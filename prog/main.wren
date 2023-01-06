@@ -1,6 +1,8 @@
 class Math {
+	foreign static add(a, b)
+
     static print() {
-    	System.print("I am running in the math class")
+    	System.print(add(5, 5))
     }
 }
 

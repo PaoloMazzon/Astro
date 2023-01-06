@@ -63,12 +63,33 @@ WrenLoadModuleResult myLoadModule(WrenVM* vm, const char* name) {
 	return result;
 }
 
+void mathAdd(WrenVM* vm)
+{
+	double a = wrenGetSlotDouble(vm, 1);
+	double b = wrenGetSlotDouble(vm, 2);
+	wrenSetSlotDouble(vm, 0, a + b);
+}
+
+WrenForeignMethodFn bindForeignMethod(WrenVM* vm, const char* module, const char* className, bool isStatic, const char* signature) {
+	if (strcmp(module, "main") == 0) {
+		if (strcmp(className, "Math") == 0) {
+			if (isStatic && strcmp(signature, "add(_,_)") == 0) {
+				return mathAdd; // C function for Math.add(_,_).
+			}
+			// Other foreign methods on Math...
+		}
+		// Other classes in main...
+	}
+	// Other modules...
+}
+
 int main() {
 	WrenConfiguration config;
 	wrenInitConfiguration(&config);
 	config.writeFn = &writeFn;
 	config.errorFn = &errorFn;
 	config.loadModuleFn = &myLoadModule;
+	config.bindForeignMethodFn = &bindForeignMethod;
 
 	WrenVM* vm = wrenNewVM(&config);
 
