@@ -1,0 +1,9 @@
+[submodule "Vulkan2D"]
+	path = Vulkan2D
+	url = https://github.com/PaoloMazzon/Vulkan2D.git
+[submodule "JamUtil"]
+	path = JamUtil
+	url = https://github.com/PaoloMazzon/JamUtil.git
+[submodule "wren"]
+	path = wren
+	url = https://github.com/wren-lang/wren
