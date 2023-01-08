@@ -81,7 +81,7 @@ WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module
 WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, const char* className, bool isStatic, const char* signature) {
 	if (strcmp(module, "lib/Renderer") == 0) {
 		if (strcmp(className, "Renderer") == 0) {
-			if (isStatic && strcmp(signature, "init(_,_,_,_,_)") == 0) {
+			if (isStatic && strcmp(signature, "init(_,_,_,_,_,_)") == 0) {
 				return vksk_RuntimeRendererInit;
 			} else if (isStatic && strcmp(signature, "update()") == 0) {
 				return vksk_RuntimeRendererUpdate;
