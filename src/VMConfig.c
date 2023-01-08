@@ -2,7 +2,9 @@
 /// \author Paolo Mazzon
 #include <string.h>
 #include <stdio.h>
+
 #include "src/VMConfig.h"
+#include "src/RendererBindings.h"
 
 void vksk_WrenWriteFn(WrenVM* vm, const char* text) {
 	printf("%s", text);
@@ -80,9 +82,9 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 	if (strcmp(module, "lib/Renderer") == 0) {
 		if (strcmp(className, "Renderer") == 0) {
 			if (isStatic && strcmp(signature, "init(_,_,_,_,_)") == 0) {
-				return NULL; // TODO: This
+				return vksk_RuntimeRendererInit;
 			} else if (isStatic && strcmp(signature, "update()") == 0) {
-				return NULL; // TODO: This
+				return vksk_RuntimeRendererUpdate;
 			}
 		}
 	}

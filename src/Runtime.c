@@ -2,6 +2,7 @@
 /// \author Paolo Mazzon
 #include "src/Runtime.h"
 #include "src/VMConfig.h"
+#include "src/RendererBindings.h"
 
 void vksk_Start() {
 	// Wren config and VM initialization
@@ -23,6 +24,6 @@ void vksk_Start() {
 	WrenInterpretResult result = wrenCall(vm, mainClassPrintHandle);
 
 	// Destroy resrouces
-	// TODO: Destroy renderer, window, and jamutil context
+	vksk_RendererCleanup();
 	wrenFreeVM(vm);
 }

@@ -1,10 +1,9 @@
-//import "lib/Renderer"
-//import "lib/Constants"
+import "lib/Renderer" for Renderer
 
 class Main {
-	/*static main() {
+	static main() {
 		System.print("Initializing renderer")
-		Renderer.init(800, 600, MSAA_32X, SCREEN_MODE_TRIPLE_BUFFER, FILTER_TYPE_NEAREST)
+		Renderer.init(800, 600, Renderer.MSAA_32X, Renderer.SCREEN_MODE_TRIPLE_BUFFER, Renderer.FILTER_TYPE_NEAREST)
 
 		System.print("Beginning loop")
 		while (Renderer.update()) {
@@ -12,8 +11,5 @@ class Main {
 		}
 
 		System.print("Done")
-	}*/
-	static main() {
-		System.print("main")
 	}
 }
