@@ -1,10 +1,10 @@
 #define SDL_MAIN_HANDLED
 #include <VK2D/VK2D.h>
 
-#include "src/testing.c"
+#include "src/Runtime.h"
 
 int main() {
-	testWren();
+	vksk_Start();
 
 	return 0;
 }
