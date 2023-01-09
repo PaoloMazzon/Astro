@@ -74,64 +74,10 @@ void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitl
 	config->filterMode = convertToFilterTypeEnum(wrenGetSlotDouble(vm, valueSlot));
 }
 
-void vksk_RuntimeRendererInit(WrenVM *vm) {
-	// Create the window
-	gWindow = SDL_CreateWindow(
-			wrenGetSlotString(vm, 1),
-			SDL_WINDOWPOS_CENTERED,
-			SDL_WINDOWPOS_CENTERED,
-			wrenGetSlotDouble(vm, 2),
-			wrenGetSlotDouble(vm, 3),
-			SDL_WINDOW_VULKAN
-			);
-
-	// Create the config and the renderer
-	VK2DRendererConfig conf = {
-			convertToMSAAEnum(wrenGetSlotDouble(vm, 4)),
-			convertToScreenModeEnum(wrenGetSlotDouble(vm, 5)),
-			convertToFilterTypeEnum(wrenGetSlotDouble(vm, 6)),
-	};
-	vk2dRendererInit(gWindow, conf);
-
-	// And finally jamutil
-	juInit(gWindow, 0, 0);
-}
-
-void vksk_RuntimeRendererUpdate(WrenVM *vm) {
-	// End the previous frame, update the SDL window/jam util and start the next frame
-	bool ret = true;
-	vk2dRendererEndFrame();
-
-	juUpdate();
-	SDL_Event e;
-	while (SDL_PollEvent(&e)) {
-		if (e.type == SDL_QUIT) {
-			ret = false;
-		}
-	}
-
-	VK2DCameraSpec spec = vk2dCameraGetSpec(VK2D_DEFAULT_CAMERA);
-	spec.zoom = 1;
-	spec.y = spec.yOnScreen = 0;
-	vk2dCameraUpdate(VK2D_DEFAULT_CAMERA, spec);
-	vk2dRendererStartFrame(VK2D_BLACK);
-	wrenSetSlotBool(vm, 0, ret);
-}
-
 void vksk_RuntimeRendererDrawCircle(WrenVM *vm) {
 	vk2dRendererDrawCircle(
 			wrenGetSlotDouble(vm, 1),
 			wrenGetSlotDouble(vm, 2),
 			wrenGetSlotDouble(vm, 3)
 			);
-}
-
-void vksk_RendererCleanup() {
-	if (gWindow != NULL) {
-		vk2dRendererEndFrame();
-		vk2dRendererWait();
-		juQuit();
-		vk2dRendererQuit();
-		SDL_DestroyWindow(gWindow);
-	}
 }

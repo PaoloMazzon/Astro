@@ -60,7 +60,40 @@ void vksk_Start() {
 	vk2dRendererInit(gWindow, rendererConfig);
 	juInit(gWindow, 0, 0);
 
+	// Run starting level create function
+	wrenSetSlotHandle(vm, 0, gCurrentLevel);
+	wrenCall(vm, createHandle);
 
+	// Game loop
+	while (!gQuit) {
+		juUpdate();
+		SDL_Event e;
+		while (SDL_PollEvent(&e))
+			if (e.type == SDL_QUIT)
+				gQuit = true;
+
+		// Update VK2D and run the level update function
+		VK2DCameraSpec spec = vk2dCameraGetSpec(VK2D_DEFAULT_CAMERA);
+		spec.zoom = 1;
+		spec.yOnScreen = spec.y = 0;
+		vk2dCameraUpdate(VK2D_DEFAULT_CAMERA, spec);
+		vk2dRendererStartFrame(VK2D_BLACK);
+		wrenSetSlotHandle(vm, 0, gCurrentLevel);
+		wrenCall(vm, updateHandle);
+		vk2dRendererEndFrame();
+
+		// Run the level creation/destruction functions if need be
+		if (gQuit || gNextLevel != NULL) {
+			wrenSetSlotHandle(vm, 0, gCurrentLevel);
+			wrenCall(vm, destroyHandle);
+			if (gNextLevel != NULL) {
+				gCurrentLevel = gNextLevel;
+				gNextLevel = NULL;
+				wrenSetSlotHandle(vm, 0, gCurrentLevel);
+				wrenCall(vm, createHandle);
+			}
+		}
+	}
 
 	// Cleanup
 	vk2dRendererWait();

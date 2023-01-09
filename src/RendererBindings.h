@@ -4,10 +4,4 @@
 #pragma once
 #include "wren.h"
 
-void vksk_RuntimeRendererInit(WrenVM *vm);
-
-void vksk_RuntimeRendererUpdate(WrenVM *vm);
-
 void vksk_RuntimeRendererDrawCircle(WrenVM *vm);
-
-void vksk_RendererCleanup();

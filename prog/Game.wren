@@ -7,7 +7,7 @@ class Game is Level {
     }
     
     create() {
-        System.print("create")
+        System.print("game create")
     }
 
     update() {
@@ -15,6 +15,6 @@ class Game is Level {
     }
 
     destroy() {
-        System.print("destroy")
+        System.print("game destroy")
     }
 }
