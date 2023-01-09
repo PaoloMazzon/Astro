@@ -85,6 +85,8 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 				return vksk_RuntimeRendererInit;
 			} else if (isStatic && strcmp(signature, "update()") == 0) {
 				return vksk_RuntimeRendererUpdate;
+			} else if (isStatic && strcmp(signature, "draw_circle(_,_,_)") == 0) {
+				return vksk_RuntimeRendererDrawCircle;
 			}
 		}
 	}

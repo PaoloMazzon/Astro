@@ -74,8 +74,20 @@ void vksk_RuntimeRendererUpdate(WrenVM *vm) {
 		}
 	}
 
+	VK2DCameraSpec spec = vk2dCameraGetSpec(VK2D_DEFAULT_CAMERA);
+	spec.zoom = 1;
+	spec.y = spec.yOnScreen = 0;
+	vk2dCameraUpdate(VK2D_DEFAULT_CAMERA, spec);
 	vk2dRendererStartFrame(VK2D_BLACK);
 	wrenSetSlotBool(vm, 0, ret);
+}
+
+void vksk_RuntimeRendererDrawCircle(WrenVM *vm) {
+	vk2dRendererDrawCircle(
+			wrenGetSlotDouble(vm, 1),
+			wrenGetSlotDouble(vm, 2),
+			wrenGetSlotDouble(vm, 3)
+			);
 }
 
 void vksk_RendererCleanup() {

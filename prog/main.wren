@@ -7,7 +7,7 @@ class Main {
 
 		System.print("Beginning loop")
 		while (Renderer.update()) {
-			System.print("Update")
+			Renderer.draw_circle(100, 100, 20)
 		}
 
 		System.print("Done")

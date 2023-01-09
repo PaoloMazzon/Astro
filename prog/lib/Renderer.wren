@@ -2,6 +2,7 @@
 // Author: Paolo Mazzon
 // Wren-accessible interface for Vulkan2D's renderer (plus a bit more)
 
+// Bindings for Vulkan2D's Renderer.h
 class Renderer {
 	static MSAA_1X { 1 }
 	static MSAA_2X { 2 }
@@ -21,4 +22,7 @@ class Renderer {
 	// Call in a while loop - returns false if the program needs to quit and true otherwise.
 	// It also updates the underlying window and renderer.
 	foreign static update()
+
+	// Draws a circle to the screen
+	foreign static draw_circle(x, y, radius)
 }
