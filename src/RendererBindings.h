@@ -5,3 +5,11 @@
 #include "wren.h"
 
 void vksk_RuntimeRendererDrawCircle(WrenVM *vm);
+
+void vksk_RuntimeRendererDrawTextureExt(WrenVM *vm);
+
+void vksk_RuntimeRendererDrawTexture(WrenVM *vm);
+
+void vksk_RuntimeRendererDrawTexturePartExt(WrenVM *vm);
+
+void vksk_RuntimeRendererDrawTexturePart(WrenVM *vm);

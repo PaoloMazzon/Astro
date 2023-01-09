@@ -18,4 +18,16 @@ class Renderer {
 
 	// Draws a circle to the screen
 	foreign static draw_circle(x, y, radius)
+
+	// Draws a texture to the screen - texture MUST be a Wren Texture handle
+	foreign static draw_texture(texture, x, y)
+	
+	// Draws a texture to the screen with transformations - texture MUST be a Wren Texture handle
+	foreign static draw_texture(texture, x, y, x_scale, y_scale, rotation, x_origin, y_origin)
+
+	// Draws a part of a texture to the screen - texture MUST be a Wren Texture handle
+	foreign static draw_texture_part(texture, x, y, x_in_tex, y_in_tex, width, height)
+
+	// Draws a part of a texture to the screen with transformations - texture MUST be a Wren Texture handle
+	foreign static draw_texture_part(texture, x, y, x_in_tex, y_in_tex, width, height, x_scale, y_scale, rotation, x_origin, y_origin)
 }

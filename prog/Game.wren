@@ -10,6 +10,7 @@ class Game is Level {
     create() {
         System.print("game create")
         var tex = Texture.new("assets/sprite.png")
+        System.print(tex.width())
     }
 
     update() {

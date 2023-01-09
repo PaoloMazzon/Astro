@@ -95,7 +95,15 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		if (strcmp(className, "Renderer") == 0) {
 			if (isStatic && strcmp(signature, "draw_circle(_,_,_)") == 0) {
 				return vksk_RuntimeRendererDrawCircle;
-			}
+			} else if (isStatic && strcmp(signature, "draw_texture(_,_,_)") == 0) {
+                return vksk_RuntimeRendererDrawTexture;
+            } else if (isStatic && strcmp(signature, "draw_texture(_,_,_,_,_,_,_,_)") == 0) {
+                return vksk_RuntimeRendererDrawTextureExt;
+            } else if (isStatic && strcmp(signature, "draw_texture_part(_,_,_,_,_,_,_)") == 0) {
+                return vksk_RuntimeRendererDrawTexturePart;
+            } else if (isStatic && strcmp(signature, "draw_texture_part(_,_,_,_,_,_,_,_,_,_,_,_)") == 0) {
+                return vksk_RuntimeRendererDrawTexturePartExt;
+            }
 		}
 	} else if (strcmp(module, "lib/Runtime") == 0) {
 		if (strcmp(className, "Runtime") == 0) {

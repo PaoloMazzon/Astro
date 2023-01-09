@@ -81,3 +81,22 @@ void vksk_RuntimeRendererDrawCircle(WrenVM *vm) {
 			wrenGetSlotDouble(vm, 3)
 			);
 }
+
+void vksk_RuntimeRendererDrawTextureExt(WrenVM *vm) {
+    VK2DTexture *tex = wrenGetSlotForeign(vm, 1);
+    float x = wrenGetSlotDouble(vm, 2);
+    float y = wrenGetSlotDouble(vm, 3);
+    vk2dRendererDrawTexture(*tex, x, y, 1, 1, 0, 0, 0, 0, 0, (*tex)->img->width, (*tex)->img->height);
+}
+
+void vksk_RuntimeRendererDrawTexture(WrenVM *vm) {
+
+}
+
+void vksk_RuntimeRendererDrawTexturePartExt(WrenVM *vm) {
+
+}
+
+void vksk_RuntimeRendererDrawTexturePart(WrenVM *vm) {
+
+}
