@@ -2,7 +2,19 @@ import "lib/Levels" for Level
 import "lib/Renderer" for Renderer
 
 class Game is Level {
+    construct new() {
+
+    }
+    
+    create() {
+        System.print("create")
+    }
+
     update() {
-        draw_circle(200, 200, 10)
+        Renderer.draw_circle(200, 200, 10)
+    }
+
+    destroy() {
+        System.print("destroy")
     }
 }

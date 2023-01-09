@@ -1,7 +1,7 @@
 import "lib/Renderer" for Renderer
 import "Game" for Game
 
-var config = {
+var renderer_config = {
 	"window_title": "Game",
 	"window_width": 800,
 	"window_height": 600,
@@ -10,4 +10,4 @@ var config = {
 	"filter_type": Renderer.FILTER_TYPE_NEAREST
 }
 
-var start = Game
+var start_level = Game.new()
