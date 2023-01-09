@@ -6,6 +6,7 @@
 #include "src/VMConfig.h"
 #include "src/RendererBindings.h"
 #include "src/Runtime.h"
+#include "src/VK2DTypes.h"
 
 void vksk_WrenWriteFn(WrenVM* vm, const char* text) {
 	printf("%s", text);
@@ -73,7 +74,17 @@ WrenLoadModuleResult vksk_WrenLoadModule(WrenVM* vm, const char* name) {
 WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module, const char* className) {
 	WrenForeignClassMethods methods = {};
 
-
+	if (strcmp(module, "lib/Texture") == 0) {
+		if (strcmp(className, "Texture") == 0) {
+			methods.allocate = vksk_RuntimeVK2DTextureAllocate;
+			methods.finalize = vksk_RuntimeVK2DTextureFinalize;
+		}
+	} else if (strcmp(module, "lib/Surface") == 0) {
+		if (strcmp(className, "Surface") == 0) {
+			methods.allocate = vksk_RuntimeVK2DSurfaceAllocate;
+			methods.finalize = vksk_RuntimeVK2DSurfaceFinalize;
+		}
+	}
 
 	return methods;
 }
@@ -92,6 +103,22 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 				return vksk_RuntimeSwitchLevel;
 			} else if (isStatic && strcmp(signature, "quit()") == 0) {
 				return vksk_RuntimeQuit;
+			}
+		}
+	} else if (strcmp(module, "lib/Texture") == 0) {
+		if (strcmp(className, "Texture") == 0) {
+			if (strcmp(signature, "width()") == 0) {
+				return vksk_RuntimeVK2DTextureWidth;
+			} else if (strcmp(signature, "height()") == 0) {
+				return vksk_RuntimeVK2DTextureHeight;
+			}
+		}
+	} else if (strcmp(module, "lib/Surface") == 0) {
+		if (strcmp(className, "Surface") == 0) {
+			if (strcmp(signature, "width()") == 0) {
+				return vksk_RuntimeVK2DSurfaceWidth;
+			} else if (strcmp(signature, "height()") == 0) {
+				return vksk_RuntimeVK2DSurfaceHeight;
 			}
 		}
 	}
