@@ -86,6 +86,7 @@ void vksk_Start() {
 		if (gQuit || gNextLevel != NULL) {
 			wrenSetSlotHandle(vm, 0, gCurrentLevel);
 			wrenCall(vm, destroyHandle);
+            wrenReleaseHandle(vm, gCurrentLevel);
 			if (gNextLevel != NULL) {
 				gCurrentLevel = gNextLevel;
 				gNextLevel = NULL;
@@ -97,6 +98,7 @@ void vksk_Start() {
 
 	// Cleanup
 	vk2dRendererWait();
+	wrenCollectGarbage(vm);
 	juQuit();
 	vk2dRendererQuit();
 	SDL_DestroyWindow(gWindow);

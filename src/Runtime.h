@@ -2,7 +2,7 @@
 /// \author Paolo Mazzon
 /// \brief The top-level runtime and meta functions that are binded to the VM but dont exist in VK2D/JamUtil
 #pragma once
-#include <Wren.h>
+#include <wren.h>
 
 // Starts the runtime
 void vksk_Start();

@@ -12,7 +12,7 @@ void vksk_RuntimeVK2DTextureAllocate(WrenVM *vm) {
 
 void vksk_RuntimeVK2DTextureFinalize(void *data) {
 	vk2dRendererWait();
-	vk2dTextureFree(data);
+	vk2dTextureFree(*(VK2DTexture*)data);
 }
 
 void vksk_RuntimeVK2DTextureWidth(WrenVM *vm) {
@@ -33,7 +33,7 @@ void vksk_RuntimeVK2DSurfaceAllocate(WrenVM *vm) {
 
 void vksk_RuntimeVK2DSurfaceFinalize(void *data) {
 	vk2dRendererWait();
-	vk2dTextureFree(data);
+	vk2dTextureFree(*(VK2DTexture*)data);
 }
 
 void vksk_RuntimeVK2DSurfaceWidth(WrenVM *vm) {
