@@ -9,12 +9,13 @@ class Game is Level {
     
     create() {
         System.print("game create")
-        var tex = Texture.new("assets/sprite.png")
-        System.print(tex.width())
+        _tex = Texture.new("assets/sprite.png")
+        System.print(_tex.width())
     }
 
     update() {
         Renderer.draw_circle(200, 200, 10)
+        Renderer.draw_texture(_tex, 100, 100)
     }
 
     destroy() {

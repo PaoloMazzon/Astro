@@ -16,13 +16,13 @@ void vksk_RuntimeVK2DTextureFinalize(void *data) {
 }
 
 void vksk_RuntimeVK2DTextureWidth(WrenVM *vm) {
-	VK2DTexture tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, tex->img->width);
+	VK2DTexture *tex = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, (*tex)->img->width);
 }
 
 void vksk_RuntimeVK2DTextureHeight(WrenVM *vm) {
-	VK2DTexture tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, tex->img->height);
+	VK2DTexture *tex = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, (*tex)->img->height);
 }
 
 /*************** Surface ***************/
@@ -37,12 +37,12 @@ void vksk_RuntimeVK2DSurfaceFinalize(void *data) {
 }
 
 void vksk_RuntimeVK2DSurfaceWidth(WrenVM *vm) {
-	VK2DTexture tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, tex->img->width);
+	VK2DTexture *tex = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, (*tex)->img->width);
 }
 
 void vksk_RuntimeVK2DSurfaceHeight(WrenVM *vm) {
-	VK2DTexture tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, tex->img->height);
+	VK2DTexture *tex = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, (*tex)->img->height);
 }
 
