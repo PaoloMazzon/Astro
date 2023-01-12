@@ -5,6 +5,7 @@
 #include "wren.h"
 
 #include "src/RendererBindings.h"
+#include "src/Validation.h"
 
 // Globals
 extern SDL_Window *gWindow; // -- from src/Runtime.c
@@ -39,6 +40,8 @@ VK2DScreenMode convertToScreenModeEnum(double wrenVal) {
 
 // Uses 3 slots in front of mapSlot
 void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitle, int *windowWidth, int *windowHeight, VK2DRendererConfig *config) {
+	// TODO: Check that the key exists first
+
 	wrenEnsureSlots(vm, 3 + mapSlot);
 	int keySlot = mapSlot + 1;
 	int valueSlot = mapSlot + 2;
@@ -75,6 +78,7 @@ void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitl
 }
 
 void vksk_RuntimeRendererDrawCircle(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
 	vk2dRendererDrawCircle(
 			wrenGetSlotDouble(vm, 1),
 			wrenGetSlotDouble(vm, 2),
@@ -83,10 +87,11 @@ void vksk_RuntimeRendererDrawCircle(WrenVM *vm) {
 }
 
 void vksk_RuntimeRendererDrawTextureExt(WrenVM *vm) {
-
+	VALIDATE_FOREIGN_ARGS(vm, "Texture", FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
 }
 
 void vksk_RuntimeRendererDrawTexture(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, "Texture", FOREIGN_NUM, FOREIGN_NUM)
 	VK2DTexture *tex = wrenGetSlotForeign(vm, 1);
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
@@ -94,9 +99,124 @@ void vksk_RuntimeRendererDrawTexture(WrenVM *vm) {
 }
 
 void vksk_RuntimeRendererDrawTexturePartExt(WrenVM *vm) {
-
+	VALIDATE_FOREIGN_ARGS(vm, "Texture", FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
 }
 
 void vksk_RuntimeRendererDrawTexturePart(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, "Texture", FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
+}
+
+// vksk_RuntimeRendererGetConfig() - get_config()
+void vksk_RuntimeRendererGetConfig(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererSetConfig(VK2DRendererConfig config) - set_config(_)
+void vksk_RuntimeRendererSetConfig(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererSetTarget(VK2DTexture target) - set_target(_)
+void vksk_RuntimeRendererSetTarget(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererSetBlendMode(VK2DBlendMode blendMode) - set_blend_mode(_)
+void vksk_RuntimeRendererSetBlendMode(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererGetBlendMode() - get_blend_mode()
+void vksk_RuntimeRendererGetBlendMode(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererSetColourMod(const vec4 mod) - set_colour_mod(_)
+void vksk_RuntimeRendererSetColourMod(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererGetColourMod(vec4 dst) - get_colour_mod()
+void vksk_RuntimeRendererGetColourMod(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererSetTextureCamera(bool useCameraOnTextures) - set_texture_camera(_)
+void vksk_RuntimeRendererSetTextureCamera(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererGetAverageFrameTime() - average_frame_time()
+void vksk_RuntimeRendererGetAverageFrameTime(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererSetCamera(VK2DCameraSpec camera) - set_camera(_)
+void vksk_RuntimeRendererSetCamera(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererGetCamera() - get_camera()
+void vksk_RuntimeRendererGetCamera(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererLockCameras(VK2DCameraIndex cam) - lock_cameras(_)
+void vksk_RuntimeRendererLockCameras(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererUnlockCameras() - unlock_cameras()
+void vksk_RuntimeRendererUnlockCameras(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererSetViewport(float x, float y, float w, float h) - set_viewport(_,_,_,_)
+void vksk_RuntimeRendererSetViewport(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererGetViewport(float *x, float *y, float *w, float *h) - get_viewport()
+void vksk_RuntimeRendererGetViewport(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererClear() - clear()
+void vksk_RuntimeRendererClear(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererDrawRectangle(float x, float y, float w, float h, float r, float ox, float oy) - draw_rectangle(_,_,_,_,_,_,_)
+void vksk_RuntimeRendererDrawRectangle(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererDrawRectangleOutline(float x, float y, float w, float h, float r, float ox, float oy, float lineWidth) - draw_rectangle_outline(_,_,_,_,_,_,_,_)
+void vksk_RuntimeRendererDrawRectangleOutline(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererDrawCircleOutline(float x, float y, float r, float lineWidth) - draw_circle_outline(_,_,_,_)
+void vksk_RuntimeRendererDrawCircleOutline(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererDrawLine(float x1, float y1, float x2, float y2) - draw_line(_,_,_,_)
+void vksk_RuntimeRendererDrawLine(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererDrawShader(VK2DShader shader, VK2DTexture tex, float x, float y, float xscale, float yscale, float rot, float originX, float originY, float xInTex, float yInTex, float texWidth, float texHeight) - draw_shader(_,_,_,_,_,_,_,_,_,_,_,_,_)
+void vksk_RuntimeRendererDrawShader(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererDrawPolygon(VK2DPolygon polygon, float x, float y, bool filled, float lineWidth, float xscale, float yscale, float rot, float originX, float originY) - draw_polygon(_,_,_,_,_,_,_,_,_,_)
+void vksk_RuntimeRendererDrawPolygon(WrenVM *vm) {
+
+}
+
+// vksk_RuntimeRendererDrawModel(VK2DModel model, float x, float y, float z, float xscale, float yscale, float zscale, float rot, vec3 axis, float originX, float originY, float originZ) - draw_model(_,_,_,_,_,_,_,_,_,_,_,_)
+void vksk_RuntimeRendererDrawModel(WrenVM *vm) {
 
 }

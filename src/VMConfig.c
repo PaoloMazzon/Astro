@@ -96,14 +96,60 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 			if (isStatic && strcmp(signature, "draw_circle(_,_,_)") == 0) {
 				return vksk_RuntimeRendererDrawCircle;
 			} else if (isStatic && strcmp(signature, "draw_texture(_,_,_)") == 0) {
-                return vksk_RuntimeRendererDrawTexture;
-            } else if (isStatic && strcmp(signature, "draw_texture(_,_,_,_,_,_,_,_)") == 0) {
-                return vksk_RuntimeRendererDrawTextureExt;
-            } else if (isStatic && strcmp(signature, "draw_texture_part(_,_,_,_,_,_,_)") == 0) {
-                return vksk_RuntimeRendererDrawTexturePart;
-            } else if (isStatic && strcmp(signature, "draw_texture_part(_,_,_,_,_,_,_,_,_,_,_,_)") == 0) {
-                return vksk_RuntimeRendererDrawTexturePartExt;
-            }
+				return vksk_RuntimeRendererDrawTexture;
+			} else if (isStatic && strcmp(signature, "draw_texture(_,_,_,_,_,_,_,_)") == 0) {
+				return vksk_RuntimeRendererDrawTextureExt;
+			} else if (isStatic && strcmp(signature, "draw_texture_part(_,_,_,_,_,_,_)") == 0) {
+				return vksk_RuntimeRendererDrawTexturePart;
+			} else if (isStatic && strcmp(signature, "draw_texture_part(_,_,_,_,_,_,_,_,_,_,_,_)") == 0) {
+				return vksk_RuntimeRendererDrawTexturePartExt;
+			} else if (isStatic && strcmp(signature, "get_config()") == 0) {
+				return vksk_RuntimeRendererGetConfig;
+			} else if (isStatic && strcmp(signature, "set_config(_)") == 0) {
+				return vksk_RuntimeRendererSetConfig;
+			} else if (isStatic && strcmp(signature, "set_target(_)") == 0) {
+				return vksk_RuntimeRendererSetTarget;
+			} else if (isStatic && strcmp(signature, "set_blend_mode(_)") == 0) {
+				return vksk_RuntimeRendererSetBlendMode;
+			} else if (isStatic && strcmp(signature, "get_blend_mode()") == 0) {
+				return vksk_RuntimeRendererGetBlendMode;
+			} else if (isStatic && strcmp(signature, "set_colour_mod(_)") == 0) {
+				return vksk_RuntimeRendererSetColourMod;
+			} else if (isStatic && strcmp(signature, "get_colour_mod()") == 0) {
+				return vksk_RuntimeRendererGetColourMod;
+			} else if (isStatic && strcmp(signature, "set_texture_camera(_)") == 0) {
+				return vksk_RuntimeRendererSetTextureCamera;
+			} else if (isStatic && strcmp(signature, "average_frame_time()") == 0) {
+				return vksk_RuntimeRendererGetAverageFrameTime;
+			} else if (isStatic && strcmp(signature, "set_camera(_)") == 0) {
+				return vksk_RuntimeRendererSetCamera;
+			} else if (isStatic && strcmp(signature, "get_camera()") == 0) {
+				return vksk_RuntimeRendererGetCamera;
+			} else if (isStatic && strcmp(signature, "lock_cameras(_)") == 0) {
+				return vksk_RuntimeRendererLockCameras;
+			} else if (isStatic && strcmp(signature, "unlock_cameras()") == 0) {
+				return vksk_RuntimeRendererUnlockCameras;
+			} else if (isStatic && strcmp(signature, "set_viewport(_,_,_,_)") == 0) {
+				return vksk_RuntimeRendererSetViewport;
+			} else if (isStatic && strcmp(signature, "get_viewport()") == 0) {
+				return vksk_RuntimeRendererGetViewport;
+			} else if (isStatic && strcmp(signature, "clear()") == 0) {
+				return vksk_RuntimeRendererClear;
+			} else if (isStatic && strcmp(signature, "draw_rectangle(_,_,_,_,_,_,_)") == 0) {
+				return vksk_RuntimeRendererDrawRectangle;
+			} else if (isStatic && strcmp(signature, "draw_rectangle_outline(_,_,_,_,_,_,_,_)") == 0) {
+				return vksk_RuntimeRendererDrawRectangleOutline;
+			} else if (isStatic && strcmp(signature, "draw_circle_outline(_,_,_,_)") == 0) {
+				return vksk_RuntimeRendererDrawCircleOutline;
+			} else if (isStatic && strcmp(signature, "draw_line(_,_,_,_)") == 0) {
+				return vksk_RuntimeRendererDrawLine;
+			} else if (isStatic && strcmp(signature, "draw_shader(_,_,_,_,_,_,_,_,_,_,_,_,_)") == 0) {
+				return vksk_RuntimeRendererDrawShader;
+			} else if (isStatic && strcmp(signature, "draw_polygon(_,_,_,_,_,_,_,_,_,_)") == 0) {
+				return vksk_RuntimeRendererDrawPolygon;
+			} else if (isStatic && strcmp(signature, "draw_model(_,_,_,_,_,_,_,_,_,_,_,_)") == 0) {
+				return vksk_RuntimeRendererDrawModel;
+			}
 		}
 	} else if (strcmp(module, "lib/Runtime") == 0) {
 		if (strcmp(className, "Runtime") == 0) {
