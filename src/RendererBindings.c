@@ -151,16 +151,6 @@ void vksk_RuntimeRendererGetAverageFrameTime(WrenVM *vm) {
 
 }
 
-// vksk_RuntimeRendererSetCamera(VK2DCameraSpec camera) - set_camera(_)
-void vksk_RuntimeRendererSetCamera(WrenVM *vm) {
-
-}
-
-// vksk_RuntimeRendererGetCamera() - get_camera()
-void vksk_RuntimeRendererGetCamera(WrenVM *vm) {
-
-}
-
 // vksk_RuntimeRendererLockCameras(VK2DCameraIndex cam) - lock_cameras(_)
 void vksk_RuntimeRendererLockCameras(WrenVM *vm) {
 

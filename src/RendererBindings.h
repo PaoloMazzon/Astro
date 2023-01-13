@@ -33,10 +33,6 @@ void vksk_RuntimeRendererSetTextureCamera(WrenVM *vm);
 
 void vksk_RuntimeRendererGetAverageFrameTime(WrenVM *vm);
 
-void vksk_RuntimeRendererSetCamera(WrenVM *vm);
-
-void vksk_RuntimeRendererGetCamera(WrenVM *vm);
-
 void vksk_RuntimeRendererLockCameras(WrenVM *vm);
 
 void vksk_RuntimeRendererUnlockCameras(WrenVM *vm);
