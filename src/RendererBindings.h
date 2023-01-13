@@ -59,8 +59,6 @@ void vksk_RuntimeRendererDrawModel(WrenVM *vm); // UNIMPLEMENTED
 
 void vksk_RuntimeRendererDrawFont(WrenVM *vm);
 
-void vksk_RuntimeRendererDrawSprite(WrenVM *vm);
-
 void vksk_RuntimeRendererDrawSpritePos(WrenVM *vm);
 
 void vksk_RuntimeRendererDrawSpriteFrame(WrenVM *vm);

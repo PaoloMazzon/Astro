@@ -1,6 +1,6 @@
 import "lib/Levels" for Level
 import "lib/Renderer" for Renderer
-import "lib/Texture" for Texture
+import "lib/Sprite" for Sprite
 import "lib/Engine" for Engine
 import "lib/Input" for Input
 import "lib/BitmapFont" for BitmapFont
@@ -13,7 +13,7 @@ class Game is Level {
     create() {
         System.print("game create")
         Engine.cap_fps(60)
-        _tex = Texture.new("assets/sprite.png")
+        _spr = Sprite.new("assets/sprite.png", 0, 0, 16, 16, 0.3, 4)
         _x = 100
         _y = 100
         _font = BitmapFont.new("assets/font.png", 32, 128, 40, 70)
@@ -34,12 +34,12 @@ class Game is Level {
             _y = _y + speed
         }
 
-        Renderer.draw_texture(_tex, _x, _y)
+        Renderer.draw_sprite(_spr, _x, _y)
         Renderer.draw_font(_font, "Font test", 0, 0)
     }
 
     destroy() {
-        _tex.free()
+        _spr.free()
         _font.free()
         System.print("game destroy")
     }

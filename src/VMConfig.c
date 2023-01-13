@@ -140,7 +140,6 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Renderer", true, "draw_polygon(_,_,_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawPolygon)
 		BIND_METHOD("Renderer", true, "draw_model(_,_,_,_,_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawModel)
 		BIND_METHOD("Renderer", true, "draw_font(_,_,_,_)", vksk_RuntimeRendererDrawFont)
-		BIND_METHOD("Renderer", true, "draw_sprite(_)", vksk_RuntimeRendererDrawSprite)
 		BIND_METHOD("Renderer", true, "draw_sprite(_,_,_)", vksk_RuntimeRendererDrawSpritePos)
 		BIND_METHOD("Renderer", true, "draw_sprite(_,_,_,_)", vksk_RuntimeRendererDrawSpriteFrame)
 	} else if (strcmp(module, "lib/Engine") == 0) {
@@ -162,11 +161,8 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 	} else if (strcmp(module, "lib/Sprite") == 0) {
 		BIND_METHOD("Sprite", false, "free()", vksk_RuntimeJUSpriteFree)
 		BIND_METHOD("Sprite", false, "copy()", vksk_RuntimeJUSpriteCopy)
-		BIND_METHOD("Sprite", false, "set_pos(_,_)", vksk_RuntimeJUSpriteSetPos)
 		BIND_METHOD("Sprite", false, "get_delay()", vksk_RuntimeJUSpriteGetDelay)
 		BIND_METHOD("Sprite", false, "set_delay(_)", vksk_RuntimeJUSpriteSetDelay)
-		BIND_METHOD("Sprite", false, "get_x()", vksk_RuntimeJUSpriteGetX)
-		BIND_METHOD("Sprite", false, "get_y()", vksk_RuntimeJUSpriteGetY)
 		BIND_METHOD("Sprite", false, "get_origin_x()", vksk_RuntimeJUSpriteGetOriginX)
 		BIND_METHOD("Sprite", false, "set_origin_x(_)", vksk_RuntimeJUSpriteSetOriginX)
 		BIND_METHOD("Sprite", false, "get_origin_y()", vksk_RuntimeJUSpriteGetOriginY)

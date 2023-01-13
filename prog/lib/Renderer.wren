@@ -122,10 +122,6 @@ class Renderer {
     // Draws text, font MUST be a `BitmapFont`
     foreign static draw_font(font, text, x, y)
 
-    // Draws a sprite, scale/pos/origin/rotation are all controlled by
-    // the sprite, sprite MUST be a `Sprite`
-    foreign static draw_sprite(sprite)
-
     // Draws a sprite at a specific position, sprite MUST be a `Sprite`
     foreign static draw_sprite(sprite, x, y)
 

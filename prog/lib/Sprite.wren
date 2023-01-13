@@ -17,20 +17,11 @@ foreign class Sprite {
     // texture and doesn't copy it
     foreign copy()
 
-    // Sets this sprite's position
-    foreign set_pos(x, y)
-    
     // Gets this sprite's delay
     foreign get_delay()
 
     // Sets this sprite's delay
     foreign set_delay(delay)
-
-    // Gets this sprite's x
-	foreign get_x()
-    
-    // Gets this sprite's y
-	foreign get_y()
     
     // Gets this sprite's origin_x
 	foreign get_origin_x()

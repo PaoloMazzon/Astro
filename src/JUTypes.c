@@ -61,13 +61,6 @@ void vksk_RuntimeJUSpriteCopy(WrenVM *vm) {
 	*newspr = juSpriteCopy(*spr);
 }
 
-void vksk_RuntimeJUSpriteSetPos(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM)
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	(*spr)->x = wrenGetSlotDouble(vm, 1);
-	(*spr)->y = wrenGetSlotDouble(vm, 2);
-}
-
 void vksk_RuntimeJUSpriteGetDelay(WrenVM *vm) {
 	JUSprite *spr = wrenGetSlotForeign(vm, 0);
 	wrenSetSlotDouble(vm, 0, (*spr)->delay);
@@ -77,16 +70,6 @@ void vksk_RuntimeJUSpriteSetDelay(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM)
 	JUSprite *spr = wrenGetSlotForeign(vm, 0);
 	(*spr)->delay = wrenGetSlotDouble(vm, 1);
-}
-
-void vksk_RuntimeJUSpriteGetX(WrenVM *vm) {
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, (*spr)->x);
-}
-
-void vksk_RuntimeJUSpriteGetY(WrenVM *vm) {
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, (*spr)->y);
 }
 
 void vksk_RuntimeJUSpriteGetOriginX(WrenVM *vm) {
