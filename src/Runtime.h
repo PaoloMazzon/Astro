@@ -12,3 +12,6 @@ void vksk_RuntimeSwitchLevel(WrenVM *vm);
 
 // Ends the runtime, calling the level destruction function before it does
 void vksk_RuntimeQuit(WrenVM *vm);
+
+// Caps the FPS
+void vksk_RuntimeCapFPS(WrenVM *vm);

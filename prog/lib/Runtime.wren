@@ -9,4 +9,7 @@ class Runtime {
 
     // Ends the game, calling the current level's destruction method first
     foreign static quit()
+
+    // Caps the FPS, or use 0 for no cap
+    foreign static cap_fps(fps)
 }

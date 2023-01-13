@@ -54,6 +54,5 @@ Bindings
 --------
 
  + All of `JamUtil`
- + Foreign class for VK2D objects `VK2DCamera`, `VK2DModel`, `VK2DShader`, `VK2DPolygon`
+ + Foreign class for VK2D objects `VK2DModel`, `VK2DShader`, `VK2DPolygon`
  + Bind functions to the above foreign classes
- + Bind the entirety of `VK2D/Renderer.h`

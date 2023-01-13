@@ -7,12 +7,15 @@
 #include "src/Runtime.h"
 #include "src/VMConfig.h"
 #include "src/RendererBindings.h"
+#include "src/Validation.h"
 
 // Globals
 SDL_Window *gWindow = NULL;
 WrenHandle *gCurrentLevel = NULL;
 WrenHandle *gNextLevel = NULL;
 bool gQuit = false;
+double gFPSCap = 0;
+JUClock gFPSClock = {};
 
 // From RendererBindings.c
 void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitle, int *windowWidth, int *windowHeight, VK2DRendererConfig *config);
@@ -60,9 +63,10 @@ void vksk_Start() {
 	vk2dRendererInit(gWindow, rendererConfig);
 	juInit(gWindow, 0, 0);
 
-	// Run starting level create function
+	// Run starting level create function and FPS cap
 	wrenSetSlotHandle(vm, 0, gCurrentLevel);
 	wrenCall(vm, createHandle);
+	juClockStart(&gFPSClock);
 
 	// Game loop
 	while (!gQuit) {
@@ -81,6 +85,10 @@ void vksk_Start() {
 		wrenSetSlotHandle(vm, 0, gCurrentLevel);
 		wrenCall(vm, updateHandle);
 		vk2dRendererEndFrame();
+
+		// Enfore the FPS clock
+		if (gFPSCap != 0)
+			juClockFramerate(&gFPSClock, gFPSCap);
 
 		// Run the level creation/destruction functions if need be
 		if (gQuit || gNextLevel != NULL) {
@@ -106,9 +114,16 @@ void vksk_Start() {
 }
 
 void vksk_RuntimeSwitchLevel(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM)
 	gNextLevel = wrenGetSlotHandle(vm, 1);
 }
 
 void vksk_RuntimeQuit(WrenVM *vm) {
 	gQuit = true;
+}
+
+void vksk_RuntimeCapFPS(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM)
+	gFPSCap = wrenGetSlotDouble(vm, 1);
+	juClockStart(&gFPSClock);
 }

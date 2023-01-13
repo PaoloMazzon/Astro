@@ -7,6 +7,7 @@
 #include "src/RendererBindings.h"
 #include "src/Runtime.h"
 #include "src/VK2DTypes.h"
+#include "src/Input.h"
 
 void vksk_WrenWriteFn(WrenVM* vm, const char* text) {
 	printf("%s", text);
@@ -130,6 +131,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 	} else if (strcmp(module, "lib/Runtime") == 0) {
 		BIND_METHOD("Runtime", true, "switch_level(_)", vksk_RuntimeSwitchLevel)
 		BIND_METHOD("Runtime", true, "quit()", vksk_RuntimeQuit)
+		BIND_METHOD("Runtime", true, "cap_fps(_)", vksk_RuntimeCapFPS)
 	} else if (strcmp(module, "lib/Texture") == 0) {
 		BIND_METHOD("Texture", false, "width()", vksk_RuntimeVK2DTextureWidth)
 		BIND_METHOD("Texture", false, "height()", vksk_RuntimeVK2DTextureHeight)
@@ -170,6 +172,10 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Camera", false, "get_fov()", vksk_RuntimeVK2DCameraGetFov)
 		BIND_METHOD("Camera", false, "set_fov(_)", vksk_RuntimeVK2DCameraSetFov)
 		BIND_METHOD("Camera", false, "update()", vksk_RuntimeVK2DCameraUpdate)
+	} else if (strcmp(module, "lib/Input") == 0) {
+		BIND_METHOD("Input", true, "keyboard_get_key(_)", vksk_RuntimeInputCheckKey)
+		BIND_METHOD("Input", true, "keyboard_get_key_pressed(_)", vksk_RuntimeInputCheckKeyPressed)
+		BIND_METHOD("Input", true, "keyboard_get_key_released(_)", vksk_RuntimeInputCheckKeyReleased)
 	}
 	return NULL;
 }
