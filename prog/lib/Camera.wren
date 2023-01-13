@@ -1,6 +1,6 @@
 // Camera.wren
 // Author: Paolo Mazzon
-// Functions for managing and creating cameras in Black Glacier
+// Functions for managing and creating cameras in Astro Engine
 
 // This is equivalent to VK2D's camera spec and the camera index combined
 foreign class Camera {

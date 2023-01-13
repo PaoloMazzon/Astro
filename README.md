@@ -1,7 +1,7 @@
-![Black Glacier](./assets/banner.png)
+![Astro Engine](./assets/banner.png)
 
-Black Glacier is a game development framework that provides all the things you need to
-easily develop games. In no small part, Black Glacier provides bindings for the libraries
+Astro Engine is a game development framework that provides all the things you need to
+easily develop games. In no small part, Astro Engine provides bindings for the libraries
 [Vulkan2D](https://github.com/PaoloMazzon/Vulkan2D) and [JamUtil](https://github.com/PaoloMazzon/JamUtil)
 to a [Wren](https://github.com/wren-lang/wren) virtual machine, with various additional features
 provided in the bindings. It will also provide a slew of other features to make development
@@ -9,7 +9,7 @@ faster and easier.
 
 Getting Started
 ===============
-To use the Black Glacer runtime you must first compile it from source. That won't be covered
+To use the Astro Engine runtime you must first compile it from source. That won't be covered
 here in detail at the moment, but in brief, clone this repository and all the submodules
 and run the CMake file.
 
@@ -38,6 +38,7 @@ keys must be provided:
  + `screen_mode` - Use `Renderer.SCREEN_MODE_*` to select your preferred screen mode (if that screen
  mode is unavailable `Renderer.SCREEN_MODE_IMMEDIATE` will be used instead)
  + `filter_type` - Use `Renderer.FILTER_TYPE_*` to select your preferred texture filter option
+
  
 TODO
 ====

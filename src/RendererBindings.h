@@ -15,7 +15,7 @@ void vksk_RuntimeRendererDrawTexturePartExt(WrenVM *vm);
 
 void vksk_RuntimeRendererDrawTexturePart(WrenVM *vm);
 
-void vksk_RuntimeRendererGetConfig(WrenVM *vm);
+void vksk_RuntimeRendererGetConfig(WrenVM *vm); // UNIMPLEMENTED
 
 void vksk_RuntimeRendererSetConfig(WrenVM *vm);
 
@@ -51,9 +51,9 @@ void vksk_RuntimeRendererDrawCircleOutline(WrenVM *vm);
 
 void vksk_RuntimeRendererDrawLine(WrenVM *vm);
 
-void vksk_RuntimeRendererDrawShader(WrenVM *vm);
+void vksk_RuntimeRendererDrawShader(WrenVM *vm); // UNIMPLEMENTED
 
-void vksk_RuntimeRendererDrawPolygon(WrenVM *vm);
+void vksk_RuntimeRendererDrawPolygon(WrenVM *vm); // UNIMPLEMENTED
 
-void vksk_RuntimeRendererDrawModel(WrenVM *vm);
+void vksk_RuntimeRendererDrawModel(WrenVM *vm); // UNIMPLEMENTED
 
