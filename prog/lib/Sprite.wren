@@ -10,7 +10,7 @@ foreign class Sprite {
     // of frames to pull from the spritesheet 
     construct new(filename, x, y, w, h, delay, frames) {}
 
-    // Forces the sprite to be freed
+    // Forces the sprite to be freed if you don't want to wait for the garbage collector
     foreign free()
 
     // Returns a copy of this sprite that just references the internal

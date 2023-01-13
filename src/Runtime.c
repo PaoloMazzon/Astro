@@ -118,10 +118,10 @@ void vksk_Start() {
 	// Cleanup
 	vk2dRendererWait();
 	wrenCollectGarbage(vm);
+	wrenFreeVM(vm);
 	juQuit();
 	vk2dRendererQuit();
 	SDL_DestroyWindow(gWindow);
-	wrenFreeVM(vm);
 }
 
 void vksk_RuntimeSwitchLevel(WrenVM *vm) {

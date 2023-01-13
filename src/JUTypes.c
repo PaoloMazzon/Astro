@@ -20,11 +20,13 @@ void vksk_RuntimeJUBitmapFontAllocate(WrenVM *vm) {
 
 void vksk_RuntimeJUBitmapFontFinalize(void *data) {
 	JUFont *font = data;
+	vk2dRendererWait();
 	juFontFree(*font);
 }
 
 void vksk_RuntimeJUBitmapFontFree(WrenVM *vm) {
 	JUFont *font = wrenGetSlotForeign(vm, 0);
+	vk2dRendererWait();
 	juFontFree(*font);
 	*font = NULL;
 }
@@ -45,11 +47,13 @@ void vksk_RuntimeJUSpriteAllocate(WrenVM *vm) {
 
 void vksk_RuntimeJUSpriteFinalize(void *data) {
 	JUSprite *spr = data;
+	vk2dRendererWait();
 	juSpriteFree(*spr);
 }
 
 void vksk_RuntimeJUSpriteFree(WrenVM *vm) {
 	JUSprite *font = wrenGetSlotForeign(vm, 0);
+	vk2dRendererWait();
 	juSpriteFree(*font);
 	*font = NULL;
 }

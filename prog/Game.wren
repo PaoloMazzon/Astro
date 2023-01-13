@@ -39,8 +39,6 @@ class Game is Level {
     }
 
     destroy() {
-        _spr.free()
-        _font.free()
         System.print("game destroy")
     }
 }

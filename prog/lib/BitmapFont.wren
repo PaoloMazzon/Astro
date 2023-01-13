@@ -8,6 +8,6 @@ foreign class BitmapFont {
     // least unicode_end-unicode_start characters of w*h size
     construct new(filename, unicode_start, unicode_end, w, h) {}
 
-    // Forces the font to be freed
+    // Forces the font to be freed if you don't want to wait for the garbage collector
     foreign free()
 }
