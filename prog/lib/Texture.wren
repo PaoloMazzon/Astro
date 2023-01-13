@@ -11,4 +11,7 @@ foreign class Texture {
 
     // Returns the height of the texture
     foreign height()
+
+    // Forces the internal texture to be freed
+    foreign free()
 }

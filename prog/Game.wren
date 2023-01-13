@@ -1,16 +1,16 @@
 import "lib/Levels" for Level
 import "lib/Renderer" for Renderer
 import "lib/Texture" for Texture
+import "lib/Camera" for Camera
 
 class Game is Level {
     construct new() {
-
+        
     }
     
     create() {
         System.print("game create")
         _tex = Texture.new("assets/sprite.png")
-        System.print(_tex.width())
     }
 
     update() {
@@ -19,6 +19,7 @@ class Game is Level {
     }
 
     destroy() {
+        _tex.free()
         System.print("game destroy")
     }
 }

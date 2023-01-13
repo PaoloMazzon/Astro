@@ -2,10 +2,11 @@
 /// \author Paolo Mazzon
 #include <VK2D/VK2D.h>
 #include <JamUtil/JamUtil.h>
-#include "wren.h"
+#include <wren.h>
 
 #include "src/RendererBindings.h"
 #include "src/Validation.h"
+#include "src/IntermediateTypes.h"
 
 // Globals
 extern SDL_Window *gWindow; // -- from src/Runtime.c
@@ -92,10 +93,10 @@ void vksk_RuntimeRendererDrawTextureExt(WrenVM *vm) {
 
 void vksk_RuntimeRendererDrawTexture(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, "Texture", FOREIGN_NUM, FOREIGN_NUM)
-	VK2DTexture *tex = wrenGetSlotForeign(vm, 1);
+	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 1);
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
-	vk2dRendererDrawTexture(*tex, x, y, 1, 1, 0, 0, 0, 0, 0, (*tex)->img->width, (*tex)->img->height);
+	vk2dRendererDrawTexture(tex->tex, x, y, 1, 1, 0, 0, 0, 0, 0, tex->tex->img->width, tex->tex->img->height);
 }
 
 void vksk_RuntimeRendererDrawTexturePartExt(WrenVM *vm) {

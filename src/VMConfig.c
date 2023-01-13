@@ -133,9 +133,11 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 	} else if (strcmp(module, "lib/Texture") == 0) {
 		BIND_METHOD("Texture", false, "width()", vksk_RuntimeVK2DTextureWidth)
 		BIND_METHOD("Texture", false, "height()", vksk_RuntimeVK2DTextureHeight)
+		BIND_METHOD("Texture", false, "free()", vksk_RuntimeVK2DTextureFree)
 	} else if (strcmp(module, "lib/Surface") == 0) {
 		BIND_METHOD("Surface", false, "width()", vksk_RuntimeVK2DSurfaceWidth)
 		BIND_METHOD("Surface", false, "height()", vksk_RuntimeVK2DSurfaceHeight)
+		BIND_METHOD("Surface", false, "free()", vksk_RuntimeVK2DSurfaceFree)
 	} else if (strcmp(module, "lib/Camera") == 0) {
 		BIND_METHOD("Camera", false, "get_type()", vksk_RuntimeVK2DCameraGetType)
 		BIND_METHOD("Camera", false, "set_type(_)", vksk_RuntimeVK2DCameraSetType)

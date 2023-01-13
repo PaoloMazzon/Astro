@@ -3,57 +3,75 @@
 #include <VK2D/VK2D.h>
 
 #include "src/VK2DTypes.h"
+#include "src/IntermediateTypes.h"
 
 /*************** Texture ***************/
 void vksk_RuntimeVK2DTextureAllocate(WrenVM *vm) {
-	VK2DTexture* tex = (VK2DTexture*)wrenSetSlotNewForeign(vm,0, 0, sizeof(VK2DTexture));
-	*tex = vk2dTextureLoad(wrenGetSlotString(vm, 1));
+	_vksk_RuntimeTexture* tex = (_vksk_RuntimeTexture*)wrenSetSlotNewForeign(vm,0, 0, sizeof(_vksk_RuntimeTexture));
+	tex->tex = vk2dTextureLoad(wrenGetSlotString(vm, 1));
+	tex->freed = false;
 }
 
 void vksk_RuntimeVK2DTextureFinalize(void *data) {
-	vk2dRendererWait();
-	vk2dTextureFree(*(VK2DTexture*)data);
+	if (((_vksk_RuntimeTexture*)data)->freed == false) {
+		vk2dRendererWait();
+		vk2dTextureFree(((_vksk_RuntimeTexture *) data)->tex);
+	}
+}
+
+void vksk_RuntimeVK2DTextureFree(WrenVM *vm) {
+	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 0);
+	if (tex->freed == false) {
+		vk2dRendererWait();
+		vk2dTextureFree(tex->tex);
+		tex->freed = true;
+	}
 }
 
 void vksk_RuntimeVK2DTextureWidth(WrenVM *vm) {
-	VK2DTexture *tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, (*tex)->img->width);
+	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, tex->tex->img->width);
 }
 
 void vksk_RuntimeVK2DTextureHeight(WrenVM *vm) {
-	VK2DTexture *tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, (*tex)->img->height);
+	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, tex->tex->img->height);
 }
 
 /*************** Surface ***************/
 void vksk_RuntimeVK2DSurfaceAllocate(WrenVM *vm) {
-	VK2DTexture* tex = (VK2DTexture*)wrenSetSlotNewForeign(vm,0, 0, sizeof(VK2DTexture));
-	*tex = vk2dTextureCreate(wrenGetSlotDouble(vm, 1), wrenGetSlotDouble(vm, 2));
+	_vksk_RuntimeTexture* tex = (_vksk_RuntimeTexture*)wrenSetSlotNewForeign(vm,0, 0, sizeof(_vksk_RuntimeTexture));
+	tex->tex = vk2dTextureCreate(wrenGetSlotDouble(vm, 1), wrenGetSlotDouble(vm, 2));
+	tex->freed = false;
 }
 
 void vksk_RuntimeVK2DSurfaceFinalize(void *data) {
-	vk2dRendererWait();
-	vk2dTextureFree(*(VK2DTexture*)data);
+	if (((_vksk_RuntimeTexture*)data)->freed == false) {
+		vk2dRendererWait();
+		vk2dTextureFree(((_vksk_RuntimeTexture *) data)->tex);
+	}
+}
+
+void vksk_RuntimeVK2DSurfaceFree(WrenVM *vm) {
+	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 0);
+	if (tex->freed == false) {
+		vk2dRendererWait();
+		vk2dTextureFree(tex->tex);
+		tex->freed = true;
+	}
 }
 
 void vksk_RuntimeVK2DSurfaceWidth(WrenVM *vm) {
-	VK2DTexture *tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, (*tex)->img->width);
+	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, tex->tex->img->width);
 }
 
 void vksk_RuntimeVK2DSurfaceHeight(WrenVM *vm) {
-	VK2DTexture *tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, (*tex)->img->height);
+	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, tex->tex->img->height);
 }
 
 /*************** Camera ***************/
-// Just for the internal wren camera
-typedef struct _vksk_RuntimeCamera {
-	VK2DCameraIndex index;
-	VK2DCameraSpec spec;
-} _vksk_RuntimeCamera;
-
-
 void vksk_RuntimeVK2DCameraAllocate(WrenVM *vm) {
 	_vksk_RuntimeCamera *cam = wrenSetSlotNewForeign(vm, 0, 0, sizeof(_vksk_RuntimeCamera));
 	memset(&cam->spec, 0, sizeof(VK2DCameraSpec));
@@ -177,32 +195,65 @@ void vksk_RuntimeVK2DCameraSetHOnScreen(WrenVM *vm) {
 
 void vksk_RuntimeVK2DCameraGetEyes(WrenVM *vm) {
 	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	// TODO: This
+	wrenEnsureSlots(vm, 2);
+	wrenSetSlotNewList(vm, 0);
+	for (int i = 0; i < 3; i++) {
+		wrenSetSlotDouble(vm, 1, cam->spec.Perspective.eyes[i]);
+		wrenInsertInList(vm, 0, -1, 1);
+	}
 }
 
 void vksk_RuntimeVK2DCameraSetEyes(WrenVM *vm) {
 	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	// TODO: This
+	vec3 vec;
+	wrenEnsureSlots(vm, 3);
+	for (int i = 0; i < 3; i++) {
+		wrenGetListElement(vm, 1, i, 2);
+		vec[i] = wrenGetSlotDouble(vm, 2);
+	}
+	memcpy(cam->spec.Perspective.eyes, vec, sizeof(vec3));
 }
 
 void vksk_RuntimeVK2DCameraGetCentre(WrenVM *vm) {
 	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	// TODO: This
+	wrenEnsureSlots(vm, 2);
+	wrenSetSlotNewList(vm, 0);
+	for (int i = 0; i < 3; i++) {
+		wrenSetSlotDouble(vm, 1, cam->spec.Perspective.centre[i]);
+		wrenInsertInList(vm, 0, -1, 1);
+	}
 }
 
 void vksk_RuntimeVK2DCameraSetCentre(WrenVM *vm) {
 	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	// TODO: This
+	vec3 vec;
+	wrenEnsureSlots(vm, 3);
+	for (int i = 0; i < 3; i++) {
+		wrenGetListElement(vm, 1, i, 2);
+		vec[i] = wrenGetSlotDouble(vm, 2);
+	}
+	memcpy(cam->spec.Perspective.centre, vec, sizeof(vec3));
 }
 
 void vksk_RuntimeVK2DCameraGetUp(WrenVM *vm) {
 	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	// TODO: This
+	wrenEnsureSlots(vm, 2);
+	wrenSetSlotNewList(vm, 0);
+	for (int i = 0; i < 3; i++) {
+		wrenSetSlotDouble(vm, 1, cam->spec.Perspective.up[i]);
+		wrenInsertInList(vm, 0, -1, 1);
+	}
 }
 
 void vksk_RuntimeVK2DCameraSetUp(WrenVM *vm) {
 	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	// TODO: This
+	vec3 vec;
+	wrenEnsureSlots(vm, 3);
+	for (int i = 0; i < 3; i++) {
+		wrenGetListElement(vm, 1, i, 2);
+		vec[i] = wrenGetSlotDouble(vm, 2);
+	}
+	memcpy(cam->spec.Perspective.up, vec, sizeof(vec3));
 }
 
 void vksk_RuntimeVK2DCameraGetFov(WrenVM *vm) {
