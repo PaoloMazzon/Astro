@@ -127,3 +127,11 @@ void vksk_RuntimeCapFPS(WrenVM *vm) {
 	gFPSCap = wrenGetSlotDouble(vm, 1);
 	juClockStart(&gFPSClock);
 }
+
+void vksk_RuntimeDelta(WrenVM *vm) {
+	wrenSetSlotDouble(vm, 0, juDelta());
+}
+
+void vksk_RuntimeTime(WrenVM *vm) {
+	wrenSetSlotDouble(vm, 0, juTime());
+}

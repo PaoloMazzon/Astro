@@ -15,3 +15,9 @@ void vksk_RuntimeQuit(WrenVM *vm);
 
 // Caps the FPS
 void vksk_RuntimeCapFPS(WrenVM *vm);
+
+// Returns delta
+void vksk_RuntimeDelta(WrenVM *vm);
+
+// Returns time in seconds since the program start
+void vksk_RuntimeTime(WrenVM *vm);

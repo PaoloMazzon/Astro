@@ -128,10 +128,12 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Renderer", true, "draw_shader(_,_,_,_,_,_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawShader)
 		BIND_METHOD("Renderer", true, "draw_polygon(_,_,_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawPolygon)
 		BIND_METHOD("Renderer", true, "draw_model(_,_,_,_,_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawModel)
-	} else if (strcmp(module, "lib/Runtime") == 0) {
-		BIND_METHOD("Runtime", true, "switch_level(_)", vksk_RuntimeSwitchLevel)
-		BIND_METHOD("Runtime", true, "quit()", vksk_RuntimeQuit)
-		BIND_METHOD("Runtime", true, "cap_fps(_)", vksk_RuntimeCapFPS)
+	} else if (strcmp(module, "lib/Engine") == 0) {
+		BIND_METHOD("Engine", true, "switch_level(_)", vksk_RuntimeSwitchLevel)
+		BIND_METHOD("Engine", true, "quit()", vksk_RuntimeQuit)
+		BIND_METHOD("Engine", true, "cap_fps(_)", vksk_RuntimeCapFPS)
+		BIND_METHOD("Engine", true, "delta()", vksk_RuntimeDelta)
+		BIND_METHOD("Engine", true, "time()", vksk_RuntimeTime)
 	} else if (strcmp(module, "lib/Texture") == 0) {
 		BIND_METHOD("Texture", false, "width()", vksk_RuntimeVK2DTextureWidth)
 		BIND_METHOD("Texture", false, "height()", vksk_RuntimeVK2DTextureHeight)
