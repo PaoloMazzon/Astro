@@ -96,6 +96,11 @@ WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module
 			methods.allocate = vksk_RuntimeVK2DCameraAllocate;
 			methods.finalize = vksk_RuntimeVK2DCameraFinalize;
 		}
+	} else if (strcmp(module, "lib/Sprite") == 0) {
+		if (strcmp(className, "Sprite") == 0) {
+			methods.allocate = vksk_RuntimeJUSpriteAllocate;
+			methods.finalize = vksk_RuntimeJUSpriteFinalize;
+		}
 	}
 
 	return methods;
@@ -135,6 +140,9 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Renderer", true, "draw_polygon(_,_,_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawPolygon)
 		BIND_METHOD("Renderer", true, "draw_model(_,_,_,_,_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawModel)
 		BIND_METHOD("Renderer", true, "draw_font(_,_,_,_)", vksk_RuntimeRendererDrawFont)
+		BIND_METHOD("Renderer", true, "draw_sprite(_)", vksk_RuntimeRendererDrawSprite)
+		BIND_METHOD("Renderer", true, "draw_sprite(_,_,_)", vksk_RuntimeRendererDrawSpritePos)
+		BIND_METHOD("Renderer", true, "draw_sprite(_,_,_,_)", vksk_RuntimeRendererDrawSpriteFrame)
 	} else if (strcmp(module, "lib/Engine") == 0) {
 		BIND_METHOD("Engine", true, "switch_level(_)", vksk_RuntimeSwitchLevel)
 		BIND_METHOD("Engine", true, "quit()", vksk_RuntimeQuit)
@@ -151,6 +159,24 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Surface", false, "free()", vksk_RuntimeVK2DSurfaceFree)
 	} else if (strcmp(module, "lib/BitmapFont") == 0) {
 		BIND_METHOD("BitmapFont", false, "free()", vksk_RuntimeJUBitmapFontFree)
+	} else if (strcmp(module, "lib/Sprite") == 0) {
+		BIND_METHOD("Sprite", false, "free()", vksk_RuntimeJUSpriteFree)
+		BIND_METHOD("Sprite", false, "copy()", vksk_RuntimeJUSpriteCopy)
+		BIND_METHOD("Sprite", false, "set_pos(_,_)", vksk_RuntimeJUSpriteSetPos)
+		BIND_METHOD("Sprite", false, "get_delay()", vksk_RuntimeJUSpriteGetDelay)
+		BIND_METHOD("Sprite", false, "set_delay(_)", vksk_RuntimeJUSpriteSetDelay)
+		BIND_METHOD("Sprite", false, "get_x()", vksk_RuntimeJUSpriteGetX)
+		BIND_METHOD("Sprite", false, "get_y()", vksk_RuntimeJUSpriteGetY)
+		BIND_METHOD("Sprite", false, "get_origin_x()", vksk_RuntimeJUSpriteGetOriginX)
+		BIND_METHOD("Sprite", false, "set_origin_x(_)", vksk_RuntimeJUSpriteSetOriginX)
+		BIND_METHOD("Sprite", false, "get_origin_y()", vksk_RuntimeJUSpriteGetOriginY)
+		BIND_METHOD("Sprite", false, "set_origin_y(_)", vksk_RuntimeJUSpriteSetOriginY)
+		BIND_METHOD("Sprite", false, "get_scale_x()", vksk_RuntimeJUSpriteGetScaleX)
+		BIND_METHOD("Sprite", false, "set_scale_x(_)", vksk_RuntimeJUSpriteSetScaleX)
+		BIND_METHOD("Sprite", false, "get_scale_y()", vksk_RuntimeJUSpriteGetScaleY)
+		BIND_METHOD("Sprite", false, "set_scale_y(_)", vksk_RuntimeJUSpriteSetScaleY)
+		BIND_METHOD("Sprite", false, "get_rotation()", vksk_RuntimeJUSpriteGetRotation)
+		BIND_METHOD("Sprite", false, "set_rotation(_)", vksk_RuntimeJUSpriteSetRotation)
 	} else if (strcmp(module, "lib/Camera") == 0) {
 		BIND_METHOD("Camera", false, "get_type()", vksk_RuntimeVK2DCameraGetType)
 		BIND_METHOD("Camera", false, "set_type(_)", vksk_RuntimeVK2DCameraSetType)

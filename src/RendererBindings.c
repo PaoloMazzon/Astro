@@ -318,3 +318,22 @@ void vksk_RuntimeRendererDrawFont(WrenVM *vm) {
 	float y = wrenGetSlotDouble(vm, 4);
 	juFontDraw(*font, x, y, "%s", str);
 }
+
+void vksk_RuntimeRendererDrawSprite(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, "Sprite")
+	JUSprite *spr = wrenGetSlotForeign(vm, 1);
+	juSpriteDraw(*spr, (*spr)->x, (*spr)->y);
+}
+
+void vksk_RuntimeRendererDrawSpritePos(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, "Sprite", FOREIGN_NUM, FOREIGN_NUM)
+	JUSprite *spr = wrenGetSlotForeign(vm, 1);
+	juSpriteDraw(*spr, wrenGetSlotDouble(vm, 2), wrenGetSlotDouble(vm, 3));
+}
+
+void vksk_RuntimeRendererDrawSpriteFrame(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, "Sprite", FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
+	JUSprite *spr = wrenGetSlotForeign(vm, 1);
+	juSpriteDrawFrame(*spr, wrenGetSlotDouble(vm, 2), wrenGetSlotDouble(vm, 3), wrenGetSlotDouble(vm, 3));
+}
+
