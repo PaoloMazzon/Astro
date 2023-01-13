@@ -255,4 +255,35 @@ class Input {
 
     // Returns true if a key was just released this frame
     foreign static keyboard_get_key_released(key)
+
+    // Gets the position of the mouse as a list of [x, y] in the game world 
+    // relative to a camera (use `null` to get the mouse relative to the window)
+    foreign static get_mouse_position(camera)
+    
+    // Returns true if the left mouse button is currently held
+    foreign static get_mouse_left()
+    
+    // Returns true if the left mouse button is pressed
+    foreign static get_mouse_left_pressed()
+    
+    // Returns true if the left mouse button is released
+    foreign static get_mouse_left_released()
+    
+    // Returns true if the right mouse button is currently held
+    foreign static get_mouse_right()
+    
+    // Returns true if the right mouse button was just pressed
+    foreign static get_mouse_right_pressed()
+    
+    // Returns true if the right mouse button was just released
+    foreign static get_mouse_right_released()
+    
+    // Returns true if the middle mouse button is currently held
+    foreign static get_mouse_middle()
+    
+    // Returns true if the middle mouse button was just pressed
+    foreign static get_mouse_middle_pressed()
+    
+    // Returns true if the middle mouse button was just released
+    foreign static get_mouse_middle_released()
 }

@@ -16,6 +16,8 @@ WrenHandle *gNextLevel = NULL;
 bool gQuit = false;
 double gFPSCap = 0;
 JUClock gFPSClock = {};
+bool gMouseButtons[3] = {};
+bool gMouseButtonsPrevious[3] = {};
 
 // From RendererBindings.c
 void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitle, int *windowWidth, int *windowHeight, VK2DRendererConfig *config);
@@ -75,6 +77,15 @@ void vksk_Start() {
 		while (SDL_PollEvent(&e))
 			if (e.type == SDL_QUIT)
 				gQuit = true;
+
+		// Deal with mouse buttons
+		Uint32 buttons = SDL_GetMouseState(NULL, NULL);
+		gMouseButtonsPrevious[0] = gMouseButtons[0];
+		gMouseButtonsPrevious[1] = gMouseButtons[1];
+		gMouseButtonsPrevious[2] = gMouseButtons[2];
+		gMouseButtons[0] = buttons & SDL_BUTTON(SDL_BUTTON_LEFT);
+		gMouseButtons[1] = buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE);
+		gMouseButtons[2] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
 
 		// Update VK2D and run the level update function
 		VK2DCameraSpec spec = vk2dCameraGetSpec(VK2D_DEFAULT_CAMERA);

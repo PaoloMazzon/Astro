@@ -32,7 +32,6 @@ class Game is Level {
             _y = _y + speed
         }
 
-        Renderer.draw_circle(200, 200, 10)
         Renderer.draw_texture(_tex, _x, _y)
     }
 

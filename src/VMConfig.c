@@ -178,6 +178,16 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Input", true, "keyboard_get_key(_)", vksk_RuntimeInputCheckKey)
 		BIND_METHOD("Input", true, "keyboard_get_key_pressed(_)", vksk_RuntimeInputCheckKeyPressed)
 		BIND_METHOD("Input", true, "keyboard_get_key_released(_)", vksk_RuntimeInputCheckKeyReleased)
+		BIND_METHOD("Input", true, "get_mouse_position(_)", vksk_RuntimeInputGetMousePosition)
+		BIND_METHOD("Input", true, "get_mouse_left()", vksk_RuntimeInputGetMouseLeftButton)
+		BIND_METHOD("Input", true, "get_mouse_left_pressed()", vksk_RuntimeInputGetMouseLeftButtonPressed)
+		BIND_METHOD("Input", true, "get_mouse_left_released()", vksk_RuntimeInputGetMouseLeftButtonReleased)
+		BIND_METHOD("Input", true, "get_mouse_right()", vksk_RuntimeInputGetMouseRightButton)
+		BIND_METHOD("Input", true, "get_mouse_right_pressed()", vksk_RuntimeInputGetMouseRightButtonPressed)
+		BIND_METHOD("Input", true, "get_mouse_right_released()", vksk_RuntimeInputGetMouseRightButtonReleased)
+		BIND_METHOD("Input", true, "get_mouse_middle()", vksk_RuntimeInputGetMouseMiddleButton)
+		BIND_METHOD("Input", true, "get_mouse_middle_pressed()", vksk_RuntimeInputGetMouseMiddleButtonPressed)
+		BIND_METHOD("Input", true, "get_mouse_middle_released()", vksk_RuntimeInputGetMouseMiddleButtonReleased)
 	}
 	return NULL;
 }
