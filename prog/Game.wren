@@ -3,6 +3,7 @@ import "lib/Renderer" for Renderer
 import "lib/Texture" for Texture
 import "lib/Engine" for Engine
 import "lib/Input" for Input
+import "lib/BitmapFont" for BitmapFont
 
 class Game is Level {
     construct new() {
@@ -15,6 +16,7 @@ class Game is Level {
         _tex = Texture.new("assets/sprite.png")
         _x = 100
         _y = 100
+        _font = BitmapFont.new("assets/font.png", 32, 128, 40, 70)
     }
 
     update() {
@@ -33,10 +35,12 @@ class Game is Level {
         }
 
         Renderer.draw_texture(_tex, _x, _y)
+        Renderer.draw_font(_font, "Font test", 0, 0)
     }
 
     destroy() {
         _tex.free()
+        _font.free()
         System.print("game destroy")
     }
 }

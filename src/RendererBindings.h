@@ -57,3 +57,4 @@ void vksk_RuntimeRendererDrawPolygon(WrenVM *vm); // UNIMPLEMENTED
 
 void vksk_RuntimeRendererDrawModel(WrenVM *vm); // UNIMPLEMENTED
 
+void vksk_RuntimeRendererDrawFont(WrenVM *vm);

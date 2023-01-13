@@ -309,3 +309,12 @@ void vksk_RuntimeRendererDrawPolygon(WrenVM *vm) {
 void vksk_RuntimeRendererDrawModel(WrenVM *vm) {
 	// TODO: This
 }
+
+void vksk_RuntimeRendererDrawFont(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, "BitmapFont", FOREIGN_STRING, FOREIGN_NUM, FOREIGN_NUM)
+	JUFont *font = wrenGetSlotForeign(vm, 1);
+	const char *str = wrenGetSlotString(vm, 2);
+	float x = wrenGetSlotDouble(vm, 3);
+	float y = wrenGetSlotDouble(vm, 4);
+	juFontDraw(*font, x, y, "%s", str);
+}

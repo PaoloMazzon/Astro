@@ -118,4 +118,7 @@ class Renderer {
 
     // Draws a model, model MUST be `Model`, axis MUST be a 3-element list
     foreign static draw_model(model, x, y, z, xscale, yscale, zscale, rot, axis, origin_x, origin_y, origin_z)
+
+    // Draws text, font MUST be a `BitmapFont`
+    foreign static draw_font(font, text, x, y)
 }

@@ -8,6 +8,7 @@
 #include "src/Runtime.h"
 #include "src/VK2DTypes.h"
 #include "src/Input.h"
+#include "src/JUTypes.h"
 
 void vksk_WrenWriteFn(WrenVM* vm, const char* text) {
 	printf("%s", text);
@@ -85,6 +86,11 @@ WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module
 			methods.allocate = vksk_RuntimeVK2DSurfaceAllocate;
 			methods.finalize = vksk_RuntimeVK2DSurfaceFinalize;
 		}
+	} else if (strcmp(module, "lib/BitmapFont") == 0) {
+		if (strcmp(className, "BitmapFont") == 0) {
+			methods.allocate = vksk_RuntimeJUBitmapFontAllocate;
+			methods.finalize = vksk_RuntimeJUBitmapFontFinalize;
+		}
 	} else if (strcmp(module, "lib/Camera") == 0) {
 		if (strcmp(className, "Camera") == 0) {
 			methods.allocate = vksk_RuntimeVK2DCameraAllocate;
@@ -128,6 +134,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Renderer", true, "draw_shader(_,_,_,_,_,_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawShader)
 		BIND_METHOD("Renderer", true, "draw_polygon(_,_,_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawPolygon)
 		BIND_METHOD("Renderer", true, "draw_model(_,_,_,_,_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawModel)
+		BIND_METHOD("Renderer", true, "draw_font(_,_,_,_)", vksk_RuntimeRendererDrawFont)
 	} else if (strcmp(module, "lib/Engine") == 0) {
 		BIND_METHOD("Engine", true, "switch_level(_)", vksk_RuntimeSwitchLevel)
 		BIND_METHOD("Engine", true, "quit()", vksk_RuntimeQuit)
@@ -142,6 +149,8 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Surface", false, "width()", vksk_RuntimeVK2DSurfaceWidth)
 		BIND_METHOD("Surface", false, "height()", vksk_RuntimeVK2DSurfaceHeight)
 		BIND_METHOD("Surface", false, "free()", vksk_RuntimeVK2DSurfaceFree)
+	} else if (strcmp(module, "lib/BitmapFont") == 0) {
+		BIND_METHOD("BitmapFont", false, "free()", vksk_RuntimeJUBitmapFontFree)
 	} else if (strcmp(module, "lib/Camera") == 0) {
 		BIND_METHOD("Camera", false, "get_type()", vksk_RuntimeVK2DCameraGetType)
 		BIND_METHOD("Camera", false, "set_type(_)", vksk_RuntimeVK2DCameraSetType)
