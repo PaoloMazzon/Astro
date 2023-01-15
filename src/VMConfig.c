@@ -10,6 +10,9 @@
 #include "src/Input.h"
 #include "src/JUTypes.h"
 
+// Globals
+extern const char *gAssetsFile;
+
 void vksk_WrenWriteFn(WrenVM* vm, const char* text) {
 	printf("%s", text);
 	fflush(stdout);
@@ -68,7 +71,10 @@ WrenLoadModuleResult vksk_WrenLoadModule(WrenVM* vm, const char* name) {
 	strcat(fname, ext);
 	WrenLoadModuleResult result = {0};
 	result.onComplete = vksk_WrenLoadModuleComplete;
-	result.source = loadFile(fname);
+	if (strcmp(name, "Assets") != 0)
+		result.source = loadFile(fname);
+	else
+		result.source = gAssetsFile;
 	return result;
 }
 

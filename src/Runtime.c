@@ -18,11 +18,15 @@ double gFPSCap = 0;
 JUClock gFPSClock = {};
 bool gMouseButtons[3] = {};
 bool gMouseButtonsPrevious[3] = {};
+const char *gAssetsFile;
 
 // From RendererBindings.c
 void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitle, int *windowWidth, int *windowHeight, VK2DRendererConfig *config);
 
 void vksk_Start() {
+	// Compile the assets code
+	gAssetsFile = vksk_CompileAssetFile();
+
 	// Wren config and VM initialization
 	WrenConfiguration config;
 	wrenInitConfiguration(&config);
@@ -65,7 +69,11 @@ void vksk_Start() {
 	vk2dRendererInit(gWindow, rendererConfig);
 	juInit(gWindow, 0, 0);
 
+	// Load assets
+	wrenInterpret(vm, "__top__", "import \"Assets\" for Assets\nAssets.load_assets()\n");
+
 	// Run starting level create function and FPS cap
+	wrenEnsureSlots(vm, 1);
 	wrenSetSlotHandle(vm, 0, gCurrentLevel);
 	wrenCall(vm, createHandle);
 	juClockStart(&gFPSClock);

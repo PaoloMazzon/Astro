@@ -7,6 +7,9 @@
 // Starts the runtime
 void vksk_Start();
 
+// Searches through the assets folder and makes a wren source file loading it all
+const char *vksk_CompileAssetFile();
+
 // Switches the current level
 void vksk_RuntimeSwitchLevel(WrenVM *vm);
 

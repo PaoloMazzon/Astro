@@ -33,3 +33,6 @@
 
 // Underlying function for the `VALIDATE_FOREIGN_ARGS` macro
 void _vksk_ValidateForeignArgs(WrenVM *vm, ...);
+
+// Log a message
+void vksk_Log(const char *fmt, ...);

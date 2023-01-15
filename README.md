@@ -98,7 +98,18 @@ keys must be provided:
  mode is unavailable `Renderer.SCREEN_MODE_IMMEDIATE` will be used instead)
  + `filter_type` - Use `Renderer.FILTER_TYPE_*` to select your preferred texture filter option
 
- 
+Features
+========
+Astro is still quite bare-bones at the moment while everything is still being ported over.
+Technically, you can use it to make games right now but the biggest issue is the lack of an
+audio subsystem as well as lack of any sort of file I/O. See the TODO section for an overview
+on what is yet to come.
+
+ + Easy-to-use API and simple language: [Wren](https://github.com/wren-lang/wren)
+ + Load and draw textures, sprites, bitmap fonts, and surfaces
+ + Fast and flexible cameras
+ + Incredibly simple level management
+
 TODO
 ====
 
@@ -108,8 +119,9 @@ Meta/Framework Things
  + Debug mode that checks types on binded functions
  + Basic file I/O functions that can be binded to Wren since Wren doesn't provide any
  + Better audio system that can be binded to the VM
- + Automatic asset loading into the VM so the user never needs to manage the assets themself
+ + Asset loader should support sprites likely in the same way `GenAssets.py` does, also bitmap fonts
  + Entity management system through a spatial hash-map and collisions that utilize it
+ + Detailed documentation for the Wren API
 
 Bindings
 --------
