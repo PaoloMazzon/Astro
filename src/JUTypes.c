@@ -130,3 +130,50 @@ void vksk_RuntimeJUSpriteSetRotation(WrenVM *vm) {
 	JUSprite *spr = wrenGetSlotForeign(vm, 0);
 	(*spr)->rotation = wrenGetSlotDouble(vm, 1);
 }
+
+/********************* Saves *********************/
+void vksk_RuntimeJUSaveAllocate(WrenVM *vm) {
+	JUSave *save = wrenSetSlotNewForeign(vm, 0, 0, sizeof(JUSave));
+	*save = juSaveLoad(wrenGetSlotString(vm, 1));
+}
+
+void vksk_RuntimeJUSaveFinalize(void *data) {
+	juSaveFree(*((JUSave *)data));
+}
+
+void vksk_RuntimeJUSaveFlush(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING)
+	JUSave *save = wrenGetSlotForeign(vm, 0);
+	juSaveStore(*save, wrenGetSlotString(vm, 1));
+}
+
+void vksk_RuntimeJUSaveKeyExists(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING)
+	JUSave *save = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotBool(vm, 0, juSaveKeyExists(*save, wrenGetSlotString(vm, 1)));
+}
+
+void vksk_RuntimeJUSaveGetString(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING)
+	JUSave *save = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotString(vm, 0, juSaveGetString(*save, wrenGetSlotString(vm, 1)));
+}
+
+void vksk_RuntimeJUSaveSetString(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_STRING)
+	JUSave *save = wrenGetSlotForeign(vm, 0);
+	juSaveSetString(*save, wrenGetSlotString(vm, 1), wrenGetSlotString(vm, 2));
+}
+
+void vksk_RuntimeJUSaveGetNum(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING)
+	JUSave *save = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, juSaveGetDouble(*save, wrenGetSlotString(vm, 1)));
+}
+
+void vksk_RuntimeJUSaveSetNum(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_NUM)
+	JUSave *save = wrenGetSlotForeign(vm, 0);
+	juSaveSetDouble(*save, wrenGetSlotString(vm, 1), wrenGetSlotDouble(vm, 2));
+}
+
