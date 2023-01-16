@@ -1,0 +1,47 @@
+/// \file ConfigFile.h
+/// \author Paolo Mazzon
+/// \brief Saves and loads .ini files
+#pragma once
+
+typedef struct _VKSK_ConfigKey {
+	const char *key;
+	const char *val;
+} _VKSK_ConfigKey;
+
+typedef struct _VKSK_ConfigHeader {
+	const char *header;
+	_VKSK_ConfigKey *keys;
+	int size;
+} _VKSK_ConfigHeader;
+
+typedef struct {
+	_VKSK_ConfigHeader *headers; // List of headers
+	int size; // How many headers in memory
+} *VKSK_Config;
+
+// Loads an ini file or returns an empty config if it doesn't exist
+VKSK_Config vksk_ConfigLoad(const char *filename);
+
+// Saves a config to a file
+void vksk_ConfigFlush(VKSK_Config config, const char *filename);
+
+// Gets a string from the config or returns def if they key/header doesn't exist
+const char *vksk_ConfigGetString(VKSK_Config config, const char *header, const char *key, const char *def);
+
+// Gets a double from the config or returns def if they key/header doesn't exist
+double vksk_ConfigGetDouble(VKSK_Config config, const char *header, const char *key, double def);
+
+// Sets a string in the config file
+void vksk_ConfigSetString(VKSK_Config config, const char *header, const char *key, const char *string);
+
+// Sets a double in the config file
+void vksk_ConfigSetDouble(VKSK_Config config, const char *header, const char *key, double real);
+
+// Returns true if a header exists, false otherwise
+bool vksk_ConfigHeaderExists(VKSK_Config config, const char *header);
+
+// Returns true if a header/key value exists, false otherwise
+bool vksk_ConfigKeyExists(VKSK_Config config, const char *header, const char *key);
+
+// Frees a config from memory - does not save
+void vksk_ConfigFree(VKSK_Config config);
