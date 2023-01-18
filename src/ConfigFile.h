@@ -14,7 +14,7 @@ typedef struct _VKSK_ConfigHeader {
 	int size;
 } _VKSK_ConfigHeader;
 
-typedef struct {
+typedef struct VKSK_Config {
 	_VKSK_ConfigHeader *headers; // List of headers
 	int size; // How many headers in memory
 } *VKSK_Config;

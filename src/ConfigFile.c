@@ -49,8 +49,72 @@ static _VKSK_ConfigKey *_vksk_ConfigGetKey(VKSK_Config config, const char *heade
 	return foundKey;
 }
 
+static const char *cleanINIString(const char *ini) {
+	char *new = malloc(strlen(ini) + 1);
+	int newP = 0;
+
+	// Loop through and remove garbage characters
+	for (int i = 0; i < strlen(ini); i++) {
+		if (ini[i] != '\r') {
+			new[newP] = ini[i];
+			newP++;
+		}
+	}
+
+	new[newP] = 0;
+	return new;
+}
+
+const char* loadFile(const char *filename); // from VMConfig.c
+
 VKSK_Config vksk_ConfigLoad(const char *filename) {
-	return NULL; // TODO: This
+	VKSK_Config conf = malloc(sizeof(struct VKSK_Config));
+	conf->size = 0;
+	conf->headers = NULL;
+
+	if (_vk2dFileExists(filename)) {
+		const char *file = cleanINIString(loadFile(filename));
+		char header[100] = "none";
+		char key[100] = "";
+		const char *line = file;
+		bool first = true;
+
+		// Loop through each line of the file
+		while (line != NULL) {
+			if (first)
+				first = false;
+			else
+				line += 1;
+			const char *nextLine = strchr(line, '\n');
+			int len;
+			if (nextLine == NULL)
+				len = strlen(line);
+			else
+				len = nextLine - line;
+
+			// Determine if its a key header or empty line
+			if (len > 2) {
+				const char *equal = memchr(line, '=', len);
+				if (line[0] == '[' && line[len - 1] == ']' && len < 102) {
+					strncpy(header, line + 1, len - 2);
+				} else if (equal != NULL && equal - line < 100) {
+					strncpy(key, line, equal - line);
+					_VKSK_ConfigKey *newkey = _vksk_ConfigGetKey(conf, header, key);
+					newkey->val = malloc((line + len) - equal);
+					strncpy((void*)newkey->val, equal + 1, (line + len) - equal - 1);
+					((char*)newkey->val)[(line + len) - equal - 1] = 0;
+				}
+			}
+
+			// Find the next line
+			line = nextLine;
+		}
+
+
+		free((void*)file);
+	}
+
+	return conf;
 }
 
 void vksk_ConfigFlush(VKSK_Config config, const char *filename) {
@@ -79,7 +143,7 @@ const char *vksk_ConfigGetString(VKSK_Config config, const char *header, const c
 				}
 		}
 	}
-	return def;
+	return string;
 }
 
 double vksk_ConfigGetDouble(VKSK_Config config, const char *header, const char *key, double def) {
@@ -94,7 +158,7 @@ double vksk_ConfigGetDouble(VKSK_Config config, const char *header, const char *
 				}
 		}
 	}
-	return def;
+	return real;
 }
 
 void vksk_ConfigSetString(VKSK_Config config, const char *header, const char *key, const char *string) {

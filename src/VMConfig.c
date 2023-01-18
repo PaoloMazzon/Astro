@@ -33,7 +33,7 @@ void vksk_WrenErrorFn(WrenVM* vm, WrenErrorType errorType, const char* module, c
 	fflush(stdout);
 }
 
-static const char* loadFile(const char *filename) {
+const char* loadFile(const char *filename) {
 	FILE* file = fopen(filename, "rb");
 	unsigned char *buffer = NULL;
 	int size = 0;
