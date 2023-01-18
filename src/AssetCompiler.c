@@ -9,8 +9,7 @@
 #include "src/Runtime.h"
 #include "src/Validation.h"
 
-const char *OUTPUT_HEADER = "import \"lib/Texture\" for Texture\n"
-							"import \"lib/Sprite\" for Sprite\n"
+const char *OUTPUT_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont\n"
 							"\n"
 							"class Assets {\n";
 

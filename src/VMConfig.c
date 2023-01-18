@@ -83,32 +83,26 @@ WrenLoadModuleResult vksk_WrenLoadModule(WrenVM* vm, const char* name) {
 WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module, const char* className) {
 	WrenForeignClassMethods methods = {};
 
-	if (strcmp(module, "lib/Texture") == 0) {
-		if (strcmp(className, "Texture") == 0) {
-			methods.allocate = vksk_RuntimeVK2DTextureAllocate;
-			methods.finalize = vksk_RuntimeVK2DTextureFinalize;
-		}
-	} else if (strcmp(module, "lib/Surface") == 0) {
-		if (strcmp(className, "Surface") == 0) {
-			methods.allocate = vksk_RuntimeVK2DSurfaceAllocate;
-			methods.finalize = vksk_RuntimeVK2DSurfaceFinalize;
-		}
-	} else if (strcmp(module, "lib/BitmapFont") == 0) {
+	if (strcmp(module, "lib/Drawing") == 0) {
 		if (strcmp(className, "BitmapFont") == 0) {
 			methods.allocate = vksk_RuntimeJUBitmapFontAllocate;
 			methods.finalize = vksk_RuntimeJUBitmapFontFinalize;
+		} else if (strcmp(className, "Sprite") == 0) {
+			methods.allocate = vksk_RuntimeJUSpriteAllocate;
+			methods.finalize = vksk_RuntimeJUSpriteFinalize;
+		} else if (strcmp(className, "Surface") == 0) {
+			methods.allocate = vksk_RuntimeVK2DSurfaceAllocate;
+			methods.finalize = vksk_RuntimeVK2DSurfaceFinalize;
+		} else if (strcmp(className, "Texture") == 0) {
+			methods.allocate = vksk_RuntimeVK2DTextureAllocate;
+			methods.finalize = vksk_RuntimeVK2DTextureFinalize;
 		}
-	} else if (strcmp(module, "lib/Camera") == 0) {
+	} else if (strcmp(module, "lib/Renderer") == 0) {
 		if (strcmp(className, "Camera") == 0) {
 			methods.allocate = vksk_RuntimeVK2DCameraAllocate;
 			methods.finalize = vksk_RuntimeVK2DCameraFinalize;
 		}
-	} else if (strcmp(module, "lib/Sprite") == 0) {
-		if (strcmp(className, "Sprite") == 0) {
-			methods.allocate = vksk_RuntimeJUSpriteAllocate;
-			methods.finalize = vksk_RuntimeJUSpriteFinalize;
-		}
-	} else if (strcmp(module, "lib/INI") == 0) {
+	} else if (strcmp(module, "lib/File") == 0) {
 		if (strcmp(className, "INI") == 0) {
 			methods.allocate = vksk_RuntimeINIAllocate;
 			methods.finalize = vksk_RuntimeINIFinalize;
@@ -154,38 +148,6 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Renderer", true, "draw_font(_,_,_,_)", vksk_RuntimeRendererDrawFont)
 		BIND_METHOD("Renderer", true, "draw_sprite(_,_,_)", vksk_RuntimeRendererDrawSpritePos)
 		BIND_METHOD("Renderer", true, "draw_sprite(_,_,_,_)", vksk_RuntimeRendererDrawSpriteFrame)
-	} else if (strcmp(module, "lib/Engine") == 0) {
-		BIND_METHOD("Engine", true, "switch_level(_)", vksk_RuntimeSwitchLevel)
-		BIND_METHOD("Engine", true, "quit()", vksk_RuntimeQuit)
-		BIND_METHOD("Engine", true, "cap_fps(_)", vksk_RuntimeCapFPS)
-		BIND_METHOD("Engine", true, "delta()", vksk_RuntimeDelta)
-		BIND_METHOD("Engine", true, "time()", vksk_RuntimeTime)
-	} else if (strcmp(module, "lib/Texture") == 0) {
-		BIND_METHOD("Texture", false, "width()", vksk_RuntimeVK2DTextureWidth)
-		BIND_METHOD("Texture", false, "height()", vksk_RuntimeVK2DTextureHeight)
-		BIND_METHOD("Texture", false, "free()", vksk_RuntimeVK2DTextureFree)
-	} else if (strcmp(module, "lib/Surface") == 0) {
-		BIND_METHOD("Surface", false, "width()", vksk_RuntimeVK2DSurfaceWidth)
-		BIND_METHOD("Surface", false, "height()", vksk_RuntimeVK2DSurfaceHeight)
-		BIND_METHOD("Surface", false, "free()", vksk_RuntimeVK2DSurfaceFree)
-	} else if (strcmp(module, "lib/BitmapFont") == 0) {
-		BIND_METHOD("BitmapFont", false, "free()", vksk_RuntimeJUBitmapFontFree)
-	} else if (strcmp(module, "lib/Sprite") == 0) {
-		BIND_METHOD("Sprite", false, "free()", vksk_RuntimeJUSpriteFree)
-		BIND_METHOD("Sprite", false, "copy()", vksk_RuntimeJUSpriteCopy)
-		BIND_METHOD("Sprite", false, "get_delay()", vksk_RuntimeJUSpriteGetDelay)
-		BIND_METHOD("Sprite", false, "set_delay(_)", vksk_RuntimeJUSpriteSetDelay)
-		BIND_METHOD("Sprite", false, "get_origin_x()", vksk_RuntimeJUSpriteGetOriginX)
-		BIND_METHOD("Sprite", false, "set_origin_x(_)", vksk_RuntimeJUSpriteSetOriginX)
-		BIND_METHOD("Sprite", false, "get_origin_y()", vksk_RuntimeJUSpriteGetOriginY)
-		BIND_METHOD("Sprite", false, "set_origin_y(_)", vksk_RuntimeJUSpriteSetOriginY)
-		BIND_METHOD("Sprite", false, "get_scale_x()", vksk_RuntimeJUSpriteGetScaleX)
-		BIND_METHOD("Sprite", false, "set_scale_x(_)", vksk_RuntimeJUSpriteSetScaleX)
-		BIND_METHOD("Sprite", false, "get_scale_y()", vksk_RuntimeJUSpriteGetScaleY)
-		BIND_METHOD("Sprite", false, "set_scale_y(_)", vksk_RuntimeJUSpriteSetScaleY)
-		BIND_METHOD("Sprite", false, "get_rotation()", vksk_RuntimeJUSpriteGetRotation)
-		BIND_METHOD("Sprite", false, "set_rotation(_)", vksk_RuntimeJUSpriteSetRotation)
-	} else if (strcmp(module, "lib/Camera") == 0) {
 		BIND_METHOD("Camera", false, "get_type()", vksk_RuntimeVK2DCameraGetType)
 		BIND_METHOD("Camera", false, "set_type(_)", vksk_RuntimeVK2DCameraSetType)
 		BIND_METHOD("Camera", false, "get_x()", vksk_RuntimeVK2DCameraGetX)
@@ -217,6 +179,34 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Camera", false, "get_fov()", vksk_RuntimeVK2DCameraGetFov)
 		BIND_METHOD("Camera", false, "set_fov(_)", vksk_RuntimeVK2DCameraSetFov)
 		BIND_METHOD("Camera", false, "update()", vksk_RuntimeVK2DCameraUpdate)
+	} else if (strcmp(module, "lib/Engine") == 0) {
+		BIND_METHOD("Engine", true, "switch_level(_)", vksk_RuntimeSwitchLevel)
+		BIND_METHOD("Engine", true, "quit()", vksk_RuntimeQuit)
+		BIND_METHOD("Engine", true, "cap_fps(_)", vksk_RuntimeCapFPS)
+		BIND_METHOD("Engine", true, "delta()", vksk_RuntimeDelta)
+		BIND_METHOD("Engine", true, "time()", vksk_RuntimeTime)
+	} else if (strcmp(module, "lib/Drawing") == 0) {
+		BIND_METHOD("Texture", false, "width()", vksk_RuntimeVK2DTextureWidth)
+		BIND_METHOD("Texture", false, "height()", vksk_RuntimeVK2DTextureHeight)
+		BIND_METHOD("Texture", false, "free()", vksk_RuntimeVK2DTextureFree)
+		BIND_METHOD("Surface", false, "width()", vksk_RuntimeVK2DSurfaceWidth)
+		BIND_METHOD("Surface", false, "height()", vksk_RuntimeVK2DSurfaceHeight)
+		BIND_METHOD("Surface", false, "free()", vksk_RuntimeVK2DSurfaceFree)
+		BIND_METHOD("BitmapFont", false, "free()", vksk_RuntimeJUBitmapFontFree)
+		BIND_METHOD("Sprite", false, "free()", vksk_RuntimeJUSpriteFree)
+		BIND_METHOD("Sprite", false, "copy()", vksk_RuntimeJUSpriteCopy)
+		BIND_METHOD("Sprite", false, "get_delay()", vksk_RuntimeJUSpriteGetDelay)
+		BIND_METHOD("Sprite", false, "set_delay(_)", vksk_RuntimeJUSpriteSetDelay)
+		BIND_METHOD("Sprite", false, "get_origin_x()", vksk_RuntimeJUSpriteGetOriginX)
+		BIND_METHOD("Sprite", false, "set_origin_x(_)", vksk_RuntimeJUSpriteSetOriginX)
+		BIND_METHOD("Sprite", false, "get_origin_y()", vksk_RuntimeJUSpriteGetOriginY)
+		BIND_METHOD("Sprite", false, "set_origin_y(_)", vksk_RuntimeJUSpriteSetOriginY)
+		BIND_METHOD("Sprite", false, "get_scale_x()", vksk_RuntimeJUSpriteGetScaleX)
+		BIND_METHOD("Sprite", false, "set_scale_x(_)", vksk_RuntimeJUSpriteSetScaleX)
+		BIND_METHOD("Sprite", false, "get_scale_y()", vksk_RuntimeJUSpriteGetScaleY)
+		BIND_METHOD("Sprite", false, "set_scale_y(_)", vksk_RuntimeJUSpriteSetScaleY)
+		BIND_METHOD("Sprite", false, "get_rotation()", vksk_RuntimeJUSpriteGetRotation)
+		BIND_METHOD("Sprite", false, "set_rotation(_)", vksk_RuntimeJUSpriteSetRotation)
 	} else if (strcmp(module, "lib/Input") == 0) {
 		BIND_METHOD("Input", true, "keyboard_get_key(_)", vksk_RuntimeInputCheckKey)
 		BIND_METHOD("Input", true, "keyboard_get_key_pressed(_)", vksk_RuntimeInputCheckKeyPressed)
@@ -231,7 +221,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Input", true, "get_mouse_middle()", vksk_RuntimeInputGetMouseMiddleButton)
 		BIND_METHOD("Input", true, "get_mouse_middle_pressed()", vksk_RuntimeInputGetMouseMiddleButtonPressed)
 		BIND_METHOD("Input", true, "get_mouse_middle_released()", vksk_RuntimeInputGetMouseMiddleButtonReleased)
-	} else if (strcmp(module, "lib/INI") == 0) {
+	} else if (strcmp(module, "lib/File") == 0) {
 		BIND_METHOD("INI", false, "flush(_)", vksk_RuntimeINIFlush)
 		BIND_METHOD("INI", false, "key_exists(_,_)", vksk_RuntimeINIKeyExists)
 		BIND_METHOD("INI", false, "get_string(_,_,_)", vksk_RuntimeINIGetString)
@@ -240,6 +230,9 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("INI", false, "set_bool(_,_,_)", vksk_RuntimeINISetBool)
 		BIND_METHOD("INI", false, "get_num(_,_,_)", vksk_RuntimeINIGetNum)
 		BIND_METHOD("INI", false, "set_num(_,_,_)", vksk_RuntimeINISetNum)
+		BIND_METHOD("File", true, "read(_)", vksk_RuntimeFileRead)
+		BIND_METHOD("File", true, "write(_,_)", vksk_RuntimeFileWrite)
+		BIND_METHOD("File", true, "exists(_)", vksk_RuntimeFileExists)
 	}
 	return NULL;
 }

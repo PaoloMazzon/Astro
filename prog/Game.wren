@@ -1,10 +1,8 @@
-import "lib/Levels" for Level
-import "lib/Renderer" for Renderer
-import "lib/Sprite" for Sprite
-import "lib/Engine" for Engine
+import "lib/Engine" for Engine, Level
 import "lib/Input" for Input
-import "lib/BitmapFont" for BitmapFont
-import "lib/Camera" for Camera
+import "lib/Renderer" for Renderer, Camera
+import "lib/Drawing" for BitmapFont, Sprite
+import "lib/File" for File
 import "Assets" for Assets
 
 class Game is Level {

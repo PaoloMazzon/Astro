@@ -1,6 +1,45 @@
-// Sprite.wren
+// Drawing.wren
 // Author: Paolo Mazzon
-// Tools for creating and managing sprites
+// Drawing related classes
+
+// Bitmap fonts
+foreign class BitmapFont {
+    // Loads a bitmap font from a given image filename, it expects at
+    // least unicode_end-unicode_start characters of w*h size
+    construct new(filename, unicode_start, unicode_end, w, h) {}
+
+    // Forces the font to be freed if you don't want to wait for the garbage collector
+    foreign free()
+}
+
+// 2D textures
+foreign class Texture {
+    construct new(filename) {}
+
+    // Returns the width of the texture
+    foreign width()
+
+    // Returns the height of the texture
+    foreign height()
+
+    // Forces the internal texture to be freed if you don't want to wait for the garbage collector
+    foreign free()
+}
+
+// Textures you can draw to
+foreign class Surface {
+    // Creates a new surface you can draw on and draw to the screen
+    construct new(width, height) {}
+
+    // Returns the width of the texture
+    foreign width()
+
+    // Returns the height of the texture
+    foreign height()
+
+    // Forces the surface to be freed if you don't want to wait for the garbage collector
+    foreign free()
+}
 
 // Animated sprites
 foreign class Sprite {

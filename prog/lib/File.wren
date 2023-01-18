@@ -1,7 +1,20 @@
-// INI.wren
+// File.wren
 // Author: Paolo Mazzon
-// Parse, modify, create, and save INI files
+// Access and modify files on the system
 
+// Tools for accessing files
+class File {
+    // Reads an entire file into a string and returns it or NULL if the file doesn't exist
+    foreign static read(filename)
+
+    // Writes a string to a file
+    foreign static write(filename, contents)
+
+    // Returns true if a file exists, false otherwise
+    foreign static exists(filename)
+}
+
+// Easy access for configuration files
 foreign class INI {
     // Opens an INI file, returns an empty one if the file doesn't exist
     construct open(filename) {}

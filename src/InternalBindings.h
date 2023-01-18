@@ -14,3 +14,7 @@ void vksk_RuntimeINIGetNum(WrenVM *vm);
 void vksk_RuntimeINISetNum(WrenVM *vm);
 void vksk_RuntimeINIGetBool(WrenVM *vm);
 void vksk_RuntimeINISetBool(WrenVM *vm);
+
+void vksk_RuntimeFileRead(WrenVM *vm);
+void vksk_RuntimeFileWrite(WrenVM *vm);
+void vksk_RuntimeFileExists(WrenVM *vm);

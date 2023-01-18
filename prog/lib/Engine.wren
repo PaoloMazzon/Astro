@@ -19,3 +19,15 @@ class Engine {
     // Returns the time in seconds since the program started
     foreign static time()
 }
+
+// All levels must inherit this class and implement all functions AND a constructor
+class Level {
+    // Called when the level is loaded
+    init() {}
+
+    // Called each frame while the level is loaded
+    update() {}
+
+    // Called whenever the level is unloaded (when the game stops or level change)
+    destroy() {}
+}

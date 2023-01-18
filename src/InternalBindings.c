@@ -1,5 +1,7 @@
 /// \file InternalBindings.c
 /// \author Paolo Mazzon
+#include <stdio.h>
+
 #include "src/InternalBindings.h"
 #include "src/ConfigFile.h"
 #include "src/Validation.h"
@@ -59,4 +61,34 @@ void vksk_RuntimeINISetBool(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_STRING, FOREIGN_BOOL)
 	VKSK_Config *conf = wrenGetSlotForeign(vm, 0);
 	vksk_ConfigSetBool(*conf, wrenGetSlotString(vm, 1), wrenGetSlotString(vm, 2), wrenGetSlotBool(vm, 3));
+}
+
+const char* loadFile(const char *filename); // from VMConfig.c
+bool _vk2dFileExists(const char *filename);
+
+void vksk_RuntimeFileRead(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING)
+	const char *fname = wrenGetSlotString(vm, 1);
+	if (_vk2dFileExists(fname)) {
+		const char *str = loadFile(fname);
+		wrenSetSlotString(vm, 0, str);
+		free((void*)str);
+	} else {
+		wrenSetSlotNull(vm, 0);
+	}
+}
+
+void vksk_RuntimeFileWrite(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_STRING)
+	const char *fname = wrenGetSlotString(vm, 1);
+	const char *val = wrenGetSlotString(vm, 2);
+	FILE *f = fopen(fname, "w");
+	fprintf(f, "%s", val);
+	fclose(f);
+}
+
+void vksk_RuntimeFileExists(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING)
+	const char *fname = wrenGetSlotString(vm, 1);
+	wrenSetSlotBool(vm, 0, _vk2dFileExists(fname));
 }
