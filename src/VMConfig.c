@@ -9,6 +9,7 @@
 #include "src/VK2DTypes.h"
 #include "src/Input.h"
 #include "src/JUTypes.h"
+#include "src/InternalBindings.h"
 
 // Globals
 extern const char *gAssetsFile;
@@ -107,10 +108,10 @@ WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module
 			methods.allocate = vksk_RuntimeJUSpriteAllocate;
 			methods.finalize = vksk_RuntimeJUSpriteFinalize;
 		}
-	} else if (strcmp(module, "lib/Save") == 0) {
-		if (strcmp(className, "Save") == 0) {
-			methods.allocate = vksk_RuntimeJUSaveAllocate;
-			methods.finalize = vksk_RuntimeJUSaveFinalize;
+	} else if (strcmp(module, "lib/INI") == 0) {
+		if (strcmp(className, "INI") == 0) {
+			methods.allocate = vksk_RuntimeINIAllocate;
+			methods.finalize = vksk_RuntimeINIFinalize;
 		}
 	}
 
@@ -230,13 +231,15 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Input", true, "get_mouse_middle()", vksk_RuntimeInputGetMouseMiddleButton)
 		BIND_METHOD("Input", true, "get_mouse_middle_pressed()", vksk_RuntimeInputGetMouseMiddleButtonPressed)
 		BIND_METHOD("Input", true, "get_mouse_middle_released()", vksk_RuntimeInputGetMouseMiddleButtonReleased)
-	} else if (strcmp(module, "lib/Save") == 0) {
-		BIND_METHOD("Save", false, "flush(_)", vksk_RuntimeJUSaveFlush)
-		BIND_METHOD("Save", false, "key_exists(_)", vksk_RuntimeJUSaveKeyExists)
-		BIND_METHOD("Save", false, "get_string(_)", vksk_RuntimeJUSaveGetString)
-		BIND_METHOD("Save", false, "set_string(_,_)", vksk_RuntimeJUSaveSetString)
-		BIND_METHOD("Save", false, "get_num(_)", vksk_RuntimeJUSaveGetNum)
-		BIND_METHOD("Save", false, "set_num(_,_)", vksk_RuntimeJUSaveSetNum)
+	} else if (strcmp(module, "lib/INI") == 0) {
+		BIND_METHOD("INI", false, "flush(_)", vksk_RuntimeINIFlush)
+		BIND_METHOD("INI", false, "key_exists(_,_)", vksk_RuntimeINIKeyExists)
+		BIND_METHOD("INI", false, "get_string(_,_,_)", vksk_RuntimeINIGetString)
+		BIND_METHOD("INI", false, "set_string(_,_,_)", vksk_RuntimeINISetString)
+		BIND_METHOD("INI", false, "get_bool(_,_,_)", vksk_RuntimeINIGetBool)
+		BIND_METHOD("INI", false, "set_bool(_,_,_)", vksk_RuntimeINISetBool)
+		BIND_METHOD("INI", false, "get_num(_,_,_)", vksk_RuntimeINIGetNum)
+		BIND_METHOD("INI", false, "set_num(_,_,_)", vksk_RuntimeINISetNum)
 	}
 	return NULL;
 }

@@ -6,7 +6,6 @@ import "lib/Input" for Input
 import "lib/BitmapFont" for BitmapFont
 import "lib/Camera" for Camera
 import "Assets" for Assets
-import "lib/Save" for Save
 
 class Game is Level {
     construct new() { }
@@ -29,10 +28,6 @@ class Game is Level {
         _spr = Sprite.new("assets/sprite.png", 0, 0, 16, 16, 0.3, 4)
         _x = 100
         _y = 100
-
-        var save = Save.new("save.bin")
-        System.print(save.get_num("number"))
-        System.print(save.get_string("string"))
     }
 
     update() {

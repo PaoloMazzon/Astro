@@ -92,13 +92,14 @@ VKSK_Config vksk_ConfigLoad(const char *filename) {
 			else
 				len = nextLine - line;
 
-			// Determine if its a key header or empty line
-			if (len > 2) {
+			// Determine if its a key, header, empty line, or comment
+			if (len > 2 || line[0] != ';') {
 				const char *equal = memchr(line, '=', len);
 				if (line[0] == '[' && line[len - 1] == ']' && len < 102) {
 					strncpy(header, line + 1, len - 2);
 				} else if (equal != NULL && equal - line < 100) {
 					strncpy(key, line, equal - line);
+					key[equal - line] = 0;
 					_VKSK_ConfigKey *newkey = _vksk_ConfigGetKey(conf, header, key);
 					newkey->val = malloc((line + len) - equal);
 					strncpy((void*)newkey->val, equal + 1, (line + len) - equal - 1);
@@ -161,6 +162,29 @@ double vksk_ConfigGetDouble(VKSK_Config config, const char *header, const char *
 	return real;
 }
 
+bool strToBool(const char *string) {
+	if (strcmp(string, "yes") == 0 || strcmp(string, "true") == 0 || strcmp(string, "1") == 0 ||
+			strcmp(string, "Yes") == 0 || strcmp(string, "True") == 0 || strcmp(string, "YES") == 0
+																		 || strcmp(string, "TRUE") == 0)
+		return true;
+	return false;
+}
+
+bool vksk_ConfigGetBool(VKSK_Config config, const char *header, const char *key, bool def) {
+	bool boolean = def;
+	bool out = false;
+	for (int i = 0; i < config->size && !out; i++) {
+		if (strcmp(config->headers[i].header, header) == 0) {
+			for (int j = 0; j < config->headers[i].size && !out; j++)
+				if (strcmp(config->headers[i].keys[j].key, key) == 0) {
+					boolean = strToBool(config->headers[i].keys[j].val);
+					out = true;
+				}
+		}
+	}
+	return boolean;
+}
+
 void vksk_ConfigSetString(VKSK_Config config, const char *header, const char *key, const char *string) {
 	_VKSK_ConfigKey *internalKey = _vksk_ConfigGetKey(config, header, key);
 	free((void*)internalKey->val);
@@ -171,6 +195,18 @@ void vksk_ConfigSetString(VKSK_Config config, const char *header, const char *ke
 void vksk_ConfigSetDouble(VKSK_Config config, const char *header, const char *key, double real) {
 	char string[100];
 	snprintf(string, 99, "%f", real);
+	_VKSK_ConfigKey *internalKey = _vksk_ConfigGetKey(config, header, key);
+	free((void*)internalKey->val);
+	internalKey->val = malloc(strlen(string) + 1);
+	strcpy((void*)internalKey->val, string);
+}
+
+void vksk_ConfigSetBool(VKSK_Config config, const char *header, const char *key, bool boolean) {
+	const char *string;
+	if (boolean)
+		string = "Yes";
+	else
+		string = "No";
 	_VKSK_ConfigKey *internalKey = _vksk_ConfigGetKey(config, header, key);
 	free((void*)internalKey->val);
 	internalKey->val = malloc(strlen(string) + 1);
