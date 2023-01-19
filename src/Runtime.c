@@ -26,9 +26,10 @@ void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitl
 void vksk_Start() {
 	// Compile the assets code
 	gAssetsFile = vksk_CompileAssetFile();
-	printf("%s", gAssetsFile);
+	vksk_Log("---------------------Compiled assets file---------------------\n%s\n---------------------Compiled assets file---------------------", gAssetsFile);
 
 	// Wren config and VM initialization
+	vksk_Log("Starting VM...");
 	WrenConfiguration config;
 	wrenInitConfiguration(&config);
 	config.writeFn = &vksk_WrenWriteFn;
@@ -39,6 +40,7 @@ void vksk_Start() {
 	WrenVM *vm = wrenNewVM(&config);
 
 	// Import the initialization module
+	vksk_Log("Loading init file...");
 	wrenInterpret(vm, "__top__", "import \"init\"");
 
 	// Create handles for the 3 primary functions of a level
@@ -59,6 +61,7 @@ void vksk_Start() {
 	vksk_LoadVK2DConfigFromMap(vm, 0, &windowTitle, &windowWidth, &windowHeight, &rendererConfig);
 
 	// Create VK2D and all that
+	vksk_Log("Starting Vulkan2D...");
 	gWindow = SDL_CreateWindow(
 			windowTitle,
 			SDL_WINDOWPOS_CENTERED,
@@ -71,15 +74,18 @@ void vksk_Start() {
 	juInit(gWindow, 0, 0);
 
 	// Load assets
+	vksk_Log("Loading assets...");
 	wrenInterpret(vm, "__top__", "import \"Assets\" for Assets\nAssets.load_assets()\n");
 
 	// Run starting level create function and FPS cap
+	vksk_Log("Running first level create function...");
 	wrenEnsureSlots(vm, 1);
 	wrenSetSlotHandle(vm, 0, gCurrentLevel);
 	wrenCall(vm, createHandle);
 	juClockStart(&gFPSClock);
 
 	// Game loop
+	vksk_Log("Beginning game loop...");
 	while (!gQuit) {
 		juUpdate();
 		SDL_Event e;
@@ -125,6 +131,7 @@ void vksk_Start() {
 	}
 
 	// Cleanup
+	vksk_Log("Cleanup...");
 	vk2dRendererWait();
 	wrenCollectGarbage(vm);
 	wrenFreeVM(vm);

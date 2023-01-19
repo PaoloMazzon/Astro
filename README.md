@@ -105,10 +105,10 @@ Technically, you can use it to make games right now but the biggest issue is the
 audio subsystem as well as lack of any sort of file I/O. See the TODO section for an overview
 on what is yet to come.
 
- + Easy-to-use API and simple language: [Wren](https://github.com/wren-lang/wren)
- + Load and draw textures, sprites, bitmap fonts, and surfaces
+ + Intuitive API that utilizes [Wren](https://github.com/wren-lang/wren) as its language
+ + Manual and automatic resource management
  + Fast and flexible cameras
- + Incredibly simple level management
+ + Simple level management
 
 TODO
 ====
@@ -116,18 +116,15 @@ TODO
 Meta/Framework Things
 ---------------------
 
- + Debug mode that checks types on binded functions
- + Basic file I/O functions that can be binded to Wren since Wren doesn't provide any
- + Better audio system that can be binded to the VM
- + Asset loader should support sprites likely in the same way `GenAssets.py` does, also bitmap fonts
- + Entity management system through a spatial hash-map and collisions that utilize it
- + Detailed documentation for the Wren API
+ + Debug mode
+ + 3D audio system
+ + Entity management system
+ + Detailed documentation
+ + TrueType fonts
 
 Bindings
 --------
 
- + JamUtil `JUClock`, `JUFont` (non-bitmap), `JUSave`, collision/math things
+ + JamUtil `JUClock`, collision/math things
  + 3D audio system
- + Generic file I/O
  + Foreign class for VK2D objects `VK2DModel`, `VK2DShader`, `VK2DPolygon` (not a priority)
- + Bind functions to the above foreign classes
