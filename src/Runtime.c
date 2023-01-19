@@ -26,6 +26,7 @@ void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitl
 void vksk_Start() {
 	// Compile the assets code
 	gAssetsFile = vksk_CompileAssetFile();
+	printf("%s", gAssetsFile);
 
 	// Wren config and VM initialization
 	WrenConfiguration config;

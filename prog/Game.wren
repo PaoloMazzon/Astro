@@ -21,9 +21,6 @@ class Game is Level {
         _game_cam.update()
         Engine.cap_fps(60)
 
-        // Load assets
-        _font = BitmapFont.new("assets/font.png", 32, 128, 40, 70)
-        _spr = Sprite.new("assets/sprite.png", 0, 0, 16, 16, 0.3, 4)
         _x = 100
         _y = 100
     }
@@ -44,10 +41,10 @@ class Game is Level {
         }
 
         Renderer.lock_cameras(_game_cam)
-        Renderer.draw_sprite(_spr, _x, _y)
+        Renderer.draw_sprite(Assets.sprite(), _x, _y)
         Renderer.draw_texture(Assets.logo(), 100, 100)
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
-        Renderer.draw_font(_font, "Font test", 0, 0)
+        Renderer.draw_font(Assets.font(), "Font test", 0, 0)
         Renderer.unlock_cameras()
     }
 

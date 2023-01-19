@@ -97,6 +97,7 @@ VKSK_Config vksk_ConfigLoad(const char *filename) {
 				const char *equal = memchr(line, '=', len);
 				if (line[0] == '[' && line[len - 1] == ']' && len < 102) {
 					strncpy(header, line + 1, len - 2);
+					header[len - 2] = 0;
 				} else if (equal != NULL && equal - line < 100) {
 					strncpy(key, line, equal - line);
 					key[equal - line] = 0;

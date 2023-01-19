@@ -8,6 +8,7 @@
 
 #include "src/Runtime.h"
 #include "src/Validation.h"
+#include "src/ConfigFile.h"
 
 const char *OUTPUT_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont\n"
 							"\n"
@@ -46,21 +47,56 @@ static void freeString(String s) {
 	free(s);
 }
 
-static void addFileToAssets(const char *file, String loaderFunction, String getterFunctions) {
+static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFunction, String getterFunctions) {
 	char tmpCode[1024]; // Code will be generated in here
 	char tmpName[1024]; // Name will be manipulated here
 	memcpy(tmpName, file, strlen(file) + 1);
-	const char *ext = strrchr(tmpName, '.');
-	tmpName[ext - tmpName] = 0; // grr memory tomfoolery
+	const char *ext = strrchr(tmpName, '.') + 1;
+	tmpName[ext - 1 - tmpName] = 0; // grr memory tomfoolery
 
-	if (strcmp(ext, "png")) {
-		// Generate loader function bit first
-		snprintf(tmpCode, 1024, "        __%s = Texture.new(\"assets/%s\")\n", tmpName, file);
-		appendString(loaderFunction, tmpCode);
+	// Sprites textures and bitmap fonts
+	if (strcmp(ext, "png") == 0 || strcmp(ext, "jpg") == 0 || strcmp(ext, "jpeg") == 0 ||
+		strcmp(ext, "bmp") == 0) {
+		// Check if its in the assets ini
+		bool exists = vksk_ConfigHeaderExists(conf, file);
 
-		// Getter
-		snprintf(tmpCode, 1024, "    static %s() { __%s }\n", tmpName, tmpName);
-		appendString(getterFunctions, tmpCode);
+		if (exists && strcmp(vksk_ConfigGetString(conf, file, "type", ""), "sprite") == 0) {
+			double x, y, w, h, delay, frames;
+			x = vksk_ConfigGetDouble(conf, file, "x", 0);
+			y = vksk_ConfigGetDouble(conf, file, "y", 0);
+			w = vksk_ConfigGetDouble(conf, file, "w", 0);
+			h = vksk_ConfigGetDouble(conf, file, "h", 0);
+			delay = vksk_ConfigGetDouble(conf, file, "delay", 0);
+			frames = vksk_ConfigGetDouble(conf, file, "frames", 1);
+			// Generate loader function bit first
+			snprintf(tmpCode, 1024, "        __%s = Sprite.new(\"assets/%s\", %f, %f, %f, %f, %f, %i)\n", tmpName, file, x, y, w, h, delay, (int)frames);
+			appendString(loaderFunction, tmpCode);
+
+			// Getter
+			snprintf(tmpCode, 1024, "    static %s() { __%s }\n", tmpName, tmpName);
+			appendString(getterFunctions, tmpCode);
+		} else if (exists && strcmp(vksk_ConfigGetString(conf, file, "type", ""), "font") == 0) {
+			double ustart, uend, w, h;
+			ustart = vksk_ConfigGetDouble(conf, file, "ustart", 0);
+			uend = vksk_ConfigGetDouble(conf, file, "uend", 0);
+			w = vksk_ConfigGetDouble(conf, file, "w", 0);
+			h = vksk_ConfigGetDouble(conf, file, "h", 0);
+			// Generate loader function bit first
+			snprintf(tmpCode, 1024, "        __%s = BitmapFont.new(\"assets/%s\", %i, %i, %f, %f)\n", tmpName, file, (int)ustart, (int)uend, w, h);
+			appendString(loaderFunction, tmpCode);
+
+			// Getter
+			snprintf(tmpCode, 1024, "    static %s() { __%s }\n", tmpName, tmpName);
+			appendString(getterFunctions, tmpCode);
+		} else {
+			// Generate loader function bit first
+			snprintf(tmpCode, 1024, "        __%s = Texture.new(\"assets/%s\")\n", tmpName, file);
+			appendString(loaderFunction, tmpCode);
+
+			// Getter
+			snprintf(tmpCode, 1024, "    static %s() { __%s }\n", tmpName, tmpName);
+			appendString(getterFunctions, tmpCode);
+		}
 	}
 }
 
@@ -69,6 +105,7 @@ const char *vksk_CompileAssetFile() {
 	String loadFunction = appendString(newString(), LOAD_HEADER);
 	String getterFunctions = newString();
 	DIR *dfd;
+	VKSK_Config conf = vksk_ConfigLoad("assets/assets.ini");
 
 	char *dir = "assets/";
 
@@ -88,7 +125,7 @@ const char *vksk_CompileAssetFile() {
 		}
 
 		if ( ( stbuf.st_mode & S_IFMT ) != S_IFDIR ) {
-			addFileToAssets(dp->d_name, loadFunction, getterFunctions);
+			addFileToAssets(conf, dp->d_name, loadFunction, getterFunctions);
 		}
 		dp = readdir(dfd);
 	}
@@ -104,6 +141,7 @@ const char *vksk_CompileAssetFile() {
 
 	const char *out = compiledAssets->str;
 	free(compiledAssets);
+	vksk_ConfigFree(conf);
 
 	return out;
 }
