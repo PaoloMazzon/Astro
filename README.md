@@ -16,20 +16,16 @@ and run the CMake file. From there, feel free to just use the basic demo that is
 A basic game
 ------------
 
-    import "lib/Levels" for Level
-    import "lib/Renderer" for Renderer
-    import "lib/Sprite" for Sprite
-    import "lib/Engine" for Engine
+    import "lib/Engine" for Engine, Level
     import "lib/Input" for Input
-    import "lib/BitmapFont" for BitmapFont
+    import "lib/Renderer" for Renderer
+    import "lib/Drawing" for BitmapFont, Sprite
+    import "Assets" for Assets
     
     class Game is Level {
         construct new() { }
         
         create() {
-            Engine.cap_fps(60)
-            _font = BitmapFont.new("assets/font.png", 32, 128, 40, 70)
-            _spr = Sprite.new("assets/sprite.png", 0, 0, 16, 16, 0.3, 4)
             _x = 100
             _y = 100
         }
@@ -49,8 +45,8 @@ A basic game
                 _y = _y + speed
             }
     
-            Renderer.draw_sprite(_spr, _x, _y)
-            Renderer.draw_font(_font, "My Game", 0, 0)
+            Renderer.draw_sprite(Assets.sprite(), _x, _y)
+            Renderer.draw_font(Assets.font(), "The quick brown fox jumps over the lazy dog.", 0, 0)
         }
     
         destroy() { }
