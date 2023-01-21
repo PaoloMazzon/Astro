@@ -130,3 +130,47 @@ void vksk_RuntimeJUSpriteSetRotation(WrenVM *vm) {
 	JUSprite *spr = wrenGetSlotForeign(vm, 0);
 	(*spr)->rotation = wrenGetSlotDouble(vm, 1);
 }
+
+/********************* Audio data *********************/
+void vksk_RuntimeJUAudioDataAllocate(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING)
+	JUSound *snd = wrenSetSlotNewForeign(vm, 0, 0, sizeof(JUSound));
+	*snd = juSoundLoad(wrenGetSlotString(vm, 1));
+}
+
+void vksk_RuntimeJUAudioDataFinalize(void *data) {
+	juSoundFree(*((JUSound*)data));
+}
+
+void vksk_RuntimeJUAudioDataFree(WrenVM *vm) {
+	JUSound *snd = wrenGetSlotForeign(vm, 1);
+	juSoundFree(*snd);
+	*snd = NULL;
+}
+
+/********************* Audio *********************/
+void vksk_RuntimeJUAudioAllocate(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, "AudioData", FOREIGN_BOOL, FOREIGN_NUM, FOREIGN_NUM)
+	JUPlayingSound *snd = wrenSetSlotNewForeign(vm, 0, 0, sizeof(JUPlayingSound));
+	JUSound *aud = wrenGetSlotForeign(vm, 1);
+	*snd = juSoundPlay(*aud, wrenGetSlotBool(vm, 2), wrenGetSlotDouble(vm, 3), wrenGetSlotDouble(vm, 4));
+}
+
+void vksk_RuntimeJUAudioFinalize(void *data) {
+
+}
+
+void vksk_RuntimeJUAudioUpdate(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BOOL, FOREIGN_NUM, FOREIGN_NUM)
+	JUPlayingSound *snd = wrenGetSlotForeign(vm, 0);
+	juSoundUpdate(*snd, wrenGetSlotBool(vm, 1), wrenGetSlotDouble(vm, 2), wrenGetSlotDouble(vm, 3));
+}
+
+void vksk_RuntimeJUAudioStop(WrenVM *vm) {
+	JUPlayingSound *snd = wrenGetSlotForeign(vm, 0);
+	juSoundStop(*snd);
+}
+
+void vksk_RuntimeJUAudioStopAll(WrenVM *vm) {
+	juSoundStopAll();
+}

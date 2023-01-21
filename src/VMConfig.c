@@ -107,6 +107,14 @@ WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module
 			methods.allocate = vksk_RuntimeINIAllocate;
 			methods.finalize = vksk_RuntimeINIFinalize;
 		}
+	} else if (strcmp(module, "lib/Audio") == 0) {
+		if (strcmp(className, "AudioData") == 0) {
+			methods.allocate = vksk_RuntimeJUAudioDataAllocate;
+			methods.finalize = vksk_RuntimeJUAudioDataFinalize;
+		} else if (strcmp(className, "Audio") == 0) {
+			methods.allocate = vksk_RuntimeJUAudioAllocate;
+			methods.finalize = vksk_RuntimeJUAudioFinalize;
+		}
 	}
 
 	return methods;
@@ -233,6 +241,11 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("File", true, "read(_)", vksk_RuntimeFileRead)
 		BIND_METHOD("File", true, "write(_,_)", vksk_RuntimeFileWrite)
 		BIND_METHOD("File", true, "exists(_)", vksk_RuntimeFileExists)
+	} else if (strcmp(module, "lib/Audio") == 0) {
+		BIND_METHOD("AudioData", false, "free()", vksk_RuntimeJUAudioDataFree)
+		BIND_METHOD("Audio", false, "update(_,_,_)", vksk_RuntimeJUAudioUpdate)
+		BIND_METHOD("Audio", false, "stop()", vksk_RuntimeJUAudioStop)
+		BIND_METHOD("Audio", true, "stop_all()", vksk_RuntimeJUAudioStopAll)
 	}
 	return NULL;
 }

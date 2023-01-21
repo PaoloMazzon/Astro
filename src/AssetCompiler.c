@@ -10,7 +10,7 @@
 #include "src/Validation.h"
 #include "src/ConfigFile.h"
 
-const char *OUTPUT_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont\n"
+const char *OUTPUT_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont\nimport \"lib/Audio\" for AudioData\n"
 							"\n"
 							"class Assets {\n";
 
@@ -97,6 +97,14 @@ static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFun
 			snprintf(tmpCode, 1024, "    static %s() { __%s }\n", tmpName, tmpName);
 			appendString(getterFunctions, tmpCode);
 		}
+	} else if (strcmp(ext, "wav") == 0) {
+		// Generate loader function bit first
+		snprintf(tmpCode, 1024, "        __%s = AudioData.open(\"assets/%s\")\n", tmpName, file);
+		appendString(loaderFunction, tmpCode);
+
+		// Getter
+		snprintf(tmpCode, 1024, "    static %s() { __%s }\n", tmpName, tmpName);
+		appendString(getterFunctions, tmpCode);
 	}
 }
 

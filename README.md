@@ -105,6 +105,7 @@ on what is yet to come.
  + Manual and automatic resource management
  + Fast and flexible cameras
  + Simple level management
+ + Easily load and use sprites, sounds, and fonts
 
 TODO
 ====
@@ -113,7 +114,6 @@ Meta/Framework Things
 ---------------------
 
  + Debug mode
- + 3D audio system
  + Entity management system
  + Detailed documentation
  + TrueType fonts
@@ -123,5 +123,4 @@ Bindings
 --------
 
  + JamUtil `JUClock`, collision/math things
- + 3D audio system
  + Foreign class for VK2D objects `VK2DModel`, `VK2DShader`, `VK2DPolygon` (not a priority)

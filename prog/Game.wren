@@ -3,6 +3,7 @@ import "lib/Input" for Input
 import "lib/Renderer" for Renderer, Camera
 import "lib/Drawing" for BitmapFont, Sprite
 import "lib/File" for File
+import "lib/Audio" for Audio
 import "Assets" for Assets
 
 class Game is Level {
@@ -38,6 +39,9 @@ class Game is Level {
         }
         if (Input.keyboard_get_key(Input.KEY_S)) {
             _y = _y + speed
+        }
+        if (Input.keyboard_get_key_pressed(Input.KEY_SPACE)) {
+            Audio.play(Assets.sound(), false, 1, 1)
         }
 
         Renderer.lock_cameras(_game_cam)
