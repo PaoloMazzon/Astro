@@ -117,6 +117,7 @@ Meta/Framework Things
  + Entity management system
  + Detailed documentation
  + TrueType fonts
+ + Built-in mod support
 
 Bindings
 --------
