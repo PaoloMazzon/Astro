@@ -39,8 +39,36 @@ VK2DScreenMode convertToScreenModeEnum(double wrenVal) {
 	return sm_Immediate;
 }
 
+double convertFromMSAAEnum(VK2DMSAA val) {
+	if (val == msaa_2x)
+		return 2;
+	if (val == msaa_4x)
+		return 4;
+	if (val == msaa_8x)
+		return 8;
+	if (val == msaa_16x)
+		return 16;
+	if (val == msaa_32x)
+		return 32;
+	return 1;
+}
+
+double convertFromFilterTypeEnum(VK2DFilterType val) {
+	if (val == ft_Linear)
+		return 1;
+	return 0;
+}
+
+double convertFromScreenModeEnum(VK2DScreenMode val) {
+	if (val == sm_VSync)
+		return 1;
+	if (val == sm_TripleBuffer)
+		return 2;
+	return 0;
+}
+
 // Uses 3 slots in front of mapSlot
-void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitle, int *windowWidth, int *windowHeight, VK2DRendererConfig *config) {
+void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitle, int *windowWidth, int *windowHeight, bool *fullscreen, VK2DRendererConfig *config) {
 	// TODO: Check that the key exists first
 
 	wrenEnsureSlots(vm, 3 + mapSlot);
@@ -61,6 +89,11 @@ void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitl
 	wrenSetSlotString(vm, mapSlot + 1, "window_height");
 	wrenGetMapValue(vm, mapSlot, keySlot, valueSlot);
 	*windowHeight = (int)wrenGetSlotDouble(vm, valueSlot);
+
+	// Fullscreen
+	wrenSetSlotString(vm, mapSlot + 1, "fullscreen");
+	wrenGetMapValue(vm, mapSlot, keySlot, valueSlot);
+	*fullscreen = wrenGetSlotBool(vm, valueSlot);
 
 	// Config MSAA
 	wrenSetSlotString(vm, mapSlot + 1, "msaa");
@@ -139,7 +172,48 @@ void vksk_RuntimeRendererDrawTexturePart(WrenVM *vm) {
 
 // vksk_RuntimeRendererGetConfig() - get_config()
 void vksk_RuntimeRendererGetConfig(WrenVM *vm) {
-	// TODO: This
+	wrenEnsureSlots(vm, 3);
+	wrenSetSlotNewMap(vm, 0);
+	int keySlot = 1;
+	int valSlot = 2;
+	int w, h;
+	SDL_GetWindowSize(gWindow, &w, &h);
+	VK2DRendererConfig conf = vk2dRendererGetConfig();
+
+	// Title
+	wrenSetSlotString(vm, keySlot, "window_title");
+	wrenSetSlotString(vm, valSlot, SDL_GetWindowTitle(gWindow));
+	wrenSetMapValue(vm, 0, keySlot, valSlot);
+
+	// Width
+	wrenSetSlotString(vm, keySlot, "window_width");
+	wrenSetSlotDouble(vm, valSlot, (double)w);
+	wrenSetMapValue(vm, 0, keySlot, valSlot);
+
+	// Height
+	wrenSetSlotString(vm, keySlot, "window_height");
+	wrenSetSlotDouble(vm, valSlot, (double)h);
+	wrenSetMapValue(vm, 0, keySlot, valSlot);
+
+	// Fullscreen
+	wrenSetSlotString(vm, keySlot, "fullscreen");
+	wrenSetSlotBool(vm, valSlot, SDL_GetWindowFlags(gWindow) & SDL_WINDOW_FULLSCREEN_DESKTOP);
+	wrenSetMapValue(vm, 0, keySlot, valSlot);
+
+	// MSAA
+	wrenSetSlotString(vm, keySlot, "msaa");
+	wrenSetSlotDouble(vm, valSlot, convertFromMSAAEnum(conf.msaa));
+	wrenSetMapValue(vm, 0, keySlot, valSlot);
+
+	// Screen mode
+	wrenSetSlotString(vm, keySlot, "screen_mode");
+	wrenSetSlotDouble(vm, valSlot, convertFromScreenModeEnum(conf.screenMode));
+	wrenSetMapValue(vm, 0, keySlot, valSlot);
+
+	// Filter type
+	wrenSetSlotString(vm, keySlot, "filter_type");
+	wrenSetSlotDouble(vm, valSlot, convertFromFilterTypeEnum(conf.filterMode));
+	wrenSetMapValue(vm, 0, keySlot, valSlot);
 }
 
 // vksk_RuntimeRendererSetConfig(VK2DRendererConfig config) - set_config(_)
@@ -147,9 +221,12 @@ void vksk_RuntimeRendererSetConfig(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_MAP)
 	const char *windowTitle;
 	int windowWidth, windowHeight;
+	bool fullscreen;
 	VK2DRendererConfig rendererConfig;
-	vksk_LoadVK2DConfigFromMap(vm, 1, &windowTitle, &windowWidth, &windowHeight, &rendererConfig);
+	vksk_LoadVK2DConfigFromMap(vm, 1, &windowTitle, &windowWidth, &windowHeight, &fullscreen, &rendererConfig);
 	vk2dRendererSetConfig(rendererConfig);
+	SDL_SetWindowSize(gWindow, windowWidth, windowHeight);
+	SDL_SetWindowFullscreen(gWindow, fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
 }
 
 // vksk_RuntimeRendererSetTarget(VK2DTexture target) - set_target(_)

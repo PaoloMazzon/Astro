@@ -19,9 +19,12 @@ JUClock gFPSClock = {};
 bool gMouseButtons[3] = {};
 bool gMouseButtonsPrevious[3] = {};
 const char *gAssetsFile;
+double gLastTime = 0;
+double gFrames = 0;
+double gFPS = 0;
 
 // From RendererBindings.c
-void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitle, int *windowWidth, int *windowHeight, VK2DRendererConfig *config);
+void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitle, int *windowWidth, int *windowHeight, bool *fullscreen, VK2DRendererConfig *config);
 
 void vksk_Start() {
 	// Compile the assets code
@@ -56,9 +59,10 @@ void vksk_Start() {
 	// Load VK2D settings
 	const char *windowTitle;
 	int windowWidth, windowHeight;
+	bool fullscreen;
 	VK2DRendererConfig rendererConfig;
 	wrenGetVariable(vm, "init", "renderer_config", 0);
-	vksk_LoadVK2DConfigFromMap(vm, 0, &windowTitle, &windowWidth, &windowHeight, &rendererConfig);
+	vksk_LoadVK2DConfigFromMap(vm, 0, &windowTitle, &windowWidth, &windowHeight, &fullscreen, &rendererConfig);
 
 	// Create VK2D and all that
 	vksk_Log("Starting Vulkan2D...");
@@ -68,7 +72,7 @@ void vksk_Start() {
 			SDL_WINDOWPOS_CENTERED,
 			windowWidth,
 			windowHeight,
-			SDL_WINDOW_VULKAN
+			SDL_WINDOW_VULKAN | (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0)
 			);
 	vk2dRendererInit(gWindow, rendererConfig);
 	juInit(gWindow, 0, 0);
@@ -86,6 +90,7 @@ void vksk_Start() {
 
 	// Game loop
 	vksk_Log("Beginning game loop...");
+	gLastTime = juTime();
 	while (!gQuit) {
 		juUpdate();
 		SDL_Event e;
@@ -128,6 +133,14 @@ void vksk_Start() {
 				wrenCall(vm, createHandle);
 			}
 		}
+
+		// Calculate FPS
+		gFrames += 1;
+		if (juTime() - gLastTime >= 1) {
+			gFPS = gFrames / (juTime() - gLastTime);
+			gLastTime = juTime();
+			gFrames = 0;
+		}
 	}
 
 	// Cleanup
@@ -161,4 +174,9 @@ void vksk_RuntimeDelta(WrenVM *vm) {
 
 void vksk_RuntimeTime(WrenVM *vm) {
 	wrenSetSlotDouble(vm, 0, juTime());
+}
+
+void vksk_RuntimeFPS(WrenVM *vm) {
+	double r = round(gFPS * 100) / 100;
+	wrenSetSlotDouble(vm, 0, r);
 }

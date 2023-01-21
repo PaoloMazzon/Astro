@@ -193,6 +193,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Engine", true, "cap_fps(_)", vksk_RuntimeCapFPS)
 		BIND_METHOD("Engine", true, "delta()", vksk_RuntimeDelta)
 		BIND_METHOD("Engine", true, "time()", vksk_RuntimeTime)
+		BIND_METHOD("Engine", true, "fps()", vksk_RuntimeFPS)
 	} else if (strcmp(module, "lib/Drawing") == 0) {
 		BIND_METHOD("Texture", false, "width()", vksk_RuntimeVK2DTextureWidth)
 		BIND_METHOD("Texture", false, "height()", vksk_RuntimeVK2DTextureHeight)

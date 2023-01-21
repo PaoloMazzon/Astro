@@ -18,6 +18,9 @@ class Engine {
 
     // Returns the time in seconds since the program started
     foreign static time()
+
+    // Returns the average FPS over the last second
+    foreign static fps()
 }
 
 // All levels must inherit this class and implement all functions AND a constructor

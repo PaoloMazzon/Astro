@@ -34,7 +34,8 @@ aspects of game development.
  + [cap_fps](#cap_fps)
  + [delta](#delta)
  + [time](#time)
-
+ + [fps](#fps)
+ 
 ### switch_level
 `static switch_level(level)`
 
@@ -79,6 +80,11 @@ when making game logic not bound to framerate.
 `static time()`
 
 Returns the time seconds since the engine initialized.
+
+### fps
+`static fps()`
+
+Returns the average framerate over the last second.
 
 ## Level
 This class is only provided for the user to inherit their level classes from. See [switch_level](#switch_level).

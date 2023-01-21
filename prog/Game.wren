@@ -20,7 +20,7 @@ class Game is Level {
         _game_cam.set_w_on_screen(800)
         _game_cam.set_h_on_screen(600)
         _game_cam.update()
-        Engine.cap_fps(60)
+        //Engine.cap_fps(60)
 
         _x = 100
         _y = 100
@@ -48,7 +48,7 @@ class Game is Level {
         Renderer.draw_sprite(Assets.sprite(), _x, _y)
         Renderer.draw_texture(Assets.logo(), 100, 100)
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
-        Renderer.draw_font(Assets.font(), "Font test", 0, 0)
+        Renderer.draw_font(Assets.font(), "FPS: " + Engine.fps().toString, 0, 0)
         Renderer.unlock_cameras()
     }
 

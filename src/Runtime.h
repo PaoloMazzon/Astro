@@ -24,3 +24,6 @@ void vksk_RuntimeDelta(WrenVM *vm);
 
 // Returns time in seconds since the program start
 void vksk_RuntimeTime(WrenVM *vm);
+
+// Returns the average FPS each seconds
+void vksk_RuntimeFPS(WrenVM *vm);

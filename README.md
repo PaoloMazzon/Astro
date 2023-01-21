@@ -61,6 +61,7 @@ And the corresponding `init.wren` file
         "window_title": "Game",
         "window_width": 800,
         "window_height": 600,
+	    "fullscreen": false,
         "msaa": Renderer.MSAA_8X,
         "screen_mode": Renderer.SCREEN_MODE_TRIPLE_BUFFER,
         "filter_type": Renderer.FILTER_TYPE_NEAREST
@@ -76,23 +77,6 @@ Here are the specifications for using the runtime
  + The runtime treats `prog/` as the import working directory
  + `prog/init.wren` must contain at least two top-level variables `start_level` and `renderer_config`
  that will be detailed below
-
-`prog/init.wren` Variables
---------------------------
-`start_level` must be a new instance of a class that implements all methods of `Level`. The runtime
-will use that class to start the game from.
-
-`renderer_config` must be a map of details on how to initialize the renderer. All of the following
-keys must be provided:
-
- + `window_title` - A string which will be the window's title
- + `window_width` - Window width in pixels
- + `window_height` - Window height in pixels
- + `msaa` - Use `Renderer.MSAA_*` to select your preferred MSAA (if the selected MSAA isn't available
- the next highest available MSAA will be used instead)
- + `screen_mode` - Use `Renderer.SCREEN_MODE_*` to select your preferred screen mode (if that screen
- mode is unavailable `Renderer.SCREEN_MODE_IMMEDIATE` will be used instead)
- + `filter_type` - Use `Renderer.FILTER_TYPE_*` to select your preferred texture filter option
 
 Features
 ========
