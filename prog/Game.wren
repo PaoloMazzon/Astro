@@ -41,14 +41,14 @@ class Game is Level {
             _y = _y + speed
         }
         if (Input.keyboard_get_key_pressed(Input.KEY_SPACE)) {
-            Audio.play(Assets.sound(), false, 1, 1)
+            Audio.play(Assets.sound, false, 1, 1)
         }
 
         Renderer.lock_cameras(_game_cam)
-        Renderer.draw_sprite(Assets.sprite(), _x, _y)
-        Renderer.draw_texture(Assets.logo(), 100, 100)
+        Renderer.draw_sprite(Assets.sprite, _x, _y)
+        Renderer.draw_texture(Assets.logo, 100, 100)
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
-        Renderer.draw_font(Assets.font(), "FPS: " + Engine.fps().toString, 0, 0)
+        Renderer.draw_font(Assets.font, "FPS: " + Engine.fps().toString, 0, 0)
         Renderer.unlock_cameras()
     }
 

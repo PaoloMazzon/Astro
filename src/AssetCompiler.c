@@ -73,7 +73,7 @@ static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFun
 			appendString(loaderFunction, tmpCode);
 
 			// Getter
-			snprintf(tmpCode, 1024, "    static %s() { __%s }\n", tmpName, tmpName);
+			snprintf(tmpCode, 1024, "    static %s { __%s }\n", tmpName, tmpName);
 			appendString(getterFunctions, tmpCode);
 		} else if (exists && strcmp(vksk_ConfigGetString(conf, file, "type", ""), "font") == 0) {
 			double ustart, uend, w, h;
@@ -86,7 +86,7 @@ static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFun
 			appendString(loaderFunction, tmpCode);
 
 			// Getter
-			snprintf(tmpCode, 1024, "    static %s() { __%s }\n", tmpName, tmpName);
+			snprintf(tmpCode, 1024, "    static %s { __%s }\n", tmpName, tmpName);
 			appendString(getterFunctions, tmpCode);
 		} else {
 			// Generate loader function bit first
@@ -94,7 +94,7 @@ static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFun
 			appendString(loaderFunction, tmpCode);
 
 			// Getter
-			snprintf(tmpCode, 1024, "    static %s() { __%s }\n", tmpName, tmpName);
+			snprintf(tmpCode, 1024, "    static %s { __%s }\n", tmpName, tmpName);
 			appendString(getterFunctions, tmpCode);
 		}
 	} else if (strcmp(ext, "wav") == 0) {
@@ -103,7 +103,7 @@ static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFun
 		appendString(loaderFunction, tmpCode);
 
 		// Getter
-		snprintf(tmpCode, 1024, "    static %s() { __%s }\n", tmpName, tmpName);
+		snprintf(tmpCode, 1024, "    static %s { __%s }\n", tmpName, tmpName);
 		appendString(getterFunctions, tmpCode);
 	}
 }

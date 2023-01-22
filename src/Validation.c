@@ -6,8 +6,8 @@
 
 #include "src/Validation.h"
 
-void _vksk_ValidateForeignArgs(WrenVM *vm, ...) {
-	// TODO: Something here lol
+void _vksk_ValidateForeignArgs(WrenVM *vm, const char *function, ...) {
+	// TODO: Possibly something?
 }
 
 void vksk_Log(const char *fmt, ...) {
