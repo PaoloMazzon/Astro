@@ -44,9 +44,12 @@ class Game is Level {
             Audio.play(Assets.sound, false, 1, 1)
         }
 
+        // Render game world
         Renderer.lock_cameras(_game_cam)
         Renderer.draw_sprite(Assets.sprite, _x, _y)
         Renderer.draw_texture(Assets.logo, 100, 100)
+
+        // Render UI
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
         Renderer.draw_font(Assets.font, "FPS: " + Engine.fps().toString, 0, 0)
         Renderer.unlock_cameras()

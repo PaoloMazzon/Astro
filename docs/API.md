@@ -18,7 +18,7 @@
  + [Input](classes/Input.md) (Not yet documented)
 
 ### `Renderer.wren`
- + [Renderer](classes/Renderer.md) (Not yet documented)
+ + [Renderer](classes/Renderer.md)
  + [Camera](classes/Camera.md) (Not yet documented)
 
 ### `Audio.wren`
