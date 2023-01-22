@@ -74,6 +74,7 @@ Meta/Framework Things
 ---------------------
 
  + Debug mode
+ + Profiling tools
  + Entity management system
  + Detailed documentation
  + TrueType fonts
