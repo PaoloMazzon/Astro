@@ -20,18 +20,23 @@ void vksk_WrenWriteFn(WrenVM* vm, const char* text) {
 }
 
 void vksk_WrenErrorFn(WrenVM* vm, WrenErrorType errorType, const char* module, const int line, const char* msg) {
+	FILE *f = fopen("astroerror.txt", "a");
 	switch (errorType) {
 		case WREN_ERROR_COMPILE: {
 			printf("[%s line %d] [Error] %s\n", module, line, msg);
+			fprintf(f, "[%s line %d] [Error] %s\n", module, line, msg);
 		} break;
 		case WREN_ERROR_STACK_TRACE: {
 			printf("[%s line %d] in %s\n", module, line, msg);
+			fprintf(f, "[%s line %d] in %s\n", module, line, msg);
 		} break;
 		case WREN_ERROR_RUNTIME: {
 			printf("[Runtime Error] %s\n", msg);
+			fprintf(f, "[Runtime Error] %s\n", msg);
 		} break;
 	}
 	fflush(stdout);
+	fclose(f);
 }
 
 const char* loadFile(const char *filename) {
