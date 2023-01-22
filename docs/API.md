@@ -13,7 +13,6 @@
  + [Texture](#texture)
  + [Sprite](#sprite)
  + [Surface](#surface)
- 
 
 ### `Input.wren`
  + [Input](#input)
@@ -22,7 +21,13 @@
  + [Renderer](#renderer)
  + [Camera](#camera)
 
+### `Audio.wren`
+ + [AudioData](#audiodata)
+ + [Audio](#audio)
 
+### `Util.wren`
+ + [Math](#math)
+ + [Hitbox](#hitbox)
 
 
 ## Engine
@@ -256,4 +261,16 @@ The `Renderer` class contains methods that are used in drawing and managing the 
 
 
 ## Camera
+
+
+## AudioData
+
+
+## Audio
+
+
+## Math
+
+
+## Hitbox
 
