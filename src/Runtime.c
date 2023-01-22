@@ -3,11 +3,14 @@
 #define SDL_MAIN_HANDLED
 #include <VK2D/VK2D.h>
 #include <JamUtil/JamUtil.h>
+#include <VK2D/stb_image.h>
 
 #include "src/Runtime.h"
 #include "src/VMConfig.h"
 #include "src/RendererBindings.h"
 #include "src/Validation.h"
+
+extern Uint32 rmask, gmask, bmask, amask;
 
 // Globals
 SDL_Window *gWindow = NULL;
@@ -22,6 +25,26 @@ const char *gAssetsFile;
 double gLastTime = 0;
 double gFrames = 0;
 double gFPS = 0;
+
+static void _vksk_SetWindowIcon(WrenVM *vm) {
+	if (wrenHasVariable(vm, "init", "window_icon")) {
+		// Get filename and load pixels
+		wrenEnsureSlots(vm, 1);
+		wrenGetVariable(vm, "init", "window_icon", 0);
+		const char *filename = wrenGetSlotString(vm, 0);
+		int x, y, channels;
+		uint8_t *pixels = stbi_load(filename, &x, &y, &channels, 4);
+
+		if (pixels != NULL) {
+			// Convert to SDL surface & set window icon
+			SDL_Surface *icon = SDL_CreateRGBSurfaceFrom(pixels, x, y, channels * 8, x * channels, rmask, gmask, bmask, amask);
+			SDL_SetWindowIcon(gWindow, icon);
+			SDL_FreeSurface(icon);
+		}
+
+		stbi_image_free(pixels);
+	}
+}
 
 // From RendererBindings.c
 void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitle, int *windowWidth, int *windowHeight, bool *fullscreen, VK2DRendererConfig *config);
@@ -76,6 +99,9 @@ void vksk_Start() {
 			);
 	vk2dRendererInit(gWindow, rendererConfig);
 	juInit(gWindow, 0, 0);
+
+	// Load window icon if one was selected
+	_vksk_SetWindowIcon(vm);
 
 	// Load assets
 	vksk_Log("Loading assets...");

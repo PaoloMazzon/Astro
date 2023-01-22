@@ -51,32 +51,8 @@ A basic game
     
         destroy() { }
     }
-    
-And the corresponding `init.wren` file
 
-    import "lib/Renderer" for Renderer
-    import "Game" for Game
-    
-    var renderer_config = {
-        "window_title": "Game",
-        "window_width": 800,
-        "window_height": 600,
-	    "fullscreen": false,
-        "msaa": Renderer.MSAA_8X,
-        "screen_mode": Renderer.SCREEN_MODE_TRIPLE_BUFFER,
-        "filter_type": Renderer.FILTER_TYPE_NEAREST
-    }
-    
-    var start_level = Game.new()
-
-Here are the specifications for using the runtime
-
- + The runtime entry point is `prog/init.wren`, from there where you put your source files
- is irrelevant to the runtime as long as you import them all properly
- + Wren bindings must be located in `prog/lib/`
- + The runtime treats `prog/` as the import working directory
- + `prog/init.wren` must contain at least two top-level variables `start_level` and `renderer_config`
- that will be detailed below
+See [Getting Started](docs/GettingStarted.md) for more information.
 
 Features
 ========

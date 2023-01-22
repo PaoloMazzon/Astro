@@ -11,4 +11,6 @@ var renderer_config = {
 	"filter_type": Renderer.FILTER_TYPE_NEAREST
 }
 
+var window_icon = "assets/logo.png"
+
 var start_level = Game.new()

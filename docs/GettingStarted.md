@@ -65,6 +65,9 @@ keys must be provided:
  mode is unavailable `Renderer.SCREEN_MODE_IMMEDIATE` will be used instead)
  + `filter_type` - Use `Renderer.FILTER_TYPE_*` to select your preferred texture filter option
 
+`window_icon` is an optional variable that if set to a valid image filename, sets the window icon
+to that file.
+
 -----------
 
 [Getting Started](GettingStarted.md) | [API Reference](API.md)
