@@ -8,6 +8,7 @@ aspects of game development.
  + [delta](#delta)
  + [time](#time)
  + [fps](#fps)
+ + [info](#info)
  
 ### switch_level
 `static switch_level(level)`
@@ -58,6 +59,16 @@ Returns the time seconds since the engine initialized.
 `static fps()`
 
 Returns the average framerate over the last second.
+
+### info
+`static info()`
+
+Returns a map containing information about the engine, the map will contain the
+following keys:
+ + `name` - A string containing the name of the engine.
+ + `wren-version` - Number representing the version of Wren the engine was built with.
+ + `astro-version` - A list representing the engine's version in the form `[major, minor, patch]`.
+ + `build-date` - Date the engine was built on as a string.
 
 -----------
 

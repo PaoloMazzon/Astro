@@ -9,9 +9,9 @@ faster and easier.
 
 Getting Started
 ===============
-To use the Astro Engine runtime you must first compile it from source. That won't be covered
-here in detail at the moment, but in brief, clone this repository and all the submodules
-and run the CMake file. From there, feel free to just use the basic demo that is in this repo.
+See [Getting Started](docs/GettingStarted.md) for a detailed breakdown, and check out the
+[API Reference](docs/API.md) for everything else. In short, you need a Wren file the engine
+will use as an entry point and at least one level.
 
 A basic game
 ------------
@@ -45,8 +45,8 @@ A basic game
                 _y = _y + speed
             }
     
-            Renderer.draw_sprite(Assets.sprite(), _x, _y)
-            Renderer.draw_font(Assets.font(), "The quick brown fox jumps over the lazy dog.", 0, 0)
+            Renderer.draw_sprite(Assets.sprite, _x, _y)
+            Renderer.draw_font(Assets.font, "The quick brown fox jumps over the lazy dog.", 0, 0)
         }
     
         destroy() { }

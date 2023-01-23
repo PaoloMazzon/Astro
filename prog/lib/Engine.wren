@@ -21,6 +21,9 @@ class Engine {
 
     // Returns the average FPS over the last second
     foreign static fps()
+
+    // Returns a map containing info on the engine
+    foreign static info()
 }
 
 // All levels must inherit this class and implement all functions AND a constructor

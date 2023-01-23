@@ -118,7 +118,8 @@ const char *vksk_CompileAssetFile() {
 	char *dir = "assets/";
 
 	if ((dfd = opendir(dir)) == NULL) {
-		vksk_Log("Can't assets directory");
+		vksk_Log("Can't access assets directory");
+		return NULL;
 	}
 
 	char filename_qfd[100] ;

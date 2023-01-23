@@ -109,6 +109,8 @@ void vksk_Start() {
 
 	// Run starting level create function and FPS cap
 	vksk_Log("Running first level create function...");
+	vk2dRendererStartFrame(VK2D_BLACK);
+	bool first = true;
 	wrenEnsureSlots(vm, 1);
 	wrenSetSlotHandle(vm, 0, gCurrentLevel);
 	wrenCall(vm, createHandle);
@@ -138,10 +140,12 @@ void vksk_Start() {
 		spec.zoom = 1;
 		spec.yOnScreen = spec.y = 0;
 		vk2dCameraUpdate(VK2D_DEFAULT_CAMERA, spec);
-		vk2dRendererStartFrame(VK2D_BLACK);
+		if (first)
+			first = false;
+		else
+			vk2dRendererStartFrame(VK2D_BLACK);
 		wrenSetSlotHandle(vm, 0, gCurrentLevel);
 		wrenCall(vm, updateHandle);
-		vk2dRendererEndFrame();
 
 		// Enfore the FPS clock
 		if (gFPSCap != 0)
@@ -159,6 +163,8 @@ void vksk_Start() {
 				wrenCall(vm, createHandle);
 			}
 		}
+
+		vk2dRendererEndFrame();
 
 		// Calculate FPS
 		gFrames += 1;
@@ -205,4 +211,30 @@ void vksk_RuntimeTime(WrenVM *vm) {
 void vksk_RuntimeFPS(WrenVM *vm) {
 	double r = round(gFPS * 100) / 100;
 	wrenSetSlotDouble(vm, 0, r);
+}
+
+void vksk_RuntimeInfo(WrenVM *vm) {
+	wrenEnsureSlots(vm, 4);
+	wrenSetSlotNewMap(vm, 0);
+	int mapKeySlot = 1;
+	int mapValSlot = 2;
+	int listValSlot = 3;
+	wrenSetSlotString(vm, mapKeySlot, "name");
+	wrenSetSlotString(vm, mapValSlot, "Astro Engine");
+	wrenSetMapValue(vm, 0, mapKeySlot, mapValSlot);
+	wrenSetSlotString(vm, mapKeySlot, "astro-version");
+	wrenSetSlotNewList(vm, mapValSlot);
+	wrenSetSlotDouble(vm, listValSlot, ASTRO_VERSION_MAJOR);
+	wrenInsertInList(vm, mapValSlot, -1, listValSlot);
+	wrenSetSlotDouble(vm, listValSlot, ASTRO_VERSION_MINOR);
+	wrenInsertInList(vm, mapValSlot, -1, listValSlot);
+	wrenSetSlotDouble(vm, listValSlot, ASTRO_VERSION_PATCH);
+	wrenInsertInList(vm, mapValSlot, -1, listValSlot);
+	wrenSetMapValue(vm, 0, mapKeySlot, mapValSlot);
+	wrenSetSlotString(vm, mapKeySlot, "wren-version");
+	wrenSetSlotDouble(vm, mapValSlot, wrenGetVersionNumber());
+	wrenSetMapValue(vm, 0, mapKeySlot, mapValSlot);
+	wrenSetSlotString(vm, mapKeySlot, "build-date");
+	wrenSetSlotString(vm, mapValSlot, __DATE__);
+	wrenSetMapValue(vm, 0, mapKeySlot, mapValSlot);
 }

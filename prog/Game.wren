@@ -10,6 +10,7 @@ class Game is Level {
     construct new() { }
     
     create() {
+        System.print(Engine.info())
         System.print("game create")
         
         // Create the game camera and set fps

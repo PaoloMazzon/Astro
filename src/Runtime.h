@@ -4,6 +4,10 @@
 #pragma once
 #include <wren.h>
 
+#define ASTRO_VERSION_MAJOR 0
+#define ASTRO_VERSION_MINOR 5
+#define ASTRO_VERSION_PATCH 1
+
 // Starts the runtime
 void vksk_Start();
 
@@ -27,3 +31,6 @@ void vksk_RuntimeTime(WrenVM *vm);
 
 // Returns the average FPS each seconds
 void vksk_RuntimeFPS(WrenVM *vm);
+
+// Returns a map with engine information
+void vksk_RuntimeInfo(WrenVM *vm);
