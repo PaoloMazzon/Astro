@@ -47,7 +47,7 @@ class Game is Level {
 
         // Render game world
         Renderer.lock_cameras(_game_cam)
-        Renderer.draw_sprite(Assets.sprite, _x, _y)
+        Renderer.draw_sprite(Assets.player_idle, _x, _y)
         Renderer.draw_texture(Assets.logo, 100, 100)
 
         // Render UI
