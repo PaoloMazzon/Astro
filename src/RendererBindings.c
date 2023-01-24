@@ -302,24 +302,6 @@ void vksk_RuntimeRendererUnlockCameras(WrenVM *vm) {
 	vk2dRendererUnlockCameras();
 }
 
-// vksk_RuntimeRendererSetViewport(float x, float y, float w, float h) - set_viewport(_,_,_,_)
-void vksk_RuntimeRendererSetViewport(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
-	vk2dRendererSetViewport(wrenGetSlotDouble(vm, 0), wrenGetSlotDouble(vm, 1), wrenGetSlotDouble(vm, 2), wrenGetSlotDouble(vm, 3));
-}
-
-// vksk_RuntimeRendererGetViewport(float *x, float *y, float *w, float *h) - get_viewport()
-void vksk_RuntimeRendererGetViewport(WrenVM *vm) {
-	vec4 vec;
-	vk2dRendererGetViewport(&vec[0], &vec[1], &vec[2], &vec[3]);
-	wrenEnsureSlots(vm, 2);
-	wrenSetSlotNewList(vm, 0);
-	for (int i = 0; i < 4; i++) {
-		wrenSetSlotDouble(vm, 1, vec[i]);
-		wrenInsertInList(vm, 0, -1, 1);
-	}
-}
-
 // vksk_RuntimeRendererClear() - clear()
 void vksk_RuntimeRendererClear(WrenVM *vm) {
 	vk2dRendererClear();

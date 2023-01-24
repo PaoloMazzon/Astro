@@ -15,8 +15,6 @@ The `Renderer` class contains methods that are used in drawing and managing the 
  + [average_frame_time](#average_frame_time)
  + [lock_cameras](#lock_cameras)
  + [unlock_cameras](#unlock_cameras)
- + [set_viewport](#set_viewport)
- + [get_viewport](#get_viewport)
  + [clear](#clear)
  + [draw_rectangle](#draw_rectangle)
  + [draw_rectangle_outline](#draw_rectangle_outline)
@@ -208,22 +206,6 @@ for the UI and another for game world.
 `static unlock_cameras()`
 
 Undoes the effects of [lock_cameras](#lock_cameras).
-
-## set_viewport
-`static set_viewport(x, y, w, h)`
-
-Parameters
- + `x -> Num` X position in the window.
- + `y -> Num` Y position in the window.
- + `w -> Num` Width of the viewport.
- + `h -> Num` Height of the viewport.
-
-Sets the renderer's viewport (portion of the window that is drawn to).
-
-## get_viewport
-`static get_viewport()`
-
-Returns the current viewport as a 4-element list of `[x, y, w, h]`.
 
 ## clear
 `static clear()`

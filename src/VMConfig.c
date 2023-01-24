@@ -148,8 +148,6 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Renderer", true, "average_frame_time()", vksk_RuntimeRendererGetAverageFrameTime)
 		BIND_METHOD("Renderer", true, "lock_cameras(_)", vksk_RuntimeRendererLockCameras)
 		BIND_METHOD("Renderer", true, "unlock_cameras()", vksk_RuntimeRendererUnlockCameras)
-		BIND_METHOD("Renderer", true, "set_viewport(_,_,_,_)", vksk_RuntimeRendererSetViewport)
-		BIND_METHOD("Renderer", true, "get_viewport()", vksk_RuntimeRendererGetViewport)
 		BIND_METHOD("Renderer", true, "clear()", vksk_RuntimeRendererClear)
 		BIND_METHOD("Renderer", true, "draw_rectangle(_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawRectangle)
 		BIND_METHOD("Renderer", true, "draw_rectangle_outline(_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawRectangleOutline)

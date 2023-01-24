@@ -88,12 +88,6 @@ class Renderer {
     // Unlocks the cameras so they will all be rendered to again
     foreign static unlock_cameras()
 
-    // Set's the screen's viewport
-    foreign static set_viewport(x, y, w, h)
-
-    // Returns the current viewport as a 4-element list as [x, y, w, h]
-    foreign static get_viewport()
-
     // Wipes the screen with the current rendering colour
     foreign static clear()
 
