@@ -19,6 +19,8 @@ world will be drawn with sprites.
  + [set_scale_y](#set_scale_y)
  + [get_rotation](#get_rotation)
  + [set_rotation](#set_rotation)
+ + [get_width](#get_width)
+ + [get_height](#get_height)
 
 ## new
 `construct new(filename, x, y, w, h, delay, frames)`
@@ -129,6 +131,16 @@ Parameters
  + `rotation -> Num` Rotation for the sprite.
 
 Sets a sprite's rotation.
+
+## get_width
+`get_width()`
+
+Returns the sprite's width.
+
+## get_height
+`get_height()`
+
+Returns the sprite's height.
 
 -----------
 

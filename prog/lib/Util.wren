@@ -1,6 +1,7 @@
 // Util.wren
 // Author: Paolo Mazzon
 // Utilities for various aspects of a game
+import "lib/Renderer" for Renderer
 
 // Various math related methods
 class Math {
@@ -96,6 +97,80 @@ class Hitbox {
             return [x - _r, y - _r, x + _r, y + _r]
         } else if (_type == Hitbox.TYPE_RECTANGLE) {
             return [x, y, x + _w, y + _h]
+        }
+    }
+}
+
+// Tileset for drawing and colliding with many things at once
+class Tileset {
+    // Creates a new tileset from a list, should be a 2D list like
+    // [[x1y1, x2y1], [x1y2, x2y2]]. Each cell in the grid should be
+    // an index in the sprite sheet + 1 because 0 is treated as an
+    // empty space for collisions
+    construct new(tileset, sprite, x, y) {
+        _tileset = tileset
+        _sprite = sprite
+        _x = x
+        _y = y
+    }
+
+    // Returns total width of the tileset
+    width { _tileset[0].count * _sprite.width() }
+
+    // Returns total height of the tileset
+    height { _tileset.count * _sprite.height() }
+
+    // Returns an element in the tileset
+    get(x, y) {
+        var cell = null
+        if (y >= 0 && y < _tileset.count) {
+            if (x >= 0 && x < _tileset[y].count) {
+                cell = _tileset[y][x]
+            }
+        }
+        return cell
+    }
+
+    // Sets an element in the tileset
+    set(x, y, cell) {
+        if (y >= 0 && y < _tileset.count) {
+            if (x >= 0 && x < _tileset[y].count) {
+                _tileset[y][x] = cell
+            }
+        }
+    }
+
+    // Draws the tileset
+    draw() {
+        var y_offset = _y
+
+        // Loop through each cell in the 2D grid
+        for (i in _tileset) {
+            var x_offset = _x
+            for (cell in i) {
+                if (cell != 0) {
+                    Renderer.draw_sprite(_sprite, cell - 1, x_offset, y_offset)
+                }
+                x_offset = x_offset + _sprite.width()
+            }
+            y_offset = y_offset + _sprite.height()
+        }
+    }
+
+    // Draws a tiling background with specified parallax (movement)
+    // 0 for parallax would be static regardless of camera, 1 would
+    // be moves with the camera. This doesn't work with rotated cameras.
+    static draw_tiling_background(texture, parallax, camera) {
+        var tile_start_x = camera.get_x() * parallax
+        var tile_start_y = camera.get_y() * parallax
+        tile_start_x = tile_start_x + (((camera.get_x() - tile_start_x) / texture.width()).floor * texture.width())
+        tile_start_y = tile_start_y + (((camera.get_y() - tile_start_y) / texture.height()).floor * texture.height())
+        var horizontal = (camera.get_w() / texture.width()).ceil
+        var vertical = (camera.get_h() / texture.height()).ceil
+        for (y in 0..vertical) {
+            for (x in 0..horizontal) {
+                Renderer.draw_texture(texture, tile_start_x + (x * texture.width()), tile_start_y + (y * texture.height()))
+            }
         }
     }
 }

@@ -222,6 +222,8 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Sprite", false, "set_scale_y(_)", vksk_RuntimeJUSpriteSetScaleY)
 		BIND_METHOD("Sprite", false, "get_rotation()", vksk_RuntimeJUSpriteGetRotation)
 		BIND_METHOD("Sprite", false, "set_rotation(_)", vksk_RuntimeJUSpriteSetRotation)
+		BIND_METHOD("Sprite", false, "width()", vksk_RuntimeJUSpriteGetWidth)
+		BIND_METHOD("Sprite", false, "height()", vksk_RuntimeJUSpriteGetHeight)
 	} else if (strcmp(module, "lib/Input") == 0) {
 		BIND_METHOD("Input", true, "keyboard_get_key(_)", vksk_RuntimeInputCheckKey)
 		BIND_METHOD("Input", true, "keyboard_get_key_pressed(_)", vksk_RuntimeInputCheckKeyPressed)

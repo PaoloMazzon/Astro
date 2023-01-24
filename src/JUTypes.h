@@ -24,6 +24,8 @@ void vksk_RuntimeJUSpriteGetScaleY(WrenVM *vm);
 void vksk_RuntimeJUSpriteSetScaleY(WrenVM *vm);
 void vksk_RuntimeJUSpriteGetRotation(WrenVM *vm);
 void vksk_RuntimeJUSpriteSetRotation(WrenVM *vm);
+void vksk_RuntimeJUSpriteGetWidth(WrenVM *vm);
+void vksk_RuntimeJUSpriteGetHeight(WrenVM *vm);
 
 void vksk_RuntimeJUAudioDataAllocate(WrenVM *vm);
 void vksk_RuntimeJUAudioDataFinalize(void *data);

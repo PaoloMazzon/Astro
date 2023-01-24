@@ -28,7 +28,8 @@
 ### `Util.wren`
  + [Math](classes/Math.md) (Not yet documented)
  + [Hitbox](classes/Hitbox.md) (Not yet documented)
-
+ + [Tileset](classes/Tileset.md) (Not yet documented)
+ 
 --------
 
 [Getting Started](GettingStarted.md) | [API Reference](API.md)

@@ -131,6 +131,17 @@ void vksk_RuntimeJUSpriteSetRotation(WrenVM *vm) {
 	(*spr)->rotation = wrenGetSlotDouble(vm, 1);
 }
 
+void vksk_RuntimeJUSpriteGetWidth(WrenVM *vm) {
+	JUSprite *spr = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, (*spr)->Internal.w);
+}
+
+void vksk_RuntimeJUSpriteGetHeight(WrenVM *vm) {
+	JUSprite *spr = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, (*spr)->Internal.h);
+}
+
+
 /********************* Audio data *********************/
 void vksk_RuntimeJUAudioDataAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING)

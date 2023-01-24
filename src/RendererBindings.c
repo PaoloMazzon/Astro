@@ -405,6 +405,6 @@ void vksk_RuntimeRendererDrawSpritePos(WrenVM *vm) {
 void vksk_RuntimeRendererDrawSpriteFrame(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, "Sprite", FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
 	JUSprite *spr = wrenGetSlotForeign(vm, 1);
-	juSpriteDrawFrame(*spr, wrenGetSlotDouble(vm, 2), wrenGetSlotDouble(vm, 3), wrenGetSlotDouble(vm, 3));
+	juSpriteDrawFrame(*spr, wrenGetSlotDouble(vm, 2), wrenGetSlotDouble(vm, 3), wrenGetSlotDouble(vm, 4));
 }
 

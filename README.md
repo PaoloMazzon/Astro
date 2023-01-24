@@ -74,14 +74,10 @@ Meta/Framework Things
 ---------------------
 
  + Debug mode
+ + Asset load directories
+ + OGG loading support
  + Profiling tools
  + Entity management system
  + Detailed documentation
  + TrueType fonts
  + Built-in mod support
-
-Bindings
---------
-
- + JamUtil `JUClock`, collision/math things
- + Foreign class for VK2D objects `VK2DModel`, `VK2DShader`, `VK2DPolygon` (not a priority)

@@ -91,4 +91,10 @@ foreign class Sprite {
 
     // Sets this sprite's rotation
     foreign set_rotation(rotation)
+
+    // Returns the sprite's width
+    foreign width()
+
+    // Returns the sprite's height
+    foreign height()
 }
