@@ -107,13 +107,19 @@ void vksk_Start() {
 	vksk_Log("Loading assets...");
 	wrenInterpret(vm, "__top__", "import \"Assets\" for Assets\nAssets.load_assets()\n");
 
+	// Setup camera
+	VK2DCameraSpec spec = vk2dCameraGetSpec(VK2D_DEFAULT_CAMERA);
+	spec.zoom = 1;
+	spec.yOnScreen = spec.y = 0;
+	vk2dCameraUpdate(VK2D_DEFAULT_CAMERA, spec);
+
 	// Run starting level create function and FPS cap
 	vksk_Log("Running first level create function...");
 	vk2dRendererStartFrame(VK2D_BLACK);
-	bool first = true;
 	wrenEnsureSlots(vm, 1);
 	wrenSetSlotHandle(vm, 0, gCurrentLevel);
 	wrenCall(vm, createHandle);
+	vk2dRendererEndFrame();
 	juClockStart(&gFPSClock);
 
 	// Game loop
@@ -135,15 +141,8 @@ void vksk_Start() {
 		gMouseButtons[1] = buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE);
 		gMouseButtons[2] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
 
-		// Update VK2D and run the level update function
-		VK2DCameraSpec spec = vk2dCameraGetSpec(VK2D_DEFAULT_CAMERA);
-		spec.zoom = 1;
-		spec.yOnScreen = spec.y = 0;
-		vk2dCameraUpdate(VK2D_DEFAULT_CAMERA, spec);
-		if (first)
-			first = false;
-		else
-			vk2dRendererStartFrame(VK2D_BLACK);
+		// Start the frame and run update
+		vk2dRendererStartFrame(VK2D_BLACK);
 		wrenSetSlotHandle(vm, 0, gCurrentLevel);
 		wrenCall(vm, updateHandle);
 
@@ -220,7 +219,7 @@ void vksk_RuntimeInfo(WrenVM *vm) {
 	int mapValSlot = 2;
 	int listValSlot = 3;
 	wrenSetSlotString(vm, mapKeySlot, "name");
-	wrenSetSlotString(vm, mapValSlot, "Astro Engine");
+	wrenSetSlotString(vm, mapValSlot, "Astro Engine (c) Paolo Mazzon");
 	wrenSetMapValue(vm, 0, mapKeySlot, mapValSlot);
 	wrenSetSlotString(vm, mapKeySlot, "astro-version");
 	wrenSetSlotNewList(vm, mapValSlot);

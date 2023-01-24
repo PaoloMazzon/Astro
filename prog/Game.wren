@@ -37,8 +37,12 @@ class Game is Level {
         _game_cam.update()
         //Engine.cap_fps(60)
 
-        // Load the tileset
+        // Load the tileset and draw it to a surface
         _tileset = Tileset.new(LEVEL_TILES, Assets.terrain, 0, 0)
+        _tileset_surface = Surface.new(_tileset.width, _tileset.height)
+        Renderer.set_target(_tileset_surface)
+        _tileset.draw()
+        Renderer.set_target(Renderer.RENDER_TARGET_DEFAULT)
 
         _x = 208 / 2
         _y = 160 / 2
@@ -70,7 +74,8 @@ class Game is Level {
         // Render game world
         Renderer.lock_cameras(_game_cam)
         Tileset.draw_tiling_background(Assets.bg_blue, 0.7, _game_cam)
-        _tileset.draw()
+        Renderer.draw_texture(_tileset_surface, 0, 0)
+        Renderer.draw_sprite(Assets.cherries, 200, 50)
         Renderer.draw_sprite(Assets.player_idle, _x, _y)
 
         // Render UI
