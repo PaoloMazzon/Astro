@@ -45,23 +45,23 @@ there will be no limit on framerate.
 > with this function.
 
 ### delta
-`static delta()`
+`static delta`
 
 Returns the time in seconds the last frame took to process. This is typically useful
 when making game logic not bound to framerate.
 
 ### time
-`static time()`
+`static time`
 
 Returns the time seconds since the engine initialized.
 
 ### fps
-`static fps()`
+`static fps`
 
 Returns the average framerate over the last second.
 
 ### info
-`static info()`
+`static info`
 
 Returns a map containing information about the engine, the map will contain the
 following keys:

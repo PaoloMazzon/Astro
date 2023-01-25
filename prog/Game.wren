@@ -34,7 +34,7 @@ class Player is Entity {
     }
 
     update(level) {
-        var speed = Engine.delta() * 100
+        var speed = Engine.delta * 100
         if (Input.keyboard_get_key(Input.KEY_A)) {
             _x = _x - speed
         }
@@ -64,16 +64,16 @@ class Game is Level {
     
     create() {
         super.create()
-        System.print(Engine.info())
+        System.print(Engine.info)
         System.print("game create")
         
         // Create the game camera and set fps
         _game_cam = Camera.new()
-        _game_cam.set_w(208)
-        _game_cam.set_h(160)
-        _game_cam.set_zoom(1)
-        _game_cam.set_w_on_screen(832)
-        _game_cam.set_h_on_screen(640)
+        _game_cam.width = 208
+        _game_cam.height = 160
+        _game_cam.zoom = 1
+        _game_cam.w_on_screen = 832
+        _game_cam.h_on_screen = 640
         _game_cam.update()
         //Engine.cap_fps(60)
 
@@ -90,8 +90,8 @@ class Game is Level {
 
     update() {
         // Center the camera on the player
-        _game_cam.set_x(_game_cam.get_x() + (((_player.x + 16 - (_game_cam.get_w() / 2)) - _game_cam.get_x()) * 5 * Engine.delta()))
-        _game_cam.set_y(_game_cam.get_y() + (((_player.y + 16 - (_game_cam.get_h() / 2)) - _game_cam.get_y()) * 5 * Engine.delta()))
+        _game_cam.x = (_game_cam.x + (((_player.x + 16 - (_game_cam.width / 2)) - _game_cam.x) * 5 * Engine.delta))
+        _game_cam.y = (_game_cam.y + (((_player.y + 16 - (_game_cam.height / 2)) - _game_cam.y) * 5 * Engine.delta))
         _game_cam.update()
 
         // Render game world
@@ -103,7 +103,7 @@ class Game is Level {
 
         // Render UI
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
-        Renderer.draw_font(Assets.font, "FPS: " + Engine.fps().toString, 2, 0)
+        Renderer.draw_font(Assets.font, "FPS: " + Engine.fps.toString, 2, 0)
         Renderer.unlock_cameras()
     }
 

@@ -20,12 +20,12 @@ Parameters
 Creates of a new surface of specified dimensions.
 
 ### width
-`width()`
+`width`
 
 Returns the width of the surface in pixels.
 
 ### height
-`height()`
+`height`
 
 Returns the height of the surface in pixels.
 

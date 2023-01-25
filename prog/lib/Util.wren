@@ -116,13 +116,13 @@ class Tileset {
     }
 
     // Returns total width of the tileset
-    width { _tileset[0].count * _sprite.width() }
+    width { _tileset[0].count * _sprite.width }
 
     // Returns total height of the tileset
-    height { _tileset.count * _sprite.height() }
+    height { _tileset.count * _sprite.height }
 
     // Returns an element in the tileset
-    get(x, y) {
+    [x, y] {
         var cell = null
         if (y >= 0 && y < _tileset.count) {
             if (x >= 0 && x < _tileset[y].count) {
@@ -133,7 +133,7 @@ class Tileset {
     }
 
     // Sets an element in the tileset
-    set(x, y, cell) {
+    [x, y]=(cell) {
         if (y >= 0 && y < _tileset.count) {
             if (x >= 0 && x < _tileset[y].count) {
                 _tileset[y][x] = cell
@@ -152,9 +152,9 @@ class Tileset {
                 if (cell != 0) {
                     Renderer.draw_sprite(_sprite, cell - 1, x_offset, y_offset)
                 }
-                x_offset = x_offset + _sprite.width()
+                x_offset = x_offset + _sprite.width
             }
-            y_offset = y_offset + _sprite.height()
+            y_offset = y_offset + _sprite.height
         }
     }
 
@@ -162,15 +162,15 @@ class Tileset {
     // 0 for parallax would be static regardless of camera, 1 would
     // be moves with the camera. This doesn't work with rotated cameras.
     static draw_tiling_background(texture, parallax, camera) {
-        var tile_start_x = camera.get_x() * parallax
-        var tile_start_y = camera.get_y() * parallax
-        tile_start_x = tile_start_x + (((camera.get_x() - tile_start_x) / texture.width()).floor * texture.width())
-        tile_start_y = tile_start_y + (((camera.get_y() - tile_start_y) / texture.height()).floor * texture.height())
-        var horizontal = (camera.get_w() / texture.width()).ceil
-        var vertical = (camera.get_h() / texture.height()).ceil
+        var tile_start_x = camera.x * parallax
+        var tile_start_y = camera.y * parallax
+        tile_start_x = tile_start_x + (((camera.x - tile_start_x) / texture.width).floor * texture.width)
+        tile_start_y = tile_start_y + (((camera.y - tile_start_y) / texture.height).floor * texture.height)
+        var horizontal = (camera.width / texture.width).ceil
+        var vertical = (camera.height / texture.height).ceil
         for (y in 0..vertical) {
             for (x in 0..horizontal) {
-                Renderer.draw_texture(texture, tile_start_x + (x * texture.width()), tile_start_y + (y * texture.height()))
+                Renderer.draw_texture(texture, tile_start_x + (x * texture.width), tile_start_y + (y * texture.height))
             }
         }
     }

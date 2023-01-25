@@ -55,12 +55,12 @@ using copies.
 > drawn.
 
 ## get_delay
-`get_delay()`
+`delay`
 
 Returns the sprite's delay.
 
 ## set_delay
-`set_delay(delay)`
+`delay=`
 
 Parameters
  + `delay -> Num` Delay between each frame in seconds.
@@ -68,12 +68,12 @@ Parameters
 Sets the sprite's delay.
 
 ## get_origin_x
-`get_origin_x()`
+`origin_x`
 
 Returns a sprite's x origin.
 
 ## set_origin_x
-`set_origin_x(origin_x)`
+`origin_x=`
 
 Parameters
  + `origin_x -> Num` X origin of the sprite for rotation.
@@ -81,12 +81,12 @@ Parameters
 Sets a sprite's x origin.
 
 ## get_origin_y
-`get_origin_y()`
+`origin_y`
 
 Returns a sprite's y origin.
 
 ## set_origin_y
-`set_origin_y(origin_y)`
+`origin_y=`
 
 Parameters
  + `origin_y -> Num` Y origin of the sprite for rotation.
@@ -94,12 +94,12 @@ Parameters
 Sets a sprite's y origin.
 
 ## get_scale_x
-`get_scale_x()`
+`scale_x`
 
 Returns a sprite's x scale.
 
 ## set_scale_x
-`set_scale_x(scale_x)`
+`scale_x=`
 
 Parameters
  + `scale_x -> Num` X scale to set for this sprite.
@@ -107,12 +107,12 @@ Parameters
 Sets a sprite's x scale.
 
 ## get_scale_y
-`get_scale_y()`
+`scale_y`
 
 Returns a sprite's y scale.
 
 ## set_scale_y
-`set_scale_y(scale_y)`
+`scale_y=`
 
 Parameters
  + `scale_y -> Num` Y scale to set for this sprite.
@@ -120,12 +120,12 @@ Parameters
 Sets a sprite's y scale.
 
 ## get_rotation
-`get_rotation()`
+`rotation`
 
 Returns the sprite's rotation.
 
 ## set_rotation
-`set_rotation(rotation)`
+`rotation=`
 
 Parameters
  + `rotation -> Num` Rotation for the sprite.
@@ -133,12 +133,12 @@ Parameters
 Sets a sprite's rotation.
 
 ## get_width
-`get_width()`
+`width`
 
 Returns the sprite's width.
 
 ## get_height
-`get_height()`
+`height`
 
 Returns the sprite's height.
 

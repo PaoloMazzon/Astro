@@ -15,16 +15,16 @@ class Engine {
     foreign static cap_fps(fps)
 
     // Returns the time in seconds since the last frame
-    foreign static delta()
+    foreign static delta
 
     // Returns the time in seconds since the program started
-    foreign static time()
+    foreign static time
 
     // Returns the average FPS over the last second
-    foreign static fps()
+    foreign static fps
 
     // Returns a map containing info on the engine
-    foreign static info()
+    foreign static info
 }
 
 // Entity in the game world, child classes must implement their own

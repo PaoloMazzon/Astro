@@ -16,12 +16,12 @@ Parameters
 Loads an image as a texture.
 
 ### width
-`width()`
+`width`
 
 Returns the width of the texture in pixels.
 
 ### height
-`height()`
+`height`
 
 Returns the height of the texture in pixels.
 

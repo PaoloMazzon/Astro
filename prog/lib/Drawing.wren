@@ -17,10 +17,10 @@ foreign class Texture {
     construct new(filename) {}
 
     // Returns the width of the texture
-    foreign width()
+    foreign width
 
     // Returns the height of the texture
-    foreign height()
+    foreign height
 
     // Forces the internal texture to be freed if you don't want to wait for the garbage collector
     foreign free()
@@ -32,10 +32,10 @@ foreign class Surface {
     construct new(width, height) {}
 
     // Returns the width of the texture
-    foreign width()
+    foreign width
 
     // Returns the height of the texture
-    foreign height()
+    foreign height
 
     // Forces the surface to be freed if you don't want to wait for the garbage collector
     foreign free()
@@ -57,44 +57,44 @@ foreign class Sprite {
     foreign copy()
 
     // Gets this sprite's delay
-    foreign get_delay()
+    foreign delay
 
     // Sets this sprite's delay
-    foreign set_delay(delay)
+    foreign delay=(delay)
     
     // Gets this sprite's origin_x
-	foreign get_origin_x()
+	foreign origin_x
 
     // Sets this sprite's origin_x
-    foreign set_origin_x(origin_x)
+    foreign origin_x=(origin_x)
     
     // Gets this sprite's origin_y
-	foreign get_origin_y()
+	foreign origin_y
 
     // Sets this sprite's origin_y
-    foreign set_origin_y(origin_y)
+    foreign origin_y=(origin_y)
     
     // Gets this sprite's scale_x
-	foreign get_scale_x()
+	foreign scale_x
 
     // Sets this sprite's scale_x
-    foreign set_scale_x(scale_x)
+    foreign scale_x=(scale_x)
     
     // Gets this sprite's scale_y
-	foreign get_scale_y()
+	foreign scale_y
 
     // Sets this sprite's scale_y
-    foreign set_scale_y(scale_y)
+    foreign scale_y=(scale_y)
     
     // Gets this sprite's rotation
-	foreign get_rotation()
+	foreign rotation
 
     // Sets this sprite's rotation
-    foreign set_rotation(rotation)
+    foreign rotation=(rotation)
 
     // Returns the sprite's width
-    foreign width()
+    foreign width
 
     // Returns the sprite's height
-    foreign height()
+    foreign height
 }
