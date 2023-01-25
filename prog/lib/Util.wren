@@ -59,6 +59,7 @@ class Math {
 class Hitbox {
     static TYPE_CIRCLE { 0 }
     static TYPE_RECTANGLE { 1 }
+    static NO_HIT { Hitbox.new_circle(0) }
 
     type { _type }
     r { _r }
@@ -83,9 +84,9 @@ class Hitbox {
         if (hitbox2.type == Hitbox.TYPE_RECTANGLE && _type == Hitbox.TYPE_RECTANGLE) {
             return (y1 + _h > y2 && y1 < y2 + hitbox2.h && x1 + _w > x2 && x1 < x2 + hitbox2.w)
         } else if (hitbox2.type == Hitbox.TYPE_CIRCLE && _type == Hitbox.TYPE_RECTANGLE) {
-            // TODO: This
+            return false
         } else if (hitbox2.type == Hitbox.TYPE_RECTANGLE && _type == Hitbox.TYPE_CIRCLE) {
-            // TODO: This
+            return false
         } else if (hitbox2.type == Hitbox.TYPE_CIRCLE && _type == Hitbox.TYPE_CIRCLE) {
             return Math.point_distance(x1, y1, x2, y2) < _r + hitbox2.r
         }

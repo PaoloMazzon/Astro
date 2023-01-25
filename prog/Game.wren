@@ -1,4 +1,4 @@
-import "lib/Engine" for Engine, Level
+import "lib/Engine" for Engine, Level, Entity
 import "lib/Input" for Input
 import "lib/Renderer" for Renderer, Camera
 import "lib/Drawing" for BitmapFont, Sprite, Surface
@@ -20,10 +20,50 @@ var LEVEL_TILES = [
     [45, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 47]
 ]
 
+// Player
+class Player is Entity {
+    construct new() {}
+
+    x { _x }
+    y { _y }
+
+    create(level) {
+        _sprite = Assets.player_idle
+        _x = 208 / 2
+        _y = 160 / 2
+    }
+
+    update(level) {
+        var speed = Engine.delta() * 100
+        if (Input.keyboard_get_key(Input.KEY_A)) {
+            _x = _x - speed
+        }
+        if (Input.keyboard_get_key(Input.KEY_D)) {
+            _x = _x + speed
+        }
+        if (Input.keyboard_get_key(Input.KEY_W)) {
+            _y = _y - speed
+        }
+        if (Input.keyboard_get_key(Input.KEY_S)) {
+            _y = _y + speed
+        }
+
+        // Center the camera on the player
+        //var game_cam = level.game_cam
+        //game_cam.set_x(game_cam.get_x() + (((_x + 16 - (game_cam.get_w() / 2)) - game_cam.get_x()) * 5 * Engine.delta()))
+        //game_cam.set_y(game_cam.get_y() + (((_y + 16 - (game_cam.get_h() / 2)) - game_cam.get_y()) * 5 * Engine.delta()))
+        //game_cam.update()
+
+        // Draw the player
+        Renderer.draw_sprite(_sprite, _x, _y)
+    }
+}
+
 class Game is Level {
     construct new() { }
     
     create() {
+        super.create()
         System.print(Engine.info())
         System.print("game create")
         
@@ -44,31 +84,14 @@ class Game is Level {
         _tileset.draw()
         Renderer.set_target(Renderer.RENDER_TARGET_DEFAULT)
 
-        _x = 208 / 2
-        _y = 160 / 2
+        // Create the player entity and save it
+        _player = add_entity(Player)
     }
 
     update() {
-        var speed = Engine.delta() * 100
-        if (Input.keyboard_get_key(Input.KEY_A)) {
-            _x = _x - speed
-        }
-        if (Input.keyboard_get_key(Input.KEY_D)) {
-            _x = _x + speed
-        }
-        if (Input.keyboard_get_key(Input.KEY_W)) {
-            _y = _y - speed
-        }
-        if (Input.keyboard_get_key(Input.KEY_S)) {
-            _y = _y + speed
-        }
-        if (Input.keyboard_get_key_pressed(Input.KEY_SPACE)) {
-            Audio.play(Assets.sound, false, 1, 1)
-        }
-
         // Center the camera on the player
-        _game_cam.set_x(_game_cam.get_x() + (((_x + 16 - (_game_cam.get_w() / 2)) - _game_cam.get_x()) * 5 * Engine.delta()))
-        _game_cam.set_y(_game_cam.get_y() + (((_y + 16 - (_game_cam.get_h() / 2)) - _game_cam.get_y()) * 5 * Engine.delta()))
+        _game_cam.set_x(_game_cam.get_x() + (((_player.x + 16 - (_game_cam.get_w() / 2)) - _game_cam.get_x()) * 5 * Engine.delta()))
+        _game_cam.set_y(_game_cam.get_y() + (((_player.y + 16 - (_game_cam.get_h() / 2)) - _game_cam.get_y()) * 5 * Engine.delta()))
         _game_cam.update()
 
         // Render game world
@@ -76,7 +99,7 @@ class Game is Level {
         Tileset.draw_tiling_background(Assets.bg_blue, 0.7, _game_cam)
         Renderer.draw_texture(_tileset_surface, 0, 0)
         Renderer.draw_sprite(Assets.cherries, 200, 50)
-        Renderer.draw_sprite(Assets.player_idle, _x, _y)
+        super.update() // update all entities
 
         // Render UI
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
@@ -84,5 +107,7 @@ class Game is Level {
         Renderer.unlock_cameras()
     }
 
-    destroy() { }
+    destroy() {
+        super.destroy()
+    }
 }

@@ -2,7 +2,8 @@
 
 ### `Engine.wren`
  + [Engine](classes/Engine.md)
- + [Level](classes/Level.md)
+ + [Level](classes/Level.md) (Not yet documented)
+ + [Entity](classes/Entity.md) (Not yet documented)
 
 ### `File.wren`
  + [File](classes/File.md)
