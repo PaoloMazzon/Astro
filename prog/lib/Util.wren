@@ -5,6 +5,21 @@ import "lib/Renderer" for Renderer
 
 // Various math related methods
 class Math {
+    // Rounds a number to another number
+    static round_to(x, y) {
+        return (x / y).round * y
+    }
+
+    // Floors a number to another number
+    static floor_to(x, y) {
+        return (x / y).floor * y
+    }
+
+    // Ceils a number to another number
+    static ceil_to(x, y) {
+        return (x / y).ceil * y
+    }
+
     // Calculates the angle between two points
     static point_angle(x1, y1, x2, y2) {
         return (x2 - x1).atan(y2 - y1)
@@ -123,7 +138,7 @@ class Tileset {
 
     // Returns an element in the tileset
     [x, y] {
-        var cell = null
+        var cell = 0
         if (y >= 0 && y < _tileset.count) {
             if (x >= 0 && x < _tileset[y].count) {
                 cell = _tileset[y][x]
@@ -139,6 +154,20 @@ class Tileset {
                 _tileset[y][x] = cell
             }
         }
+    }
+
+    // Returns true if one of the bounding box corners of the hitbox are in a cell that
+    // isn't 0. Only works when the hitbox's bounding box w/h is equal or smaller to the
+    // w/h of cells in the tileset (usually don't worry about that).
+    collision(hitbox, x, y) {
+        var hb = hitbox.bounding_box(x, y)
+        var bb = [(hb[0] / _sprite.width).floor, (hb[1] / _sprite.height).floor, (hb[2] / _sprite.width).floor, (hb[3] / _sprite.height).floor]
+        var hit = false
+        if (this[bb[0], bb[1]] != 0) {hit = true}
+        if (this[bb[0], bb[3]] != 0) {hit = true}
+        if (this[bb[2], bb[1]] != 0) {hit = true}
+        if (this[bb[2], bb[3]] != 0) {hit = true}
+        return hit
     }
 
     // Draws the tileset

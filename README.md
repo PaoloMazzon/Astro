@@ -7,6 +7,8 @@ to a [Wren](https://github.com/wren-lang/wren) virtual machine, with various add
 provided in the bindings. It will also provide a slew of other features to make development
 faster and easier.
 
+![Example gif](./assets/example.gif)
+
 Getting Started
 ===============
 See [Getting Started](docs/GettingStarted.md) for a detailed breakdown, and check out the
@@ -19,7 +21,6 @@ A basic game
     import "lib/Engine" for Engine, Level
     import "lib/Input" for Input
     import "lib/Renderer" for Renderer
-    import "lib/Drawing" for BitmapFont, Sprite
     import "Assets" for Assets
     
     class Game is Level {
@@ -31,7 +32,7 @@ A basic game
         }
     
         update() {
-            var speed = Engine.delta() * 100
+            var speed = Engine.delta * 100
             if (Input.keyboard_get_key(Input.KEY_A)) {
                 _x = _x - speed
             }
