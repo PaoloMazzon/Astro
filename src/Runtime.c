@@ -26,6 +26,7 @@ const char *gAssetsFile;
 double gLastTime = 0;
 double gFrames = 0;
 double gFPS = 0;
+extern VKSK_EngineConfig gEngineConfig;
 
 static void _vksk_SetWindowIcon(WrenVM *vm) {
 	if (wrenHasVariable(vm, "init", "window_icon")) {

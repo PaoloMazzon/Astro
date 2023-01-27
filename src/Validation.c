@@ -6,8 +6,9 @@
 #include <stdint.h>
 
 #include "src/Validation.h"
+#include "src/Runtime.h"
 
-const uint64_t FOREIGN_END = UINT64_MAX; // internal use
+const uint64_t FOREIGN_END = 0; // internal use
 const uint64_t FOREIGN_STRING = 1<<0;
 const uint64_t FOREIGN_BOOL = 1<<1;
 const uint64_t FOREIGN_NUM = 1<<2;
@@ -24,8 +25,30 @@ const uint64_t FOREIGN_CAMERA = 1<<12;
 const uint64_t FOREIGN_AUDIO_DATA = 1<<13;
 const uint64_t FOREIGN_AUDIO = 1<<14;
 
+extern VKSK_EngineConfig gEngineConfig;
+
+static inline bool checkType(WrenVM *vm, int slot, uint64_t type) {
+	return true;
+}
+
 void _vksk_ValidateForeignArgs(WrenVM *vm, const char *function, ...) {
-	// TODO: Possibly something?
+	if (gEngineConfig.enableTypeChecking) {
+		va_list list;
+		va_start(list, function);
+
+		uint64_t type = va_arg(list, uint64_t);
+		int slot = 1;
+		while (type != FOREIGN_END) {
+
+			if (!checkType(vm, 1, type)) {
+				vksk_Log("Argument %i in foreign function \"%s\" is of incorrect type %#010X", slot, function, type);
+			}
+
+			type = va_arg(list, uint64_t);
+		}
+
+		va_end(list);
+	}
 }
 
 void vksk_Log(const char *fmt, ...) {

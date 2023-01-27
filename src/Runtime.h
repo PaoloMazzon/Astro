@@ -8,6 +8,11 @@
 #define ASTRO_VERSION_MINOR 5
 #define ASTRO_VERSION_PATCH 1
 
+// Engine configuration
+typedef struct VKSK_EngineConfig {
+	bool enableTypeChecking;
+} VKSK_EngineConfig;
+
 // Starts the runtime
 void vksk_Start();
 
