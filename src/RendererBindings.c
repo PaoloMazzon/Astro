@@ -121,7 +121,7 @@ void vksk_RuntimeRendererDrawCircle(WrenVM *vm) {
 }
 
 void vksk_RuntimeRendererDrawTextureExt(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE | FOREIGN_SURFACE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
@@ -134,7 +134,7 @@ void vksk_RuntimeRendererDrawTextureExt(WrenVM *vm) {
 }
 
 void vksk_RuntimeRendererDrawTexture(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE | FOREIGN_SURFACE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
@@ -142,7 +142,7 @@ void vksk_RuntimeRendererDrawTexture(WrenVM *vm) {
 }
 
 void vksk_RuntimeRendererDrawTexturePartExt(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE | FOREIGN_SURFACE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
@@ -159,7 +159,7 @@ void vksk_RuntimeRendererDrawTexturePartExt(WrenVM *vm) {
 }
 
 void vksk_RuntimeRendererDrawTexturePart(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE | FOREIGN_SURFACE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
@@ -232,7 +232,7 @@ void vksk_RuntimeRendererSetConfig(WrenVM *vm) {
 // vksk_RuntimeRendererSetTarget(VK2DTexture target) - set_target(_)
 void vksk_RuntimeRendererSetTarget(WrenVM *vm) {
 	if (wrenGetSlotType(vm, 1) != WREN_TYPE_NULL) {
-		VALIDATE_FOREIGN_ARGS(vm, FOREIGN_SURFACE)
+		VALIDATE_FOREIGN_ARGS(vm, FOREIGN_SURFACE, FOREIGN_END)
 		VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
 		vk2dRendererSetTarget(tex->surface);
 	} else {

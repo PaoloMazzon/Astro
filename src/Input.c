@@ -12,17 +12,17 @@ extern bool gMouseButtons[3]; // -- from src/Runtime.c
 extern bool gMouseButtonsPrevious[3]; // -- from src/Runtime.c
 
 void vksk_RuntimeInputCheckKey(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	wrenSetSlotBool(vm, 0, juKeyboardGetKey((int)wrenGetSlotDouble(vm, 1)));
 }
 
 void vksk_RuntimeInputCheckKeyPressed(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	wrenSetSlotBool(vm, 0, juKeyboardGetKeyPressed((int)wrenGetSlotDouble(vm, 1)));
 }
 
 void vksk_RuntimeInputCheckKeyReleased(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	wrenSetSlotBool(vm, 0, juKeyboardGetKeyReleased((int)wrenGetSlotDouble(vm, 1)));
 }
 
@@ -31,7 +31,7 @@ void vksk_RuntimeInputGetMousePosition(WrenVM *vm) {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 	if (wrenGetSlotType(vm, 1) != WREN_TYPE_NULL) {
-		VALIDATE_FOREIGN_ARGS(vm, "Camera")
+		VALIDATE_FOREIGN_ARGS(vm, FOREIGN_CAMERA, FOREIGN_END)
 		int w, h;
 		SDL_GetWindowSize(gWindow, &w, &h);
 		_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 1);
