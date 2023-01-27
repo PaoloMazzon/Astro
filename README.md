@@ -65,8 +65,8 @@ on what is yet to come.
  + Intuitive API that utilizes [Wren](https://github.com/wren-lang/wren) as its language
  + Manual and automatic resource management
  + Fast and flexible cameras
- + Simple level management
- + Easily load and use sprites, sounds, and fonts
+ + Simple level and entity management
+ + Easily load and use sprites, sounds, and fonts 
 
 TODO
 ====
