@@ -9,6 +9,7 @@
 #include "src/VMConfig.h"
 #include "src/RendererBindings.h"
 #include "src/Validation.h"
+#include "src/IntermediateTypes.h"
 
 extern Uint32 rmask, gmask, bmask, amask;
 
@@ -63,6 +64,7 @@ void vksk_Start() {
 	config.loadModuleFn = &vksk_WrenLoadModule;
 	config.bindForeignMethodFn = &vksk_WrenBindForeignMethod;
 	config.bindForeignClassFn = &vksk_WrenBindForeignClass;
+	config.initialHeapSize = 1024 * 1024 * 100; // 100mb
 	WrenVM *vm = wrenNewVM(&config);
 
 	// Import the initialization module
@@ -185,7 +187,7 @@ void vksk_Start() {
 }
 
 void vksk_RuntimeSwitchLevel(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	gNextLevel = wrenGetSlotHandle(vm, 1);
 }
 
@@ -194,7 +196,7 @@ void vksk_RuntimeQuit(WrenVM *vm) {
 }
 
 void vksk_RuntimeCapFPS(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	gFPSCap = wrenGetSlotDouble(vm, 1);
 	juClockStart(&gFPSClock);
 }

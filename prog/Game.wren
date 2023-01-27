@@ -53,6 +53,8 @@ class Player is Entity {
         }
         if (!level.tileset.collision(_hitbox, _x, _y + 1)) {
             _gravity = _gravity + (800 * Engine.delta)
+        } else {
+            _gravity = 0
         }
         _vspeed = _gravity * Engine.delta
 

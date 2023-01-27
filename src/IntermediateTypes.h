@@ -2,6 +2,29 @@
 /// \author Paolo Mazzon
 /// \brief Types that the VM needs but don't correspond 1:1 to what they come from
 #pragma once
+#include <stdint.h>
+#include <VK2D/VK2D.h>
+#include <JamUtil/JamUtil.h>
+
+#include "src/ConfigFile.h"
+
+// Various Wren-types Astro cares about, can be bit-wised together - defined in Validation.c
+extern const uint64_t FOREIGN_END;
+extern const uint64_t FOREIGN_STRING;
+extern const uint64_t FOREIGN_BOOL;
+extern const uint64_t FOREIGN_NUM;
+extern const uint64_t FOREIGN_LIST;
+extern const uint64_t FOREIGN_MAP;
+extern const uint64_t FOREIGN_NULL;
+extern const uint64_t FOREIGN_FOREIGN;
+extern const uint64_t FOREIGN_INI;
+extern const uint64_t FOREIGN_BITMAP_FONT;
+extern const uint64_t FOREIGN_TEXTURE;
+extern const uint64_t FOREIGN_SPRITE;
+extern const uint64_t FOREIGN_SURFACE;
+extern const uint64_t FOREIGN_CAMERA;
+extern const uint64_t FOREIGN_AUDIO_DATA;
+extern const uint64_t FOREIGN_AUDIO;
 
 // To protect Textures from garbage collection kinda
 typedef struct _vksk_RuntimeTexture {
@@ -14,3 +37,18 @@ typedef struct _vksk_RuntimeCamera {
 	VK2DCameraIndex index;
 	VK2DCameraSpec spec;
 } _vksk_RuntimeCamera;
+
+// All foreign types come from this for type checking purposes
+typedef struct VKSK_RuntimeForeign {
+	uint64_t type;
+	union {
+		VKSK_Config ini;
+		JUFont bitmapFont;
+		VK2DTexture texture;
+		VK2DTexture surface;
+		JUSprite sprite;
+		_vksk_RuntimeCamera camera;
+		JUSound audioData;
+		JUPlayingSound audio;
+	};
+} VKSK_RuntimeForeign;

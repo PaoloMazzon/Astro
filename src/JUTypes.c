@@ -4,37 +4,39 @@
 
 #include "src/Validation.h"
 #include "src/JUTypes.h"
+#include "src/IntermediateTypes.h"
 
 /********************* Bitmap Fonts *********************/
 void vksk_RuntimeJUBitmapFontAllocate(WrenVM *vm) {
-	JUFont *font = wrenSetSlotNewForeign(vm, 0, 0, sizeof(JUFont));
-	*font = juFontLoadFromImage(
+	VKSK_RuntimeForeign *font = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
+	font->bitmapFont = juFontLoadFromImage(
 			wrenGetSlotString(vm, 1),
 			(int)wrenGetSlotDouble(vm, 2),
 			(int)wrenGetSlotDouble(vm, 3),
 			(int)wrenGetSlotDouble(vm, 4),
 			(int)wrenGetSlotDouble(vm, 5)
 			);
-
+	font->type = FOREIGN_BITMAP_FONT;
 }
 
 void vksk_RuntimeJUBitmapFontFinalize(void *data) {
-	JUFont *font = data;
+	VKSK_RuntimeForeign *font = data;
 	vk2dRendererWait();
-	juFontFree(*font);
+	juFontFree(font->bitmapFont);
 }
 
 void vksk_RuntimeJUBitmapFontFree(WrenVM *vm) {
-	JUFont *font = wrenGetSlotForeign(vm, 0);
+	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 0);
 	vk2dRendererWait();
-	juFontFree(*font);
-	*font = NULL;
+	juFontFree(font->bitmapFont);
+	font->bitmapFont = NULL;
 }
 
 /********************* Sprites *********************/
 void vksk_RuntimeJUSpriteAllocate(WrenVM *vm) {
-	JUSprite *spr = wrenSetSlotNewForeign(vm, 0, 0, sizeof(JUSprite));
-	*spr = juSpriteCreate(
+	VKSK_RuntimeForeign *spr = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
+	spr->type = FOREIGN_SPRITE;
+	spr->sprite = juSpriteCreate(
 			wrenGetSlotString(vm, 1),
 			wrenGetSlotDouble(vm, 2),
 			wrenGetSlotDouble(vm, 3),
@@ -46,125 +48,129 @@ void vksk_RuntimeJUSpriteAllocate(WrenVM *vm) {
 }
 
 void vksk_RuntimeJUSpriteFinalize(void *data) {
-	JUSprite *spr = data;
+	VKSK_RuntimeForeign *spr = data;
 	vk2dRendererWait();
-	juSpriteFree(*spr);
+	juSpriteFree(spr->sprite);
 }
 
 void vksk_RuntimeJUSpriteFree(WrenVM *vm) {
-	JUSprite *font = wrenGetSlotForeign(vm, 0);
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
 	vk2dRendererWait();
-	juSpriteFree(*font);
-	*font = NULL;
+	juSpriteFree(spr->sprite);
+	spr->sprite = NULL;
 }
 
 void vksk_RuntimeJUSpriteCopy(WrenVM *vm) {
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
 	wrenGetVariable(vm, "lib/Sprite", "Sprite", 0);
-	JUSprite *newspr = wrenSetSlotNewForeign(vm, 0, 0, sizeof(JUSprite));
-	*newspr = juSpriteCopy(*spr);
+	VKSK_RuntimeForeign *newspr = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
+	newspr->sprite = juSpriteCopy(spr->sprite);
+	newspr->type = FOREIGN_SPRITE;
 }
 
 void vksk_RuntimeJUSpriteGetDelay(WrenVM *vm) {
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, (*spr)->delay);
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, spr->sprite->delay);
 }
 
 void vksk_RuntimeJUSpriteSetDelay(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM)
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	(*spr)->delay = wrenGetSlotDouble(vm, 1);
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	spr->sprite->delay = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeJUSpriteGetOriginX(WrenVM *vm) {
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, (*spr)->originX);
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, spr->sprite->originX);
 }
 
 void vksk_RuntimeJUSpriteSetOriginX(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM)
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	(*spr)->originX = wrenGetSlotDouble(vm, 1);
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	spr->sprite->originX = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeJUSpriteGetOriginY(WrenVM *vm) {
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, (*spr)->originY);
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, spr->sprite->originY);
 }
 
 void vksk_RuntimeJUSpriteSetOriginY(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM)
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	(*spr)->originY = wrenGetSlotDouble(vm, 1);
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	spr->sprite->originY = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeJUSpriteGetScaleX(WrenVM *vm) {
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, (*spr)->scaleX);
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, spr->sprite->scaleX);
 }
 
 void vksk_RuntimeJUSpriteSetScaleX(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM)
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	(*spr)->scaleX = wrenGetSlotDouble(vm, 1);
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	spr->sprite->scaleX = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeJUSpriteGetScaleY(WrenVM *vm) {
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, (*spr)->scaleY);
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, spr->sprite->scaleY);
 }
 
 void vksk_RuntimeJUSpriteSetScaleY(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM)
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	(*spr)->scaleY = wrenGetSlotDouble(vm, 1);
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	spr->sprite->scaleY = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeJUSpriteGetRotation(WrenVM *vm) {
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, (*spr)->rotation);
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, spr->sprite->rotation);
 }
 
 void vksk_RuntimeJUSpriteSetRotation(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM)
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	(*spr)->rotation = wrenGetSlotDouble(vm, 1);
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	spr->sprite->rotation = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeJUSpriteGetWidth(WrenVM *vm) {
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, (*spr)->Internal.w);
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, spr->sprite->Internal.w);
 }
 
 void vksk_RuntimeJUSpriteGetHeight(WrenVM *vm) {
-	JUSprite *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, (*spr)->Internal.h);
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, spr->sprite->Internal.h);
 }
 
 
 /********************* Audio data *********************/
 void vksk_RuntimeJUAudioDataAllocate(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING)
-	JUSound *snd = wrenSetSlotNewForeign(vm, 0, 0, sizeof(JUSound));
-	*snd = juSoundLoad(wrenGetSlotString(vm, 1));
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	VKSK_RuntimeForeign *snd = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
+	snd->audioData = juSoundLoad(wrenGetSlotString(vm, 1));
+	snd->type = FOREIGN_AUDIO_DATA;
 }
 
 void vksk_RuntimeJUAudioDataFinalize(void *data) {
-	juSoundFree(*((JUSound*)data));
+	VKSK_RuntimeForeign *d = data;
+	juSoundFree(d->audioData);
 }
 
 void vksk_RuntimeJUAudioDataFree(WrenVM *vm) {
-	JUSound *snd = wrenGetSlotForeign(vm, 1);
-	juSoundFree(*snd);
-	*snd = NULL;
+	VKSK_RuntimeForeign *snd = wrenGetSlotForeign(vm, 1);
+	juSoundFree(snd->audioData);
+	snd->audioData = NULL;
 }
 
 /********************* Audio *********************/
 void vksk_RuntimeJUAudioAllocate(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, "AudioData", FOREIGN_BOOL, FOREIGN_NUM, FOREIGN_NUM)
-	JUPlayingSound *snd = wrenSetSlotNewForeign(vm, 0, 0, sizeof(JUPlayingSound));
-	JUSound *aud = wrenGetSlotForeign(vm, 1);
-	*snd = juSoundPlay(*aud, wrenGetSlotBool(vm, 2), wrenGetSlotDouble(vm, 3), wrenGetSlotDouble(vm, 4));
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_AUDIO_DATA, FOREIGN_BOOL, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *snd = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
+	VKSK_RuntimeForeign *aud = wrenGetSlotForeign(vm, 1);
+	snd->audio = juSoundPlay(aud->audioData, wrenGetSlotBool(vm, 2), wrenGetSlotDouble(vm, 3), wrenGetSlotDouble(vm, 4));
+	snd->type = FOREIGN_AUDIO;
 }
 
 void vksk_RuntimeJUAudioFinalize(void *data) {
@@ -172,14 +178,14 @@ void vksk_RuntimeJUAudioFinalize(void *data) {
 }
 
 void vksk_RuntimeJUAudioUpdate(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BOOL, FOREIGN_NUM, FOREIGN_NUM)
-	JUPlayingSound *snd = wrenGetSlotForeign(vm, 0);
-	juSoundUpdate(*snd, wrenGetSlotBool(vm, 1), wrenGetSlotDouble(vm, 2), wrenGetSlotDouble(vm, 3));
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BOOL, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *snd = wrenGetSlotForeign(vm, 0);
+	juSoundUpdate(snd->audio, wrenGetSlotBool(vm, 1), wrenGetSlotDouble(vm, 2), wrenGetSlotDouble(vm, 3));
 }
 
 void vksk_RuntimeJUAudioStop(WrenVM *vm) {
-	JUPlayingSound *snd = wrenGetSlotForeign(vm, 0);
-	juSoundStop(*snd);
+	VKSK_RuntimeForeign *snd = wrenGetSlotForeign(vm, 0);
+	juSoundStop(snd->audio);
 }
 
 void vksk_RuntimeJUAudioStopAll(WrenVM *vm) {

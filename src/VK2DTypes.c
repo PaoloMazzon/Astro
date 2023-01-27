@@ -7,76 +7,69 @@
 
 /*************** Texture ***************/
 void vksk_RuntimeVK2DTextureAllocate(WrenVM *vm) {
-	_vksk_RuntimeTexture* tex = (_vksk_RuntimeTexture*)wrenSetSlotNewForeign(vm,0, 0, sizeof(_vksk_RuntimeTexture));
-	tex->tex = vk2dTextureLoad(wrenGetSlotString(vm, 1));
-	tex->freed = false;
+	VKSK_RuntimeForeign* tex = (VKSK_RuntimeForeign*)wrenSetSlotNewForeign(vm,0, 0, sizeof(VKSK_RuntimeForeign));
+	tex->texture = vk2dTextureLoad(wrenGetSlotString(vm, 1));
+	tex->type = FOREIGN_TEXTURE;
 }
 
 void vksk_RuntimeVK2DTextureFinalize(void *data) {
-	if (((_vksk_RuntimeTexture*)data)->freed == false) {
-		vk2dRendererWait();
-		vk2dTextureFree(((_vksk_RuntimeTexture *) data)->tex);
-	}
+	vk2dRendererWait();
+	vk2dTextureFree(((VKSK_RuntimeForeign*)data)->texture);
 }
 
 void vksk_RuntimeVK2DTextureFree(WrenVM *vm) {
-	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 0);
-	if (tex->freed == false) {
-		vk2dRendererWait();
-		vk2dTextureFree(tex->tex);
-		tex->freed = true;
-	}
+	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 0);
+	vk2dRendererWait();
+	vk2dTextureFree(tex->texture);
+	tex->texture = NULL;
 }
 
 void vksk_RuntimeVK2DTextureWidth(WrenVM *vm) {
-	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, tex->tex->img->width);
+	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, tex->texture->img->width);
 }
 
 void vksk_RuntimeVK2DTextureHeight(WrenVM *vm) {
-	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, tex->tex->img->height);
+	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, tex->texture->img->height);
 }
 
 /*************** Surface ***************/
 void vksk_RuntimeVK2DSurfaceAllocate(WrenVM *vm) {
-	_vksk_RuntimeTexture* tex = (_vksk_RuntimeTexture*)wrenSetSlotNewForeign(vm,0, 0, sizeof(_vksk_RuntimeTexture));
-	tex->tex = vk2dTextureCreate(wrenGetSlotDouble(vm, 1), wrenGetSlotDouble(vm, 2));
-	tex->freed = false;
+	VKSK_RuntimeForeign* tex = (VKSK_RuntimeForeign*)wrenSetSlotNewForeign(vm,0, 0, sizeof(VKSK_RuntimeForeign));
+	tex->surface = vk2dTextureCreate(wrenGetSlotDouble(vm, 1), wrenGetSlotDouble(vm, 2));
+	tex->type = FOREIGN_SURFACE;
 }
 
 void vksk_RuntimeVK2DSurfaceFinalize(void *data) {
-	if (((_vksk_RuntimeTexture*)data)->freed == false) {
-		vk2dRendererWait();
-		vk2dTextureFree(((_vksk_RuntimeTexture *) data)->tex);
-	}
+	vk2dRendererWait();
+	vk2dTextureFree(((VKSK_RuntimeForeign *) data)->surface);
 }
 
 void vksk_RuntimeVK2DSurfaceFree(WrenVM *vm) {
-	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 0);
-	if (tex->freed == false) {
-		vk2dRendererWait();
-		vk2dTextureFree(tex->tex);
-		tex->freed = true;
-	}
+	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 0);
+	vk2dRendererWait();
+	vk2dTextureFree(tex->surface);
+	tex->surface = NULL;
 }
 
 void vksk_RuntimeVK2DSurfaceWidth(WrenVM *vm) {
-	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, tex->tex->img->width);
+	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, tex->surface->img->width);
 }
 
 void vksk_RuntimeVK2DSurfaceHeight(WrenVM *vm) {
-	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, tex->tex->img->height);
+	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, tex->surface->img->height);
 }
 
 /*************** Camera ***************/
 void vksk_RuntimeVK2DCameraAllocate(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenSetSlotNewForeign(vm, 0, 0, sizeof(_vksk_RuntimeCamera));
-	memset(&cam->spec, 0, sizeof(VK2DCameraSpec));
-	cam->spec = vk2dRendererGetCamera();
-	cam->index = vk2dCameraCreate(cam->spec);
+	VKSK_RuntimeForeign *cam = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
+	memset(&cam->camera.spec, 0, sizeof(VK2DCameraSpec));
+	cam->camera.spec = vk2dRendererGetCamera();
+	cam->camera.index = vk2dCameraCreate(cam->camera.spec);
+	cam->type = FOREIGN_CAMERA;
 }
 
 void vksk_RuntimeVK2DCameraFinalize(void *data) {
@@ -84,116 +77,116 @@ void vksk_RuntimeVK2DCameraFinalize(void *data) {
 }
 
 void vksk_RuntimeVK2DCameraGetType(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, cam->spec.type);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, cam->camera.spec.type);
 }
 
 void vksk_RuntimeVK2DCameraSetType(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	cam->spec.type = wrenGetSlotDouble(vm, 1);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	cam->camera.spec.type = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeVK2DCameraGetX(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, cam->spec.x);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, cam->camera.spec.x);
 }
 
 void vksk_RuntimeVK2DCameraSetX(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	cam->spec.x = wrenGetSlotDouble(vm, 1);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	cam->camera.spec.x = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeVK2DCameraGetY(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, cam->spec.y);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, cam->camera.spec.y);
 }
 
 void vksk_RuntimeVK2DCameraSetY(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	cam->spec.y = wrenGetSlotDouble(vm, 1);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	cam->camera.spec.y = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeVK2DCameraGetW(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, cam->spec.w);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, cam->camera.spec.w);
 }
 
 void vksk_RuntimeVK2DCameraSetW(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	cam->spec.w = wrenGetSlotDouble(vm, 1);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	cam->camera.spec.w = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeVK2DCameraGetH(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, cam->spec.h);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, cam->camera.spec.h);
 }
 
 void vksk_RuntimeVK2DCameraSetH(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	cam->spec.h = wrenGetSlotDouble(vm, 1);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	cam->camera.spec.h = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeVK2DCameraGetZoom(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, cam->spec.zoom);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, cam->camera.spec.zoom);
 }
 
 void vksk_RuntimeVK2DCameraSetZoom(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	cam->spec.zoom = wrenGetSlotDouble(vm, 1);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	cam->camera.spec.zoom = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeVK2DCameraGetRotation(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, cam->spec.rot);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, cam->camera.spec.rot);
 }
 
 void vksk_RuntimeVK2DCameraSetRotation(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	cam->spec.rot = wrenGetSlotDouble(vm, 1);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	cam->camera.spec.rot = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeVK2DCameraGetXOnScreen(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, cam->spec.xOnScreen);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, cam->camera.spec.xOnScreen);
 }
 
 void vksk_RuntimeVK2DCameraSetXOnScreen(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	cam->spec.xOnScreen = wrenGetSlotDouble(vm, 1);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	cam->camera.spec.xOnScreen = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeVK2DCameraGetYOnScreen(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, cam->spec.yOnScreen);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, cam->camera.spec.yOnScreen);
 }
 
 void vksk_RuntimeVK2DCameraSetYOnScreen(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	cam->spec.yOnScreen = wrenGetSlotDouble(vm, 1);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	cam->camera.spec.yOnScreen = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeVK2DCameraGetWOnScreen(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, cam->spec.wOnScreen);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, cam->camera.spec.wOnScreen);
 }
 
 void vksk_RuntimeVK2DCameraSetWOnScreen(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	cam->spec.wOnScreen = wrenGetSlotDouble(vm, 1);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	cam->camera.spec.wOnScreen = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeVK2DCameraGetHOnScreen(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, cam->spec.hOnScreen);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, cam->camera.spec.hOnScreen);
 }
 
 void vksk_RuntimeVK2DCameraSetHOnScreen(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	cam->spec.hOnScreen = wrenGetSlotDouble(vm, 1);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	cam->camera.spec.hOnScreen = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeVK2DCameraUpdate(WrenVM *vm) {
-	_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 0);
-	vk2dCameraUpdate(cam->index, cam->spec);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	vk2dCameraUpdate(cam->camera.index, cam->camera.spec);
 }

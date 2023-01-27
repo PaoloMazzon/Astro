@@ -112,7 +112,7 @@ void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitl
 }
 
 void vksk_RuntimeRendererDrawCircle(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	vk2dRendererDrawCircle(
 			wrenGetSlotDouble(vm, 1),
 			wrenGetSlotDouble(vm, 2),
@@ -121,8 +121,8 @@ void vksk_RuntimeRendererDrawCircle(WrenVM *vm) {
 }
 
 void vksk_RuntimeRendererDrawTextureExt(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, "Texture", FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
-	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 1);
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
 	float xscale = wrenGetSlotDouble(vm, 4);
@@ -130,20 +130,20 @@ void vksk_RuntimeRendererDrawTextureExt(WrenVM *vm) {
 	float rot = wrenGetSlotDouble(vm, 6);
 	float ox = wrenGetSlotDouble(vm, 7);
 	float oy = wrenGetSlotDouble(vm, 8);
-	vk2dRendererDrawTexture(tex->tex, x, y, xscale, yscale, rot, ox, oy, 0, 0, tex->tex->img->width, tex->tex->img->height);
+	vk2dRendererDrawTexture(tex->texture, x, y, xscale, yscale, rot, ox, oy, 0, 0, tex->texture->img->width, tex->texture->img->height);
 }
 
 void vksk_RuntimeRendererDrawTexture(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, "Texture", FOREIGN_NUM, FOREIGN_NUM)
-	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 1);
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
-	vk2dRendererDrawTexture(tex->tex, x, y, 1, 1, 0, 0, 0, 0, 0, tex->tex->img->width, tex->tex->img->height);
+	vk2dRendererDrawTexture(tex->texture, x, y, 1, 1, 0, 0, 0, 0, 0, tex->texture->img->width, tex->texture->img->height);
 }
 
 void vksk_RuntimeRendererDrawTexturePartExt(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, "Texture", FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
-	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 1);
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
 	float xscale = wrenGetSlotDouble(vm, 4);
@@ -155,19 +155,19 @@ void vksk_RuntimeRendererDrawTexturePartExt(WrenVM *vm) {
 	float yt = wrenGetSlotDouble(vm, 10);
 	float tw = wrenGetSlotDouble(vm, 11);
 	float th = wrenGetSlotDouble(vm, 12);
-	vk2dRendererDrawTexture(tex->tex, x, y, xscale, yscale, rot, ox, oy, xt, yt, tw, th);
+	vk2dRendererDrawTexture(tex->texture, x, y, xscale, yscale, rot, ox, oy, xt, yt, tw, th);
 }
 
 void vksk_RuntimeRendererDrawTexturePart(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, "Texture", FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
-	_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 1);
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
 	float xt = wrenGetSlotDouble(vm, 4);
 	float yt = wrenGetSlotDouble(vm, 5);
 	float tw = wrenGetSlotDouble(vm, 6);
 	float th = wrenGetSlotDouble(vm, 7);
-	vk2dRendererDrawTexture(tex->tex, x, y, 1, 1, 0, 0, 0, xt, yt, tw, th);
+	vk2dRendererDrawTexture(tex->texture, x, y, 1, 1, 0, 0, 0, xt, yt, tw, th);
 }
 
 // vksk_RuntimeRendererGetConfig() - get_config()
@@ -218,7 +218,7 @@ void vksk_RuntimeRendererGetConfig(WrenVM *vm) {
 
 // vksk_RuntimeRendererSetConfig(VK2DRendererConfig config) - set_config(_)
 void vksk_RuntimeRendererSetConfig(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_MAP)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_MAP, FOREIGN_END)
 	const char *windowTitle;
 	int windowWidth, windowHeight;
 	bool fullscreen;
@@ -232,9 +232,9 @@ void vksk_RuntimeRendererSetConfig(WrenVM *vm) {
 // vksk_RuntimeRendererSetTarget(VK2DTexture target) - set_target(_)
 void vksk_RuntimeRendererSetTarget(WrenVM *vm) {
 	if (wrenGetSlotType(vm, 1) != WREN_TYPE_NULL) {
-		VALIDATE_FOREIGN_ARGS(vm, "Texture")
-		_vksk_RuntimeTexture *tex = wrenGetSlotForeign(vm, 1);
-		vk2dRendererSetTarget(tex->tex);
+		VALIDATE_FOREIGN_ARGS(vm, FOREIGN_SURFACE)
+		VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
+		vk2dRendererSetTarget(tex->surface);
 	} else {
 		vk2dRendererSetTarget(VK2D_TARGET_SCREEN);
 	}
@@ -242,7 +242,7 @@ void vksk_RuntimeRendererSetTarget(WrenVM *vm) {
 
 // vksk_RuntimeRendererSetBlendMode(VK2DBlendMode blendMode) - set_blend_mode(_)
 void vksk_RuntimeRendererSetBlendMode(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	vk2dRendererSetBlendMode(wrenGetSlotDouble(vm, 1));
 }
 
@@ -253,7 +253,7 @@ void vksk_RuntimeRendererGetBlendMode(WrenVM *vm) {
 
 // vksk_RuntimeRendererSetColourMod(const vec4 mod) - set_colour_mod(_)
 void vksk_RuntimeRendererSetColourMod(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST, FOREIGN_END)
 	vec4 vec;
 	wrenEnsureSlots(vm, 3);
 	for (int i = 0; i < 4; i++) {
@@ -277,7 +277,7 @@ void vksk_RuntimeRendererGetColourMod(WrenVM *vm) {
 
 // vksk_RuntimeRendererSetTextureCamera(bool useCameraOnTextures) - set_texture_camera(_)
 void vksk_RuntimeRendererSetTextureCamera(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BOOL)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BOOL, FOREIGN_END)
 	vk2dRendererSetTextureCamera(wrenGetSlotBool(vm, 1));
 }
 
@@ -291,9 +291,9 @@ void vksk_RuntimeRendererLockCameras(WrenVM *vm) {
 	if (wrenGetSlotType(vm, 1) == WREN_TYPE_NULL) {
 		vk2dRendererLockCameras(VK2D_DEFAULT_CAMERA);
 	} else {
-		VALIDATE_FOREIGN_ARGS(vm, "Camera")
-		_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 1);
-		vk2dRendererLockCameras(cam->index);
+		VALIDATE_FOREIGN_ARGS(vm, FOREIGN_CAMERA, FOREIGN_END)
+		VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 1);
+		vk2dRendererLockCameras(cam->camera.index);
 	}
 }
 
@@ -309,7 +309,7 @@ void vksk_RuntimeRendererClear(WrenVM *vm) {
 
 // vksk_RuntimeRendererDrawRectangle(float x, float y, float w, float h, float r, float ox, float oy) - draw_rectangle(_,_,_,_,_,_,_)
 void vksk_RuntimeRendererDrawRectangle(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	float x = wrenGetSlotDouble(vm, 1);
 	float y = wrenGetSlotDouble(vm, 2);
 	float w = wrenGetSlotDouble(vm, 3);
@@ -322,7 +322,7 @@ void vksk_RuntimeRendererDrawRectangle(WrenVM *vm) {
 
 // vksk_RuntimeRendererDrawRectangleOutline(float x, float y, float w, float h, float r, float ox, float oy, float lineWidth) - draw_rectangle_outline(_,_,_,_,_,_,_,_)
 void vksk_RuntimeRendererDrawRectangleOutline(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	float x = wrenGetSlotDouble(vm, 1);
 	float y = wrenGetSlotDouble(vm, 2);
 	float w = wrenGetSlotDouble(vm, 3);
@@ -336,7 +336,7 @@ void vksk_RuntimeRendererDrawRectangleOutline(WrenVM *vm) {
 
 // vksk_RuntimeRendererDrawCircleOutline(float x, float y, float r, float lineWidth) - draw_circle_outline(_,_,_,_)
 void vksk_RuntimeRendererDrawCircleOutline(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	float x = wrenGetSlotDouble(vm, 1);
 	float y = wrenGetSlotDouble(vm, 2);
 	float w = wrenGetSlotDouble(vm, 3);
@@ -346,7 +346,7 @@ void vksk_RuntimeRendererDrawCircleOutline(WrenVM *vm) {
 
 // vksk_RuntimeRendererDrawLine(float x1, float y1, float x2, float y2) - draw_line(_,_,_,_)
 void vksk_RuntimeRendererDrawLine(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	float x = wrenGetSlotDouble(vm, 1);
 	float y = wrenGetSlotDouble(vm, 2);
 	float w = wrenGetSlotDouble(vm, 3);
@@ -370,23 +370,23 @@ void vksk_RuntimeRendererDrawModel(WrenVM *vm) {
 }
 
 void vksk_RuntimeRendererDrawFont(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, "BitmapFont", FOREIGN_STRING, FOREIGN_NUM, FOREIGN_NUM)
-	JUFont *font = wrenGetSlotForeign(vm, 1);
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BITMAP_FONT, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 1);
 	const char *str = wrenGetSlotString(vm, 2);
 	float x = wrenGetSlotDouble(vm, 3);
 	float y = wrenGetSlotDouble(vm, 4);
-	juFontDraw(*font, x, y, "%s", str);
+	juFontDraw(font->bitmapFont, x, y, "%s", str);
 }
 
 void vksk_RuntimeRendererDrawSpritePos(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, "Sprite", FOREIGN_NUM, FOREIGN_NUM)
-	JUSprite *spr = wrenGetSlotForeign(vm, 1);
-	juSpriteDraw(*spr, wrenGetSlotDouble(vm, 2), wrenGetSlotDouble(vm, 3));
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_SPRITE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 1);
+	juSpriteDraw(spr->sprite, wrenGetSlotDouble(vm, 2), wrenGetSlotDouble(vm, 3));
 }
 
 void vksk_RuntimeRendererDrawSpriteFrame(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, "Sprite", FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM)
-	JUSprite *spr = wrenGetSlotForeign(vm, 1);
-	juSpriteDrawFrame(*spr, wrenGetSlotDouble(vm, 2), wrenGetSlotDouble(vm, 3), wrenGetSlotDouble(vm, 4));
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_SPRITE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 1);
+	juSpriteDrawFrame(spr->sprite, wrenGetSlotDouble(vm, 2), wrenGetSlotDouble(vm, 3), wrenGetSlotDouble(vm, 4));
 }
 
