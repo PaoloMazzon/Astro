@@ -1,11 +1,9 @@
 ![Astro Engine](./assets/banner.png)
 
 Astro Engine is a game development framework that provides all the things you need to
-easily develop games. In no small part, Astro Engine provides bindings for the libraries
-[Vulkan2D](https://github.com/PaoloMazzon/Vulkan2D) and [JamUtil](https://github.com/PaoloMazzon/JamUtil)
-to a [Wren](https://github.com/wren-lang/wren) virtual machine, with various additional features
-provided in the bindings. It will also provide a slew of other features to make development
-faster and easier.
+easily develop games. It uses the scripting language [Wren](https://github.com/wren-lang/wren)
+for game logic, taking full advantage of the features that come with an embedded
+scripting language.
 
 ![Example gif](./assets/example.gif)
 
@@ -57,28 +55,22 @@ See [Getting Started](docs/GettingStarted.md) for more information.
 
 Features
 ========
-Astro is still quite bare-bones at the moment while everything is still being ported over.
-Technically, you can use it to make games right now but the biggest issue is the lack of an
-audio subsystem as well as lack of any sort of file I/O. See the TODO section for an overview
-on what is yet to come.
 
  + Intuitive API that utilizes [Wren](https://github.com/wren-lang/wren) as its language
  + Manual and automatic resource management
  + Fast and flexible cameras
  + Simple level and entity management
  + Easily load and use sprites, sounds, and fonts 
+ + Complete [API documentation](docs/API.md)
 
 TODO
 ====
 
-Meta/Framework Things
----------------------
-
  + Debug mode
+ + Extended tileset support
  + Asset load directories
  + OGG loading support
  + Profiling tools
- + Entity management system
- + Detailed documentation
  + TrueType fonts
  + Built-in mod support
+ + Load Tiled maps

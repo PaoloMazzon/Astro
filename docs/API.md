@@ -35,15 +35,15 @@ Core 2D renderer, as well as primitives like circles and rectangles.
 ### `Audio.wren`
 Loading and playing sounds.
 
- + [AudioData](classes/AudioData.md) (Not yet documented)
- + [Audio](classes/Audio.md) (Not yet documented)
+ + [AudioData](classes/AudioData.md)
+ + [Audio](classes/Audio.md)
 
 ### `Util.wren`
 Game development utilities.
 
- + [Math](classes/Math.md) (Not yet documented)
- + [Hitbox](classes/Hitbox.md) (Not yet documented)
- + [Tileset](classes/Tileset.md) (Not yet documented)
+ + [Math](classes/Math.md)
+ + [Hitbox](classes/Hitbox.md)
+ + [Tileset](classes/Tileset.md)
  
 --------
 
