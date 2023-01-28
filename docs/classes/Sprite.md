@@ -7,20 +7,20 @@ world will be drawn with sprites.
  + [new](#new)
  + [free](#free)
  + [copy](#copy)
- + [get_delay](#get_delay)
- + [set_delay](#set_delay)
- + [get_origin_x](#get_origin_x)
- + [set_origin_x](#set_origin_x)
- + [get_origin_y](#get_origin_y)
- + [set_origin_y](#set_origin_y)
- + [get_scale_x](#get_scale_x)
- + [set_scale_x](#set_scale_x)
- + [get_scale_y](#get_scale_y)
- + [set_scale_y](#set_scale_y)
- + [get_rotation](#get_rotation)
- + [set_rotation](#set_rotation)
- + [get_width](#get_width)
- + [get_height](#get_height)
+ + [delay](#delay-setter)
+ + [delay=](#delay-setter)
+ + [origin_x](#origin_x-setter)
+ + [origin_x=](#origin_x-setter)
+ + [origin_y](#origin_y-setter)
+ + [origin_y=](#origin_y-setter)
+ + [scale_x](#scale_x-setter)
+ + [scale_x=](#scale_x-setter)
+ + [scale_y](#scale_y-setter)
+ + [scale_y=](#scale_y-setter)
+ + [rotation](#rotation-setter)
+ + [rotation=](#rotation-setter)
+ + [width](#width)
+ + [height](#height)
 
 ## new
 `construct new(filename, x, y, w, h, delay, frames)`
@@ -54,12 +54,12 @@ using copies.
 > that everything uses will result in that transformation being shown every time it is
 > drawn.
 
-## get_delay
+## delay (getter)
 `delay`
 
 Returns the sprite's delay.
 
-## set_delay
+## delay (setter)
 `delay=`
 
 Parameters
@@ -67,12 +67,12 @@ Parameters
 
 Sets the sprite's delay.
 
-## get_origin_x
+## origin_x (getter)
 `origin_x`
 
 Returns a sprite's x origin.
 
-## set_origin_x
+## origin_x (setter)
 `origin_x=`
 
 Parameters
@@ -80,12 +80,12 @@ Parameters
 
 Sets a sprite's x origin.
 
-## get_origin_y
+## origin_y (getter)
 `origin_y`
 
 Returns a sprite's y origin.
 
-## set_origin_y
+## origin_y (setter)
 `origin_y=`
 
 Parameters
@@ -93,12 +93,12 @@ Parameters
 
 Sets a sprite's y origin.
 
-## get_scale_x
+## scale_x (getter)
 `scale_x`
 
 Returns a sprite's x scale.
 
-## set_scale_x
+## scale_x (setter)
 `scale_x=`
 
 Parameters
@@ -106,12 +106,12 @@ Parameters
  
 Sets a sprite's x scale.
 
-## get_scale_y
+## scale_y (getter)
 `scale_y`
 
 Returns a sprite's y scale.
 
-## set_scale_y
+## scale_y (setter)
 `scale_y=`
 
 Parameters
@@ -119,12 +119,12 @@ Parameters
  
 Sets a sprite's y scale.
 
-## get_rotation
+## rotation (getter)
 `rotation`
 
 Returns the sprite's rotation.
 
-## set_rotation
+## rotation (setter)
 `rotation=`
 
 Parameters
@@ -132,12 +132,12 @@ Parameters
 
 Sets a sprite's rotation.
 
-## get_width
+## width
 `width`
 
 Returns the sprite's width.
 
-## get_height
+## height
 `height`
 
 Returns the sprite's height.
