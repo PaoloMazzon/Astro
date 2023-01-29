@@ -5,7 +5,7 @@
 #include <wren.h>
 
 #define ASTRO_VERSION_MAJOR 0
-#define ASTRO_VERSION_MINOR 5
+#define ASTRO_VERSION_MINOR 6
 #define ASTRO_VERSION_PATCH 1
 
 // Engine configuration
@@ -39,3 +39,6 @@ void vksk_RuntimeFPS(WrenVM *vm);
 
 // Returns a map with engine information
 void vksk_RuntimeInfo(WrenVM *vm);
+
+// Returns a specified class
+void vksk_RuntimeGetClass(WrenVM *vm);

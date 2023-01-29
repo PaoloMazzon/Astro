@@ -240,3 +240,22 @@ void vksk_RuntimeInfo(WrenVM *vm) {
 	wrenSetSlotString(vm, mapValSlot, __DATE__);
 	wrenSetMapValue(vm, 0, mapKeySlot, mapValSlot);
 }
+
+void vksk_RuntimeGetClass(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	const char *fullName = wrenGetSlotString(vm, 1);
+	char module[200];
+	char *temp = strstr(fullName, "::");
+
+	if (temp != NULL) {
+		strncpy(module, fullName, temp - fullName);
+		temp += 2;
+		if (wrenHasModule(vm, module) && wrenHasVariable(vm, module, temp)) {
+			wrenGetVariable(vm, module, temp, 0);
+		} else {
+			wrenSetSlotNull(vm, 0);
+		}
+	} else {
+		wrenSetSlotNull(vm, 0);
+	}
+}

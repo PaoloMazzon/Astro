@@ -9,6 +9,7 @@ aspects of game development.
  + [time](#time)
  + [fps](#fps)
  + [info](#info)
+ + [get_class](#get_class)
  
 ### switch_level
 `static switch_level(level)`
@@ -69,6 +70,15 @@ following keys:
  + `wren-version` - Number representing the version of Wren the engine was built with.
  + `astro-version` - A list representing the engine's version in the form `[major, minor, patch]`.
  + `build-date` - Date the engine was built on as a string.
+
+### get_class
+`static get_class(class_name)`
+
+Parameters
+ + `class_name -> String` Class name in the form `module::class`.
+ 
+This method finds a variable in a module and returns it, or returns `null` if the variable/module
+does not exist.
 
 -----------
 

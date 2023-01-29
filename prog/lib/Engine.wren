@@ -25,6 +25,9 @@ class Engine {
 
     // Returns a map containing info on the engine
     foreign static info
+
+    // Returns a Wren class with a given class name in the format `module::class`
+    foreign static get_class(class_name)
 }
 
 // Entity in the game world, child classes must implement their own
