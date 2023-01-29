@@ -45,6 +45,11 @@ Game development utilities.
  + [Hitbox](classes/Hitbox.md)
  + [Tileset](classes/Tileset.md)
  
+### `Tiled.wren`
+Internal use.
+ 
+ + TiledMap
+ 
 --------
 
 [Getting Started](GettingStarted.md) | [API Reference](API.md)

@@ -7,6 +7,7 @@
 #include <JamUtil/JamUtil.h>
 
 #include "src/ConfigFile.h"
+#include "src/cute_tiled.h"
 
 // Various Wren-types Astro cares about, can be bit-wised together - defined in Validation.c
 extern const uint64_t FOREIGN_END;
@@ -25,6 +26,7 @@ extern const uint64_t FOREIGN_SURFACE;
 extern const uint64_t FOREIGN_CAMERA;
 extern const uint64_t FOREIGN_AUDIO_DATA;
 extern const uint64_t FOREIGN_AUDIO;
+extern const uint64_t FOREIGN_TILED_MAP;
 
 // To protect Textures from garbage collection kinda
 typedef struct _vksk_RuntimeTexture {
@@ -38,6 +40,12 @@ typedef struct _vksk_RuntimeCamera {
 	VK2DCameraSpec spec;
 } _vksk_RuntimeCamera;
 
+// For navigating tiled maps
+typedef struct _vksk_RuntimeTiledMap {
+	cute_tiled_map_t *map;
+	cute_tiled_layer_t *layer;
+} _vksk_RuntimeTiledMap;
+
 // All foreign types come from this for type checking purposes
 typedef struct VKSK_RuntimeForeign {
 	uint64_t type;
@@ -50,5 +58,6 @@ typedef struct VKSK_RuntimeForeign {
 		_vksk_RuntimeCamera camera;
 		JUSound audioData;
 		JUPlayingSound audio;
+		_vksk_RuntimeTiledMap tiled;
 	};
 } VKSK_RuntimeForeign;

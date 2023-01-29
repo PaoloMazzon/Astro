@@ -2,6 +2,8 @@
 /// \author Paolo Mazzon
 #include <stdio.h>
 
+#define CUTE_TILED_IMPLEMENTATION
+#include "src/cute_tiled.h"
 #include "src/InternalBindings.h"
 #include "src/ConfigFile.h"
 #include "src/Validation.h"
@@ -94,4 +96,16 @@ void vksk_RuntimeFileExists(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
 	const char *fname = wrenGetSlotString(vm, 1);
 	wrenSetSlotBool(vm, 0, _vk2dFileExists(fname));
+}
+
+void vksk_RuntimeTiledAllocate(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	VKSK_RuntimeForeign *tiled = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
+	tiled->tiled.map = cute_tiled_load_map_from_file(wrenGetSlotString(vm, 1), NULL);
+	tiled->type = FOREIGN_TILED_MAP;
+}
+
+void vksk_RuntimeTiledFinalize(void *data) {
+	VKSK_RuntimeForeign *f = data;
+	cute_tiled_free_map(f->tiled.map);
 }

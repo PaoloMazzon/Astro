@@ -7,6 +7,7 @@ import "lib/Audio" for Audio
 import "lib/Util" for Tileset, Hitbox, Math
 import "Assets" for Assets
 import "Tileset" for LEVEL_TILES
+import "lib/Tiled" for TiledMap
 
 // Player
 class Player is Entity {
@@ -125,6 +126,8 @@ class Game is Level {
 
         // Create the player entity and save it
         _player = add_entity(Player)
+
+        TiledMap.open("assets/level0.tmj")
     }
 
     update() {

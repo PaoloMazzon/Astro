@@ -120,6 +120,11 @@ WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module
 			methods.allocate = vksk_RuntimeJUAudioAllocate;
 			methods.finalize = vksk_RuntimeJUAudioFinalize;
 		}
+	} else if (strcmp(module, "lib/Tiled") == 0) {
+		if (strcmp(className, "TiledMap") == 0) {
+			methods.allocate = vksk_RuntimeTiledAllocate;
+			methods.finalize = vksk_RuntimeTiledFinalize;
+		}
 	}
 
 	return methods;
