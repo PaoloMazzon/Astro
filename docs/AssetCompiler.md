@@ -20,6 +20,8 @@ You would be able to access the files with
     Audio.play(Assets.music, true, 1, 1)
 
 Based on the extension, the asset compiler will automatically load it as the proper class.
+The `Assets` class also provides a way to access assets via a string name of the asset by the
+`Assets[]` operator. Simply, `Assets.font` is equal to `Assets["font"]`.
 
 ## Loading Sprites and Bitmap Fonts
 Because bitmap fonts and sprites both just come from images, you have to tell the asset compiler

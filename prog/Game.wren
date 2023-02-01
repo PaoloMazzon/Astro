@@ -128,6 +128,7 @@ class Game is Level {
         _player = add_entity(Player)
 
         TiledMap.open("assets/level0.tmj")
+        System.print(Assets["font"])
     }
 
     update() {
