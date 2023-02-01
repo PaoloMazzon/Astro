@@ -9,6 +9,10 @@
 #include "src/Validation.h"
 #include "src/IntermediateTypes.h"
 
+static const double NO_MORE_LAYERS = 0;
+static const double TILE_LAYER = 1;
+static const double OBJECT_LAYER = 2;
+
 void vksk_RuntimeINIAllocate(WrenVM *vm) {
 	VKSK_RuntimeForeign *conf = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
 	conf->ini = vksk_ConfigLoad(wrenGetSlotString(vm, 1));
@@ -102,6 +106,7 @@ void vksk_RuntimeTiledAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
 	VKSK_RuntimeForeign *tiled = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
 	tiled->tiled.map = cute_tiled_load_map_from_file(wrenGetSlotString(vm, 1), NULL);
+	tiled->tiled.layer = NULL;
 	tiled->type = FOREIGN_TILED_MAP;
 }
 
@@ -109,3 +114,68 @@ void vksk_RuntimeTiledFinalize(void *data) {
 	VKSK_RuntimeForeign *f = data;
 	cute_tiled_free_map(f->tiled.map);
 }
+
+void vksk_RuntimeTiledWidth(WrenVM *vm) {
+	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, (double)f->tiled.map->width);
+}
+
+void vksk_RuntimeTiledHeight(WrenVM *vm) {
+	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, (double)f->tiled.map->height);
+}
+
+void vksk_RuntimeTiledCellWidth(WrenVM *vm) {
+	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, (double)f->tiled.map->tilewidth);
+}
+
+void vksk_RuntimeTiledCellHeight(WrenVM *vm) {
+	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, (double)f->tiled.map->tileheight);
+}
+
+void vksk_RuntimeTiledNextLayer(WrenVM *vm) {
+	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
+	if (f->tiled.layer == NULL) {
+		f->tiled.layer = f->tiled.map->layers;
+	} else {
+		f->tiled.layer = f->tiled.layer->next;
+	}
+
+	// Iterate through the layers until we find a tile layer, object layer, or run out
+	// (basically just skip unsupported layers)
+	bool foundLayer = false;
+	while (!foundLayer) {
+		if (f->tiled.layer == NULL) {
+			foundLayer = true;
+			wrenSetSlotDouble(vm, 0, NO_MORE_LAYERS);
+		} else {
+			if (strcmp(f->tiled.layer->type.ptr, "tilelayer") == 0) {
+				wrenSetSlotDouble(vm, 0, TILE_LAYER);
+				foundLayer = true;
+			} else if (strcmp(f->tiled.layer->type.ptr, "objectgroup") == 0) {
+				wrenSetSlotDouble(vm, 0, OBJECT_LAYER);
+				foundLayer = true;
+			} else {
+				f->tiled.layer = f->tiled.layer->next;
+			}
+		}
+	}
+}
+
+void vksk_RuntimeTiledGetObjects(WrenVM *vm) {
+	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
+
+}
+
+void vksk_RuntimeTiledGetTiles(WrenVM *vm) {
+	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
+
+}
+
+void vksk_RuntimeTiledGetTilesets(WrenVM *vm) {
+	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
+	// TODO: Give `Tileset` the ability to store multiple sprites with GIDs for easier compatibility with tiled
+}
+

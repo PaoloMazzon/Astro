@@ -21,3 +21,11 @@ void vksk_RuntimeFileExists(WrenVM *vm);
 
 void vksk_RuntimeTiledAllocate(WrenVM *vm);
 void vksk_RuntimeTiledFinalize(void *data);
+void vksk_RuntimeTiledWidth(WrenVM *vm);
+void vksk_RuntimeTiledHeight(WrenVM *vm);
+void vksk_RuntimeTiledCellWidth(WrenVM *vm);
+void vksk_RuntimeTiledCellHeight(WrenVM *vm);
+void vksk_RuntimeTiledNextLayer(WrenVM *vm);
+void vksk_RuntimeTiledGetObjects(WrenVM *vm);
+void vksk_RuntimeTiledGetTiles(WrenVM *vm);
+void vksk_RuntimeTiledGetTilesets(WrenVM *vm);
