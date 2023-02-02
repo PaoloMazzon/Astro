@@ -124,16 +124,28 @@ class Tileset {
     // empty space for collisions
     construct new(tileset, sprite, x, y) {
         _tileset = tileset
-        _sprite = sprite
+        if (sprite == null) {
+            _sprites = []
+            _gids = []
+        } else {
+            _sprites = [sprite]
+            _gids = [1]
+        }
         _x = x
         _y = y
     }
 
+    // Adds a new sprite to the tileset, index starting at gid
+    add_tileset(sprite, gid) {
+        _sprites.add(sprite)
+        _gids.add(gid)
+    }
+
     // Returns total width of the tileset
-    width { _tileset[0].count * _sprite.width }
+    width { _tileset[0].count * (_sprites[0].width) }
 
     // Returns total height of the tileset
-    height { _tileset.count * _sprite.height }
+    height { _tileset.count * (_sprites[0].height) }
 
     // Returns the width of the tileset in tiles
     tile_width { _tileset[0].count }
@@ -166,13 +178,29 @@ class Tileset {
     // w/h of cells in the tileset (usually don't worry about that).
     collision(hitbox, x, y) {
         var hb = hitbox.bounding_box(x, y)
-        var bb = [((hb[0] - _x) / _sprite.width).floor, ((hb[1] - _y) / _sprite.height).floor, ((hb[2] - _x) / _sprite.width).floor, ((hb[3] - _y) / _sprite.height).floor]
+        var bb = [((hb[0] - _x) / _sprites[0].width).floor, ((hb[1] - _y) / _sprites[0].height).floor, ((hb[2] - _x) / _sprites[0].width).floor, ((hb[3] - _y) / _sprites[0].height).floor]
         var hit = false
         if (this[bb[0], bb[1]] != 0) {hit = true}
         if (this[bb[0], bb[3]] != 0) {hit = true}
         if (this[bb[2], bb[1]] != 0) {hit = true}
         if (this[bb[2], bb[3]] != 0) {hit = true}
         return hit
+    }
+
+    // Internal use
+    internal_draw_sprite(gid, x, y) {
+        var selected_gid = 1
+        var sprite = 0
+
+        // Find the right tileset
+        for (i in 0..(_gids.count - 1)) {
+            if (_gids[i] <= gid && _gids[i] > selected_gid) {
+                sprite = i
+                selected_gid = _gids[i]
+            }
+        }
+
+        Renderer.draw_sprite(_sprites[sprite], gid - selected_gid, x, y)
     }
 
     // Draws the tileset
@@ -184,11 +212,11 @@ class Tileset {
             var x_offset = _x
             for (cell in i) {
                 if (cell != 0) {
-                    Renderer.draw_sprite(_sprite, cell - 1, x_offset, y_offset)
+                    internal_draw_sprite(cell, x_offset, y_offset)
                 }
-                x_offset = x_offset + _sprite.width
+                x_offset = x_offset + _sprites[0].width
             }
-            y_offset = y_offset + _sprite.height
+            y_offset = y_offset + _sprites[0].height
         }
     }
 

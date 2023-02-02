@@ -102,32 +102,12 @@ void vksk_RuntimeFileExists(WrenVM *vm) {
 	wrenSetSlotBool(vm, 0, _vk2dFileExists(fname));
 }
 
-static CUTE_TILED_U64 a(const void* buf, int len)
-{
-	CUTE_TILED_U64 h = (CUTE_TILED_U64)14695981039346656037U;
-	const char* str = (const char*)buf;
-
-	while (len--)
-	{
-		char c = *str++;
-		h = h ^ (CUTE_TILED_U64)c;
-		h = h * (CUTE_TILED_U64)1099511628211;
-	}
-
-	return h;
-}
-
 void vksk_RuntimeTiledAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
 	VKSK_RuntimeForeign *tiled = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
 	tiled->tiled.map = cute_tiled_load_map_from_file(wrenGetSlotString(vm, 1), NULL);
 	tiled->tiled.layer = NULL;
 	tiled->type = FOREIGN_TILED_MAP;
-
-	char name[] = "type";
-	vksk_Log("without 0: %llu\nwith 0: %llu\n", a(name, 4), a(name, 5));
-	int asdasd;
-	// 13509284784451838071U -- type
 }
 
 void vksk_RuntimeTiledFinalize(void *data) {

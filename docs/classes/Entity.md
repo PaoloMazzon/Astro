@@ -57,12 +57,27 @@ Returns the sprite.
 Sets the sprite.
 
 ### create
-`create(level)`
+`create(level, tiled_data)`
 
 Parameters
  + `level -> lib/Engine::Level` Level that this instance was created for.
+ + `tiled_data -> Map` Map containing data from Tiled if this entity was loaded from a Tiled map.
 
 Called by the level when the entity is added to the level.
+
+`tiled_data` is a map with the following keys:
+
+ + `x -> Num` X position in the editor.
+ + `y -> Num` Y position in the editor.
+ + `class -> String` Name of this entity.
+ + `width -> Num` Width of the entity in the editor.
+ + `height -> Num` Height of the entity in the editor.
+ + `gid -> Num` GID of the entity in the editor.
+ + `point -> Bool` Whether or not it is a single point in the editor.
+ + `rotation -> Num` Rotation of the entity in the editor.
+ + `id -> Num` ID in the editor.
+ + `visible -> Bool` Whether or not its visible in the editor.
+ + `properties -> Map` Map of all user defined properties in the editor.
 
 ### update
 `update(level)`

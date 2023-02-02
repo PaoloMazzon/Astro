@@ -7,6 +7,7 @@ and just render that to offset the cost. Collisions on the other hand are extrem
 weight regardless of how big the tileset is.
 
  + [new](#new)
+ + [add_tileset](#add_tileset)
  + [width](#width)
  + [height](#height)
  + [tile_width](#tile_width)
@@ -22,7 +23,7 @@ weight regardless of how big the tileset is.
 
 Parameters
  + `tileset -> List` List of all indices in the tileset. See below.
- + `sprite -> lib/Drawing::Sprite` Sprite that will be used for the tiles in the tileset.
+ + `sprite -> lib/Drawing::Sprite` Sprite that will be used for the tiles in the tileset. `null` for no loaded tilesets.
  + `x -> Num` X position in the game world this tileset exists at.
  + `y -> Num` Y position in the game world this tileset exists at.
 
@@ -49,6 +50,19 @@ the bottom-right is at position (11, 8). Each non-zero value represents a sprite
 > 📝 Sprite frames are indexed starting at 1 instead of 0 because the tileset treats zero as empty
 > spaces. Note that methods like [draw_sprite](Renderer.md#draw_sprite) still expect to be indexed
 > from 0.
+
+### add_tileset
+`add_tileset(sprite, gid)`
+
+Parameters
+ + `sprite -> lib/Drawing::Sprite` Sprite to use for the new tileset.
+ + `gid -> Num` What number to start indexing this sprite at.
+
+Adds a new sprite/tileset to the tileset, using the GID to differentiate between sprites.
+When you create a tileset, the sprite you provide automatically has GID 1. This means all
+indices in the grid 1 or higher are treated as frames for that tileset - 1. If you introduce
+another tileset at GID 100, anytime you have a cell with value 100 or higher, it will be drawn
+from the new tileset with frame cell - 100. This is primarily for Tiled map loading.
 
 ### width
 `width`

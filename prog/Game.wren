@@ -13,7 +13,7 @@ import "lib/Tiled" for TiledMap
 class Player is Entity {
     construct new() { super() }
 
-    create(level) {
+    create(level, tiled_data) {
         sprite = Assets.player_idle
         hitbox = Hitbox.new_rectangle(sprite.width, sprite.height)
         x = 208 / 2
@@ -117,7 +117,7 @@ class Game is Level {
         _game_cam.update()
 
         // Load the tileset and draw it to a surface
-        _tileset = Tileset.new(LEVEL_TILES, Assets.terrain, 0, 0)
+        _tileset = Tileset.new(LEVEL_TILES, Assets.terrain, 1, 0, 0)
         _tileset_surface = Surface.new(_tileset.width, _tileset.height)
         Renderer.set_target(_tileset_surface)
         _tileset.draw()

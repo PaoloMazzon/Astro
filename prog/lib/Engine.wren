@@ -66,7 +66,7 @@ class Entity {
     sprite=(new_sprite) { _sprite = new_sprite }
 
     // Called by the level when its added to the level list
-    create(level) {}
+    create(level, tiled_data) {}
 
     // Called each frame of the level
     update(level) {}
@@ -91,7 +91,15 @@ class Level {
     add_entity(entity) {
         var new = entity.new()
         _entity_list.add(new)
-        new.create(this)
+        new.create(this, null)
+        return new
+    }
+
+    // Same as add_entity but provides tiled_data as well
+    add_entity(entity, tiled_data) {
+        var new = entity.new()
+        _entity_list.add(new)
+        new.create(this, tiled_data)
         return new
     }
 

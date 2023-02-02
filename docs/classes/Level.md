@@ -11,9 +11,11 @@ All levels in Astro must inherit from this class. See [switch_level](Engine.md#s
 
 ### add_entity
 `add_entity(entity)`
+`add_entity(entity, tiled_data)`
 
 Parameters
  + `entity -> lib/Engine::Entity` Entity class to add to the level.
+ + `tiled_data -> Map` If provided, supplies Tiled data to the entity.
 
 Adds an entity to a level, `entity` must be a class and not an instance of a class. That
 class must inherit from `lib/Engine::Entity`. This method returns the new instance of the
