@@ -4,6 +4,7 @@ All levels in Astro must inherit from this class. See [switch_level](Engine.md#s
  + [add_entity](#add_entity)
  + [remove_entity](#remove_entity)
  + [get_entities](#get_entities)
+ + [load](#load)
  + [create](#create)
  + [update](#update)
  + [destroy](#destroy)
@@ -36,6 +37,15 @@ Parameters
  + `base_class -> lib/Engine::Entity` Entity class to search for.
  
 This method returns a list of all entities in the level that are an instance of `base_class`.
+
+### load
+`load(filename)`
+
+Parameters
+ + `filename -> String` Filename of the Tiled map.
+
+Loads a [Tiled](https://www.mapeditor.org/) map as a level. See [Tiled Integration](../TiledIntegration.md)
+for more information. Returns a list of `lib/Util::Tileset`s representing each tile layer.
 
 ### create
 `create()`

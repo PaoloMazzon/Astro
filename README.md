@@ -62,6 +62,7 @@ Features
  + Simple level and entity management
  + Easily load and use sprites, sounds, and fonts 
  + Complete [API documentation](docs/API.md)
+ + Load [Tiled](https://www.mapeditor.org/) maps automatically
 
 TODO
 ====
@@ -73,4 +74,3 @@ TODO
  + Profiling tools
  + TrueType fonts
  + Built-in mod support
- + Load Tiled maps

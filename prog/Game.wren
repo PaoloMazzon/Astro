@@ -7,7 +7,6 @@ import "lib/Audio" for Audio
 import "lib/Util" for Tileset, Hitbox, Math
 import "Assets" for Assets
 import "Tileset" for LEVEL_TILES
-import "lib/Tiled" for TiledMap
 
 // Player
 class Player is Entity {
@@ -16,8 +15,6 @@ class Player is Entity {
     create(level, tiled_data) {
         sprite = Assets.player_idle
         hitbox = Hitbox.new_rectangle(sprite.width, sprite.height)
-        x = 208 / 2
-        y = 160 / 2
         _hspeed = 0
         _vspeed = 0
         _gravity = 0
@@ -117,14 +114,14 @@ class Game is Level {
         _game_cam.update()
 
         // Load the tileset and draw it to a surface
-        _tileset = Tileset.new(LEVEL_TILES, Assets.terrain, 1, 0, 0)
+        _tileset = load("assets/level0.tmj")[0]
         _tileset_surface = Surface.new(_tileset.width, _tileset.height)
         Renderer.set_target(_tileset_surface)
         _tileset.draw()
         Renderer.set_target(Renderer.RENDER_TARGET_DEFAULT)
 
-        // Create the player entity and save it
-        _player = add_entity(Player)
+        // Find the player entity
+        _player = get_entities(Player)[0]
     }
 
     update() {

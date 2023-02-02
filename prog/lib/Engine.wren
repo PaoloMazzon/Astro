@@ -1,8 +1,10 @@
 // Engine.wren
 // Author: Paolo Mazzon
 // Top-level meta functions for the framework
-import "lib/Util" for Hitbox
+import "lib/Util" for Hitbox, Tileset
 import "lib/Renderer" for Renderer
+import "lib/Tiled" for TiledMap
+import "Assets" for Assets
 
 // Framework control functions
 class Engine {
@@ -100,6 +102,8 @@ class Level {
         var new = entity.new()
         _entity_list.add(new)
         new.create(this, tiled_data)
+        new.x = tiled_data["x"]
+        new.y = tiled_data["y"]
         return new
     }
 
@@ -120,6 +124,38 @@ class Level {
             }
         }
         return type_list
+    }
+
+    // Loads a Tiled map for this level
+    load(filename) {
+        var tilesets = []
+        var map = TiledMap.open(filename)
+        var layer = map.next_layer()
+        var gids = map.get_tilesets()
+
+        while (layer != TiledMap.NO_MORE_LAYERS) {
+            if (layer == TiledMap.OBJECT_LAYER) {
+                // Create a bunch of entities
+                var entities = map.get_objects()
+                for (entity in entities) {
+                    var internal = Engine.get_class(entity["class"])
+                    if (internal != null) {
+                        var e = add_entity(internal, entity)
+                    }
+                }
+            } else if (layer == TiledMap.TILE_LAYER) {
+                // Create a new tileset
+                var ts = Tileset.new(map.get_tiles(), null, 0, 0)
+                for (slot in gids) {
+                    ts.add_tileset(Assets[slot["filename"].split(".")[0]], slot["gid"])
+                }
+                tilesets.add(ts)
+            }
+
+            layer = map.next_layer()
+        }
+
+        return tilesets
     }
 
     // Called when the level is loaded, call the super to create the entity list

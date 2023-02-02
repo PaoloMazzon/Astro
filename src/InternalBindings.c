@@ -108,6 +108,8 @@ void vksk_RuntimeTiledAllocate(WrenVM *vm) {
 	tiled->tiled.map = cute_tiled_load_map_from_file(wrenGetSlotString(vm, 1), NULL);
 	tiled->tiled.layer = NULL;
 	tiled->type = FOREIGN_TILED_MAP;
+	fflush(stdout);
+	fflush(stderr);
 }
 
 void vksk_RuntimeTiledFinalize(void *data) {
