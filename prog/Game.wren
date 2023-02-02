@@ -11,21 +11,18 @@ import "lib/Tiled" for TiledMap
 
 // Player
 class Player is Entity {
-    construct new() {}
-
-    x { _x }
-    y { _y }
+    construct new() { super() }
 
     create(level) {
-        _sprite = Assets.player_idle
-        _hitbox = Hitbox.new_rectangle(_sprite.width, _sprite.height)
-        _x = 208 / 2
-        _y = 160 / 2
+        sprite = Assets.player_idle
+        hitbox = Hitbox.new_rectangle(sprite.width, sprite.height)
+        x = 208 / 2
+        y = 160 / 2
         _hspeed = 0
         _vspeed = 0
         _gravity = 0
         _jumps = 2 // resets when you touch the ground
-        _scale_x = 1
+        _scalex = 1
     }
 
     update(level) {
@@ -36,23 +33,23 @@ class Player is Entity {
         // Left/right
         if (Input.keyboard_get_key(Input.KEY_A)) {
             _hspeed = _hspeed - speed
-            _scale_x = -1
+            _scalex = -1
         }
         if (Input.keyboard_get_key(Input.KEY_D)) {
             _hspeed = _hspeed + speed
-            _scale_x = 1
+            _scalex = 1
         }
 
         // Jumping
-        if (level.tileset.collision(_hitbox, _x, _y + 1)) {
+        if (level.tileset.collision(hitbox, x, y + 1)) {
             _jumps = 2
         }
         if (Input.keyboard_get_key_pressed(Input.KEY_SPACE) && _jumps > 0) {
             _jumps = _jumps - 1
             _gravity = -250
-            _y = _y - 1
+            y = y - 1
         }
-        if (!level.tileset.collision(_hitbox, _x, _y + 1)) {
+        if (!level.tileset.collision(hitbox, x, y + 1)) {
             _gravity = _gravity + (800 * Engine.delta)
         } else {
             _gravity = 0
@@ -60,40 +57,42 @@ class Player is Entity {
         _vspeed = _gravity * Engine.delta
 
         // Handle collisions
-        if (level.tileset.collision(_hitbox, _x + _hspeed, _y)) {
-            if (_hspeed.sign == 1) { _x = Math.ceil_to(_x, 16) - 0.001 }
-            if (_hspeed.sign == -1) { _x = Math.floor_to(_x, 16) }
+        if (level.tileset.collision(hitbox, x + _hspeed, y)) {
+            if (_hspeed.sign == 1) { x = Math.ceil_to(x, 16) - 0.001 }
+            if (_hspeed.sign == -1) { x = Math.floor_to(x, 16) }
             _hspeed = 0
         }
-        if (level.tileset.collision(_hitbox, _x, _y + _vspeed)) {
-            if (_vspeed.sign == 1) { _y = Math.ceil_to(_y, 16) - 0.001 }
-            if (_vspeed.sign == -1) { _y = Math.floor_to(_y, 16) }
+        if (level.tileset.collision(hitbox, x, y + _vspeed)) {
+            if (_vspeed.sign == 1) { y = Math.ceil_to(y, 16) - 0.001 }
+            if (_vspeed.sign == -1) { y = Math.floor_to(y, 16) }
             _vspeed = 0
         }
 
         // Handle animations
         if (_hspeed != 0) {
-            _sprite = Assets.player_run
+            sprite = Assets.player_run
         } else {
-            _sprite = Assets.player_idle
+            sprite = Assets.player_idle
         }
 
         if (_gravity < 0) {
-            _sprite = Assets.player_jump
-        } else if (_gravity > 0 && !level.tileset.collision(_hitbox, _x, _y + 1)) {
-            _sprite = Assets.player_fall
+            sprite = Assets.player_jump
+        } else if (_gravity > 0 && !level.tileset.collision(hitbox, x, y + 1)) {
+            sprite = Assets.player_fall
         }
 
         // Actually move the player
-        _x = Math.clamp(_x + _hspeed, 0, level.tileset.width - _sprite.width)
-        _y = Math.clamp(_y + _vspeed, 0, level.tileset.height - _sprite.height)
+        x = Math.clamp(x + _hspeed, 0, level.tileset.width - sprite.width)
+        y = Math.clamp(y + _vspeed, 0, level.tileset.height - sprite.height)
+    }
 
+    draw(level) {
         // Draw the player
-        _sprite.scale_x = _scale_x
-        if (_sprite.scale_x == -1) {
-            Renderer.draw_sprite(_sprite, _x + _sprite.width, _y)
+        sprite.scale_x = _scalex
+        if (sprite.scale_x == -1) {
+            Renderer.draw_sprite(sprite, x + sprite.width, y)
         } else {
-            Renderer.draw_sprite(_sprite, _x, _y)
+            Renderer.draw_sprite(sprite, x, y)
         }
     }
 }
@@ -126,9 +125,6 @@ class Game is Level {
 
         // Create the player entity and save it
         _player = add_entity(Player)
-
-        TiledMap.open("assets/level0.tmj")
-        System.print(Assets["font"])
     }
 
     update() {

@@ -3,30 +3,58 @@ Entities are a simple way to handle objects in the game world. You write your ow
 that inherit from this class, and then you may pass the child classes to [add_entity](Level.md#add_entity).
 This class on its own does nothing.
 
- + [x](#x)
- + [y](#y)
- + [hitbox](#hitbox)
+ + [x](#x-getter)
+ + [y](#y-getter)
+ + [x=](#x-setter)
+ + [y=](#y-setter)
+ + [hitbox](#hitbox-getter)
+ + [hitbox=](#hitbox-setter)
+ + [sprite](#sprite-getter)
+ + [sprite=](#sprite-setter)
  + [create](#create)
  + [update](#update)
+ + [draw](#draw)
  + [destroy](#destroy)
 
-### x
+### x (Getter)
 `x`
 
-One of the fields that must be in all entities, by default this just returns 0 meaning
-child classes must implement their own x field and their version of this method.
+Returns the x.
 
-### y
+### y (Getter)
 `y`
 
-One of the fields that must be in all entities, by default this just returns 0 meaning
-child classes must implement their own y field and their version of this method.
+Returns the y.
 
-### hitbox
+### x= (Setter)
+`x=`
+
+Sets the x.
+
+### y= (Setter)
+`y=`
+
+Sets the y.
+
+### hitbox (Getter)
 `hitbox`
 
-One of the fields that must be in all entities, by default this just returns a blank hitbox meaning
-child classes must implement their own hitbox field and their version of this method.
+Returns the hitbox.
+
+### hitbox= (Setter)
+`hitbox=`
+
+Sets the hitbox.
+
+### sprite (Getter)
+`sprite`
+
+Returns the sprite.
+
+### sprite= (Setter)
+`sprite=`
+
+Sets the sprite.
 
 ### create
 `create(level)`
@@ -43,6 +71,15 @@ Parameters
  + `level -> lib/Engine::Level` Level that this instance was created for.
 
 Called by the level each frame.
+
+### draw
+`draw(level)`
+
+Parameters
+ + `level -> lib/Engine::Level` Level that this instance was created for.
+
+Called by the level each frame, if this isn't overloaded and `sprite` is non-null this will
+render this entity's sprite.
 
 ### destroy
 `destroy(level)`

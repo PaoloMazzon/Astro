@@ -102,12 +102,32 @@ void vksk_RuntimeFileExists(WrenVM *vm) {
 	wrenSetSlotBool(vm, 0, _vk2dFileExists(fname));
 }
 
+static CUTE_TILED_U64 a(const void* buf, int len)
+{
+	CUTE_TILED_U64 h = (CUTE_TILED_U64)14695981039346656037U;
+	const char* str = (const char*)buf;
+
+	while (len--)
+	{
+		char c = *str++;
+		h = h ^ (CUTE_TILED_U64)c;
+		h = h * (CUTE_TILED_U64)1099511628211;
+	}
+
+	return h;
+}
+
 void vksk_RuntimeTiledAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
 	VKSK_RuntimeForeign *tiled = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
 	tiled->tiled.map = cute_tiled_load_map_from_file(wrenGetSlotString(vm, 1), NULL);
 	tiled->tiled.layer = NULL;
 	tiled->type = FOREIGN_TILED_MAP;
+
+	char name[] = "type";
+	vksk_Log("without 0: %llu\nwith 0: %llu\n", a(name, 4), a(name, 5));
+	int asdasd;
+	// 13509284784451838071U -- type
 }
 
 void vksk_RuntimeTiledFinalize(void *data) {
@@ -166,16 +186,127 @@ void vksk_RuntimeTiledNextLayer(WrenVM *vm) {
 
 void vksk_RuntimeTiledGetObjects(WrenVM *vm) {
 	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
+	struct cute_tiled_object_t *current = f->tiled.layer->objects;
+	const int listSlot = 0;
+	const int mapSlot = 1;
+	const int keySlot = 2;
+	const int valSlot = 3;
+	const int val2Slot = 4;
+	wrenEnsureSlots(vm, 5);
+	wrenSetSlotNewList(vm, listSlot);
 
+	while (current != NULL) {
+		wrenSetSlotNewMap(vm, mapSlot);
+
+		// Load x/y
+		wrenSetSlotString(vm, keySlot, "x");
+		wrenSetSlotDouble(vm, valSlot, current->x);
+		wrenSetMapValue(vm, mapSlot, keySlot, valSlot);
+		wrenSetSlotString(vm, keySlot, "y");
+		wrenSetSlotDouble(vm, valSlot, current->y);
+		wrenSetMapValue(vm, mapSlot, keySlot, valSlot);
+
+		// Type
+		wrenSetSlotString(vm, keySlot, "class");
+		wrenSetSlotString(vm, valSlot, current->type.ptr);
+		wrenSetMapValue(vm, mapSlot, keySlot, valSlot);
+
+		// Various niche stuff
+		wrenSetSlotString(vm, keySlot, "width");
+		wrenSetSlotDouble(vm, valSlot, current->width);
+		wrenSetMapValue(vm, mapSlot, keySlot, valSlot);
+		wrenSetSlotString(vm, keySlot, "height");
+		wrenSetSlotDouble(vm, valSlot, current->height);
+		wrenSetMapValue(vm, mapSlot, keySlot, valSlot);
+		wrenSetSlotString(vm, keySlot, "gid");
+		wrenSetSlotDouble(vm, valSlot, current->gid);
+		wrenSetMapValue(vm, mapSlot, keySlot, valSlot);
+		wrenSetSlotString(vm, keySlot, "point");
+		wrenSetSlotBool(vm, valSlot, current->point);
+		wrenSetMapValue(vm, mapSlot, keySlot, valSlot);
+		wrenSetSlotString(vm, keySlot, "rotation");
+		wrenSetSlotDouble(vm, valSlot, current->rotation);
+		wrenSetMapValue(vm, mapSlot, keySlot, valSlot);
+		wrenSetSlotString(vm, keySlot, "id");
+		wrenSetSlotDouble(vm, valSlot, current->id);
+		wrenSetMapValue(vm, mapSlot, keySlot, valSlot);
+		wrenSetSlotString(vm, keySlot, "visible");
+		wrenSetSlotBool(vm, valSlot, current->visible);
+		wrenSetMapValue(vm, mapSlot, keySlot, valSlot);
+
+
+		// Load properties
+		wrenSetSlotNewMap(vm, valSlot);
+		for (int i = 0; i < current->property_count; i++) {
+			wrenSetSlotString(vm, keySlot, current->properties[i].name.ptr);
+
+			if (current->properties[i].type == CUTE_TILED_PROPERTY_STRING)
+				wrenSetSlotString(vm, val2Slot, current->properties[i].data.string.ptr);
+			else if (current->properties[i].type == CUTE_TILED_PROPERTY_BOOL)
+				wrenSetSlotBool(vm, val2Slot, current->properties[i].data.boolean);
+			else if (current->properties[i].type == CUTE_TILED_PROPERTY_COLOR)
+				wrenSetSlotDouble(vm, val2Slot, (double)current->properties[i].data.color);
+			else if (current->properties[i].type == CUTE_TILED_PROPERTY_FILE)
+				wrenSetSlotString(vm, val2Slot, current->properties[i].data.file.ptr);
+			else if (current->properties[i].type == CUTE_TILED_PROPERTY_FLOAT)
+				wrenSetSlotDouble(vm, val2Slot, current->properties[i].data.floating);
+			else if (current->properties[i].type == CUTE_TILED_PROPERTY_INT)
+				wrenSetSlotDouble(vm, val2Slot, (double)current->properties[i].data.integer);
+
+			wrenSetMapValue(vm, valSlot, keySlot, val2Slot);
+		}
+		wrenSetSlotString(vm, keySlot, "properties");
+		wrenSetMapValue(vm, mapSlot, keySlot, valSlot);
+
+		wrenInsertInList(vm, listSlot, -1, mapSlot);
+		current = current->next;
+	}
 }
 
 void vksk_RuntimeTiledGetTiles(WrenVM *vm) {
 	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
+	// TODO: Give `Tileset` the ability to store multiple sprites with GIDs for easier compatibility with tiled
 
+	wrenEnsureSlots(vm, 3);
+	const int yList = 0;
+	const int xList = 1;
+	const int valSlot = 2;
+	wrenSetSlotNewList(vm, yList);
+
+	for (int y = 0; y < f->tiled.layer->height; y++) {
+		wrenSetSlotNewList(vm, xList);
+
+		for (int x = 0; x < f->tiled.layer->width; x++) {
+			wrenSetSlotDouble(vm, valSlot, f->tiled.layer->data[(y * f->tiled.layer->width) + x]);
+			wrenInsertInList(vm, xList, -1, valSlot);
+		}
+
+		wrenInsertInList(vm, yList, -1, xList);
+	}
 }
 
 void vksk_RuntimeTiledGetTilesets(WrenVM *vm) {
 	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
-	// TODO: Give `Tileset` the ability to store multiple sprites with GIDs for easier compatibility with tiled
+	cute_tiled_tileset_t *current = f->tiled.map->tilesets;
+	const int listSlot = 0;
+	const int mapSlot = 1;
+	const int keySlot = 2;
+	const int valSlot = 3;
+	wrenEnsureSlots(vm, 4);
+	wrenSetSlotNewList(vm, listSlot);
+
+	while (current != NULL) {
+		wrenSetSlotNewMap(vm, mapSlot);
+
+		wrenSetSlotString(vm, keySlot, "gid");
+		wrenSetSlotDouble(vm, valSlot, (double)current->firstgid);
+		wrenSetMapValue(vm, mapSlot, keySlot, valSlot);
+		wrenSetSlotString(vm, keySlot, "filename");
+		wrenSetSlotString(vm, valSlot, current->image.ptr);
+		wrenSetMapValue(vm, mapSlot, keySlot, valSlot);
+
+		wrenInsertInList(vm, listSlot, -1, mapSlot);
+		current = current->next;
+	}
 }
 

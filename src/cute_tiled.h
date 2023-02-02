@@ -1,4 +1,7 @@
 /*
+ * This is a modified version of cute_tiled modified by Paolo Mazzon.
+ * Effectively it just changes the parser to assign the "class" field in the json
+ * to the type field of the object since thats what Tiled does now.
 	------------------------------------------------------------------------------
 		Licensing information can be found at the end of the file.
 	------------------------------------------------------------------------------
@@ -2043,7 +2046,7 @@ cute_tiled_object_t* cute_tiled_read_object(cute_tiled_map_internal_t* m)
 			if (cute_tiled_peak(m) == '}')	continue;
 			break;
 
-		case 13509284784451838071U: // type
+		case 1485919047363370797: // class (formerly type)
 			cute_tiled_intern_string(m, &object->type);
 			break;
 
@@ -2063,11 +2066,11 @@ cute_tiled_object_t* cute_tiled_read_object(cute_tiled_map_internal_t* m)
 			cute_tiled_read_float(m, &object->y);
 			break;
 
-		case 1485919047363370797U: // class
+		/*case 1485919047363370797U: // class
 			CUTE_TILED_WARNING("Class field of Tiled objects is not yet supported. Ignoring field.");
 			while (cute_tiled_peak(m) != ',' && cute_tiled_peak(m) != '}') cute_tiled_next(m);
 			if (cute_tiled_peak(m) == '}')	continue;
-			break;
+			break;*/
 
 		default:
 			CUTE_TILED_CHECK(0, "Unknown identifier found.");

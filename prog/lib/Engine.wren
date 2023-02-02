@@ -2,6 +2,7 @@
 // Author: Paolo Mazzon
 // Top-level meta functions for the framework
 import "lib/Util" for Hitbox
+import "lib/Renderer" for Renderer
 
 // Framework control functions
 class Engine {
@@ -30,24 +31,52 @@ class Engine {
     foreign static get_class(class_name)
 }
 
-// Entity in the game world, child classes must implement their own
-// getters for hitbox, x, and y since all entities are expected to
-// have at least that. They must also have a constructor named `new`.
+// Entity in the game world, child classes must make their own constructor
+// named `new` and call the superclass constructor.
 class Entity {
+    construct new() {
+        _x = 0
+        _y = 0
+        _sprite = null
+        _hitbox = Hitbox.NO_HIT
+    }
+
     // Returns the x position
-    x { 0 }
+    x { _x }
+
+    // Sets the x position
+    x=(new_x) { _x = new_x }
 
     // Returns the y position
-    y { 0 }
+    y { _y }
+
+    // Sets the y position
+    y=(new_y) { _y = new_y }
 
     // Returns the entity's hitbox
-    hitbox { Hitbox.NO_HIT }
+    hitbox { _hitbox }
+
+    // Sets the entity's hitbox
+    hitbox=(new_hitbox) { _hitbox = new_hitbox }
+
+    // Returns the entity's sprite
+    sprite { _sprite }
+
+    // Sets the entity's sprite
+    sprite=(new_sprite) { _sprite = new_sprite }
 
     // Called by the level when its added to the level list
     create(level) {}
 
     // Called each frame of the level
     update(level) {}
+
+    // Draws the entity each frame
+    draw(level) {
+        if (sprite != null) {
+            Renderer.draw_sprite(sprite, x, y)
+        }
+    }
 
     // Called when the level ends or the entity is destroyed
     destroy(level) {}
@@ -95,6 +124,7 @@ class Level {
     update() {
         for (entity in _entity_list) {
             entity.update(this)
+            entity.draw(this)
         }
     }
 
