@@ -5,7 +5,8 @@ method that writes anything other than a double will simply cast the double and 
 have a value not representable by the desired data type this is undefined behaviour.
 Any method that reads or writes data to/from the buffer expects the pointer to be
 at least x bytes behind the size of the buffer, where x is the size of that datatype
-(the size of each datatype is documented below).
+(the size of each datatype is documented below). If you attempt more bytes than are
+remaining after the pointer all the read meathods will return `null`.
 
 You may write `Buffer`s to file using [write](File.md#write).
 

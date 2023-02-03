@@ -2,7 +2,6 @@ import "lib/Engine" for Engine, Level, Entity
 import "lib/Input" for Input
 import "lib/Renderer" for Renderer, Camera
 import "lib/Drawing" for BitmapFont, Sprite, Surface
-import "lib/File" for File
 import "lib/Audio" for Audio
 import "lib/Util" for Tileset, Hitbox, Math
 import "Assets" for Assets

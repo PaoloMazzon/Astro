@@ -268,7 +268,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 	} else if (strcmp(module, "lib/Util") == 0)  {
 		BIND_METHOD("Buffer", false, "resize(_)", vksk_RuntimeBufferResize)
 		BIND_METHOD("Buffer", false, "size", vksk_RuntimeBufferSize)
-		BIND_METHOD("Buffer", false, "open(_)", vksk_RuntimeBufferOpen)
+		BIND_METHOD("Buffer", true, "open(_)", vksk_RuntimeBufferOpen)
 		BIND_METHOD("Buffer", false, "pointer=(_)", vksk_RuntimeBufferSetPointer)
 		BIND_METHOD("Buffer", false, "pointer", vksk_RuntimeBufferGetPointer)
 		BIND_METHOD("Buffer", false, "read_double()", vksk_RuntimeBufferReadDouble)

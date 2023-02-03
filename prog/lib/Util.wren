@@ -259,7 +259,7 @@ foreign class Buffer {
     construct new(size) {}
 
     // Creates a buffer from a file
-    foreign open(filename)
+    foreign static open(filename)
 
     // Resizes a buffer, doesn't move the pointer
     foreign resize(size)
