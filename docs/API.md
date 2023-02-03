@@ -44,6 +44,7 @@ Game development utilities.
  + [Math](classes/Math.md)
  + [Hitbox](classes/Hitbox.md)
  + [Tileset](classes/Tileset.md)
+ + [Buffer](classes/Buffer.md)
  
 ### `Tiled.wren`
 Internal use.

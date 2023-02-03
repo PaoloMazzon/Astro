@@ -19,9 +19,10 @@ Reads an entire file into a string and returns it. The file is not kept open.
 
 Parameters
  + `filename -> String` filename to write to.
- + `contents -> String` contents to write to the file.
+ + `contents -> String` or `lib/Util::Buffer` contents to write to the file.
 
-Opens a file and writes `contents` to it, overwriting the file if it already exists.
+Opens a file and writes `contents` to it, overwriting the file if it already exists. If contents
+are a [Buffer](Buffer.md), the whole contents are dumped as binary to the file.
 
 ### exists
 `static exists(filename)`

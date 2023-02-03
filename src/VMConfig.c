@@ -125,6 +125,11 @@ WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module
 			methods.allocate = vksk_RuntimeTiledAllocate;
 			methods.finalize = vksk_RuntimeTiledFinalize;
 		}
+	} else if (strcmp(module, "lib/Util") == 0) {
+		if (strcmp(className, "Buffer") == 0) {
+			methods.allocate = vksk_RuntimeBufferAllocate;
+			methods.finalize = vksk_RuntimeBufferFinalize;
+		}
 	}
 
 	return methods;
@@ -260,6 +265,36 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("TiledMap", false, "get_objects()", vksk_RuntimeTiledGetObjects)
 		BIND_METHOD("TiledMap", false, "get_tiles()", vksk_RuntimeTiledGetTiles)
 		BIND_METHOD("TiledMap", false, "get_tilesets()", vksk_RuntimeTiledGetTilesets)
+	} else if (strcmp(module, "lib/Util") == 0)  {
+		BIND_METHOD("Buffer", false, "resize(_)", vksk_RuntimeBufferResize)
+		BIND_METHOD("Buffer", false, "size", vksk_RuntimeBufferSize)
+		BIND_METHOD("Buffer", false, "open(_)", vksk_RuntimeBufferOpen)
+		BIND_METHOD("Buffer", false, "pointer=(_)", vksk_RuntimeBufferSetPointer)
+		BIND_METHOD("Buffer", false, "pointer", vksk_RuntimeBufferGetPointer)
+		BIND_METHOD("Buffer", false, "read_double()", vksk_RuntimeBufferReadDouble)
+		BIND_METHOD("Buffer", false, "write_double(_)", vksk_RuntimeBufferWriteDouble)
+		BIND_METHOD("Buffer", false, "read_float()", vksk_RuntimeBufferReadFloat)
+		BIND_METHOD("Buffer", false, "write_float(_)", vksk_RuntimeBufferWriteFloat)
+		BIND_METHOD("Buffer", false, "read_uint64()", vksk_RuntimeBufferReadUint64)
+		BIND_METHOD("Buffer", false, "write_uint64(_)", vksk_RuntimeBufferWriteUint64)
+		BIND_METHOD("Buffer", false, "read_uint32()", vksk_RuntimeBufferReadUint32)
+		BIND_METHOD("Buffer", false, "write_uint32(_)", vksk_RuntimeBufferWriteUint32)
+		BIND_METHOD("Buffer", false, "read_uint16()", vksk_RuntimeBufferReadUint16)
+		BIND_METHOD("Buffer", false, "write_uint16(_)", vksk_RuntimeBufferWriteUint16)
+		BIND_METHOD("Buffer", false, "read_uint8()", vksk_RuntimeBufferReadUint8)
+		BIND_METHOD("Buffer", false, "write_uint8(_)", vksk_RuntimeBufferWriteUint8)
+		BIND_METHOD("Buffer", false, "read_int64()", vksk_RuntimeBufferReadInt64)
+		BIND_METHOD("Buffer", false, "write_int64(_)", vksk_RuntimeBufferWriteInt64)
+		BIND_METHOD("Buffer", false, "read_int32()", vksk_RuntimeBufferReadInt32)
+		BIND_METHOD("Buffer", false, "write_int32(_)", vksk_RuntimeBufferWriteInt32)
+		BIND_METHOD("Buffer", false, "read_int16()", vksk_RuntimeBufferReadInt16)
+		BIND_METHOD("Buffer", false, "write_int16(_)", vksk_RuntimeBufferWriteInt16)
+		BIND_METHOD("Buffer", false, "read_int8()", vksk_RuntimeBufferReadInt8)
+		BIND_METHOD("Buffer", false, "write_int8(_)", vksk_RuntimeBufferWriteInt8)
+		BIND_METHOD("Buffer", false, "read_string(_)", vksk_RuntimeBufferReadString)
+		BIND_METHOD("Buffer", false, "write_string(_)", vksk_RuntimeBufferWriteString)
+		BIND_METHOD("Buffer", false, "read_bool()", vksk_RuntimeBufferReadBool)
+		BIND_METHOD("Buffer", false, "write_bool(_)", vksk_RuntimeBufferWriteBool)
 	}
 	return NULL;
 }

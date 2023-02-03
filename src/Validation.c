@@ -26,6 +26,7 @@ const uint64_t FOREIGN_CAMERA = 1<<12;
 const uint64_t FOREIGN_AUDIO_DATA = 1<<13;
 const uint64_t FOREIGN_AUDIO = 1<<14;
 const uint64_t FOREIGN_TILED_MAP = 1<<15;
+const uint64_t FOREIGN_BUFFER = 1<<16;
 
 extern VKSK_EngineConfig gEngineConfig;
 

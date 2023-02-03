@@ -27,6 +27,7 @@ extern const uint64_t FOREIGN_CAMERA;
 extern const uint64_t FOREIGN_AUDIO_DATA;
 extern const uint64_t FOREIGN_AUDIO;
 extern const uint64_t FOREIGN_TILED_MAP;
+extern const uint64_t FOREIGN_BUFFER;
 
 // To protect Textures from garbage collection kinda
 typedef struct _vksk_RuntimeTexture {
@@ -46,6 +47,13 @@ typedef struct _vksk_RuntimeTiledMap {
 	cute_tiled_layer_t *layer;
 } _vksk_RuntimeTiledMap;
 
+// Binary buffers
+typedef struct _vksk_RuntimeBuffer {
+	int size;
+	int pointer;
+	uint8_t *data;
+} _vksk_RuntimeBuffer;
+
 // All foreign types come from this for type checking purposes
 typedef struct VKSK_RuntimeForeign {
 	uint64_t type;
@@ -59,5 +67,6 @@ typedef struct VKSK_RuntimeForeign {
 		JUSound audioData;
 		JUPlayingSound audio;
 		_vksk_RuntimeTiledMap tiled;
+		_vksk_RuntimeBuffer buffer;
 	};
 } VKSK_RuntimeForeign;

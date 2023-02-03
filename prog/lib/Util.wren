@@ -252,3 +252,97 @@ class Tileset {
         }
     }
 }
+
+// Binary buffers
+foreign class Buffer {
+    // Creates a buffer
+    construct new(size) {}
+
+    // Creates a buffer from a file
+    foreign open(filename)
+
+    // Resizes a buffer, doesn't move the pointer
+    foreign resize(size)
+
+    // Returns size of the buffer
+    foreign size
+
+    // Sets the pointer
+    foreign pointer=(val)
+
+    // Gets the pointer position
+    foreign pointer
+
+    // Reads a double from the buffer
+    foreign read_double()
+
+    // Write a double to the buffer
+    foreign write_double(double)
+
+    // Reads a float from the buffer    
+    foreign read_float()
+
+    // Write a float to the buffer
+    foreign write_float(float)
+
+    // Reads a uint64 from the buffer    
+    foreign read_uint64()
+
+    // Write a uint64 to the buffer
+    foreign write_uint64(uint64)
+
+    // Reads a uint32 from the buffer    
+    foreign read_uint32()
+
+    // Write a uint32 to the buffer
+    foreign write_uint32(uint32)
+
+    // Reads a uint16 from the buffer    
+    foreign read_uint16()
+
+    // Write a uint16 to the buffer
+    foreign write_uint16(uint16)
+
+    // Reads a uint8 from the buffer    
+    foreign read_uint8()
+
+    // Write a uint8 to the buffer
+    foreign write_uint8(uint8)
+
+    // Reads a int64 from the buffer    
+    foreign read_int64()
+
+    // Write a int64 to the buffer
+    foreign write_int64(int64)
+
+    // Reads a int32 from the buffer    
+    foreign read_int32()
+
+    // Write a int32 to the buffer
+    foreign write_int32(int32)
+
+    // Reads a int16 from the buffer    
+    foreign read_int16()
+
+    // Write a int16 to the buffer
+    foreign write_int16(int16)
+
+    // Reads a int8 from the buffer    
+    foreign read_int8()
+
+    // Write a int8 to the buffer
+    foreign write_int8(int8)
+
+    // Reads a string from the buffer    
+    foreign read_string(size)
+
+    // Write a string to the buffer
+    foreign write_string(string)
+
+    // Reads a bool from the buffer    
+    foreign read_bool()
+
+    // Write a bool to the buffer
+    foreign write_bool(bool)
+
+}

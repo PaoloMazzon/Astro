@@ -88,12 +88,20 @@ void vksk_RuntimeFileRead(WrenVM *vm) {
 }
 
 void vksk_RuntimeFileWrite(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_STRING, FOREIGN_END)
-	const char *fname = wrenGetSlotString(vm, 1);
-	const char *val = wrenGetSlotString(vm, 2);
-	FILE *f = fopen(fname, "w");
-	fprintf(f, "%s", val);
-	fclose(f);
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_STRING | FOREIGN_BUFFER, FOREIGN_END)
+	if (wrenGetSlotType(vm, 2) == WREN_TYPE_STRING) {
+		const char *fname = wrenGetSlotString(vm, 1);
+		const char *val = wrenGetSlotString(vm, 2);
+		FILE *f = fopen(fname, "w");
+		fprintf(f, "%s", val);
+		fclose(f);
+	} else {
+		const char *fname = wrenGetSlotString(vm, 1);
+		VKSK_RuntimeForeign *val = wrenGetSlotForeign(vm, 2);
+		FILE *f = fopen(fname, "w");
+		fwrite(val->buffer.data, 1, val->buffer.size, f);
+		fclose(f);
+	}
 }
 
 void vksk_RuntimeFileExists(WrenVM *vm) {
@@ -247,7 +255,6 @@ void vksk_RuntimeTiledGetObjects(WrenVM *vm) {
 
 void vksk_RuntimeTiledGetTiles(WrenVM *vm) {
 	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
-	// TODO: Give `Tileset` the ability to store multiple sprites with GIDs for easier compatibility with tiled
 
 	wrenEnsureSlots(vm, 3);
 	const int yList = 0;
@@ -292,3 +299,322 @@ void vksk_RuntimeTiledGetTilesets(WrenVM *vm) {
 	}
 }
 
+void vksk_RuntimeBufferAllocate(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
+	buffer->buffer.pointer = 0;
+	buffer->buffer.size = wrenGetSlotDouble(vm, 1);
+	buffer->buffer.data = malloc(buffer->buffer.size);
+	if (buffer->buffer.data == NULL) {
+		vksk_Log("Could not allocate buffer of size %f\n", buffer->buffer.size);
+	}
+	buffer->type = FOREIGN_BUFFER;
+}
+
+void vksk_RuntimeBufferFinalize(void *data) {
+	VKSK_RuntimeForeign *buffer = data;
+	free(buffer->buffer.data);
+}
+
+unsigned char* loadFileRaw(const char *filename) {
+	FILE* file = fopen(filename, "rb");
+	unsigned char *buffer = NULL;
+	int size = 0;
+
+	if (file != NULL) {
+		// Find file size
+		fseek(file, 0, SEEK_END);
+		size = ftell(file);
+		rewind(file);
+
+		buffer = malloc(size);
+
+		if (buffer != NULL) {
+			// Fill the buffer
+			fread(buffer, 1, size, file);
+		}
+		fclose(file);
+	}
+
+	return (unsigned char*)buffer;
+}
+
+void vksk_RuntimeBufferOpen(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	wrenGetVariable(vm, "lib/Util", "Buffer", 0);
+	VKSK_RuntimeForeign *buffer = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
+	buffer->buffer.pointer = 0;
+	buffer->buffer.size = wrenGetSlotDouble(vm, 1);
+	buffer->buffer.data = loadFileRaw(wrenGetSlotString(vm, 1));
+	if (buffer->buffer.data == NULL) {
+		vksk_Log("Could not open buffer from \"%s\"\n", wrenGetSlotString(vm, 1));
+	}
+	buffer->type = FOREIGN_BUFFER;
+}
+
+void vksk_RuntimeBufferResize(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	buffer->buffer.data = realloc(buffer->buffer.data, (size_t)wrenGetSlotDouble(vm, 1));
+	if (buffer->buffer.data == NULL)
+		vksk_Log("Could not resize buffer\n");
+	else
+		buffer->buffer.size = (int)wrenGetSlotDouble(vm, 1);
+}
+
+void vksk_RuntimeBufferSize(WrenVM *vm) {
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, buffer->buffer.size);
+}
+
+void vksk_RuntimeBufferSetPointer(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	int pointer = (int)wrenGetSlotDouble(vm, 1);
+	if (pointer > 0 && pointer <= buffer->buffer.size)
+		buffer->buffer.pointer = pointer;
+}
+
+void vksk_RuntimeBufferGetPointer(WrenVM *vm) {
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, buffer->buffer.pointer);
+}
+
+void vksk_RuntimeBufferReadDouble(WrenVM *vm) { // 8 bytes
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 8) {
+		double *v = (double*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		if (isnan(*v))
+			wrenSetSlotDouble(vm, 0, 0);
+		else
+			wrenSetSlotDouble(vm, 0, *v);
+		buffer->buffer.pointer += 8;
+	}
+}
+
+void vksk_RuntimeBufferWriteDouble(WrenVM *vm) { // 8 bytes
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 8) {
+		double *v = (double*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		*v = (double)wrenGetSlotDouble(vm, 1);
+		buffer->buffer.pointer += 8;
+	}
+}
+
+void vksk_RuntimeBufferReadFloat(WrenVM *vm) { // 4 bytes
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 4) {
+		float *v = (float*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		if (isnan(*v))
+			wrenSetSlotDouble(vm, 0, 0);
+		else
+			wrenSetSlotDouble(vm, 0, *v);
+		buffer->buffer.pointer += 4;
+	}
+}
+
+void vksk_RuntimeBufferWriteFloat(WrenVM *vm) { // 4 bytes
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 4) {
+		float *v = (float*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		*v = (float)wrenGetSlotDouble(vm, 1);
+		buffer->buffer.pointer += 4;
+	}
+}
+
+void vksk_RuntimeBufferReadUint64(WrenVM *vm) { // 8 bytes
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 8) {
+		uint64_t *v = (uint64_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		wrenSetSlotDouble(vm, 0, *v);
+		buffer->buffer.pointer += 8;
+	}
+}
+
+void vksk_RuntimeBufferWriteUint64(WrenVM *vm) { // 8 bytes
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 8) {
+		uint64_t *v = (uint64_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		*v = (uint64_t)wrenGetSlotDouble(vm, 1);
+		buffer->buffer.pointer += 8;
+	}
+}
+
+void vksk_RuntimeBufferReadUint32(WrenVM *vm) { // 4 bytes
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 4) {
+		uint32_t *v = (uint32_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		wrenSetSlotDouble(vm, 0, *v);
+		buffer->buffer.pointer += 4;
+	}
+}
+
+void vksk_RuntimeBufferWriteUint32(WrenVM *vm) { // 4 bytes
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 4) {
+		uint32_t *v = (uint32_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		*v = (uint32_t)wrenGetSlotDouble(vm, 1);
+		buffer->buffer.pointer += 4;
+	}
+}
+
+void vksk_RuntimeBufferReadUint16(WrenVM *vm) { // 2 bytes
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 2) {
+		uint16_t *v = (uint16_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		wrenSetSlotDouble(vm, 0, *v);
+		buffer->buffer.pointer += 2;
+	}
+}
+
+void vksk_RuntimeBufferWriteUint16(WrenVM *vm) { // 2 bytes
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 2) {
+		uint16_t *v = (uint16_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		*v = (uint16_t)wrenGetSlotDouble(vm, 1);
+		buffer->buffer.pointer += 2;
+	}
+}
+
+void vksk_RuntimeBufferReadUint8(WrenVM *vm) { // 1 bytes
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 1) {
+		uint8_t *v = (uint8_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		wrenSetSlotDouble(vm, 0, *v);
+		buffer->buffer.pointer += 1;
+	}
+}
+
+void vksk_RuntimeBufferWriteUint8(WrenVM *vm) { // 1 bytes
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 1) {
+		uint8_t *v = (uint8_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		*v = (uint8_t)wrenGetSlotDouble(vm, 1);
+		buffer->buffer.pointer += 1;
+	}
+}
+
+void vksk_RuntimeBufferReadInt64(WrenVM *vm) { // 8 bytes
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 8) {
+		int64_t *v = (int64_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		wrenSetSlotDouble(vm, 0, *v);
+		buffer->buffer.pointer += 8;
+	}
+}
+
+void vksk_RuntimeBufferWriteInt64(WrenVM *vm) { // 8 bytes
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 8) {
+		int64_t *v = (int64_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		*v = (int64_t)wrenGetSlotDouble(vm, 1);
+		buffer->buffer.pointer += 8;
+	}
+}
+
+void vksk_RuntimeBufferReadInt32(WrenVM *vm) { // 4 bytes
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 4) {
+		int32_t *v = (int32_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		wrenSetSlotDouble(vm, 0, *v);
+		buffer->buffer.pointer += 4;
+	}
+}
+
+void vksk_RuntimeBufferWriteInt32(WrenVM *vm) { // 4 bytes
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 4) {
+		int32_t *v = (int32_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		*v = (int32_t)wrenGetSlotDouble(vm, 1);
+		buffer->buffer.pointer += 4;
+	}
+}
+
+void vksk_RuntimeBufferReadInt16(WrenVM *vm) { // 2 bytes
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 2) {
+		int16_t *v = (int16_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		wrenSetSlotDouble(vm, 0, *v);
+		buffer->buffer.pointer += 2;
+	}
+}
+
+void vksk_RuntimeBufferWriteInt16(WrenVM *vm) { // 2 bytes
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 2) {
+		int16_t *v = (int16_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		*v = (int16_t)wrenGetSlotDouble(vm, 1);
+		buffer->buffer.pointer += 2;
+	}
+}
+
+void vksk_RuntimeBufferReadInt8(WrenVM *vm) { // 1 bytes
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 1) {
+		int8_t *v = (int8_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		wrenSetSlotDouble(vm, 0, *v);
+		buffer->buffer.pointer += 1;
+	}
+}
+
+void vksk_RuntimeBufferWriteInt8(WrenVM *vm) { // 1 bytes
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 1) {
+		int8_t *v = (int8_t*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		*v = (int8_t)wrenGetSlotDouble(vm, 1);
+		buffer->buffer.pointer += 1;
+	}
+}
+
+void vksk_RuntimeBufferReadString(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	int size = wrenGetSlotDouble(vm, 1);
+	if (buffer->buffer.pointer <= buffer->buffer.size - size) {
+		char *str = malloc(size + 1);
+		memcpy(str, &buffer->buffer.data[buffer->buffer.pointer], size);
+		str[size] = 0;
+		wrenSetSlotString(vm, 0, str);
+		free(str);
+		buffer->buffer.pointer += size;
+	}
+}
+
+void vksk_RuntimeBufferWriteString(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	int size = strlen(wrenGetSlotString(vm, 1));
+	if (buffer->buffer.pointer <= buffer->buffer.size - size) {
+		memcpy(&buffer->buffer.data[buffer->buffer.pointer], wrenGetSlotString(vm, 1), size);
+		buffer->buffer.pointer += size;
+	}
+}
+
+void vksk_RuntimeBufferReadBool(WrenVM *vm) { // 1 bytes
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 1) {
+		bool *v = (bool*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		wrenSetSlotBool(vm, 0, *v);
+		buffer->buffer.pointer += 1;
+	}
+}
+
+void vksk_RuntimeBufferWriteBool(WrenVM *vm) { // 1 bytes
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BOOL, FOREIGN_END)
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+	if (buffer->buffer.pointer <= buffer->buffer.size - 1) {
+		bool *v = (bool*)(&buffer->buffer.data[buffer->buffer.pointer]);
+		*v = (bool)wrenGetSlotBool(vm, 1);
+		buffer->buffer.pointer += 1;
+	}
+}

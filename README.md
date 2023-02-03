@@ -60,7 +60,6 @@ Features
  + Manual and automatic resource management
  + Fast and flexible cameras
  + Simple level and entity management
- + Easily load and use sprites, sounds, and fonts 
  + Complete [API documentation](docs/API.md)
  + Load [Tiled](https://www.mapeditor.org/) maps automatically
 
@@ -68,9 +67,8 @@ TODO
 ====
 
  + Debug mode
- + Extended tileset support
  + Asset load directories
  + OGG loading support
- + Profiling tools
  + TrueType fonts
  + Built-in mod support
+ + Better audio control
