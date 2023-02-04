@@ -10,6 +10,7 @@ int main() {
 	// Read engine config ini
 	VKSK_Config engineConfig = vksk_ConfigLoad("Astro.ini");
 	gEngineConfig.enableTypeChecking = vksk_ConfigGetBool(engineConfig, "engine", "enableTypeChecking", false);
+	gEngineConfig.enableDebugOverlay = vksk_ConfigGetBool(engineConfig, "engine", "enableDebugOverlay", false);
 	vksk_ConfigFree(engineConfig);
 
 	vksk_Start();

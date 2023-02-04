@@ -10,6 +10,7 @@
 #include "src/RendererBindings.h"
 #include "src/Validation.h"
 #include "src/IntermediateTypes.h"
+#include "src/Blobs.h"
 
 extern Uint32 rmask, gmask, bmask, amask;
 
@@ -27,6 +28,11 @@ double gLastTime = 0;
 double gFrames = 0;
 double gFPS = 0;
 extern VKSK_EngineConfig gEngineConfig;
+
+// Local globals
+static VK2DTexture gDebugFont;
+static VK2DImage gDebugFontImage;
+static int gEntityCount;
 
 static void _vksk_SetWindowIcon(WrenVM *vm) {
 	if (wrenHasVariable(vm, "init", "window_icon")) {
@@ -46,6 +52,43 @@ static void _vksk_SetWindowIcon(WrenVM *vm) {
 
 		stbi_image_free(pixels);
 	}
+}
+
+static void _vksk_InitializeDebug() {
+	int x, y, channels;
+	uint8_t *pixels = stbi_load_from_memory(DEBUG_FONT_PNG, sizeof(DEBUG_FONT_PNG), &x, &y, &channels, 4);
+	gDebugFontImage = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y);
+	gDebugFont = vk2dTextureLoadFromImage(gDebugFontImage);
+}
+
+static void _vksk_DebugPrint(float x, float y, const char *fmt, ...) {
+	if (gEngineConfig.enableDebugOverlay) {
+		char buffer[1024];
+		va_list list;
+		va_start(list, fmt);
+		vsnprintf(buffer, 1024, fmt, list);
+		va_end(list);
+		for (int i = 0; i < strlen(buffer); i++) {
+			int index = buffer[i] - 32;
+
+			if (index > 0 && index < 96) {
+				float drawX = roundf((index * 16) % 256);
+				float drawY = roundf(32 * floorf((index * 16) / (256)));
+				vk2dDrawTexturePart(gDebugFont, x, y, drawX, drawY, 16, 32);
+				x += 16;
+			}
+		}
+	}
+}
+
+static void _vksk_DrawDebugOverlay() {
+	_vksk_DebugPrint(2, 0, "FPS: %0.2f", gFPS);
+	_vksk_DebugPrint(2, 34, "Entities: %i", gEntityCount);
+}
+
+static void _vksk_FinalizeDebug() {
+	vk2dTextureFree(gDebugFont);
+	vk2dImageFree(gDebugFontImage);
 }
 
 // From RendererBindings.c
@@ -103,8 +146,9 @@ void vksk_Start() {
 	vk2dRendererInit(gWindow, rendererConfig);
 	juInit(gWindow, 0, 0);
 
-	// Load window icon if one was selected
+	// Internal stuff
 	_vksk_SetWindowIcon(vm);
+	_vksk_InitializeDebug();
 
 	// Load assets
 	vksk_Log("Loading assets...");
@@ -149,6 +193,9 @@ void vksk_Start() {
 		wrenSetSlotHandle(vm, 0, gCurrentLevel);
 		wrenCall(vm, updateHandle);
 
+		// Debug overlay
+		_vksk_DrawDebugOverlay();
+
 		// Enfore the FPS clock
 		if (gFPSCap != 0)
 			juClockFramerate(&gFPSClock, gFPSCap);
@@ -180,6 +227,7 @@ void vksk_Start() {
 	// Cleanup
 	vksk_Log("Cleanup...");
 	vk2dRendererWait();
+	_vksk_FinalizeDebug();
 	wrenCollectGarbage(vm);
 	wrenFreeVM(vm);
 	juQuit();
@@ -258,4 +306,8 @@ void vksk_RuntimeGetClass(WrenVM *vm) {
 	} else {
 		wrenSetSlotNull(vm, 0);
 	}
+}
+
+void vksk_RuntimeReportDebug(WrenVM *vm) {
+	gEntityCount = wrenGetSlotDouble(vm, 1);
 }

@@ -31,6 +31,9 @@ class Engine {
 
     // Returns a Wren class with a given class name in the format `module::class`
     foreign static get_class(class_name)
+
+    // For internal use
+    foreign static report_debug(entity_count)
 }
 
 // Entity in the game world, child classes must make their own constructor
@@ -164,12 +167,13 @@ class Level {
     }
 
     // Called each frame while the level is loaded, call the super to process
-    // the entities in the level
+    // the entities in the level and handle debug stuff
     update() {
         for (entity in _entity_list) {
             entity.update(this)
             entity.draw(this)
         }
+        Engine.report_debug(_entity_list.count)
     }
 
     // Called whenever the level is unloaded (when the game stops or level change)

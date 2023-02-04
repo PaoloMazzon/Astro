@@ -140,7 +140,7 @@ class Game is Level {
 
         // Render UI
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
-        Renderer.draw_font(Assets.font, "FPS: " + Engine.fps.toString, 2, 0)
+        //Renderer.draw_font(Assets.font, "FPS: " + Engine.fps.toString, 2, 0)
         Renderer.unlock_cameras()
     }
 

@@ -11,6 +11,7 @@
 // Engine configuration
 typedef struct VKSK_EngineConfig {
 	bool enableTypeChecking;
+	bool enableDebugOverlay;
 } VKSK_EngineConfig;
 
 // Starts the runtime
@@ -42,3 +43,6 @@ void vksk_RuntimeInfo(WrenVM *vm);
 
 // Returns a specified class
 void vksk_RuntimeGetClass(WrenVM *vm);
+
+// Reports debug info to the engine
+void vksk_RuntimeReportDebug(WrenVM *vm);
