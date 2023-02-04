@@ -145,7 +145,7 @@ class Level {
                 }
             } else if (layer == TiledMap.TILE_LAYER) {
                 // Create a new tileset
-                var ts = Tileset.new(map.get_tiles(), null, 0, 0)
+                var ts = Tileset.new(map.get_tiles(), null, map.cell_width, map.cell_height)
                 for (slot in gids) {
                     ts.add_tileset(Assets[slot["filename"].split(".")[0]], slot["gid"])
                 }

@@ -122,17 +122,17 @@ class Tileset {
     // [[x1y1, x2y1], [x1y2, x2y2]]. Each cell in the grid should be
     // an index in the sprite sheet + 1 because 0 is treated as an
     // empty space for collisions
-    construct new(tileset, sprite, x, y) {
+    construct new(tileset, texture, w, h) {
         _tileset = tileset
-        if (sprite == null) {
+        if (texture == null) {
             _sprites = []
             _gids = []
         } else {
-            _sprites = [sprite]
+            _sprites = [texture]
             _gids = [1]
         }
-        _x = x
-        _y = y
+        _w = w
+        _h = h
     }
 
     // Adds a new sprite to the tileset, index starting at gid
@@ -142,10 +142,10 @@ class Tileset {
     }
 
     // Returns total width of the tileset
-    width { _tileset[0].count * (_sprites[0].width) }
+    width { _tileset[0].count * (_w) }
 
     // Returns total height of the tileset
-    height { _tileset.count * (_sprites[0].height) }
+    height { _tileset.count * (_h) }
 
     // Returns the width of the tileset in tiles
     tile_width { _tileset[0].count }
@@ -178,7 +178,7 @@ class Tileset {
     // w/h of cells in the tileset (usually don't worry about that).
     collision(hitbox, x, y) {
         var hb = hitbox.bounding_box(x, y)
-        var bb = [((hb[0] - _x) / _sprites[0].width).floor, ((hb[1] - _y) / _sprites[0].height).floor, ((hb[2] - _x) / _sprites[0].width).floor, ((hb[3] - _y) / _sprites[0].height).floor]
+        var bb = [((hb[0]) / _w).floor, ((hb[1]) / _h).floor, ((hb[2]) / _w).floor, ((hb[3]) / _h).floor]
         var hit = false
         if (this[bb[0], bb[1]] != 0) {hit = true}
         if (this[bb[0], bb[3]] != 0) {hit = true}
@@ -200,23 +200,28 @@ class Tileset {
             }
         }
 
-        Renderer.draw_sprite(_sprites[sprite], gid - selected_gid, x, y)
+        var cell = gid - selected_gid
+
+        var draw_x = ((cell * _w) % _sprites[sprite].width).round
+        var draw_y = (_h * ((cell * _w) / (_sprites[sprite].width)).floor).round
+
+        Renderer.draw_texture_part(_sprites[sprite], x, y, draw_x, draw_y, _w, _h)
     }
 
     // Draws the tileset
     draw() {
-        var y_offset = _y
+        var y_offset = 0
 
         // Loop through each cell in the 2D grid
         for (i in _tileset) {
-            var x_offset = _x
+            var x_offset = 0
             for (cell in i) {
                 if (cell != 0) {
                     internal_draw_sprite(cell, x_offset, y_offset)
                 }
-                x_offset = x_offset + _sprites[0].width
+                x_offset = x_offset + _w
             }
-            y_offset = y_offset + _sprites[0].height
+            y_offset = y_offset + _h
         }
     }
 

@@ -21,9 +21,8 @@ properly.
  wanted to specify the `Player` class in the file `Game/Player.wren` we would use `Game/Player::Player`
  for the class field.
  4. Map file must be in `assets/` folder.
- 5. All tilesets used must be the same size and loaded by asset compiler. For example, if you had
- 3 different tilesets, they must all be in the `assets/` folder as well properly loaded as sprites
- so that Astro knows where to find them.
+ 5. All tilesets used must be loaded as textures by the asset compiler. You may only have one size
+ of cell width/height per map.
  
 ![JSON](./filedropdown.png)
 

@@ -19,17 +19,17 @@ weight regardless of how big the tileset is.
  + [draw_tiling_background](#draw_tiling_background)
 
 ### new
-`construct new(tileset, sprite, x, y)`
+`construct new(tileset, texture, w, h)`
 
 Parameters
  + `tileset -> List` List of all indices in the tileset. See below.
- + `sprite -> lib/Drawing::Sprite` Sprite that will be used for the tiles in the tileset. `null` for no loaded tilesets.
- + `x -> Num` X position in the game world this tileset exists at.
- + `y -> Num` Y position in the game world this tileset exists at.
+ + `texture -> lib/Drawing::Texture` or `lib/Drawing::Surface` Texture that will be treated as a spritesheet and indexed into.
+ + `w -> Num` Width of each cell in the texture
+ + `h -> Num` Height of each cell in the texture
 
 Creates a tileset. The list that is provided to this method should be a list of lists
-representing a 2D grid of sprite indices in the tileset. Each "cell" of the 2D list represents
-an index for the sprite + 1 (if you want the first frame in the sprite you would put 1
+representing a 2D grid of indices in the tileset. Each "cell" of the 2D list represents
+an index for the tileset + 1 (if you want the first cell in the tileset you would put 1
 and not 0). For example, you might give it a list like this:
 
     var tileset = [
@@ -45,21 +45,17 @@ and not 0). For example, you might give it a list like this:
     ]
 
 This would create a 12x9 tileset, where the top-left of that grid is (0, 0) in the tileset and
-the bottom-right is at position (11, 8). Each non-zero value represents a sprite frame - 1.
-
-> 📝 Sprite frames are indexed starting at 1 instead of 0 because the tileset treats zero as empty
-> spaces. Note that methods like [draw_sprite](Renderer.md#draw_sprite) still expect to be indexed
-> from 0.
+the bottom-right is at position (11, 8). Each non-zero value represents a cell - 1.
 
 ### add_tileset
-`add_tileset(sprite, gid)`
+`add_tileset(texture, gid)`
 
 Parameters
- + `sprite -> lib/Drawing::Sprite` Sprite to use for the new tileset.
- + `gid -> Num` What number to start indexing this sprite at.
+ + `texture -> lib/Drawing::Texture` or `lib/Drawing::Surface` Texture for the tileset.
+ + `gid -> Num` What number to start indexing this tileset at.
 
-Adds a new sprite/tileset to the tileset, using the GID to differentiate between sprites.
-When you create a tileset, the sprite you provide automatically has GID 1. This means all
+Adds a new tileset to the tileset, using the GID to differentiate between textures.
+When you create a tileset, the texture you provide automatically has GID 1. This means all
 indices in the grid 1 or higher are treated as frames for that tileset - 1. If you introduce
 another tileset at GID 100, anytime you have a cell with value 100 or higher, it will be drawn
 from the new tileset with frame cell - 100. This is primarily for Tiled map loading.
