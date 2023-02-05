@@ -33,6 +33,10 @@ extern VKSK_EngineConfig gEngineConfig;
 static VK2DTexture gDebugFont;
 static VK2DImage gDebugFontImage;
 static int gEntityCount;
+static bool gProcessFrame; // Whether or not we call update methods this frame
+static double gPreviousTimeStep; // Previous time gProcessFrame was enabled
+static double gTimeStep; // How many frames are allowed to update each second
+static double gTimeStepPercentProc = 0.95;
 
 static void _vksk_SetWindowIcon(WrenVM *vm) {
 	if (wrenHasVariable(vm, "init", "window_icon")) {
@@ -149,6 +153,8 @@ void vksk_Start() {
 	// Internal stuff
 	_vksk_SetWindowIcon(vm);
 	_vksk_InitializeDebug();
+	int processedFrames = 0;
+	double startTime = juTime();
 
 	// Load assets
 	vksk_Log("Loading assets...");
@@ -188,6 +194,20 @@ void vksk_Start() {
 		gMouseButtons[1] = buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE);
 		gMouseButtons[2] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
 
+		// Calculate timestep
+		if (gTimeStep != 0) {
+			gProcessFrame = false;
+			if ((juTime() - gPreviousTimeStep) / (1.0 / gTimeStep) > gTimeStepPercentProc) {
+				// TODO: Dynamically move the timestep percent towards the goal
+
+				gProcessFrame = true;
+				gPreviousTimeStep = juTime();
+				processedFrames += 1;
+			}
+		} else {
+			processedFrames += 1;
+		}
+
 		// Start the frame and run update
 		vk2dRendererStartFrame(VK2D_BLACK);
 		wrenSetSlotHandle(vm, 0, gCurrentLevel);
@@ -226,6 +246,7 @@ void vksk_Start() {
 
 	// Cleanup
 	vksk_Log("Cleanup...");
+	vksk_Log("%i frames were processed at an average of %.02f fps", processedFrames, (double)processedFrames / (juTime() - startTime));
 	vk2dRendererWait();
 	_vksk_FinalizeDebug();
 	wrenCollectGarbage(vm);
@@ -310,4 +331,18 @@ void vksk_RuntimeGetClass(WrenVM *vm) {
 
 void vksk_RuntimeReportDebug(WrenVM *vm) {
 	gEntityCount = wrenGetSlotDouble(vm, 1);
+}
+
+void vksk_RuntimeTimestep(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	gTimeStep = wrenGetSlotDouble(vm, 1);
+	gPreviousTimeStep = juTime();
+}
+
+void vksk_RuntimeProcessFrame(WrenVM *vm) {
+	wrenSetSlotBool(vm, 0, gProcessFrame);
+}
+
+void vksk_RuntimeTimeStepPercent(WrenVM *vm) {
+	wrenSetSlotDouble(vm, 0, (juTime() - gPreviousTimeStep) / (1.0 / gTimeStep));
 }

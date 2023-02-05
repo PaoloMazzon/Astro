@@ -29,6 +29,15 @@ class Engine {
     // Returns a map containing info on the engine
     foreign static info
 
+    // Sets Astro's timestep (how many times `process_frame` will return true in a second)
+    foreign static timestep=(timestep)
+
+    // Returns the percent through the current timestep (so if there is one frame processed every 50ms (timestep=20) and its been 25 ms since the last process frame this returns 0.5)
+    foreign static timestep_percent
+
+    // Returns true if this is a frame that should be processed
+    foreign static process_frame
+
     // Returns a Wren class with a given class name in the format `module::class`
     foreign static get_class(class_name)
 

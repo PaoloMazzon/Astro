@@ -152,6 +152,7 @@ void vksk_RuntimeJUAudioDataAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
 	VKSK_RuntimeForeign *snd = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
 	snd->audioData = juSoundLoad(wrenGetSlotString(vm, 1));
+	// TODO: Load OGG files with stb_vorbis
 	snd->type = FOREIGN_AUDIO_DATA;
 }
 

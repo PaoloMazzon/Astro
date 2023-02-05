@@ -46,3 +46,12 @@ void vksk_RuntimeGetClass(WrenVM *vm);
 
 // Reports debug info to the engine
 void vksk_RuntimeReportDebug(WrenVM *vm);
+
+// Sets the timestep for the engine
+void vksk_RuntimeTimestep(WrenVM *vm);
+
+// Returns true if this is a process frame
+void vksk_RuntimeProcessFrame(WrenVM *vm);
+
+// Returns the percent we are through this timestep
+void vksk_RuntimeTimeStepPercent(WrenVM *vm);

@@ -200,6 +200,9 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Engine", true, "time", vksk_RuntimeTime)
 		BIND_METHOD("Engine", true, "fps", vksk_RuntimeFPS)
 		BIND_METHOD("Engine", true, "info", vksk_RuntimeInfo)
+		BIND_METHOD("Engine", true, "timestep=(_)", vksk_RuntimeTimestep)
+		BIND_METHOD("Engine", true, "process_frame", vksk_RuntimeProcessFrame)
+		BIND_METHOD("Engine", true, "timestep_percent", vksk_RuntimeTimeStepPercent)
 		BIND_METHOD("Engine", true, "get_class(_)", vksk_RuntimeGetClass)
 		BIND_METHOD("Engine", true, "report_debug(_)", vksk_RuntimeReportDebug)
 	} else if (strcmp(module, "lib/Drawing") == 0) {
