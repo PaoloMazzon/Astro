@@ -22,6 +22,12 @@ foreign class Audio {
     // Stops a playing audio
     foreign stop()
 
+    // Pauses audio
+    foreign pause()
+
+    // Unpauses audio
+    foreign unpause()
+
     // Stops all currently playing audio
     foreign static stop_all()
 }

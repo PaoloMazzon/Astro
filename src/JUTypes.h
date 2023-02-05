@@ -35,4 +35,6 @@ void vksk_RuntimeJUAudioAllocate(WrenVM *vm);
 void vksk_RuntimeJUAudioFinalize(void *data);
 void vksk_RuntimeJUAudioUpdate(WrenVM *vm);
 void vksk_RuntimeJUAudioStop(WrenVM *vm);
+void vksk_RuntimeJUAudioPause(WrenVM *vm);
+void vksk_RuntimeJUAudioUnpause(WrenVM *vm);
 void vksk_RuntimeJUAudioStopAll(WrenVM *vm);

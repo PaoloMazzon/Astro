@@ -68,7 +68,6 @@ TODO
 
  + Debug mode
  + Asset load directories
- + OGG loading support
  + TrueType fonts
  + Built-in mod support
- + Better audio control
+ + Way to package games

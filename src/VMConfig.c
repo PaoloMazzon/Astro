@@ -257,6 +257,8 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Audio", false, "update(_,_,_)", vksk_RuntimeJUAudioUpdate)
 		BIND_METHOD("Audio", false, "stop()", vksk_RuntimeJUAudioStop)
 		BIND_METHOD("Audio", true, "stop_all()", vksk_RuntimeJUAudioStopAll)
+		BIND_METHOD("Audio", false, "pause()", vksk_RuntimeJUAudioPause)
+		BIND_METHOD("Audio", false, "unpause()", vksk_RuntimeJUAudioUnpause)
 	} else if (strcmp(module, "lib/Tiled") == 0) {
 		BIND_METHOD("TiledMap", false, "width", vksk_RuntimeTiledWidth)
 		BIND_METHOD("TiledMap", false, "height", vksk_RuntimeTiledHeight)

@@ -5,6 +5,8 @@ before its able to be played with this class.
  + [play](#play)
  + [update](#update)
  + [stop](#stop)
+ + [pause](#pause)
+ + [unpause](#unpause)
  + [stop_all](#stop_all)
 
 ### play
@@ -37,6 +39,16 @@ Updates an `Audio`.
 `stop()`
 
 Stops a sound from continuing to play, the handle is no longer valid after calling this.
+
+### pause
+`pause()`
+
+Pauses a sound.
+
+### unpase
+`unpause()`
+
+Unpauses a sound.
 
 ### stop_all
 `static stop_all()`

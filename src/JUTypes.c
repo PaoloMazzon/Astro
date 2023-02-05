@@ -1,6 +1,8 @@
 /// \file JUTypes.c
 /// \author Paolo Mazzon
 #include <JamUtil/JamUtil.h>
+#include <JamUtil/cute_sound.h>
+#include <src/stb_vorbis.h>
 
 #include "src/Validation.h"
 #include "src/JUTypes.h"
@@ -186,6 +188,16 @@ void vksk_RuntimeJUAudioUpdate(WrenVM *vm) {
 void vksk_RuntimeJUAudioStop(WrenVM *vm) {
 	VKSK_RuntimeForeign *snd = wrenGetSlotForeign(vm, 0);
 	juSoundStop(snd->audio);
+}
+
+void vksk_RuntimeJUAudioPause(WrenVM *vm) {
+	VKSK_RuntimeForeign *snd = wrenGetSlotForeign(vm, 0);
+	cs_pause_sound(snd->audio.playingSound, 1);
+}
+
+void vksk_RuntimeJUAudioUnpause(WrenVM *vm) {
+	VKSK_RuntimeForeign *snd = wrenGetSlotForeign(vm, 0);
+	cs_pause_sound(snd->audio.playingSound, 0);
 }
 
 void vksk_RuntimeJUAudioStopAll(WrenVM *vm) {
