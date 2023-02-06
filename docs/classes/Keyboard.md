@@ -1,19 +1,9 @@
-## Input
-Easy access for the keyboard and mouse.
+## Keyboard
+Easy access for the keyboard.
 
- + [keyboard_get_key](#keyboard_get_key)
- + [keyboard_get_key_pressed](#keyboard_get_key_pressed)
- + [keyboard_get_key_released](#keyboard_get_key_released)
- + [get_mouse_position](#get_mouse_position)
- + [get_mouse_left](#get_mouse_left)
- + [get_mouse_left_pressed](#get_mouse_left_pressed)
- + [get_mouse_left_released](#get_mouse_left_released)
- + [get_mouse_right](#get_mouse_right)
- + [get_mouse_right_pressed](#get_mouse_right_pressed)
- + [get_mouse_right_released](#get_mouse_right_released)
- + [get_mouse_middle](#get_mouse_middle)
- + [get_mouse_middle_pressed](#get_mouse_middle_pressed)
- + [get_mouse_middle_released](#get_mouse_middle_released)
+ + [key](#key)
+ + [key_pressed](#key_pressed)
+ + [key_released](#key_released)
 
 The following values are also provided:
 
@@ -260,87 +250,29 @@ The following values are also provided:
  + `KEY_AUDIOREWIND`
  + `KEY_AUDIOFASTFORWARD`
 
-### keyboard_get_key
-`static keyboard_get_key(key)`
+### key
+`static key(key)`
 
 Parameters:
  + `key -> Num` One of the `KEY_*` values to check.
 
 Returns true if `key` is currently held.
 
-### keyboard_get_key_pressed
-`static keyboard_get_key_pressed(key)`
+### key_pressed
+`static key_pressed(key)`
 
 Parameters:
  + `key -> Num` One of the `KEY_*` values to check.
 
 Returns true if `key` was pressed this frame.
 
-### keyboard_get_key_released
-`static keyboard_get_key_released(key)`
+### key_released
+`static key_released(key)`
 
 Parameters:
  + `key -> Num` One of the `KEY_*` values to check.
 
 Returns true if `key` was released this frame.
-
-### get_mouse_position
-`static get_mouse_position(camera)`
-
-Parameters
- + `camera -> lib/Renderer::Camera` or `null` Camera to check mouse relative to.
- 
-Returns the mouse position relative to a given camera, or `null` for the mouse position
-relative to the window. The mouse position is returned as a list with the values `[x, y]`.
-
-> 📝 This method adjusts the mouse position to the camera to make the position relative to
-> the game world if you want, but it does not work properly with rotated cameras or cameras
-> that use `zoom` instead of `width/height`.
-
-### get_mouse_left
-`static get_mouse_left()`
-
-Returns true if the left mouse buttons is currently held down.
-
-### get_mouse_left_pressed
-`static get_mouse_left_pressed()`
-
-Returns true if the left mouse button was just pressed this frame.
-
-### get_mouse_left_released
-`static get_mouse_left_released()`
-
-Returns true if the left mouse button was just released this frame.
-
-### get_mouse_right
-`static get_mouse_right()`
-
-Returns true if the right mouse buttons is currently held down.
-
-### get_mouse_right_pressed
-`static get_mouse_right_pressed()`
-
-Returns true if the right mouse button was just pressed this frame.
-
-### get_mouse_right_released
-`static get_mouse_right_released()`
-
-Returns true if the right mouse button was just released this frame.
-
-### get_mouse_middle
-`static get_mouse_middle()`
-
-Returns true if the middle mouse buttons is currently held down.
-
-### get_mouse_middle_pressed
-`static get_mouse_middle_pressed()`
-
-Returns true if the middle mouse button was just pressed this frame.
-
-### get_mouse_middle_released
-`static get_mouse_middle_released()`
-
-Returns true if the middle mouse button was just released this frame.
 
 
 -----------

@@ -24,7 +24,8 @@ Classes related to graphics.
 ### `Input.wren`
 Mouse/keyboard access.
 
- + [Input](classes/Input.md)
+ + [Mouse](classes/Mouse.md)
+ + [Keyboard](classes/Keyboard.md)
 
 ### `Renderer.wren`
 Core 2D renderer, as well as primitives like circles and rectangles.

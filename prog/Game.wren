@@ -1,5 +1,5 @@
 import "lib/Engine" for Engine, Level, Entity
-import "lib/Input" for Input
+import "lib/Input" for Keyboard
 import "lib/Renderer" for Renderer, Camera
 import "lib/Drawing" for BitmapFont, Sprite, Surface
 import "lib/Audio" for Audio
@@ -27,11 +27,11 @@ class Player is Entity {
         _hspeed = 0
 
         // Left/right
-        if (Input.keyboard_get_key(Input.KEY_A)) {
+        if (Keyboard.key(Keyboard.KEY_A)) {
             _hspeed = _hspeed - speed
             _scalex = -1
         }
-        if (Input.keyboard_get_key(Input.KEY_D)) {
+        if (Keyboard.key(Keyboard.KEY_D)) {
             _hspeed = _hspeed + speed
             _scalex = 1
         }
@@ -40,7 +40,7 @@ class Player is Entity {
         if (level.tileset.collision(hitbox, x, y + 1)) {
             _jumps = 2
         }
-        if (Input.keyboard_get_key_pressed(Input.KEY_SPACE) && _jumps > 0) {
+        if (Keyboard.key_pressed(Keyboard.KEY_SPACE) && _jumps > 0) {
             _jumps = _jumps - 1
             _gravity = -250
             y = y - 1
