@@ -246,10 +246,10 @@ class Tileset {
 
         var tile_start_x = cx * parallax
         var tile_start_y = cy * parallax
-        tile_start_x = tile_start_x + (((cx - tile_start_x) / texture.width).floor * texture.width)
-        tile_start_y = tile_start_y + (((cy - tile_start_y) / texture.height).floor * texture.height)
-        var horizontal = (cwidth / texture.width).ceil
-        var vertical = (cheight / texture.height).ceil
+        tile_start_x = (tile_start_x + (((cx - tile_start_x) / texture.width).floor * texture.width)) - texture.width
+        tile_start_y = (tile_start_y + (((cy - tile_start_y) / texture.height).floor * texture.height)) - texture.height
+        var horizontal = (cwidth / texture.width).ceil + 1
+        var vertical = (cheight / texture.height).ceil + 1
         for (y in 0..vertical) {
             for (x in 0..horizontal) {
                 Renderer.draw_texture(texture, tile_start_x + (x * texture.width), tile_start_y + (y * texture.height))

@@ -100,6 +100,7 @@ class Game is Level {
     
     create() {
         super.create()
+        Engine.fps_limit = 60
         System.print(Engine.info)
         System.print("game create")
         

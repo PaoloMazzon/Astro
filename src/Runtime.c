@@ -217,7 +217,7 @@ void vksk_Start() {
 		// Calculate timestep
 		if (gTimeStep != 0) {
 			gProcessFrame = false;
-			if ((juTime() - gPreviousTimeStep) / (1.0 / gTimeStep) > gTimeStepPercentProc && gTotalTimeSteps < gTimeStep) {
+			if ((gFPSCap <= gTimeStep || (juTime() - gPreviousTimeStep) / (1.0 / gTimeStep) > gTimeStepPercentProc) && gTotalTimeSteps < gTimeStep) {
 				gProcessFrame = true;
 				gPreviousTimeStep = juTime();
 				gTotalTimeSteps += 1;
