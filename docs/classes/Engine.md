@@ -4,12 +4,15 @@ aspects of game development.
 
  + [switch_level](#switch_level)
  + [quit](#quit)
- + [cap_fps](#cap_fps)
+ + [fps_limit](#fps_limit)
  + [delta](#delta)
  + [time](#time)
  + [fps](#fps)
  + [info](#info)
  + [get_class](#get_class)
+ + [timestep=](#timestep)
+ + [timestep_percent](#timestep_percent)
+ + [process_frame](#process_frame)
  
 ### switch_level
 `static switch_level(level)`
@@ -32,8 +35,8 @@ the level's destruction method will be called before all resources are cleaned u
 and program closes. This method is also implicitly called when the user closes
 the game window.
 
-### cap_fps
-`static cap_fps(fps)`
+### fps_limit
+`static fps_limit=(fps)`
 
 Parameters
  + `fps -> Num` target framerate
@@ -44,6 +47,28 @@ there will be no limit on framerate.
 > 📝 If you set the screen mode to `SCREEN_MODE_VSYNC`, the framerate will be
 > capped at the monitor's refresh rate (typically 60) regardless of what you set
 > with this function.
+
+### timestep=
+`timestep=(timestep)`
+
+Parameters
+ + `timestep -> Num` How many times `process_frame` should be set to true each second.
+ 
+For fixed-timestep logic. This controls how many times each second that `process_frame` will be
+set to true to let the user handle their own fixed-timestep code. Level's [update](Level.md#update)
+method will only update entities when `process_frame` is true automatically. Set this to 0 (the default)
+to disable fixed-timestep.
+
+### timestep_percent
+`timestep_percent`
+
+Returns how far (hypothetically) we are through this current second for fixed timestep interpolation.
+
+### process_frame
+`process_frame`
+
+Returns true if this frame is meant to be processed for fixed timestep games, always returns true
+if `timestep` is 0.
 
 ### delta
 `static delta`

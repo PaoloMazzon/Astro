@@ -32,11 +32,17 @@ extern VKSK_EngineConfig gEngineConfig;
 // Local globals
 static VK2DTexture gDebugFont;
 static VK2DImage gDebugFontImage;
+static VK2DTexture gDebugGraph;
+static VK2DImage gDebugGraphImage;
 static int gEntityCount;
 static bool gProcessFrame; // Whether or not we call update methods this frame
 static double gPreviousTimeStep; // Previous time gProcessFrame was enabled
 static double gTimeStep; // How many frames are allowed to update each second
 static double gTimeStepPercentProc = 0.95;
+static double gAverageTimeStep = 0;
+static double gTotalTimeSteps = 0;
+static double gTimeStepDistributions = 0;
+static double gAverageTimeStepDistribution = 0;
 
 static void _vksk_SetWindowIcon(WrenVM *vm) {
 	if (wrenHasVariable(vm, "init", "window_icon")) {
@@ -63,6 +69,11 @@ static void _vksk_InitializeDebug() {
 	uint8_t *pixels = stbi_load_from_memory(DEBUG_FONT_PNG, sizeof(DEBUG_FONT_PNG), &x, &y, &channels, 4);
 	gDebugFontImage = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y);
 	gDebugFont = vk2dTextureLoadFromImage(gDebugFontImage);
+	stbi_image_free(pixels);
+	pixels = stbi_load_from_memory(DEBUG_DISTRITUBTION_GRAPH_PNG, sizeof(DEBUG_DISTRITUBTION_GRAPH_PNG), &x, &y, &channels, 4);
+	gDebugGraphImage = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y);
+	gDebugGraph = vk2dTextureLoadFromImage(gDebugGraphImage);
+	stbi_image_free(pixels);
 }
 
 static void _vksk_DebugPrint(float x, float y, const char *fmt, ...) {
@@ -75,7 +86,7 @@ static void _vksk_DebugPrint(float x, float y, const char *fmt, ...) {
 		for (int i = 0; i < strlen(buffer); i++) {
 			int index = buffer[i] - 32;
 
-			if (index > 0 && index < 96) {
+			if (index >= 0 && index < 96) {
 				float drawX = roundf((index * 16) % 256);
 				float drawY = roundf(32 * floorf((index * 16) / (256)));
 				vk2dDrawTexturePart(gDebugFont, x, y, drawX, drawY, 16, 32);
@@ -88,11 +99,22 @@ static void _vksk_DebugPrint(float x, float y, const char *fmt, ...) {
 static void _vksk_DrawDebugOverlay() {
 	_vksk_DebugPrint(2, 0, "FPS: %0.2f", gFPS);
 	_vksk_DebugPrint(2, 34, "Entities: %i", gEntityCount);
+	if (gTimeStep != 0) {
+		_vksk_DebugPrint(2, 34 + 34, "Time Step: %0.2ffps | TS%: %0.2f% | ", gAverageTimeStep, gTimeStepPercentProc);
+		float x = 35 * 16;
+		float lx = x + (128 * gAverageTimeStepDistribution);
+		vk2dDrawTexture(gDebugGraph, x, 34 + 34);
+		vk2dRendererSetColourMod(VK2D_BLACK);
+		vk2dDrawRectangle(lx - 1, 34 + 34, 2, 32);
+		vk2dRendererSetColourMod(VK2D_DEFAULT_COLOUR_MOD);
+	}
 }
 
 static void _vksk_FinalizeDebug() {
 	vk2dTextureFree(gDebugFont);
 	vk2dImageFree(gDebugFontImage);
+	vk2dTextureFree(gDebugGraph);
+	vk2dImageFree(gDebugGraphImage);
 }
 
 // From RendererBindings.c
@@ -153,8 +175,6 @@ void vksk_Start() {
 	// Internal stuff
 	_vksk_SetWindowIcon(vm);
 	_vksk_InitializeDebug();
-	int processedFrames = 0;
-	double startTime = juTime();
 
 	// Load assets
 	vksk_Log("Loading assets...");
@@ -197,15 +217,14 @@ void vksk_Start() {
 		// Calculate timestep
 		if (gTimeStep != 0) {
 			gProcessFrame = false;
-			if ((juTime() - gPreviousTimeStep) / (1.0 / gTimeStep) > gTimeStepPercentProc) {
-				// TODO: Dynamically move the timestep percent towards the goal
-
+			if ((juTime() - gPreviousTimeStep) / (1.0 / gTimeStep) > gTimeStepPercentProc && gTotalTimeSteps < gTimeStep) {
 				gProcessFrame = true;
 				gPreviousTimeStep = juTime();
-				processedFrames += 1;
+				gTotalTimeSteps += 1;
+				gTimeStepDistributions += (juTime() - gLastTime);
 			}
 		} else {
-			processedFrames += 1;
+			gProcessFrame = true;
 		}
 
 		// Start the frame and run update
@@ -235,18 +254,30 @@ void vksk_Start() {
 
 		vk2dRendererEndFrame();
 
-		// Calculate FPS
+		// Calculate FPS/timestep
 		gFrames += 1;
 		if (juTime() - gLastTime >= 1) {
 			gFPS = gFrames / (juTime() - gLastTime);
-			gLastTime = juTime();
 			gFrames = 0;
+
+			// Adjust timestep
+			if (gTimeStep != 0) {
+				gAverageTimeStepDistribution = gTimeStepDistributions / gTotalTimeSteps;
+				gTimeStepDistributions = 0;
+				if (gTotalTimeSteps + 1 < gTimeStep)
+					gTimeStepPercentProc = gTotalTimeSteps / gTimeStep;
+				if (gAverageTimeStepDistribution < 0.45)
+					gTimeStepPercentProc += 0.05;
+				gAverageTimeStep = gTotalTimeSteps / (juTime() - gLastTime);
+				gTotalTimeSteps = 0;
+			}
+
+			gLastTime = juTime();
 		}
 	}
 
 	// Cleanup
 	vksk_Log("Cleanup...");
-	vksk_Log("%i frames were processed at an average of %.02f fps", processedFrames, (double)processedFrames / (juTime() - startTime));
 	vk2dRendererWait();
 	_vksk_FinalizeDebug();
 	wrenCollectGarbage(vm);

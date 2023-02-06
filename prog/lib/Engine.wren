@@ -15,7 +15,7 @@ class Engine {
     foreign static quit()
 
     // Caps the FPS, or use 0 for no cap
-    foreign static cap_fps(fps)
+    foreign static fps_limit=(fps)
 
     // Returns the time in seconds since the last frame
     foreign static delta
@@ -179,7 +179,9 @@ class Level {
     // the entities in the level and handle debug stuff
     update() {
         for (entity in _entity_list) {
-            entity.update(this)
+            if (Engine.process_frame) {
+                entity.update(this)
+            }
             entity.draw(this)
         }
         Engine.report_debug(_entity_list.count)

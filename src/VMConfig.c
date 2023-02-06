@@ -195,7 +195,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 	} else if (strcmp(module, "lib/Engine") == 0) {
 		BIND_METHOD("Engine", true, "switch_level(_)", vksk_RuntimeSwitchLevel)
 		BIND_METHOD("Engine", true, "quit()", vksk_RuntimeQuit)
-		BIND_METHOD("Engine", true, "cap_fps(_)", vksk_RuntimeCapFPS)
+		BIND_METHOD("Engine", true, "fps_limit=(_)", vksk_RuntimeCapFPS)
 		BIND_METHOD("Engine", true, "delta", vksk_RuntimeDelta)
 		BIND_METHOD("Engine", true, "time", vksk_RuntimeTime)
 		BIND_METHOD("Engine", true, "fps", vksk_RuntimeFPS)
