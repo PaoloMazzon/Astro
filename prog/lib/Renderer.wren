@@ -21,15 +21,15 @@ class Renderer {
     static BLEND_MODE_NONE { 1 }
     static BLEND_MODE_ADD { 2 }
     static BLEND_MODE_SUBTRACT { 3 }
-    static COLOUR_RED { [255, 0, 0, 255] }
-    static COLOUR_GREEN { [0, 255, 0, 255] }
-    static COLOUR_BLUE { [0, 0, 255, 255] }
-    static COLOUR_YELLOW { [255, 255, 0, 255] }
-    static COLOUR_CYAN { [0, 255, 255, 255] }
-    static COLOUR_PURPLE { [255, 0, 255, 255] }
-    static COLOUR_BLACK { [0, 0, 0, 255] }
-    static COLOUR_WHITE { [255, 255, 255, 255] }
-    static COLOUR_DEFAULT { [255, 255, 255, 255] }
+    static COLOUR_RED { [1, 0, 0, 1] }
+    static COLOUR_GREEN { [0, 1, 0, 1] }
+    static COLOUR_BLUE { [0, 0, 1, 1] }
+    static COLOUR_YELLOW { [1, 1, 0, 1] }
+    static COLOUR_CYAN { [0, 1, 1, 1] }
+    static COLOUR_PURPLE { [1, 0, 1, 1] }
+    static COLOUR_BLACK { [0, 0, 0, 1] }
+    static COLOUR_WHITE { [1, 1, 1, 1] }
+    static COLOUR_DEFAULT { [1, 1, 1, 1] }
     
     // Draws a circle to the screen
     foreign static draw_circle(x, y, radius)
@@ -66,11 +66,11 @@ class Renderer {
     foreign static get_blend_mode()
 
     // Sets the render colour all things are drawn with, must be a 4-element
-    // RGBA list of values in the range [0,255]. You may also use the
+    // RGBA list of values in the range [0,1]. You may also use the
     // `Renderer.COLOUR_*` values
     foreign static set_colour_mod(colour)
 
-    // Returns a list of 4 RGBA values from 0 to 255
+    // Returns a list of 4 RGBA values from 0 to 1
     foreign static get_colour_mod()
 
     // If true, the renderer's cameras will be used when drawing to surfaces.

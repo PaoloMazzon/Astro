@@ -97,6 +97,7 @@ static void _vksk_DebugPrint(float x, float y, const char *fmt, ...) {
 }
 
 static void _vksk_DrawDebugOverlay() {
+	vk2dRendererLockCameras(VK2D_DEFAULT_CAMERA);
 	_vksk_DebugPrint(2, 0, "FPS: %0.2f", gFPS);
 	_vksk_DebugPrint(2, 34, "Entities: %i", gEntityCount);
 	if (gTimeStep != 0) {
@@ -108,6 +109,7 @@ static void _vksk_DrawDebugOverlay() {
 		vk2dDrawRectangle(lx - 1, 34 + 34, 2, 32);
 		vk2dRendererSetColourMod(VK2D_DEFAULT_COLOUR_MOD);
 	}
+	vk2dRendererUnlockCameras();
 }
 
 static void _vksk_FinalizeDebug() {

@@ -5,6 +5,10 @@ Allows for checking for collisions between two hitboxes and tilesets.
  + [r](#r)
  + [w](#w)
  + [h](#h)
+ + [x_offset](#x_offset-getter)
+ + [x_offset=](#x_offset-setter)
+ + [y_offset](#y_offset-getter)
+ + [y_offset=](#y_offset-setter)
  + [new_circle](#new_circle)
  + [new_rectangle](#new_rectangle)
  + [collision](#collision)
@@ -35,6 +39,32 @@ Returns the hitbox's width.
 `h`
 
 Returns the hitbox's height.
+
+### x_offset (Getter)
+`x_offset`
+
+Returns the horizontal offset of the hitbox.
+
+### x_offset= (Setter)
+`x_offset=(offset)`
+
+Parameters
+ + `offset -> Num` Horizontal offset.
+
+Sets the horizontal offset of the hitbox.
+
+### y_offset (Getter)
+`y_offset`
+
+Returns the vertical offset of the hitbox.
+
+### y_offset= (Setter)
+`y_offset=(offset)`
+
+Parameters
+ + `offset -> Num` Vertical offset.
+
+Sets the vertical offset of the hitbox.
 
 ### new_circle
 `construct new_circle(r)`

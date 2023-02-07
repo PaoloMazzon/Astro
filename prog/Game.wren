@@ -13,7 +13,9 @@ class Player is Entity {
 
     create(level, tiled_data) {
         sprite = Assets.player_idle
-        hitbox = Hitbox.new_rectangle(sprite.width, sprite.height)
+        hitbox = Hitbox.new_rectangle(sprite.width - 4, sprite.height - 1)
+        hitbox.x_offset = -2
+        hitbox.y_offset = -1
         _hspeed = 0
         _vspeed = 0
         _gravity = 0
@@ -23,7 +25,7 @@ class Player is Entity {
 
     update(level) {
         // Speeds
-        var speed = Engine.delta * 200
+        var speed = 4
         _hspeed = 0
 
         // Left/right
@@ -41,39 +43,38 @@ class Player is Entity {
             _jumps = 2
         }
         if (Keyboard.key_pressed(Keyboard.KEY_SPACE) && _jumps > 0) {
+            if (_jumps == 1) {
+                sprite = Assets.player_double_jump
+            } else {
+                sprite = Assets.player_jump
+            }
             _jumps = _jumps - 1
-            _gravity = -250
-            y = y - 1
+            _vspeed = -5
         }
-        if (!level.tileset.collision(hitbox, x, y + 1)) {
-            _gravity = _gravity + (800 * Engine.delta)
-        } else {
-            _gravity = 0
-        }
-        _vspeed = _gravity * Engine.delta
+        _vspeed = _vspeed + 0.25
 
         // Handle collisions
         if (level.tileset.collision(hitbox, x + _hspeed, y)) {
-            if (_hspeed.sign == 1) { x = Math.ceil_to(x, 16) - 0.001 }
-            if (_hspeed.sign == -1) { x = Math.floor_to(x, 16) }
+            while (!level.tileset.collision(hitbox, x + _hspeed.sign, y)) {
+                x = x + _hspeed.sign
+            }
             _hspeed = 0
         }
         if (level.tileset.collision(hitbox, x, y + _vspeed)) {
-            if (_vspeed.sign == 1) { y = Math.ceil_to(y, 16) - 0.001 }
-            if (_vspeed.sign == -1) { y = Math.floor_to(y, 16) }
+            while (!level.tileset.collision(hitbox, x, y + _vspeed.sign)) {
+                y = y + _vspeed.sign
+            }
             _vspeed = 0
         }
 
         // Handle animations
-        if (_hspeed != 0) {
+        if (_hspeed != 0 && _vspeed == 0) {
             sprite = Assets.player_run
-        } else {
+        } else if (_vspeed == 0) {
             sprite = Assets.player_idle
         }
 
-        if (_gravity < 0) {
-            sprite = Assets.player_jump
-        } else if (_gravity > 0 && !level.tileset.collision(hitbox, x, y + 1)) {
+        if (_vspeed > 0) {
             sprite = Assets.player_fall
         }
 
@@ -113,11 +114,26 @@ class Game is Level {
         _game_cam.h_on_screen = 640
         _game_cam.update()
 
-        // Load the tileset and draw it to a surface
-        _tileset = load("assets/level0.tmj")[0]
-        _tileset_surface = Surface.new(_tileset.width, _tileset.height)
-        Renderer.set_target(_tileset_surface)
+        // Load the level and tilesets
+        _tilesets = load("assets/level0.tmj")
+        _tileset = _tilesets[0]
+
+        // Pre-load the image of the foreground tileset
+        _foreground_surface = Surface.new(_tileset.width, _tileset.height)
+        Renderer.set_target(_foreground_surface)
         _tileset.draw()
+        Renderer.set_target(Renderer.RENDER_TARGET_DEFAULT)
+
+        // Pre-load the image of the backdrop tileset
+        _backdrop_surface = Surface.new(_tilesets[1].width, _tilesets[1].height)
+        Renderer.set_target(_backdrop_surface)
+        _tilesets[1].draw()
+        Renderer.set_target(Renderer.RENDER_TARGET_DEFAULT)
+
+        // Pre-load the image of the background tileset
+        _background_surface = Surface.new(_tilesets[2].width, _tilesets[2].height)
+        Renderer.set_target(_background_surface)
+        _tilesets[2].draw()
         Renderer.set_target(Renderer.RENDER_TARGET_DEFAULT)
 
         // Find the player entity
@@ -133,10 +149,13 @@ class Game is Level {
         // Render game world
         Renderer.lock_cameras(_game_cam)
         Tileset.draw_tiling_background(Assets.bg_blue, 0.7, _game_cam)
-        Renderer.draw_texture(_tileset_surface, 0, 0)
-        Renderer.draw_sprite(Assets.cherries, 256, 208)
-        Renderer.draw_sprite(Assets.kiwi, 180, 152)
-        Renderer.draw_sprite(Assets.bananas, 64, 208)
+        Renderer.set_colour_mod([0.4, 0.4, 0.4, 1])
+        Renderer.draw_texture(_background_surface, _game_cam.x * 0.18, _game_cam.y * 0.18)
+        Renderer.set_colour_mod([0.5, 0.5, 0.5, 1])
+        Renderer.draw_texture(_backdrop_surface, 0, 0)
+        Renderer.set_colour_mod(Renderer.COLOUR_DEFAULT)
+        Renderer.draw_texture(_foreground_surface, 0, 0)
+
         super.update() // update all entities
 
         // Render UI

@@ -79,11 +79,17 @@ class Hitbox {
     r { _r }
     w { _w }
     h { _h }
+    x_offset=(offset) { _x_offset = offset }
+    y_offset=(offset) { _y_offset = offset }
+    x_offset { _x_offset }
+    y_offset { _y_offset }
 
     // Creates a new circle hitbox
     construct new_circle(r) {
         _type = Hitbox.TYPE_CIRCLE
         _r = r
+        _x_offset = 0
+        _y_offset = 0
     }
 
     // Creates a new rectangle hitbox
@@ -91,10 +97,16 @@ class Hitbox {
         _type = Hitbox.TYPE_RECTANGLE
         _w = w
         _h = h
+        _x_offset = 0
+        _y_offset = 0
     }
 
     // Returns true if there is a collision between this and another hitbox
     collision(x1, y1, x2, y2, hitbox2) {
+        x1 = x1 - x_offset
+        y1 = y1 - y_offset
+        x2 = x2 - hitbox2.x_offset
+        y2 = y2 - hitbox2.y_offset
         if (hitbox2.type == Hitbox.TYPE_RECTANGLE && _type == Hitbox.TYPE_RECTANGLE) {
             return (y1 + _h > y2 && y1 < y2 + hitbox2.h && x1 + _w > x2 && x1 < x2 + hitbox2.w)
         } else if (hitbox2.type == Hitbox.TYPE_CIRCLE && _type == Hitbox.TYPE_RECTANGLE) {
@@ -108,6 +120,8 @@ class Hitbox {
 
     // Returns this hitbox's bounding box as a list of [x1, y1, x2, y2]
     bounding_box(x, y) {
+        x = x - x_offset
+        y = y - y_offset
         if (_type == Hitbox.TYPE_CIRCLE) {
             return [x - _r, y - _r, x + _r, y + _r]
         } else if (_type == Hitbox.TYPE_RECTANGLE) {
