@@ -201,25 +201,10 @@ void vksk_Start() {
 	vksk_Log("Beginning game loop...");
 	gLastTime = juTime();
 	while (!gQuit) {
-		juUpdate();
-		SDL_Event e;
-		while (SDL_PollEvent(&e))
-			if (e.type == SDL_QUIT)
-				gQuit = true;
-
-		// Deal with mouse buttons
-		Uint32 buttons = SDL_GetMouseState(NULL, NULL);
-		gMouseButtonsPrevious[0] = gMouseButtons[0];
-		gMouseButtonsPrevious[1] = gMouseButtons[1];
-		gMouseButtonsPrevious[2] = gMouseButtons[2];
-		gMouseButtons[0] = buttons & SDL_BUTTON(SDL_BUTTON_LEFT);
-		gMouseButtons[1] = buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE);
-		gMouseButtons[2] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
-
 		// Calculate timestep
 		if (gTimeStep != 0) {
 			gProcessFrame = false;
-			if ((gFPSCap <= gTimeStep || (juTime() - gPreviousTimeStep) / (1.0 / gTimeStep) > gTimeStepPercentProc) && gTotalTimeSteps < gTimeStep) {
+			if (((gFPSCap <= gTimeStep && gFPSCap != 0) || (juTime() - gPreviousTimeStep) / (1.0 / gTimeStep) > gTimeStepPercentProc) && gTotalTimeSteps < gTimeStep) {
 				gProcessFrame = true;
 				gPreviousTimeStep = juTime();
 				gTotalTimeSteps += 1;
@@ -227,6 +212,23 @@ void vksk_Start() {
 			}
 		} else {
 			gProcessFrame = true;
+		}
+
+		if (gProcessFrame) {
+			juUpdate();
+			SDL_Event e;
+			while (SDL_PollEvent(&e))
+				if (e.type == SDL_QUIT)
+					gQuit = true;
+
+			// Deal with mouse buttons
+			Uint32 buttons = SDL_GetMouseState(NULL, NULL);
+			gMouseButtonsPrevious[0] = gMouseButtons[0];
+			gMouseButtonsPrevious[1] = gMouseButtons[1];
+			gMouseButtonsPrevious[2] = gMouseButtons[2];
+			gMouseButtons[0] = buttons & SDL_BUTTON(SDL_BUTTON_LEFT);
+			gMouseButtons[1] = buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE);
+			gMouseButtons[2] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
 		}
 
 		// Start the frame and run update

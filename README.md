@@ -72,3 +72,4 @@ TODO
  + Built-in mod support
  + Way to package games
  + Input queue
+ + Release builds sprites being messed up

@@ -142,9 +142,11 @@ class Game is Level {
 
     update() {
         // Center the camera on the player
-        _game_cam.x = (_game_cam.x + (((_player.x + 16 - (_game_cam.width / 2)) - _game_cam.x) * 5 * Engine.delta))
-        _game_cam.y = (_game_cam.y + (((_player.y + 16 - (_game_cam.height / 2)) - _game_cam.y) * 5 * Engine.delta))
-        _game_cam.update()
+        if (Engine.process_frame) {
+            _game_cam.x = (_game_cam.x + (((_player.x + 16 - (_game_cam.width / 2)) - _game_cam.x) * 5 * Engine.delta))
+            _game_cam.y = (_game_cam.y + (((_player.y + 16 - (_game_cam.height / 2)) - _game_cam.y) * 5 * Engine.delta))
+            _game_cam.update()
+        }
 
         // Render game world
         Renderer.lock_cameras(_game_cam)
@@ -157,10 +159,6 @@ class Game is Level {
         Renderer.draw_texture(_foreground_surface, 0, 0)
 
         super.update() // update all entities
-
-        // Render UI
-        Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
-        Renderer.unlock_cameras()
     }
 
     destroy() {
