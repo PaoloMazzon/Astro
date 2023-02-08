@@ -145,6 +145,14 @@ void vksk_RuntimeTiledCellHeight(WrenVM *vm) {
 	wrenSetSlotDouble(vm, 0, (double)f->tiled.map->tileheight);
 }
 
+void vksk_RuntimeTiledLayerName(WrenVM *vm) {
+	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
+	if (f->tiled.layer != NULL)
+		wrenSetSlotString(vm, 0, f->tiled.layer->name.ptr);
+	else
+		wrenSetSlotString(vm, 0, "");
+}
+
 void vksk_RuntimeTiledNextLayer(WrenVM *vm) {
 	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
 	if (f->tiled.layer == NULL) {

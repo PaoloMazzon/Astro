@@ -73,7 +73,8 @@ void vksk_RuntimeVK2DCameraAllocate(WrenVM *vm) {
 }
 
 void vksk_RuntimeVK2DCameraFinalize(void *data) {
-
+	VKSK_RuntimeForeign *cam = data;
+	vk2dCameraSetState(cam->camera.index, cs_Deleted);
 }
 
 void vksk_RuntimeVK2DCameraGetType(WrenVM *vm) {

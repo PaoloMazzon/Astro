@@ -45,7 +45,9 @@ Parameters
  + `filename -> String` Filename of the Tiled map.
 
 Loads a [Tiled](https://www.mapeditor.org/) map as a level. See [Tiled Integration](../TiledIntegration.md)
-for more information. Returns a list of `lib/Util::Tileset`s representing each tile layer.
+for more information. Returns a map of `lib/Util::Tileset`s representing each tile layer by their name, for
+instance if you had two tileset layers in Tiled, 'Foreground' and 'Background', you can access their
+`lib/Util::Tileset` equivalent via `tilesets["Background"]` and `tilesets["Foreground"]` respectively.
 
 ### create
 `create()`

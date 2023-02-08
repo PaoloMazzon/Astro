@@ -101,8 +101,6 @@ class Game is Level {
     
     create() {
         super.create()
-        Engine.fps_limit = 60
-        System.print(Engine.info)
         System.print("game create")
         
         // Create the game camera
@@ -116,7 +114,7 @@ class Game is Level {
 
         // Load the level and tilesets
         _tilesets = load("assets/level0.tmj")
-        _tileset = _tilesets[0]
+        _tileset = _tilesets["collisions"]
 
         // Pre-load the image of the foreground tileset
         _foreground_surface = Surface.new(_tileset.width, _tileset.height)
@@ -125,15 +123,15 @@ class Game is Level {
         Renderer.set_target(Renderer.RENDER_TARGET_DEFAULT)
 
         // Pre-load the image of the backdrop tileset
-        _backdrop_surface = Surface.new(_tilesets[1].width, _tilesets[1].height)
+        _backdrop_surface = Surface.new(_tilesets["background"].width, _tilesets["background"].height)
         Renderer.set_target(_backdrop_surface)
-        _tilesets[1].draw()
+        _tilesets["background"].draw()
         Renderer.set_target(Renderer.RENDER_TARGET_DEFAULT)
 
         // Pre-load the image of the background tileset
-        _background_surface = Surface.new(_tilesets[2].width, _tilesets[2].height)
+        _background_surface = Surface.new(_tilesets["distance"].width, _tilesets["distance"].height)
         Renderer.set_target(_background_surface)
-        _tilesets[2].draw()
+        _tilesets["distance"].draw()
         Renderer.set_target(Renderer.RENDER_TARGET_DEFAULT)
 
         // Find the player entity

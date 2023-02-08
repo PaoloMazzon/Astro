@@ -140,7 +140,7 @@ class Level {
 
     // Loads a Tiled map for this level
     load(filename) {
-        var tilesets = []
+        var tilesets = {}
         var map = TiledMap.open(filename)
         var layer = map.next_layer()
         var gids = map.get_tilesets()
@@ -161,7 +161,7 @@ class Level {
                 for (slot in gids) {
                     ts.add_tileset(Assets[slot["filename"].split(".")[0]], slot["gid"])
                 }
-                tilesets.add(ts)
+                tilesets[map.layer_name] = ts
             }
 
             layer = map.next_layer()

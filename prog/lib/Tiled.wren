@@ -23,6 +23,9 @@ foreign class TiledMap {
     // Cell height of each tile
     foreign cell_height
 
+    // Name of the current layer
+    foreign layer_name
+
     // Moves the layer pointer up, returning what kind of layer this is
     foreign next_layer()
 

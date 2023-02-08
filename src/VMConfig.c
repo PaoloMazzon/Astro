@@ -267,6 +267,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("TiledMap", false, "height", vksk_RuntimeTiledHeight)
 		BIND_METHOD("TiledMap", false, "cell_width", vksk_RuntimeTiledCellWidth)
 		BIND_METHOD("TiledMap", false, "cell_height", vksk_RuntimeTiledCellHeight)
+		BIND_METHOD("TiledMap", false, "layer_name", vksk_RuntimeTiledLayerName)
 		BIND_METHOD("TiledMap", false, "next_layer()", vksk_RuntimeTiledNextLayer)
 		BIND_METHOD("TiledMap", false, "get_objects()", vksk_RuntimeTiledGetObjects)
 		BIND_METHOD("TiledMap", false, "get_tiles()", vksk_RuntimeTiledGetTiles)

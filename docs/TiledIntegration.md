@@ -5,7 +5,7 @@ entities and tilesets in it automatically.
 
 ## Overview
 In short you load Tiled maps by calling [load](./classes/Level.md#load) in your level's `create`
-method with the desired map filename. [load](./classes/Level.md#load) returns a list of every
+method with the desired map filename. [load](./classes/Level.md#load) returns a map of every
 tile layer in the map as a `lib/Util::Tileset`, with which you may do as you like. The load method
 automatically creates all objects in the map, as well as automatically sets their x/y position and
 provides them with a map containing all the extra data they had in Tiled.

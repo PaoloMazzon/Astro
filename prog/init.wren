@@ -1,4 +1,5 @@
 import "lib/Renderer" for Renderer
+import "lib/Engine" for Engine
 import "Game" for Game
 
 var renderer_config = {
@@ -12,5 +13,8 @@ var renderer_config = {
 }
 
 var window_icon = "assets/logo.png"
+
+Engine.fps_limit = 60
+System.print(Engine.info)
 
 var start_level = Game.new()
