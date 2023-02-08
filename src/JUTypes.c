@@ -66,7 +66,7 @@ void vksk_RuntimeJUSpriteFree(WrenVM *vm) {
 
 void vksk_RuntimeJUSpriteCopy(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	wrenGetVariable(vm, "lib/Sprite", "Sprite", 0);
+	wrenGetVariable(vm, "lib/Drawing", "Sprite", 0);
 	VKSK_RuntimeForeign *newspr = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
 	newspr->sprite = juSpriteCopy(spr->sprite);
 	newspr->type = FOREIGN_SPRITE;
@@ -81,7 +81,7 @@ void vksk_RuntimeJUSpriteFrom(WrenVM *vm) {
 	double h = wrenGetSlotDouble(vm, 5);
 	double delay = wrenGetSlotDouble(vm, 6);
 	int frames = (int)wrenGetSlotDouble(vm, 7);
-	wrenGetVariable(vm, "lib/Sprite", "Sprite", 0);
+	wrenGetVariable(vm, "lib/Drawing", "Sprite", 0);
 	VKSK_RuntimeForeign *newspr = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
 	newspr->sprite = juSpriteFrom(
 			tex->type == FOREIGN_SURFACE ? tex->surface : tex->texture,

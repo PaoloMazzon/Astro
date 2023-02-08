@@ -51,7 +51,7 @@ static void freeString(String s) {
 	free(s);
 }
 
-static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFunction, String getterFunctions) {
+static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFunction, String spriteLoader, String getterFunctions) {
 	char tmpCode[1024]; // Code will be generated in here
 	char tmpName[1024]; // Name will be manipulated here
 	memcpy(tmpName, file, strlen(file) + 1);
@@ -65,6 +65,14 @@ static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFun
 		bool exists = vksk_ConfigHeaderExists(conf, file);
 
 		if (exists && strcmp(vksk_ConfigGetString(conf, file, "type", ""), "sprite") == 0) {
+			// Generate loader function bit first
+			snprintf(tmpCode, 1024, "        __tex%s = Texture.new(\"assets/%s\")\n        __asset_map[\"tex_%s\"] = __tex%s\n", tmpName, file, tmpName, tmpName);
+			appendString(loaderFunction, tmpCode);
+
+			// Getter
+			snprintf(tmpCode, 1024, "    static tex_%s { __tex%s }\n", tmpName, tmpName);
+			appendString(getterFunctions, tmpCode);
+
 			double x, y, w, h, delay, frames;
 			x = vksk_ConfigGetDouble(conf, file, "x", 0);
 			y = vksk_ConfigGetDouble(conf, file, "y", 0);
@@ -73,11 +81,11 @@ static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFun
 			delay = vksk_ConfigGetDouble(conf, file, "delay", 0);
 			frames = vksk_ConfigGetDouble(conf, file, "frames", 1);
 			// Generate loader function bit first
-			snprintf(tmpCode, 1024, "        __%s = Sprite.new(\"assets/%s\", %f, %f, %f, %f, %f, %i)\n        __asset_map[\"%s\"] = __%s\n", tmpName, file, x, y, w, h, delay, (int)frames, tmpName, tmpName);
-			appendString(loaderFunction, tmpCode);
+			snprintf(tmpCode, 1024, "        __spr%s = Sprite.from(__tex%s, %f, %f, %f, %f, %f, %i)\n        __asset_map[\"spr_%s\"] = __spr%s\n", tmpName, tmpName, x, y, w, h, delay, (int)frames, tmpName, tmpName);
+			appendString(spriteLoader, tmpCode);
 
 			// Getter
-			snprintf(tmpCode, 1024, "    static %s { __%s }\n", tmpName, tmpName);
+			snprintf(tmpCode, 1024, "    static spr_%s { __spr%s }\n", tmpName, tmpName);
 			appendString(getterFunctions, tmpCode);
 		} else if (exists && strcmp(vksk_ConfigGetString(conf, file, "type", ""), "font") == 0) {
 			double ustart, uend, w, h;
@@ -86,28 +94,28 @@ static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFun
 			w = vksk_ConfigGetDouble(conf, file, "w", 0);
 			h = vksk_ConfigGetDouble(conf, file, "h", 0);
 			// Generate loader function bit first
-			snprintf(tmpCode, 1024, "        __%s = BitmapFont.new(\"assets/%s\", %i, %i, %f, %f)\n        __asset_map[\"%s\"] = __%s\n", tmpName, file, (int)ustart, (int)uend, w, h, tmpName, tmpName);
+			snprintf(tmpCode, 1024, "        __fnt%s = BitmapFont.new(\"assets/%s\", %i, %i, %f, %f)\n        __asset_map[\"fnt_%s\"] = __fnt%s\n", tmpName, file, (int)ustart, (int)uend, w, h, tmpName, tmpName);
 			appendString(loaderFunction, tmpCode);
 
 			// Getter
-			snprintf(tmpCode, 1024, "    static %s { __%s }\n", tmpName, tmpName);
+			snprintf(tmpCode, 1024, "    static fnt_%s { __fnt%s }\n", tmpName, tmpName);
 			appendString(getterFunctions, tmpCode);
 		} else {
 			// Generate loader function bit first
-			snprintf(tmpCode, 1024, "        __%s = Texture.new(\"assets/%s\")\n        __asset_map[\"%s\"] = __%s\n", tmpName, file, tmpName, tmpName);
+			snprintf(tmpCode, 1024, "        __tex%s = Texture.new(\"assets/%s\")\n        __asset_map[\"tex_%s\"] = __tex%s\n", tmpName, file, tmpName, tmpName);
 			appendString(loaderFunction, tmpCode);
 
 			// Getter
-			snprintf(tmpCode, 1024, "    static %s { __%s }\n", tmpName, tmpName);
+			snprintf(tmpCode, 1024, "    static tex_%s { __tex%s }\n", tmpName, tmpName);
 			appendString(getterFunctions, tmpCode);
 		}
 	} else if (strcmp(ext, "wav") == 0) {
 		// Generate loader function bit first
-		snprintf(tmpCode, 1024, "        __%s = AudioData.open(\"assets/%s\")\n        __asset_map[\"%s\"] = __%s\n", tmpName, file, tmpName, tmpName);
+		snprintf(tmpCode, 1024, "        __aud%s = AudioData.open(\"assets/%s\")\n        __asset_map[\"aud_%s\"] = __aud%s\n", tmpName, file, tmpName, tmpName);
 		appendString(loaderFunction, tmpCode);
 
 		// Getter
-		snprintf(tmpCode, 1024, "    static %s { __%s }\n", tmpName, tmpName);
+		snprintf(tmpCode, 1024, "    static aud_%s { __aud%s }\n", tmpName, tmpName);
 		appendString(getterFunctions, tmpCode);
 	}
 }
@@ -116,6 +124,7 @@ const char *vksk_CompileAssetFile() {
 	struct dirent *dp;
 	String loadFunction = appendString(newString(), LOAD_HEADER);
 	String getterFunctions = newString();
+	String spriteLoadFunction = newString();
 	DIR *dfd;
 	VKSK_Config conf = vksk_ConfigLoad("assets/assets.ini");
 
@@ -138,17 +147,19 @@ const char *vksk_CompileAssetFile() {
 		}
 
 		if ( ( stbuf.st_mode & S_IFMT ) != S_IFDIR ) {
-			addFileToAssets(conf, dp->d_name, loadFunction, getterFunctions);
+			addFileToAssets(conf, dp->d_name, loadFunction, spriteLoadFunction, getterFunctions);
 		}
 		dp = readdir(dfd);
 	}
 
 	// Build output string
+	appendString(loadFunction, spriteLoadFunction->str);
 	appendString(loadFunction, LOAD_FOOTER);
 	String compiledAssets = appendString(newString(), OUTPUT_HEADER);
 	appendString(compiledAssets, loadFunction->str);
 	appendString(compiledAssets, getterFunctions->str);
 	freeString(loadFunction);
+	freeString(spriteLoadFunction);
 	freeString(getterFunctions);
 	appendString(compiledAssets, OUTPUT_FOOTER);
 

@@ -49,6 +49,9 @@ foreign class Sprite {
     // of frames to pull from the spritesheet 
     construct new(filename, x, y, w, h, delay, frames) {}
 
+    // Same as new but uses an already loaded texture
+    foreign static from(texture, x, y, w, h, delay, frames)
+
     // Forces the sprite to be freed if you don't want to wait for the garbage collector
     foreign free()
 

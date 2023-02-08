@@ -3,7 +3,8 @@ Astro automatically creates a Wren module when it starts called `Assets` with on
 `Assets`. In this class you will find all of the resources your game needs from the folder
 `assets/` already loaded. The asset compiler will search through said folder and any
 files with extensions it recognizes will be loaded at startup. The `Assets` class will
-name the getter function the same thing as the files it pulled from without the extension.
+name the getter function the same thing as the files it pulled from without the extension and
+with a prefix based on the asset type.
 
 For example, if your `assets/` folder looks like
 
@@ -15,13 +16,20 @@ You would be able to access the files with
 
     import "Assets" for Assets
     ...
-    Renderer.draw_texture(Assets.player, 0, 0)
-    Renderer.draw_texture(Assets.grass, 100, 100)
-    Audio.play(Assets.music, true, 1, 1)
+    Renderer.draw_texture(Assets.tex_player, 0, 0)
+    Renderer.draw_texture(Assets.tex_grass, 100, 100)
+    Audio.play(Assets.aud_music, true, 1, 1)
 
 Based on the extension, the asset compiler will automatically load it as the proper class.
 The `Assets` class also provides a way to access assets via a string name of the asset by the
-`Assets[]` operator. Simply, `Assets.font` is equal to `Assets["font"]`.
+`Assets[]` operator. Simply, `Assets.fnt_font` is equal to `Assets["fnt_font"]`.
+
+Prefixes
+
+ + Sprites - `spr_*` and additionally a texture of the same name (`tex_*`)
+ + Textures - `tex_*`
+ + Audio - `aud_*`
+ + Bitmap fonts - `fnt_*`
 
 ## Loading Sprites and Bitmap Fonts
 Because bitmap fonts and sprites both just come from images, you have to tell the asset compiler

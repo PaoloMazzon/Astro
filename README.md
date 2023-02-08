@@ -66,10 +66,8 @@ Features
 TODO
 ====
 
- + Debug mode
- + Asset load directories
  + TrueType fonts
+ + OGG loading
  + Built-in mod support
  + Way to package games
- + Input queue
  + Release builds sprites being messed up

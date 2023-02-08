@@ -159,7 +159,7 @@ class Level {
                 // Create a new tileset
                 var ts = Tileset.new(map.get_tiles(), null, map.cell_width, map.cell_height)
                 for (slot in gids) {
-                    ts.add_tileset(Assets[slot["filename"].split(".")[0]], slot["gid"])
+                    ts.add_tileset(Assets["tex_" + slot["filename"].split(".")[0]], slot["gid"])
                 }
                 tilesets[map.layer_name] = ts
             }

@@ -12,7 +12,7 @@ class Player is Entity {
     construct new() { super() }
 
     create(level, tiled_data) {
-        sprite = Assets.player_idle
+        sprite = Assets.spr_player_idle
         hitbox = Hitbox.new_rectangle(sprite.width - 4, sprite.height - 1)
         hitbox.x_offset = -2
         hitbox.y_offset = -1
@@ -44,9 +44,9 @@ class Player is Entity {
         }
         if (Keyboard.key_pressed(Keyboard.KEY_SPACE) && _jumps > 0) {
             if (_jumps == 1) {
-                sprite = Assets.player_double_jump
+                sprite = Assets.spr_player_double_jump
             } else {
-                sprite = Assets.player_jump
+                sprite = Assets.spr_player_jump
             }
             _jumps = _jumps - 1
             _vspeed = -5
@@ -69,13 +69,13 @@ class Player is Entity {
 
         // Handle animations
         if (_hspeed != 0 && _vspeed == 0) {
-            sprite = Assets.player_run
+            sprite = Assets.spr_player_run
         } else if (_vspeed == 0) {
-            sprite = Assets.player_idle
+            sprite = Assets.spr_player_idle
         }
 
         if (_vspeed > 0) {
-            sprite = Assets.player_fall
+            sprite = Assets.spr_player_fall
         }
 
         // Actually move the player
@@ -148,7 +148,7 @@ class Game is Level {
 
         // Render game world
         Renderer.lock_cameras(_game_cam)
-        Tileset.draw_tiling_background(Assets.bg_blue, 0.7, _game_cam)
+        Tileset.draw_tiling_background(Assets.tex_bg_blue, 0.7, _game_cam)
         Renderer.set_colour_mod([0.4, 0.4, 0.4, 1])
         Renderer.draw_texture(_background_surface, _game_cam.x * 0.18, _game_cam.y * 0.18)
         Renderer.set_colour_mod([0.5, 0.5, 0.5, 1])
