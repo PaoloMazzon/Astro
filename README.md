@@ -67,7 +67,6 @@ TODO
 ====
 
  + TrueType fonts
- + OGG loading
  + Built-in mod support
  + Way to package games
- + Release builds sprites being messed up
+ + Spatial hash maps

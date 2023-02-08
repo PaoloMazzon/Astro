@@ -11,7 +11,7 @@ information on playing audio.
 Parameters
  + `filename -> String` Filename of the audio to load.
  
-Loads a piece of audio, currently only loading `.wav` files is supported.
+Loads a piece of audio, only `.wav` and `.ogg` files are supported.
 
 ### free
 `foreign free()`

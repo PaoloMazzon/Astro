@@ -1,8 +1,11 @@
 /// \file JUTypes.c
 /// \author Paolo Mazzon
 #include <JamUtil/JamUtil.h>
-#include <JamUtil/cute_sound.h>
 #include <src/stb_vorbis.h>
+#define CUTE_SOUND_IMPLEMENTATION
+#define CUTE_SOUND_FORCE_SDL
+#define STB_VORBIS_INCLUDE_STB_VORBIS_H
+#include <JamUtil/cute_sound.h>
 
 #include "src/Validation.h"
 #include "src/JUTypes.h"
@@ -198,8 +201,19 @@ void vksk_RuntimeJUSpriteGetHeight(WrenVM *vm) {
 void vksk_RuntimeJUAudioDataAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
 	VKSK_RuntimeForeign *snd = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
-	snd->audioData = juSoundLoad(wrenGetSlotString(vm, 1));
-	// TODO: Load OGG files with stb_vorbis
+	const char *fname = wrenGetSlotString(vm, 1);
+	const char *ext = strrchr(fname, '.');
+	if (strcmp(ext, ".wav") == 0) {
+		snd->audioData = juSoundLoad(fname);
+	} else if (strcmp(ext, ".ogg") == 0) {
+		snd->audioData = malloc(sizeof(struct JUSound));
+		snd->audioData->sound = cs_load_ogg(fname);
+		memset(&snd->audioData->soundInfo, 0, sizeof(snd->audioData->soundInfo));
+	} else {
+		snd->audioData = NULL;
+		vksk_Log("Unrecognized sound file type for file \"%s\"", fname);
+	}
+
 	snd->type = FOREIGN_AUDIO_DATA;
 }
 

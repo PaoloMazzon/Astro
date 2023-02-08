@@ -109,7 +109,7 @@ static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFun
 			snprintf(tmpCode, 1024, "    static tex_%s { __tex%s }\n", tmpName, tmpName);
 			appendString(getterFunctions, tmpCode);
 		}
-	} else if (strcmp(ext, "wav") == 0) {
+	} else if (strcmp(ext, "wav") == 0 || strcmp(ext, "ogg") == 0) {
 		// Generate loader function bit first
 		snprintf(tmpCode, 1024, "        __aud%s = AudioData.open(\"assets/%s\")\n        __asset_map[\"aud_%s\"] = __aud%s\n", tmpName, file, tmpName, tmpName);
 		appendString(loaderFunction, tmpCode);
