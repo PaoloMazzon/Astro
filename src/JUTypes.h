@@ -11,6 +11,7 @@ void vksk_RuntimeJUBitmapFontFree(WrenVM *vm);
 void vksk_RuntimeJUSpriteAllocate(WrenVM *vm);
 void vksk_RuntimeJUSpriteFinalize(void *data);
 void vksk_RuntimeJUSpriteCopy(WrenVM *vm);
+void vksk_RuntimeJUSpriteFrom(WrenVM *vm);
 void vksk_RuntimeJUSpriteFree(WrenVM *vm);
 void vksk_RuntimeJUSpriteGetDelay(WrenVM *vm);
 void vksk_RuntimeJUSpriteSetDelay(WrenVM *vm);

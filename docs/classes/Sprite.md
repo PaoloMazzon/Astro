@@ -5,6 +5,7 @@ time you render it but a sprite saves this information. The majority of things i
 world will be drawn with sprites.
 
  + [new](#new)
+ + [from](#from)
  + [free](#free)
  + [copy](#copy)
  + [delay](#delay-setter)
@@ -36,6 +37,21 @@ Parameters
 
 Creates a sprite from a given sprite sheet filename. The loader expects there to find at least
 as many frames specified or this method will fail.
+
+## from
+`static from(texture, x, y, w, h, delay, frames)`
+
+Parameters:
+ + `texture -> lib/Drawing::Texture` or `lib/Drawing::Surface` Texture to create the sprite from.
+ + `x -> Num` X position in the sprite sheet to begin pulling the animation from.
+ + `y -> Num` Y position in the sprite sheet to begin pulling the animation from.
+ + `w -> Num` Width of each frame in pixels.
+ + `h -> Num` Height of each frame in pixels.
+ + `delay -> Num` Delay between each rendered frame in seconds.
+ + `frames -> Num` Number of frames in the animation.
+
+Identical to [new](#new) except it uses an already loaded texture/surface instead of loading a new
+one from a file.
 
 ## free
 `free()`

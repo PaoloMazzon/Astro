@@ -213,6 +213,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Surface", false, "height", vksk_RuntimeVK2DSurfaceHeight)
 		BIND_METHOD("Surface", false, "free()", vksk_RuntimeVK2DSurfaceFree)
 		BIND_METHOD("BitmapFont", false, "free()", vksk_RuntimeJUBitmapFontFree)
+		BIND_METHOD("Sprite", true, "from(_,_,_,_,_,_,_)", vksk_RuntimeJUSpriteFrom)
 		BIND_METHOD("Sprite", false, "free()", vksk_RuntimeJUSpriteFree)
 		BIND_METHOD("Sprite", false, "copy()", vksk_RuntimeJUSpriteCopy)
 		BIND_METHOD("Sprite", false, "delay", vksk_RuntimeJUSpriteGetDelay)

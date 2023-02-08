@@ -10,6 +10,7 @@
 
 /********************* Bitmap Fonts *********************/
 void vksk_RuntimeJUBitmapFontAllocate(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *font = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
 	font->bitmapFont = juFontLoadFromImage(
 			wrenGetSlotString(vm, 1),
@@ -36,6 +37,7 @@ void vksk_RuntimeJUBitmapFontFree(WrenVM *vm) {
 
 /********************* Sprites *********************/
 void vksk_RuntimeJUSpriteAllocate(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *spr = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
 	spr->type = FOREIGN_SPRITE;
 	spr->sprite = juSpriteCreate(
@@ -67,6 +69,28 @@ void vksk_RuntimeJUSpriteCopy(WrenVM *vm) {
 	wrenGetVariable(vm, "lib/Sprite", "Sprite", 0);
 	VKSK_RuntimeForeign *newspr = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
 	newspr->sprite = juSpriteCopy(spr->sprite);
+	newspr->type = FOREIGN_SPRITE;
+}
+
+void vksk_RuntimeJUSpriteFrom(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE | FOREIGN_SURFACE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
+	double x = wrenGetSlotDouble(vm, 2);
+	double y = wrenGetSlotDouble(vm, 3);
+	double w = wrenGetSlotDouble(vm, 4);
+	double h = wrenGetSlotDouble(vm, 5);
+	double delay = wrenGetSlotDouble(vm, 6);
+	int frames = (int)wrenGetSlotDouble(vm, 7);
+	wrenGetVariable(vm, "lib/Sprite", "Sprite", 0);
+	VKSK_RuntimeForeign *newspr = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
+	newspr->sprite = juSpriteFrom(
+			tex->type == FOREIGN_SURFACE ? tex->surface : tex->texture,
+			x,
+			y,
+			w,
+			h,
+			delay,
+			frames);
 	newspr->type = FOREIGN_SPRITE;
 }
 
