@@ -59,6 +59,15 @@ foreign class Sprite {
     // texture and doesn't copy it
     foreign copy()
 
+    // Returns current frame in the animation
+    foreign frame
+    
+    // Sets the current frame
+    foreign frame=(frame)
+
+    // Returns the number of frames in the animations
+    foreign frame_count
+
     // Gets this sprite's delay
     foreign delay
 

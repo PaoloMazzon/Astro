@@ -8,6 +8,9 @@ world will be drawn with sprites.
  + [from](#from)
  + [free](#free)
  + [copy](#copy)
+ + [frame](#frame-getter)
+ + [frame=](#frame-setter)
+ + [frame_count](#frame_count)
  + [delay](#delay-setter)
  + [delay=](#delay-setter)
  + [origin_x](#origin_x-setter)
@@ -69,6 +72,24 @@ using copies.
 > new object that uses a sprite in your game world. If you do not, modifying the one sprite
 > that everything uses will result in that transformation being shown every time it is
 > drawn.
+
+## frame (Getter)
+`frame`
+
+Returns the current frame in the sprite's animations.
+
+## frame= (Setter)
+`frame=(frame)`
+
+Parameters
+ + `frame -> Num` Index of the frame to go to.
+ 
+Sets the current animation frame. If `frame` is out of bounds, the frame is set to 0,
+if `frame` is -1, it is set to the last frame in the animation.
+
+## frame_count
+
+Returns the number of frames in the animation.
 
 ## delay (getter)
 `delay`

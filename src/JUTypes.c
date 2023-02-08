@@ -94,6 +94,29 @@ void vksk_RuntimeJUSpriteFrom(WrenVM *vm) {
 	newspr->type = FOREIGN_SPRITE;
 }
 
+void vksk_RuntimeJUSpriteGetFrame(WrenVM *vm) {
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, spr->sprite->Internal.frame);
+}
+
+void vksk_RuntimeJUSpriteSetFrame(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	int frame = wrenGetSlotDouble(vm, 1);
+	if (frame == -1)
+		spr->sprite->Internal.frame = spr->sprite->Internal.frames - 1;
+	else if (frame < 0 || frame > spr->sprite->Internal.frames - 1)
+		spr->sprite->Internal.frame = 0;
+	else
+		spr->sprite->Internal.frame = frame;
+	spr->sprite->Internal.lastTime = SDL_GetPerformanceCounter();
+}
+
+void vksk_RuntimeJUSpriteGetFrameCount(WrenVM *vm) {
+	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, spr->sprite->Internal.frames);
+}
+
 void vksk_RuntimeJUSpriteGetDelay(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
 	wrenSetSlotDouble(vm, 0, spr->sprite->delay);
