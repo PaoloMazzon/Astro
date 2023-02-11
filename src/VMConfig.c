@@ -254,6 +254,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Gamepad", true, "stick_deadzone=(_)", vksk_RuntimeControllerStickDeadzoneSet)
 		BIND_METHOD("Gamepad", true, "trigger_deadzone", vksk_RuntimeControllerTriggerDeadzone)
 		BIND_METHOD("Gamepad", true, "trigger_deadzone=(_)", vksk_RuntimeControllerTriggerDeadzoneSet)
+		BIND_METHOD("Gamepad", true, "controllers_connected", vksk_RuntimeControllerConnectedCount)
 		BIND_METHOD("Gamepad", true, "button_pressed(_,_)", vksk_RuntimeControllerButtonPressed)
 		BIND_METHOD("Gamepad", true, "button_released(_,_)", vksk_RuntimeControllerButtonReleased)
 		BIND_METHOD("Gamepad", true, "button(_,_)", vksk_RuntimeControllerButton)

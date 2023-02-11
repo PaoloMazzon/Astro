@@ -14,29 +14,15 @@ static const double TILE_LAYER = 1;
 static const double OBJECT_LAYER = 2;
 
 typedef struct _VKSK_GamepadInputs {
-	bool a;
-	bool b;
-	bool x;
-	bool y;
-	bool back;
-	bool guide;
-	bool start;
-	bool leftStick;
-	bool rightStick;
-	bool leftShoulder;
-	bool rightShoulder;
-	bool dpadUp;
-	bool dpadDown;
-	bool dpadLeft;
-	bool dpadRight;
+	bool inputs[15];
 } _VKSK_GamepadInputs;
 
 // Globals
 static SDL_GameController *gControllers[4] = {};
 static _VKSK_GamepadInputs gInputPrevious[4] = {};
 static _VKSK_GamepadInputs gInput[4] = {};
-static double axisDeadzone = 0.1;
-static double triggerDeadzone = 0.1;
+static double gAxisDeadzone = 0.1;
+static double gTriggerDeadzone = 0.1;
 
 void vksk_RuntimeINIAllocate(WrenVM *vm) {
 	VKSK_RuntimeForeign *conf = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
@@ -675,37 +661,47 @@ void vksk_RuntimeBufferWriteBool(WrenVM *vm) { // 1 bytes
 	}
 }
 
-void _vksk_RuntimeControllerRefresh(int index) {
-	if (index < 4 && index >= 0 && gControllers[index] != NULL && SDL_GameControllerGetAttached(gControllers[index])) {
-		SDL_GameControllerClose(gControllers[index]);
-		gControllers[index] = NULL;
-		vksk_Log("%i disconnected", index);
-	} else if (index < 4 && index >= 0 && SDL_IsGameController(index)) {
-		gControllers[index] = SDL_GameControllerOpen(index);
-		vksk_Log("%i/%s connecteded", index, SDL_GameControllerName(gControllers[index]));
+void _vksk_RuntimeControllerRefresh() {
+	for (int i = 0; i < 4; i++) {
+		if (gControllers[i] != NULL) {
+			SDL_GameControllerClose(gControllers[i]);
+			gControllers[i] = NULL;
+		}
+	}
+
+	int gamepad = 0;
+	for (int i = 0; i < SDL_NumJoysticks() && gamepad < 4; i++) {
+		if (SDL_IsGameController(i)) {
+			SDL_GameController *controller = SDL_GameControllerOpen(i);
+			if (controller == NULL) {
+				vksk_Log("Failed to open controller with joy index %i, SDL error: %s", i, SDL_GetError());
+			} else {
+				gControllers[gamepad] = controller;
+				gamepad++;
+			}
+		}
 	}
 }
 
 void _vksk_RuntimeControllersUpdate() {
 	for (int i = 0; i < 4; i++) {
 		if (gControllers[i] != NULL) {
-			_VKSK_GamepadInputs input = {
-					SDL_GameControllerGetButton(gControllers[i], 0),
-					SDL_GameControllerGetButton(gControllers[i], 1),
-					SDL_GameControllerGetButton(gControllers[i], 2),
-					SDL_GameControllerGetButton(gControllers[i], 3),
-					SDL_GameControllerGetButton(gControllers[i], 4),
-					SDL_GameControllerGetButton(gControllers[i], 5),
-					SDL_GameControllerGetButton(gControllers[i], 6),
-					SDL_GameControllerGetButton(gControllers[i], 7),
-					SDL_GameControllerGetButton(gControllers[i], 8),
-					SDL_GameControllerGetButton(gControllers[i], 9),
-					SDL_GameControllerGetButton(gControllers[i], 10),
-					SDL_GameControllerGetButton(gControllers[i], 11),
-					SDL_GameControllerGetButton(gControllers[i], 12),
-					SDL_GameControllerGetButton(gControllers[i], 13),
-					SDL_GameControllerGetButton(gControllers[i], 14),
-			};
+			_VKSK_GamepadInputs input = {};
+			input.inputs[0] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_A);
+			input.inputs[1] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_B);
+			input.inputs[2] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_X);
+			input.inputs[3] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_Y);
+			input.inputs[4] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_BACK);
+			input.inputs[5] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_GUIDE);
+			input.inputs[6] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_START);
+			input.inputs[7] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_LEFTSTICK);
+			input.inputs[8] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_RIGHTSTICK);
+			input.inputs[9] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
+			input.inputs[10] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+			input.inputs[11] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_DPAD_UP);
+			input.inputs[12] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+			input.inputs[13] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_DPAD_LEFT);
+			input.inputs[14] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
 
 			gInputPrevious[i] = gInput[i];
 			gInput[i] = input;
@@ -716,81 +712,177 @@ void _vksk_RuntimeControllersUpdate() {
 	}
 }
 
-void vksk_RuntimeControllerStickDeadzone(WrenVM *vm) {
+void vksk_RuntimeControllerConnectedCount(WrenVM *vm) {
+	double count = 0;
+	for (int i = 0; i < 4; i++) {
+		if (gControllers[i] != NULL && SDL_GameControllerGetAttached(gControllers[i]))
+			count += 1;
+	}
+	wrenSetSlotDouble(vm, 0, count);
+}
 
+void vksk_RuntimeControllerStickDeadzone(WrenVM *vm) {
+	wrenSetSlotDouble(vm, 0, gAxisDeadzone);
 }
 
 void vksk_RuntimeControllerStickDeadzoneSet(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
-
+	gAxisDeadzone = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeControllerTriggerDeadzone(WrenVM *vm) {
-
+	wrenSetSlotDouble(vm, 0, gTriggerDeadzone);
 }
 
 void vksk_RuntimeControllerTriggerDeadzoneSet(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
-
+	gTriggerDeadzone = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeControllerButtonPressed(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
-
+	int index = (int)wrenGetSlotDouble(vm, 1);
+	int button = (int)wrenGetSlotDouble(vm, 2);
+	if (index >= 0 && index < 4 && button >= 0 && button < 15) {
+		wrenSetSlotBool(vm, 0, gInput[index].inputs[button] && !gInputPrevious[index].inputs[button]);
+	} else {
+		wrenSetSlotBool(vm, 0, false);
+	}
 }
 
 void vksk_RuntimeControllerButtonReleased(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
-
+	int index = (int)wrenGetSlotDouble(vm, 1);
+	int button = (int)wrenGetSlotDouble(vm, 2);
+	if (index >= 0 && index < 4 && button >= 0 && button < 15) {
+		wrenSetSlotBool(vm, 0, !gInput[index].inputs[button] && gInputPrevious[index].inputs[button]);
+	} else {
+		wrenSetSlotBool(vm, 0, false);
+	}
 }
 
 void vksk_RuntimeControllerButton(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
-
+	int index = (int)wrenGetSlotDouble(vm, 1);
+	int button = (int)wrenGetSlotDouble(vm, 2);
+	if (index >= 0 && index < 4 && button >= 0 && button < 15) {
+		wrenSetSlotBool(vm, 0, gInput[index].inputs[button]);
+	} else {
+		wrenSetSlotBool(vm, 0, false);
+	}
 }
 
 void vksk_RuntimeControllerLeftStickX(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
-
+	int index = (int)wrenGetSlotDouble(vm, 1);
+	if (index >= 0 && index < 4) {
+		double val = (double)SDL_GameControllerGetAxis(gControllers[index], SDL_CONTROLLER_AXIS_LEFTX) / (double)INT16_MAX;
+		if (val > gAxisDeadzone || val < gAxisDeadzone)
+			wrenSetSlotDouble(vm, 0, val);
+		else
+			wrenSetSlotDouble(vm, 0, 0);
+	} else {
+		wrenSetSlotDouble(vm, 0, 0);
+	}
 }
 
 void vksk_RuntimeControllerLeftStickY(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
-
+	int index = (int)wrenGetSlotDouble(vm, 1);
+	if (index >= 0 && index < 4) {
+		double val = (double)SDL_GameControllerGetAxis(gControllers[index], SDL_CONTROLLER_AXIS_LEFTY) / (double)INT16_MAX;
+		if (val > gAxisDeadzone || val < gAxisDeadzone)
+			wrenSetSlotDouble(vm, 0, val);
+		else
+			wrenSetSlotDouble(vm, 0, 0);
+	} else {
+		wrenSetSlotDouble(vm, 0, 0);
+	}
 }
 
 void vksk_RuntimeControllerRightStickX(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
-
+	int index = (int)wrenGetSlotDouble(vm, 1);
+	if (index >= 0 && index < 4) {
+		double val = (double)SDL_GameControllerGetAxis(gControllers[index], SDL_CONTROLLER_AXIS_RIGHTX) / (double)INT16_MAX;
+		if (val > gAxisDeadzone || val < gAxisDeadzone)
+			wrenSetSlotDouble(vm, 0, val);
+		else
+			wrenSetSlotDouble(vm, 0, 0);
+	} else {
+		wrenSetSlotDouble(vm, 0, 0);
+	}
 }
 
 void vksk_RuntimeControllerRightStickY(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
-
+	int index = (int)wrenGetSlotDouble(vm, 1);
+	if (index >= 0 && index < 4) {
+		double val = (double)SDL_GameControllerGetAxis(gControllers[index], SDL_CONTROLLER_AXIS_RIGHTY) / (double)INT16_MAX;
+		if (val > gAxisDeadzone || val < gAxisDeadzone)
+			wrenSetSlotDouble(vm, 0, val);
+		else
+			wrenSetSlotDouble(vm, 0, 0);
+	} else {
+		wrenSetSlotDouble(vm, 0, 0);
+	}
 }
 
 void vksk_RuntimeControllerLeftTrigger(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
-
+	int index = (int)wrenGetSlotDouble(vm, 1);
+	if (index >= 0 && index < 4) {
+		double val = (double)SDL_GameControllerGetAxis(gControllers[index], SDL_CONTROLLER_AXIS_TRIGGERLEFT) / (double)INT16_MAX;
+		if (val > gTriggerDeadzone || val < gTriggerDeadzone)
+			wrenSetSlotDouble(vm, 0, val);
+		else
+			wrenSetSlotDouble(vm, 0, 0);
+	} else {
+		wrenSetSlotDouble(vm, 0, 0);
+	}
 }
 
 void vksk_RuntimeControllerRightTrigger(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
-
+	int index = (int)wrenGetSlotDouble(vm, 1);
+	if (index >= 0 && index < 4) {
+		double val = (double)SDL_GameControllerGetAxis(gControllers[index], SDL_CONTROLLER_AXIS_TRIGGERRIGHT) / (double)INT16_MAX;
+		if (val > gTriggerDeadzone || val < gTriggerDeadzone)
+			wrenSetSlotDouble(vm, 0, val);
+		else
+			wrenSetSlotDouble(vm, 0, 0);
+	} else {
+		wrenSetSlotDouble(vm, 0, 0);
+	}
 }
 
 void vksk_RuntimeControllerRumble(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
-
+	int index = (int)wrenGetSlotDouble(vm, 1);
+	if (index >= 0 && index < 4) {
+		uint16_t rumble = (uint16_t)(wrenGetSlotDouble(vm, 2) * UINT16_MAX);
+		uint32_t duration = (uint32_t)wrenGetSlotDouble(vm, 3);
+		SDL_GameControllerRumble(gControllers[index], rumble, rumble, duration);
+	}
 }
 
 void vksk_RuntimeControllerIsConnected(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
-
+	int index = (int)wrenGetSlotDouble(vm, 1);
+	if (index >= 0 && index < 4) {
+		wrenSetSlotBool(vm, 0, gControllers[index] != NULL);
+	} else {
+		wrenSetSlotBool(vm, 0, false);
+	}
 }
 
 void vksk_RuntimeControllerName(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
-
+	int index = (int)wrenGetSlotDouble(vm, 1);
+	if (index >= 0 && index < 4) {
+		wrenSetSlotString(vm, 0, SDL_GameControllerName(gControllers[index]));
+	} else {
+		wrenSetSlotString(vm, 0, "N/A");
+	}
 }
 

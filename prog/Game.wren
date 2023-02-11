@@ -1,5 +1,5 @@
 import "lib/Engine" for Engine, Level, Entity
-import "lib/Input" for Keyboard
+import "lib/Input" for Keyboard, Gamepad
 import "lib/Renderer" for Renderer, Camera
 import "lib/Drawing" for BitmapFont, Sprite, Surface
 import "lib/Audio" for Audio
@@ -28,20 +28,21 @@ class Player is Entity {
         _hspeed = 0
 
         // Left/right
-        if (Keyboard.key(Keyboard.KEY_A)) {
+        if (Keyboard.key(Keyboard.KEY_A) || Gamepad.button(0, Gamepad.BUTTON_DPAD_LEFT)) {
             _hspeed = _hspeed - speed
             _scalex = -1
         }
-        if (Keyboard.key(Keyboard.KEY_D)) {
+        if (Keyboard.key(Keyboard.KEY_D) || Gamepad.button(0, Gamepad.BUTTON_DPAD_RIGHT)) {
             _hspeed = _hspeed + speed
             _scalex = 1
         }
 
         // Jumping
-        if (level.tileset.collision(hitbox, x, y + 1)) {
+        if (level.tileset.collision(hitbox, x, y + 1) && _jumps < 2) {
             _jumps = 2
+            Gamepad.rumble(0, 0.7, 150)
         }
-        if (Keyboard.key_pressed(Keyboard.KEY_SPACE) && _jumps > 0) {
+        if ((Keyboard.key_pressed(Keyboard.KEY_SPACE) || Gamepad.button_pressed(0, Gamepad.BUTTON_A)) && _jumps > 0) {
             if (_jumps == 1) {
                 sprite = Assets.spr_player_double_jump
             } else {

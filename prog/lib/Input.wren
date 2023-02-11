@@ -293,21 +293,21 @@ class Mouse {
 
 // Controller input
 class Gamepad {
-    BUTTON_A { 0 }
-    BUTTON_B { 1 }
-    BUTTON_X { 2 }
-    BUTTON_Y { 3 }
-    BUTTON_BACK { 4 }
-    BUTTON_GUIDE { 5 }
-    BUTTON_START { 6 }
-    BUTTON_LEFT_STICK { 7 }
-    BUTTON_RIGHT_STICK { 8 }
-    BUTTON_LEFT_SHOULDER { 9 }
-    BUTTON_RIGHT_SHOULDER { 10 }
-    BUTTON_DPAD_UP { 11 }
-    BUTTON_DPAD_DOWN { 12 }
-    BUTTON_DPAD_LEFT { 13 }
-    BUTTON_DPAD_RIGHT { 14 }
+    static BUTTON_A { 0 }
+    static BUTTON_B { 1 }
+    static BUTTON_X { 2 }
+    static BUTTON_Y { 3 }
+    static BUTTON_BACK { 4 }
+    static BUTTON_GUIDE { 5 }
+    static BUTTON_START { 6 }
+    static BUTTON_LEFT_STICK { 7 }
+    static BUTTON_RIGHT_STICK { 8 }
+    static BUTTON_LEFT_SHOULDER { 9 }
+    static BUTTON_RIGHT_SHOULDER { 10 }
+    static BUTTON_DPAD_UP { 11 }
+    static BUTTON_DPAD_DOWN { 12 }
+    static BUTTON_DPAD_LEFT { 13 }
+    static BUTTON_DPAD_RIGHT { 14 }
 
     // Returns the current stick deadzone from 0-1 for all controllers and sticks
     foreign static stick_deadzone
@@ -320,6 +320,9 @@ class Gamepad {
 
     // Sets the current trigger deadzone from 0 - 1 for all controllers and triggers
     foreign static trigger_deadzone=(dz)
+
+    // Returns the number of connected controllers
+    foreign static controllers_connected
 
     // Returns true if a button was just pressed
     foreign static button_pressed(index, button)

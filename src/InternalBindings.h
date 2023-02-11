@@ -68,6 +68,7 @@ void vksk_RuntimeControllerStickDeadzone(WrenVM *vm);
 void vksk_RuntimeControllerStickDeadzoneSet(WrenVM *vm);
 void vksk_RuntimeControllerTriggerDeadzone(WrenVM *vm);
 void vksk_RuntimeControllerTriggerDeadzoneSet(WrenVM *vm);
+void vksk_RuntimeControllerConnectedCount(WrenVM *vm);
 void vksk_RuntimeControllerButtonPressed(WrenVM *vm);
 void vksk_RuntimeControllerButtonReleased(WrenVM *vm);
 void vksk_RuntimeControllerButton(WrenVM *vm);

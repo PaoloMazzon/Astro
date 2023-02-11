@@ -58,7 +58,7 @@ Features
 
  + Intuitive API that utilizes [Wren](https://github.com/wren-lang/wren) as its language
  + Manual and automatic resource management
- + Fast and flexible cameras
+ + Fast and very flexible cameras
  + Simple level and entity management
  + Complete [API documentation](docs/API.md)
  + Load [Tiled](https://www.mapeditor.org/) maps automatically
@@ -70,5 +70,3 @@ TODO
  + Built-in mod support
  + Way to package games
  + Spatial hash maps
- + Implement `Gamepad`
- + Documentation for `Gamepad` and `Shader`

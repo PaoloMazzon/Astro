@@ -121,7 +121,7 @@ static void _vksk_FinalizeDebug() {
 
 // From RendererBindings.c
 void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitle, int *windowWidth, int *windowHeight, bool *fullscreen, VK2DRendererConfig *config);
-void _vksk_RuntimeControllerRefresh(int index); // From InternalBindings.c
+void _vksk_RuntimeControllerRefresh(); // From InternalBindings.c
 void _vksk_RuntimeControllersUpdate(); // From InternalBindings.c
 
 void vksk_Start() {
@@ -165,6 +165,7 @@ void vksk_Start() {
 
 	// Create VK2D and all that
 	vksk_Log("Starting Vulkan2D...");
+	SDL_Init(SDL_INIT_EVERYTHING);
 	gWindow = SDL_CreateWindow(
 			windowTitle,
 			SDL_WINDOWPOS_CENTERED,
@@ -179,10 +180,7 @@ void vksk_Start() {
 	// Internal stuff
 	_vksk_SetWindowIcon(vm);
 	_vksk_InitializeDebug();
-	_vksk_RuntimeControllerRefresh(0);
-	_vksk_RuntimeControllerRefresh(1);
-	_vksk_RuntimeControllerRefresh(2);
-	_vksk_RuntimeControllerRefresh(3);
+	_vksk_RuntimeControllerRefresh();
 
 	// Load assets
 	vksk_Log("Loading assets...");
@@ -227,7 +225,7 @@ void vksk_Start() {
 				if (e.type == SDL_QUIT) {
 					gQuit = true;
 				} else if (e.type == SDL_CONTROLLERDEVICEADDED || e.type == SDL_CONTROLLERDEVICEREMOVED) {
-					_vksk_RuntimeControllerRefresh(e.cdevice.which);
+					_vksk_RuntimeControllerRefresh();
 				}
 			}
 			_vksk_RuntimeControllersUpdate();
