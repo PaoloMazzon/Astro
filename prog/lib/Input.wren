@@ -297,17 +297,18 @@ class Gamepad {
     BUTTON_B { 1 }
     BUTTON_X { 2 }
     BUTTON_Y { 3 }
-    BUTTON_START { 4 }
-    BUTTON_SELECT { 5 }
-    BUTTON_DPAD_UP { 6 }
-    BUTTON_DPAD_DOWN { 7 }
-    BUTTON_DPAD_LEFT { 8 }
-    BUTTON_DPAD_RIGHT { 9 }
-    BUTTON_SHOULDER_LEFT { 10 }
-    BUTTON_SHOULDER_RIGHT { 11 }
-    BUTTON_LEFT_STICK { 12 }
-    BUTTON_RIGHT_STICK { 13 }
-    
+    BUTTON_BACK { 4 }
+    BUTTON_GUIDE { 5 }
+    BUTTON_START { 6 }
+    BUTTON_LEFT_STICK { 7 }
+    BUTTON_RIGHT_STICK { 8 }
+    BUTTON_LEFT_SHOULDER { 9 }
+    BUTTON_RIGHT_SHOULDER { 10 }
+    BUTTON_DPAD_UP { 11 }
+    BUTTON_DPAD_DOWN { 12 }
+    BUTTON_DPAD_LEFT { 13 }
+    BUTTON_DPAD_RIGHT { 14 }
+
     // Returns the current stick deadzone from 0-1 for all controllers and sticks
     foreign static stick_deadzone
 

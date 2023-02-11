@@ -13,6 +13,31 @@ static const double NO_MORE_LAYERS = 0;
 static const double TILE_LAYER = 1;
 static const double OBJECT_LAYER = 2;
 
+typedef struct _VKSK_GamepadInputs {
+	bool a;
+	bool b;
+	bool x;
+	bool y;
+	bool back;
+	bool guide;
+	bool start;
+	bool leftStick;
+	bool rightStick;
+	bool leftShoulder;
+	bool rightShoulder;
+	bool dpadUp;
+	bool dpadDown;
+	bool dpadLeft;
+	bool dpadRight;
+} _VKSK_GamepadInputs;
+
+// Globals
+static SDL_GameController *gControllers[4] = {};
+static _VKSK_GamepadInputs gInputPrevious[4] = {};
+static _VKSK_GamepadInputs gInput[4] = {};
+static double axisDeadzone = 0.1;
+static double triggerDeadzone = 0.1;
+
 void vksk_RuntimeINIAllocate(WrenVM *vm) {
 	VKSK_RuntimeForeign *conf = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
 	conf->ini = vksk_ConfigLoad(wrenGetSlotString(vm, 1));
@@ -650,13 +675,53 @@ void vksk_RuntimeBufferWriteBool(WrenVM *vm) { // 1 bytes
 	}
 }
 
+void _vksk_RuntimeControllerRefresh(int index) {
+	if (index < 4 && index >= 0 && gControllers[index] != NULL && SDL_GameControllerGetAttached(gControllers[index])) {
+		SDL_GameControllerClose(gControllers[index]);
+		gControllers[index] = NULL;
+		vksk_Log("%i disconnected", index);
+	} else if (index < 4 && index >= 0 && SDL_IsGameController(index)) {
+		gControllers[index] = SDL_GameControllerOpen(index);
+		vksk_Log("%i/%s connecteded", index, SDL_GameControllerName(gControllers[index]));
+	}
+}
 
+void _vksk_RuntimeControllersUpdate() {
+	for (int i = 0; i < 4; i++) {
+		if (gControllers[i] != NULL) {
+			_VKSK_GamepadInputs input = {
+					SDL_GameControllerGetButton(gControllers[i], 0),
+					SDL_GameControllerGetButton(gControllers[i], 1),
+					SDL_GameControllerGetButton(gControllers[i], 2),
+					SDL_GameControllerGetButton(gControllers[i], 3),
+					SDL_GameControllerGetButton(gControllers[i], 4),
+					SDL_GameControllerGetButton(gControllers[i], 5),
+					SDL_GameControllerGetButton(gControllers[i], 6),
+					SDL_GameControllerGetButton(gControllers[i], 7),
+					SDL_GameControllerGetButton(gControllers[i], 8),
+					SDL_GameControllerGetButton(gControllers[i], 9),
+					SDL_GameControllerGetButton(gControllers[i], 10),
+					SDL_GameControllerGetButton(gControllers[i], 11),
+					SDL_GameControllerGetButton(gControllers[i], 12),
+					SDL_GameControllerGetButton(gControllers[i], 13),
+					SDL_GameControllerGetButton(gControllers[i], 14),
+			};
+
+			gInputPrevious[i] = gInput[i];
+			gInput[i] = input;
+		} else {
+			memset(&gInput[i], 0, sizeof(struct _VKSK_GamepadInputs));
+			memset(&gInputPrevious[i], 0, sizeof(struct _VKSK_GamepadInputs));
+		}
+	}
+}
 
 void vksk_RuntimeControllerStickDeadzone(WrenVM *vm) {
 
 }
 
 void vksk_RuntimeControllerStickDeadzoneSet(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 
 }
 
@@ -665,54 +730,67 @@ void vksk_RuntimeControllerTriggerDeadzone(WrenVM *vm) {
 }
 
 void vksk_RuntimeControllerTriggerDeadzoneSet(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 
 }
 
 void vksk_RuntimeControllerButtonPressed(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 
 }
 
 void vksk_RuntimeControllerButtonReleased(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 
 }
 
 void vksk_RuntimeControllerButton(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 
 }
 
 void vksk_RuntimeControllerLeftStickX(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 
 }
 
 void vksk_RuntimeControllerLeftStickY(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 
 }
 
 void vksk_RuntimeControllerRightStickX(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 
 }
 
 void vksk_RuntimeControllerRightStickY(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 
 }
 
 void vksk_RuntimeControllerLeftTrigger(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 
 }
 
 void vksk_RuntimeControllerRightTrigger(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 
 }
 
 void vksk_RuntimeControllerRumble(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 
 }
 
 void vksk_RuntimeControllerIsConnected(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 
 }
 
 void vksk_RuntimeControllerName(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 
 }
 
