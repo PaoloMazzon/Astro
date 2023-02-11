@@ -5,7 +5,6 @@ import "lib/Drawing" for BitmapFont, Sprite, Surface
 import "lib/Audio" for Audio
 import "lib/Util" for Tileset, Hitbox, Math
 import "Assets" for Assets
-import "Tileset" for LEVEL_TILES
 
 // Player
 class Player is Entity {

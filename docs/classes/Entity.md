@@ -7,6 +7,10 @@ This class on its own does nothing.
  + [y](#y-getter)
  + [x=](#x-setter)
  + [y=](#y-setter)
+ + [prev_x](#prev_x-getter)
+ + [prev_x=](#prev_x-setter)
+ + [prev_y](#prev_y-getter)
+ + [prev_y=](#prev_y-setter)
  + [hitbox](#hitbox-getter)
  + [hitbox=](#hitbox-setter)
  + [sprite](#sprite-getter)
@@ -35,6 +39,33 @@ Sets the x.
 `y=`
 
 Sets the y.
+
+### prev_x
+`prev_x`
+
+Returns the previous x value.
+
+### prev_x=(new_x)
+`prev_x=(new_x)`
+
+Parameters
+ + `new_ -> Num` New value.
+ 
+Sets the previous x value. This is mostly for internal use.
+
+### prev_y
+`prev_y`
+
+Returns the previous y value.
+
+### prev_y=(new_y)
+`prev_y=(new_y)`
+
+Parameters
+ + `new_ -> Num` New value.
+ 
+Sets the previous y value. This is mostly for internal use.
+
 
 ### hitbox (Getter)
 `hitbox`

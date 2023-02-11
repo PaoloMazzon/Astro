@@ -62,3 +62,21 @@ void vksk_RuntimeBufferReadString(WrenVM *vm);
 void vksk_RuntimeBufferWriteString(WrenVM *vm);
 void vksk_RuntimeBufferReadBool(WrenVM *vm);
 void vksk_RuntimeBufferWriteBool(WrenVM *vm);
+
+
+void vksk_RuntimeControllerStickDeadzone(WrenVM *vm);
+void vksk_RuntimeControllerStickDeadzoneSet(WrenVM *vm);
+void vksk_RuntimeControllerTriggerDeadzone(WrenVM *vm);
+void vksk_RuntimeControllerTriggerDeadzoneSet(WrenVM *vm);
+void vksk_RuntimeControllerButtonPressed(WrenVM *vm);
+void vksk_RuntimeControllerButtonReleased(WrenVM *vm);
+void vksk_RuntimeControllerButton(WrenVM *vm);
+void vksk_RuntimeControllerLeftStickX(WrenVM *vm);
+void vksk_RuntimeControllerLeftStickY(WrenVM *vm);
+void vksk_RuntimeControllerRightStickX(WrenVM *vm);
+void vksk_RuntimeControllerRightStickY(WrenVM *vm);
+void vksk_RuntimeControllerLeftTrigger(WrenVM *vm);
+void vksk_RuntimeControllerRightTrigger(WrenVM *vm);
+void vksk_RuntimeControllerRumble(WrenVM *vm);
+void vksk_RuntimeControllerIsConnected(WrenVM *vm);
+void vksk_RuntimeControllerName(WrenVM *vm);

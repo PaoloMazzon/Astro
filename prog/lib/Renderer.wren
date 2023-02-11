@@ -88,6 +88,9 @@ class Renderer {
     // Unlocks the cameras so they will all be rendered to again
     foreign static unlock_cameras()
 
+    // Sets the current rendering shader for textures (and sprites by extension)
+    foreign static set_shader(shader)
+
     // Wipes the screen with the current rendering colour
     foreign static clear()
 
@@ -103,15 +106,8 @@ class Renderer {
     // Draws a line with the current render colour
     foreign static draw_line(x1, y1, x2, y2)
 
-    // Draws a texture using a provided shader, tex MUST be `Texture` or `Surface`
-    // and shader MUST be `Shader`
-    foreign static draw_shader(shader, tex, x, y, x_scale, y_scale, rot, origin_x, origin_y, x_in_tex, y_in_tex, tex_width, tex_height)
-
     // Draws a polygon, polygon MUST be `Polygon`
     foreign static draw_polygon(polygon, x, y, filled, line_width, x_scale, y_scale, rot, origin_x, origin_y)
-
-    // Draws a model, model MUST be `Model`, axis MUST be a 3-element list
-    foreign static draw_model(model, x, y, z, xscale, yscale, zscale, rot, axis, origin_x, origin_y, origin_z)
 
     // Draws text, font MUST be a `BitmapFont`
     foreign static draw_font(font, text, x, y)
@@ -199,4 +195,13 @@ foreign class Camera {
 
     // Applies current settings for the camera
     foreign update()
+}
+
+// Shader support
+foreign class Shader {
+    // Loads a shader
+    construct load(vertex_file, frag_file) {}
+
+    // Sets the data for a shader to a buffer
+    foreign data=(data)
 }

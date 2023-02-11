@@ -4,9 +4,11 @@
 
 #include "src/VK2DTypes.h"
 #include "src/IntermediateTypes.h"
+#include "src/Validation.h"
 
 /*************** Texture ***************/
 void vksk_RuntimeVK2DTextureAllocate(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
 	VKSK_RuntimeForeign* tex = (VKSK_RuntimeForeign*)wrenSetSlotNewForeign(vm,0, 0, sizeof(VKSK_RuntimeForeign));
 	tex->texture = vk2dTextureLoad(wrenGetSlotString(vm, 1));
 	tex->type = FOREIGN_TEXTURE;
@@ -36,6 +38,7 @@ void vksk_RuntimeVK2DTextureHeight(WrenVM *vm) {
 
 /*************** Surface ***************/
 void vksk_RuntimeVK2DSurfaceAllocate(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign* tex = (VKSK_RuntimeForeign*)wrenSetSlotNewForeign(vm,0, 0, sizeof(VKSK_RuntimeForeign));
 	tex->surface = vk2dTextureCreate(wrenGetSlotDouble(vm, 1), wrenGetSlotDouble(vm, 2));
 	tex->type = FOREIGN_SURFACE;
@@ -83,6 +86,7 @@ void vksk_RuntimeVK2DCameraGetType(WrenVM *vm) {
 }
 
 void vksk_RuntimeVK2DCameraSetType(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
 	cam->camera.spec.type = wrenGetSlotDouble(vm, 1);
 }
@@ -93,6 +97,7 @@ void vksk_RuntimeVK2DCameraGetX(WrenVM *vm) {
 }
 
 void vksk_RuntimeVK2DCameraSetX(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
 	cam->camera.spec.x = wrenGetSlotDouble(vm, 1);
 }
@@ -103,6 +108,7 @@ void vksk_RuntimeVK2DCameraGetY(WrenVM *vm) {
 }
 
 void vksk_RuntimeVK2DCameraSetY(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
 	cam->camera.spec.y = wrenGetSlotDouble(vm, 1);
 }
@@ -113,6 +119,7 @@ void vksk_RuntimeVK2DCameraGetW(WrenVM *vm) {
 }
 
 void vksk_RuntimeVK2DCameraSetW(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
 	cam->camera.spec.w = wrenGetSlotDouble(vm, 1);
 }
@@ -123,6 +130,7 @@ void vksk_RuntimeVK2DCameraGetH(WrenVM *vm) {
 }
 
 void vksk_RuntimeVK2DCameraSetH(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
 	cam->camera.spec.h = wrenGetSlotDouble(vm, 1);
 }
@@ -133,6 +141,7 @@ void vksk_RuntimeVK2DCameraGetZoom(WrenVM *vm) {
 }
 
 void vksk_RuntimeVK2DCameraSetZoom(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
 	cam->camera.spec.zoom = wrenGetSlotDouble(vm, 1);
 }
@@ -143,6 +152,7 @@ void vksk_RuntimeVK2DCameraGetRotation(WrenVM *vm) {
 }
 
 void vksk_RuntimeVK2DCameraSetRotation(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
 	cam->camera.spec.rot = wrenGetSlotDouble(vm, 1);
 }
@@ -153,6 +163,7 @@ void vksk_RuntimeVK2DCameraGetXOnScreen(WrenVM *vm) {
 }
 
 void vksk_RuntimeVK2DCameraSetXOnScreen(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
 	cam->camera.spec.xOnScreen = wrenGetSlotDouble(vm, 1);
 }
@@ -163,6 +174,7 @@ void vksk_RuntimeVK2DCameraGetYOnScreen(WrenVM *vm) {
 }
 
 void vksk_RuntimeVK2DCameraSetYOnScreen(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
 	cam->camera.spec.yOnScreen = wrenGetSlotDouble(vm, 1);
 }
@@ -173,6 +185,7 @@ void vksk_RuntimeVK2DCameraGetWOnScreen(WrenVM *vm) {
 }
 
 void vksk_RuntimeVK2DCameraSetWOnScreen(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
 	cam->camera.spec.wOnScreen = wrenGetSlotDouble(vm, 1);
 }
@@ -183,6 +196,7 @@ void vksk_RuntimeVK2DCameraGetHOnScreen(WrenVM *vm) {
 }
 
 void vksk_RuntimeVK2DCameraSetHOnScreen(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
 	cam->camera.spec.hOnScreen = wrenGetSlotDouble(vm, 1);
 }
@@ -190,4 +204,20 @@ void vksk_RuntimeVK2DCameraSetHOnScreen(WrenVM *vm) {
 void vksk_RuntimeVK2DCameraUpdate(WrenVM *vm) {
 	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
 	vk2dCameraUpdate(cam->camera.index, cam->camera.spec);
+}
+
+/*************** Shader ***************/
+
+void vksk_RuntimeVK2DShaderAllocate(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_STRING, FOREIGN_END)
+
+}
+
+void vksk_RuntimeVK2DShaderFinalize(void *data) {
+
+}
+
+void vksk_RuntimeVK2DShaderSetData(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BUFFER, FOREIGN_END)
+
 }

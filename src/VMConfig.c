@@ -106,6 +106,9 @@ WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module
 		if (strcmp(className, "Camera") == 0) {
 			methods.allocate = vksk_RuntimeVK2DCameraAllocate;
 			methods.finalize = vksk_RuntimeVK2DCameraFinalize;
+		} else if (strcmp(className, "Shader") == 0) {
+			methods.allocate = vksk_RuntimeVK2DShaderAllocate;
+			methods.finalize = vksk_RuntimeVK2DShaderFinalize;
 		}
 	} else if (strcmp(module, "lib/File") == 0) {
 		if (strcmp(className, "INI") == 0) {
@@ -154,6 +157,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Renderer", true, "get_blend_mode()", vksk_RuntimeRendererGetBlendMode)
 		BIND_METHOD("Renderer", true, "set_colour_mod(_)", vksk_RuntimeRendererSetColourMod)
 		BIND_METHOD("Renderer", true, "get_colour_mod()", vksk_RuntimeRendererGetColourMod)
+		BIND_METHOD("Renderer", true, "set_shader(_)", vksk_RuntimeRendererSetShader)
 		BIND_METHOD("Renderer", true, "set_texture_camera(_)", vksk_RuntimeRendererSetTextureCamera)
 		BIND_METHOD("Renderer", true, "average_frame_time()", vksk_RuntimeRendererGetAverageFrameTime)
 		BIND_METHOD("Renderer", true, "lock_cameras(_)", vksk_RuntimeRendererLockCameras)
@@ -163,9 +167,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Renderer", true, "draw_rectangle_outline(_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawRectangleOutline)
 		BIND_METHOD("Renderer", true, "draw_circle_outline(_,_,_,_)", vksk_RuntimeRendererDrawCircleOutline)
 		BIND_METHOD("Renderer", true, "draw_line(_,_,_,_)", vksk_RuntimeRendererDrawLine)
-		BIND_METHOD("Renderer", true, "draw_shader(_,_,_,_,_,_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawShader)
 		BIND_METHOD("Renderer", true, "draw_polygon(_,_,_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawPolygon)
-		BIND_METHOD("Renderer", true, "draw_model(_,_,_,_,_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawModel)
 		BIND_METHOD("Renderer", true, "draw_font(_,_,_,_)", vksk_RuntimeRendererDrawFont)
 		BIND_METHOD("Renderer", true, "draw_sprite(_,_,_)", vksk_RuntimeRendererDrawSpritePos)
 		BIND_METHOD("Renderer", true, "draw_sprite(_,_,_,_)", vksk_RuntimeRendererDrawSpriteFrame)
@@ -192,6 +194,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Camera", false, "h_on_screen", vksk_RuntimeVK2DCameraGetHOnScreen)
 		BIND_METHOD("Camera", false, "h_on_screen=(_)", vksk_RuntimeVK2DCameraSetHOnScreen)
 		BIND_METHOD("Camera", false, "update()", vksk_RuntimeVK2DCameraUpdate)
+		BIND_METHOD("Shader", false, "data=(_)", vksk_RuntimeVK2DShaderSetData)
 	} else if (strcmp(module, "lib/Engine") == 0) {
 		BIND_METHOD("Engine", true, "switch_level(_)", vksk_RuntimeSwitchLevel)
 		BIND_METHOD("Engine", true, "quit()", vksk_RuntimeQuit)
@@ -247,6 +250,22 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Mouse", true, "middle", vksk_RuntimeInputGetMouseMiddleButton)
 		BIND_METHOD("Mouse", true, "middle_pressed", vksk_RuntimeInputGetMouseMiddleButtonPressed)
 		BIND_METHOD("Mouse", true, "middle_released", vksk_RuntimeInputGetMouseMiddleButtonReleased)
+		BIND_METHOD("Gamepad", true, "stick_deadzone", vksk_RuntimeControllerStickDeadzone)
+		BIND_METHOD("Gamepad", true, "stick_deadzone=(_)", vksk_RuntimeControllerStickDeadzoneSet)
+		BIND_METHOD("Gamepad", true, "trigger_deadzone", vksk_RuntimeControllerTriggerDeadzone)
+		BIND_METHOD("Gamepad", true, "trigger_deadzone=(_)", vksk_RuntimeControllerTriggerDeadzoneSet)
+		BIND_METHOD("Gamepad", true, "button_pressed(_,_)", vksk_RuntimeControllerButtonPressed)
+		BIND_METHOD("Gamepad", true, "button_released(_,_)", vksk_RuntimeControllerButtonReleased)
+		BIND_METHOD("Gamepad", true, "button(_,_)", vksk_RuntimeControllerButton)
+		BIND_METHOD("Gamepad", true, "left_stick_x(_)", vksk_RuntimeControllerLeftStickX)
+		BIND_METHOD("Gamepad", true, "left_stick_y(_)", vksk_RuntimeControllerLeftStickY)
+		BIND_METHOD("Gamepad", true, "right_stick_x(_)", vksk_RuntimeControllerRightStickX)
+		BIND_METHOD("Gamepad", true, "right_stick_y(_)", vksk_RuntimeControllerRightStickY)
+		BIND_METHOD("Gamepad", true, "left_trigger(_)", vksk_RuntimeControllerLeftTrigger)
+		BIND_METHOD("Gamepad", true, "right_trigger(_)", vksk_RuntimeControllerRightTrigger)
+		BIND_METHOD("Gamepad", true, "rumble(_,_,_)", vksk_RuntimeControllerRumble)
+		BIND_METHOD("Gamepad", true, "is_connected(_)", vksk_RuntimeControllerIsConnected)
+		BIND_METHOD("Gamepad", true, "name(_)", vksk_RuntimeControllerName)
 	} else if (strcmp(module, "lib/File") == 0) {
 		BIND_METHOD("INI", false, "flush(_)", vksk_RuntimeINIFlush)
 		BIND_METHOD("INI", false, "key_exists(_,_)", vksk_RuntimeINIKeyExists)

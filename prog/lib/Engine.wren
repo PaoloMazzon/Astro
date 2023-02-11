@@ -51,9 +51,23 @@ class Entity {
     construct new() {
         _x = 0
         _y = 0
+        _prev_x = 0
+        _prev_y = 0
         _sprite = null
         _hitbox = Hitbox.NO_HIT
     }
+
+    // Returns the previous x
+    prev_x { _prev_x }
+
+    // Sets the previous x
+    prev_x=(new_x) { _prev_x = new_x }
+
+    // Returns the previous y
+    prev_y { _prev_y }
+
+    // Sets the previous y
+    prev_y=(new_y) { _prev_y = new_y }
 
     // Returns the x position
     x { _x }
@@ -180,6 +194,8 @@ class Level {
     update() {
         for (entity in _entity_list) {
             if (Engine.process_frame) {
+                entity.prev_x = entity.x
+                entity.prev_y = entity.y
                 entity.update(this)
             }
             entity.draw(this)

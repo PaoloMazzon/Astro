@@ -290,3 +290,69 @@ class Mouse {
     // Returns true if the middle mouse button was just released
     foreign static middle_released
 }
+
+// Controller input
+class Gamepad {
+    BUTTON_A { 0 }
+    BUTTON_B { 1 }
+    BUTTON_X { 2 }
+    BUTTON_Y { 3 }
+    BUTTON_START { 4 }
+    BUTTON_SELECT { 5 }
+    BUTTON_DPAD_UP { 6 }
+    BUTTON_DPAD_DOWN { 7 }
+    BUTTON_DPAD_LEFT { 8 }
+    BUTTON_DPAD_RIGHT { 9 }
+    BUTTON_SHOULDER_LEFT { 10 }
+    BUTTON_SHOULDER_RIGHT { 11 }
+    BUTTON_LEFT_STICK { 12 }
+    BUTTON_RIGHT_STICK { 13 }
+    
+    // Returns the current stick deadzone from 0-1 for all controllers and sticks
+    foreign static stick_deadzone
+
+    // Sets the deadzone stick from 0-1 for all controllers and sticks
+    foreign static stick_deadzone=(dz)
+
+    // Returns the current trigger deadzone from 0 - 1 for all controllers and triggers
+    foreign static trigger_deadzone
+
+    // Sets the current trigger deadzone from 0 - 1 for all controllers and triggers
+    foreign static trigger_deadzone=(dz)
+
+    // Returns true if a button was just pressed
+    foreign static button_pressed(index, button)
+
+    // Returns true if a button was just released
+    foreign static button_released(index, button)
+
+    // Returns true if a button is currently held down
+    foreign static button(index, button)
+
+    // Returns the left stick x axis value from -1 - 1
+    foreign static left_stick_x(index)
+
+    // Returns the left stick y axis value from -1 - 1
+    foreign static left_stick_y(index)
+
+    // Returns the right stick x axis value from -1 - 1
+    foreign static right_stick_x(index)
+
+    // Returns the right stick y axis value from -1 - 1
+    foreign static right_stick_y(index)
+
+    // Returns how hard the left trigger is currently held down from 0 - 1
+    foreign static left_trigger(index)
+    
+    // Returns how hard the right trigger is currently held down from 0 - 1
+    foreign static right_trigger(index)
+    
+    // Rumbles the controller for ms milliseconds with intensity from 0 - 1
+    foreign static rumble(index, intensity, ms)
+
+    // Returns true if a given controller from 0 - 3 is connected
+    foreign static is_connected(index)
+
+    // Returns the name of a given controller as a string
+    foreign static name(index)
+}

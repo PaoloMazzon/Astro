@@ -43,6 +43,8 @@ void vksk_RuntimeVK2DCameraGetWOnScreen(WrenVM *vm);
 void vksk_RuntimeVK2DCameraSetWOnScreen(WrenVM *vm);
 void vksk_RuntimeVK2DCameraGetHOnScreen(WrenVM *vm);
 void vksk_RuntimeVK2DCameraSetHOnScreen(WrenVM *vm);
-void vksk_RuntimeVK2DCameraGetEyes(WrenVM *vm);
-void vksk_RuntimeVK2DCameraSetEyes(WrenVM *vm);
 void vksk_RuntimeVK2DCameraUpdate(WrenVM *vm);
+
+void vksk_RuntimeVK2DShaderAllocate(WrenVM *vm);
+void vksk_RuntimeVK2DShaderFinalize(void *data);
+void vksk_RuntimeVK2DShaderSetData(WrenVM *vm);

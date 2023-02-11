@@ -10,6 +10,7 @@
 
 // Globals
 extern SDL_Window *gWindow; // -- from src/Runtime.c
+static VK2DShader gShader = NULL;
 
 VK2DMSAA convertToMSAAEnum(double wrenVal) {
 	if (wrenVal == 2)
@@ -275,6 +276,16 @@ void vksk_RuntimeRendererGetColourMod(WrenVM *vm) {
 	}
 }
 
+void vksk_RuntimeRendererSetShader(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_SHADER | FOREIGN_NULL, FOREIGN_END)
+	if (wrenGetSlotType(vm, 1) == WREN_TYPE_NULL) {
+		gShader = NULL;
+	} else {
+		VKSK_RuntimeForeign *shader = wrenGetSlotForeign(vm, 1);
+		gShader = shader->shader;
+	}
+}
+
 // vksk_RuntimeRendererSetTextureCamera(bool useCameraOnTextures) - set_texture_camera(_)
 void vksk_RuntimeRendererSetTextureCamera(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BOOL, FOREIGN_END)
@@ -354,18 +365,8 @@ void vksk_RuntimeRendererDrawLine(WrenVM *vm) {
 	vk2dRendererDrawLine(x, y, w, h);
 }
 
-// vksk_RuntimeRendererDrawShader(VK2DShader shader, VK2DTexture tex, float x, float y, float xscale, float yscale, float rot, float originX, float originY, float xInTex, float yInTex, float texWidth, float texHeight) - draw_shader(_,_,_,_,_,_,_,_,_,_,_,_,_)
-void vksk_RuntimeRendererDrawShader(WrenVM *vm) {
-	// TODO: This
-}
-
 // vksk_RuntimeRendererDrawPolygon(VK2DPolygon polygon, float x, float y, bool filled, float lineWidth, float xscale, float yscale, float rot, float originX, float originY) - draw_polygon(_,_,_,_,_,_,_,_,_,_)
 void vksk_RuntimeRendererDrawPolygon(WrenVM *vm) {
-	// TODO: This
-}
-
-// vksk_RuntimeRendererDrawModel(VK2DModel model, float x, float y, float z, float xscale, float yscale, float zscale, float rot, vec3 axis, float originX, float originY, float originZ) - draw_model(_,_,_,_,_,_,_,_,_,_,_,_)
-void vksk_RuntimeRendererDrawModel(WrenVM *vm) {
 	// TODO: This
 }
 

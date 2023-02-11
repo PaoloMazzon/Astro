@@ -28,6 +28,7 @@ extern const uint64_t FOREIGN_AUDIO_DATA;
 extern const uint64_t FOREIGN_AUDIO;
 extern const uint64_t FOREIGN_TILED_MAP;
 extern const uint64_t FOREIGN_BUFFER;
+extern const uint64_t FOREIGN_SHADER;
 
 // To protect Textures from garbage collection kinda
 typedef struct _vksk_RuntimeTexture {
@@ -68,5 +69,6 @@ typedef struct VKSK_RuntimeForeign {
 		JUPlayingSound audio;
 		_vksk_RuntimeTiledMap tiled;
 		_vksk_RuntimeBuffer buffer;
+		VK2DShader shader;
 	};
 } VKSK_RuntimeForeign;

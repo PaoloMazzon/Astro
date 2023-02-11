@@ -70,3 +70,5 @@ TODO
  + Built-in mod support
  + Way to package games
  + Spatial hash maps
+ + Implement `Gamepad`
+ + Documentation for `Gamepad` and `Shader`
