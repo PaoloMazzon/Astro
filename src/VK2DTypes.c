@@ -209,15 +209,28 @@ void vksk_RuntimeVK2DCameraUpdate(WrenVM *vm) {
 /*************** Shader ***************/
 
 void vksk_RuntimeVK2DShaderAllocate(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_STRING, FOREIGN_END)
-
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *shader = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
+	shader->type = FOREIGN_SHADER;
+	shader->shader = vk2dShaderCreate(
+			wrenGetSlotString(vm, 1),
+			wrenGetSlotString(vm, 2),
+			(int)wrenGetSlotDouble(vm, 3)
+	);
+	if (shader->shader == NULL) {
+		vksk_Log("Failed to load shader %s/%s with uniform buffer size of %i.", wrenGetSlotString(vm, 1), wrenGetSlotString(vm, 2), (int)wrenGetSlotDouble(vm, 3));
+	}
 }
 
 void vksk_RuntimeVK2DShaderFinalize(void *data) {
-
+	VKSK_RuntimeForeign *shader = data;
+	vk2dRendererWait();
+	vk2dShaderFree(shader->shader);
 }
 
 void vksk_RuntimeVK2DShaderSetData(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BUFFER, FOREIGN_END)
-
+	VKSK_RuntimeForeign *shader = wrenGetSlotForeign(vm, 0);
+	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 1);
+	vk2dShaderUpdate(shader->shader, buffer->buffer.data, buffer->buffer.size);
 }

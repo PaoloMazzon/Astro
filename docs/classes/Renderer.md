@@ -11,6 +11,7 @@ The `Renderer` class contains methods that are used in drawing and managing the 
  + [get_blend_mode](#get_blend_mode)
  + [set_colour_mod](#set_colour_mod)
  + [get_colour_mod](#get_colour_mod)
+ + [set_shader](#set_shader)
  + [set_texture_camera](#set_texture_camera)
  + [average_frame_time](#average_frame_time)
  + [lock_cameras](#lock_cameras)
@@ -225,6 +226,15 @@ Parameters
  + `y_origin -> Num` Y origin of rotation.
 
 Draws a rectangle to the render target.
+
+## set_shader
+`static set_shader(shader)`
+
+Parameters
+ + `shader -> lib/Renderer::Shader` Shader to use for texture rendering.
+ 
+Sets the shader that will be used for all further texture rendering (including
+sprites). Set `shader` to `null` to use the default texture shader.
 
 ## draw_rectangle_outline
 `static draw_rectangle_outline(x, y, w, h, rotation, x_origin, y_origin, outline_thickness)`

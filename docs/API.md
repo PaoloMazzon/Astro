@@ -26,12 +26,14 @@ Mouse/keyboard access.
 
  + [Mouse](classes/Mouse.md)
  + [Keyboard](classes/Keyboard.md)
+ + [Gamepad](classes/Gamepad.md)
 
 ### `Renderer.wren`
 Core 2D renderer, as well as primitives like circles and rectangles.
 
  + [Renderer](classes/Renderer.md)
  + [Camera](classes/Camera.md)
+ + [Shader](classes/Shader.md)
 
 ### `Audio.wren`
 Loading and playing sounds.

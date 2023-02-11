@@ -200,7 +200,7 @@ foreign class Camera {
 // Shader support
 foreign class Shader {
     // Loads a shader
-    construct load(vertex_file, frag_file) {}
+    construct load(vertex_file, frag_file, buffer_size) {}
 
     // Sets the data for a shader to a buffer
     foreign data=(data)
