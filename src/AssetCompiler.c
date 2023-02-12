@@ -37,11 +37,13 @@ static String newString() {
 
 // Returns the same string just for convenience
 static String appendString(String s, const char *new) {
-	int len = strlen(new);
-	s->str = realloc(s->str, s->len + len + 1);
-	s->str[s->len] = 0;
-	strcat(s->str, new);
-	s->len += len;
+	if (new != NULL) {
+		int len = strlen(new);
+		s->str = realloc(s->str, s->len + len + 1);
+		s->str[s->len] = 0;
+		strcat(s->str, new);
+		s->len += len;
+	}
 	return s;
 }
 
