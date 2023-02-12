@@ -3,6 +3,10 @@ All levels in Astro must inherit from this class. See [switch_level](Engine.md#s
 
  + [add_entity](#add_entity)
  + [remove_entity](#remove_entity)
+ + [remove_all_entities](#remove_all_entities)
+ + [entity_count](#entity_count)
+ + [get_entity](#get_entity)
+ + [entity_collision](#entity_collision)
  + [get_entities](#get_entities)
  + [load](#load)
  + [create](#create)
@@ -29,6 +33,35 @@ Parameters
  + `entity -> lib/Engine::Entity` Entity instance to remove.
  
 Finds `entity` in the level, calls the entity's `destroy` method, then remove it from the level.
+
+### remove_all_entities
+`remove_all_entities()`
+
+Removes all entities in the level, calling each `destroy` method.
+
+### entity_count
+`entity_count`
+
+Returns the number of entities in the level.
+
+### get_entity
+`get_entity(base_class)`
+
+Parameters
+ + `base_class -> lib/Engine::Entity` Base class of the entity to find, not an instance.
+
+Returns the first instance of `base_class` the level finds, or `null` if it can't find any.
+
+### entity_collision
+`entity_collision(entity, base_class)`
+
+Parameters
+ + `entity -> lib/Engine::Entity` Entity instance to check for collisions against.
+ + `base_class -> lib/Engine::Entity` Base class of the entity to find, not an instance.
+
+Checks for a collision between an instance of an entity and every instance of `base_class`
+in the level. Returns `null` if none are found, and returns the instance of the entity its
+colliding with if a collision is occurring.
 
 ### get_entities
 `get_entities(base_class)`

@@ -141,6 +141,44 @@ class Level {
         }
     }
 
+    // Removes all entities
+    remove_all_entities() {
+        for (entity in _entity_list) {
+            ent.destroy(this)
+        }
+        _entity_list = []
+    }
+
+    // Returns the entity count
+    entity_count { _entity_list.count }
+
+    // Gets the first entity the level finds of a given type
+    get_entity(base_class) {
+        var out = null
+        for (entity in _entity_list) {
+            if (entity is base_class) {
+                out = entity
+                break
+            }
+        }
+        return out
+    }
+
+    // Checks for a collision between an entity and any given entity of a specified base class
+    // Returns null if no collision and the other entity if there is a collision
+    entity_collision(entity, base_class) {
+        var out = null
+        for (ent in _entity_list) {
+            if (ent is base_class) {
+                if (entity.hitbox.collision(entity.x, entity.y, ent.x, ent.y, ent.hitbox)) {
+                    out = ent
+                    break
+                }
+            }
+        }
+        return out
+    }
+
     // Returns a list of entities that are all instances of the same class
     get_entities(base_class) {
         var type_list = []

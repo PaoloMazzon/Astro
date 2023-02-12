@@ -105,12 +105,8 @@ Parameters
  + `x -> Num` X position of the hitbox.
  + `y -> Num` Y position of the hitbox.
 
-Returns true if any of the hitbox's bounding box corners intersect with a tile
+Returns true if any of the hitbox's bounding box intersect with a tile
 that has a non-zero value.
-
-> 📝 Because this only checks the hitbox's bounding box corners, if the hitbox has a bounding
-> box larger than the size of a cell this method can visually miss. In general you either want
-> to design your worlds around this limitation or simply make your tiles bigger/hitboxes smaller.
 
 ### draw
 `draw()`

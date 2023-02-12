@@ -135,7 +135,7 @@ class Game is Level {
         Renderer.set_target(Renderer.RENDER_TARGET_DEFAULT)
 
         // Find the player entity
-        _player = get_entities(Player)[0]
+        _player = get_entity(Player)
     }
 
     update() {

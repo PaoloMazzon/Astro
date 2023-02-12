@@ -187,17 +187,31 @@ class Tileset {
         }
     }
 
-    // Returns true if one of the bounding box corners of the hitbox are in a cell that
-    // isn't 0. Only works when the hitbox's bounding box w/h is equal or smaller to the
-    // w/h of cells in the tileset (usually don't worry about that).
+    // Returns true if a hitbox's bounding box is colliding with a non-zero space
+    // on the grid.
     collision(hitbox, x, y) {
-        var hb = hitbox.bounding_box(x, y)
-        var bb = [((hb[0]) / _w).floor, ((hb[1]) / _h).floor, ((hb[2]) / _w).floor, ((hb[3]) / _h).floor]
+        var bb = hitbox.bounding_box(x, y)
+        var cells_wide = ((bb[2] - bb[0]) / _w).ceil + 1
+        var cells_tall = ((bb[3] - bb[1]) / _h).ceil + 1
         var hit = false
-        if (this[bb[0], bb[1]] != 0) {hit = true}
-        if (this[bb[0], bb[3]] != 0) {hit = true}
-        if (this[bb[2], bb[1]] != 0) {hit = true}
-        if (this[bb[2], bb[3]] != 0) {hit = true}
+
+        // If the bounding box is larger than the tileset's cells we need to account for that
+        for (i in 0..(cells_tall - 1)) {
+            var temp_y = ((bb[1] + (i * _h)) / _h).floor
+            if (i == cells_tall - 1) {
+                temp_y = ((bb[3]) / _h).floor
+            }
+            for (j in 0..(cells_wide - 1)) {
+                var temp_x = ((bb[0] + (j * _w)) / _w).floor
+                if (j == cells_wide - 1) {
+                    temp_x = ((bb[2]) / _w).floor
+                }
+                if (this[temp_x, temp_y] != 0) {
+                    hit = true
+                    break
+                }
+            }
+        }
         return hit
     }
 
