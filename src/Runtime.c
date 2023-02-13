@@ -2,9 +2,9 @@
 /// \author Paolo Mazzon
 #define SDL_MAIN_HANDLED
 #include <VK2D/VK2D.h>
-#include <JamUtil/JamUtil.h>
 #include <VK2D/stb_image.h>
 
+#include "src/JamUtil.h"
 #include "src/Runtime.h"
 #include "src/VMConfig.h"
 #include "src/RendererBindings.h"

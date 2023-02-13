@@ -1,7 +1,7 @@
 /// \file Input.c
 /// \author Paolo Mazzon
-#include <JamUtil/JamUtil.h>
 
+#include "src/JamUtil.h"
 #include "src/Input.h"
 #include "src/Validation.h"
 #include "src/IntermediateTypes.h"

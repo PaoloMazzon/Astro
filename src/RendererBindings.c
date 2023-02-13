@@ -1,9 +1,9 @@
 /// \file RendererBindings.c
 /// \author Paolo Mazzon
 #include <VK2D/VK2D.h>
-#include <JamUtil/JamUtil.h>
 #include <wren.h>
 
+#include "src/JamUtil.h"
 #include "src/RendererBindings.h"
 #include "src/Validation.h"
 #include "src/IntermediateTypes.h"

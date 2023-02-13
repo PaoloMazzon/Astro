@@ -1,11 +1,11 @@
 /// \file JUTypes.c
 /// \author Paolo Mazzon
-#include <JamUtil/JamUtil.h>
+#include <src/JamUtil.h>
 #include <src/stb_vorbis.h>
 #define CUTE_SOUND_IMPLEMENTATION
 #define CUTE_SOUND_FORCE_SDL
 #define STB_VORBIS_INCLUDE_STB_VORBIS_H
-#include <JamUtil/cute_sound.h>
+#include <src/cute_sound.h>
 
 #include "src/Validation.h"
 #include "src/JUTypes.h"

@@ -4,8 +4,8 @@
 #pragma once
 #include <stdint.h>
 #include <VK2D/VK2D.h>
-#include <JamUtil/JamUtil.h>
 
+#include "src/JamUtil.h"
 #include "src/ConfigFile.h"
 #include "src/cute_tiled.h"
 
