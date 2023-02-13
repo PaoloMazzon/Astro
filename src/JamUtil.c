@@ -89,6 +89,8 @@ static uint64_t gLastTime = 0;                           // For keeping track of
 static uint64_t gProgramStartTime = 0;                   // Time when the program started
 static JUJobSystem gJobSystem;                           // Information for the job system
 static JUECS gECS;                                       // Entity component system
+static uint32_t gStringBuffer[1000];                     // For UTF-8 decoding
+static int gStringBufferSize = 1000;                     // For UTF-8 decoding
 
 /********************** Static Functions **********************/
 
@@ -280,6 +282,57 @@ static void *juWorkerThread(void *data) {
 	}
 
 	return NULL;
+}
+
+#define UTF8_IS_1_BYTE(b) ((b & 0b10000000) == 0b00000000)
+#define UTF8_IS_2_BYTE(b) ((b & 0b11100000) == 0b11000000)
+#define UTF8_IS_3_BYTE(b) ((b & 0b11110000) == 0b11100000)
+#define UTF8_IS_4_BYTE(b) ((b & 0b11111000) == 0b11110000)
+#define UTF8_IS_X_BYTE(b) ((b & 0b11000000) == 0b10000000)
+
+// Returns the size of the array and fills a given uint32_t array up to size
+static int utf8Decode(const char *str, uint32_t *codePoints, int size) {
+	if (str != NULL) {
+		int len = 0;
+		bool invalid = false;
+		int expectedXBytes = 0;
+		int arraySlot = 0;
+		uint32_t character = 0;
+		for (int i = 0; str[i] != 0 && !invalid && arraySlot < size; i++) {
+			if (expectedXBytes == 0) {
+				if (UTF8_IS_1_BYTE(str[i])) {
+					codePoints[arraySlot] = str[i] & 0b01111111;
+					arraySlot++;
+				} else if (UTF8_IS_2_BYTE(str[i])) {
+					character = str[i] & 0b00011111;
+					expectedXBytes = 2 - 1;
+				} else if (UTF8_IS_3_BYTE(str[i])) {
+					character = str[i] & 0b00001111;
+					expectedXBytes = 3 - 1;
+				} else if (UTF8_IS_4_BYTE(str[i])) {
+					character = str[i] & 0b00000111;
+					expectedXBytes = 4 - 1;
+				} else {
+					invalid = true;
+				}
+			} else {
+				if (UTF8_IS_X_BYTE(str[i])) {
+					expectedXBytes--;
+					character = (character << 6) + (str[i] & 0b00111111);
+					if (expectedXBytes == 0) {
+						codePoints[arraySlot] = character;
+						arraySlot++;
+						character = 0;
+					}
+				} else {
+					invalid = true;
+				}
+			}
+		}
+
+		return expectedXBytes == 0 ? len : 0;
+	}
+	return 0;
 }
 
 /********************** Top-Level **********************/
@@ -837,15 +890,15 @@ void juFontDraw(JUFont font, float x, float y, const char *fmt, ...) {
 
 	// Information needed to draw the text
 	float startX = x;
-	int len = strlen((void*)buffer);
+	int len = utf8Decode((void*)buffer, gStringBuffer, gStringBufferSize);
 
 	// Loop through each character and render individually
 	for (int i = 0; i < len; i++) {
-		if (font->unicodeStart <= buffer[i] && font->unicodeEnd > buffer[i]) {
-			JUCharacter *c = &font->characters[buffer[i] - font->unicodeStart];
+		if (font->unicodeStart <= gStringBuffer[i] && font->unicodeEnd > gStringBuffer[i]) {
+			JUCharacter *c = &font->characters[gStringBuffer[i] - font->unicodeStart];
 
 			// Move to the next line if we're about to go over
-			if (buffer[i] == '\n') {
+			if (gStringBuffer[i] == '\n') {
 				x = startX;
 				y += font->newLineHeight;
 			}
@@ -853,7 +906,7 @@ void juFontDraw(JUFont font, float x, float y, const char *fmt, ...) {
 			// Draw character (or not) and move the cursor forward
 			if (c->drawn)
 				vk2dRendererDrawTexture(font->bitmap, x, y, 1, 1, 0, 0, 0, c->x, c->y, c->w, c->h);
-			if (buffer[i] != '\n') x += c->w;
+			if (gStringBuffer[i] != '\n') x += c->w;
 		}
 	}
 }
