@@ -890,19 +890,13 @@ void vksk_RuntimeControllerName(WrenVM *vm) {
 	}
 }
 
-static inline uint8_t *alphaToRGBA(uint8_t *pixels, int w, int h, bool aa) {
-	uint32_t *out = malloc(w * h * sizeof(uint32_t));
-
+static inline uint32_t *alphaToRGBA(uint8_t *pixels, int w, int h, bool aa) {
+	uint32_t *out = calloc(1, w * h * sizeof(uint32_t));
 	for (int i = 0; i < w * h; i++) {
-		if (0){//pixels[i] > 0) {
-			uint32_t alpha;
-			if (amask == 0xff000000)
-				alpha = ((uint32_t)pixels[i]) << 24;
-			else
-				alpha = pixels[i];
-			out[i] = (rmask & gmask & bmask) & (amask & alpha);
-		} else {
-			out = 0;
+		if (pixels[i] > 0) {
+			uint32_t t = pixels[i];
+			uint32_t alpha = amask == 0xff000000 ? t << 24 : pixels[i];
+			out[i] = rmask + gmask + bmask + (amask & alpha);
 		}
 	}
 
@@ -931,20 +925,28 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 	font->bitmapFont->newLineHeight = (ascent * scale) - (descent * scale) + (lineGap * scale);
 	font->bitmapFont->unicodeStart = uniStart;
 	font->bitmapFont->unicodeEnd = uniEnd;
+	float spaceSize = font->bitmapFont->newLineHeight / 2;
 
 	// Calculate the width and height of the image we'll need
-	font->bitmapFont->characters = calloc(uniEnd - uniStart + 1, sizeof(struct JUCharacter));
+	font->bitmapFont->characters = calloc(uniEnd - uniStart, sizeof(struct JUCharacter));
 	float w = 0;
 	float h = 0;
-	for (int i = 0; i <= (uniEnd - uniStart + 1); i++) {
+	for (int i = 0; i <= (uniEnd - uniStart); i++) {
 		int codePoint = i + uniStart;
 		int x0, y0, x1, y1;
 		JUCharacter *c = &font->bitmapFont->characters[i];
 		stbtt_GetCodepointBox(&info, codePoint, &x0, &y0, &x1, &y1);
-		c->w = (x1 * scale) - (x0 * scale);
-		c->h = (y1 * scale) - (y0 * scale);
-		c->x = w;
-		c->drawn = true;
+		if (x1 != 0) {
+			c->w = (x1 * scale) - (x0 * scale) + 2;
+			c->h = (y1 * scale) - (y0 * scale);
+			c->x = w;
+			c->drawn = true;
+		} else {
+			c->w = spaceSize;
+			c->h = 0;
+			c->x = w;
+			c->drawn = false;
+		}
 		w += c->w;
 		if (h < c->h) h = c->h;
 	}
@@ -952,25 +954,25 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 	VALIDATE_SDL(bitmap)
 
 	// Draw each glyph to the surface
-	int tmpx;
-	for (int i = 0; i <= (uniEnd - uniStart + 1); i++) {
+	for (int i = 0; i <= (uniEnd - uniStart); i++) {
 		int codePoint = i + uniStart;
 		JUCharacter *c = &font->bitmapFont->characters[i];
-		c->ykern = h - c->h;
-		int xoff, yoff, width, height;
-		uint8_t *alpha = stbtt_GetCodepointBitmap(&info, scale, scale, codePoint, &width, &height, &xoff, &yoff);
-		uint8_t *pixels = alphaToRGBA(alpha, width, height, aa);
-		// TODO: Create surface from `pixels` and blit it to the bitmap
-		SDL_Surface *temp = SDL_CreateRGBSurfaceFrom(pixels, width, height, 32, 4, rmask, gmask, bmask, amask);
-		VALIDATE_SDL(temp)
-		SDL_Rect dst = {tmpx, 0, width, height};
-		SDL_BlitSurface(temp, NULL, bitmap, &dst);
-		SDL_FreeSurface(temp);
-		free(pixels);
-		tmpx += c->w;
+		if (c->drawn) {
+			c->ykern = h - c->h;
+			int xoff, yoff, width, height;
+			uint8_t *alpha = stbtt_GetCodepointBitmap(&info, scale, scale, codePoint, &width, &height, &xoff, &yoff);
+			uint32_t *pixels = alphaToRGBA(alpha, width, height, aa);
+			SDL_Surface *temp = SDL_CreateRGBSurfaceFrom(pixels, width, height, 32, 4 * width, rmask, gmask, bmask, amask);
+			VALIDATE_SDL(temp)
+			SDL_Rect dst = {c->x, c->y, width, height};
+			SDL_BlitSurface(temp, NULL, bitmap, &dst);
+			SDL_FreeSurface(temp);
+			free(pixels);
+		}
 	}
 
 	// Create image and texture from surface
+	SDL_SaveBMP(bitmap, "out.bmp");
 	SDL_LockSurface(bitmap);
 	font->bitmapFont->image = vk2dImageFromPixels(vk2dRendererGetDevice(), bitmap->pixels, bitmap->w, bitmap->h);
 	SDL_UnlockSurface(bitmap);
