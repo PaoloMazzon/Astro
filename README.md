@@ -66,7 +66,7 @@ Features
 TODO
 ====
 
- + TrueType fonts
+ + TrueType fonts - in progress
  + Built-in mod support
  + Way to package games
  + Spatial hash maps

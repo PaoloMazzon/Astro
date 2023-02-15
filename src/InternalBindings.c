@@ -2,6 +2,8 @@
 /// \author Paolo Mazzon
 #include <stdio.h>
 
+#define STB_TRUETYPE_IMPLEMENTATION
+#include "stb_truetype.h"
 #define CUTE_TILED_IMPLEMENTATION
 #include "src/cute_tiled.h"
 #include "src/InternalBindings.h"
@@ -886,3 +888,37 @@ void vksk_RuntimeControllerName(WrenVM *vm) {
 	}
 }
 
+void vksk_RuntimeFontAllocate(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_BOOL, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *font = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
+	font->bitmapFont = malloc(sizeof(struct JUFont));
+	font->type = FOREIGN_BITMAP_FONT;
+
+	// TODO: Load ttf
+}
+
+void vksk_RuntimeFontFinalize(void *data) {
+	VKSK_RuntimeForeign *font = data;
+	vk2dRendererWait();
+	juFontFree(font->bitmapFont);
+}
+
+void vksk_RuntimeFontSize(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	float w, h;
+	const char *str = wrenGetSlotString(vm, 1);
+	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 0);
+	juFontUTF8Size(font->bitmapFont, &w, &h, "%s", str);
+	wrenSetSlotNewList(vm, 0);
+	wrenSetSlotDouble(vm, 1, w);
+	wrenInsertInList(vm, 0, -1, 1);
+	wrenSetSlotDouble(vm, 1, h);
+	wrenInsertInList(vm, 0, -1, 1);
+}
+
+void vksk_RuntimeFontFree(WrenVM *vm) {
+	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 0);
+	vk2dRendererWait();
+	juFontFree(font->bitmapFont);
+	font->bitmapFont = NULL;
+}

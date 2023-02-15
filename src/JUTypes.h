@@ -6,6 +6,7 @@
 
 void vksk_RuntimeJUBitmapFontAllocate(WrenVM *vm);
 void vksk_RuntimeJUBitmapFontFinalize(void *data);
+void vksk_RuntimeJUBitmapFontSize(WrenVM *vm);
 void vksk_RuntimeJUBitmapFontFree(WrenVM *vm);
 
 void vksk_RuntimeJUSpriteAllocate(WrenVM *vm);

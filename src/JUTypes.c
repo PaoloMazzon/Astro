@@ -31,6 +31,19 @@ void vksk_RuntimeJUBitmapFontFinalize(void *data) {
 	juFontFree(font->bitmapFont);
 }
 
+void vksk_RuntimeJUBitmapFontSize(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	float w, h;
+	const char *str = wrenGetSlotString(vm, 1);
+	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 0);
+	juFontUTF8Size(font->bitmapFont, &w, &h, "%s", str);
+	wrenSetSlotNewList(vm, 0);
+	wrenSetSlotDouble(vm, 1, w);
+	wrenInsertInList(vm, 0, -1, 1);
+	wrenSetSlotDouble(vm, 1, h);
+	wrenInsertInList(vm, 0, -1, 1);
+}
+
 void vksk_RuntimeJUBitmapFontFree(WrenVM *vm) {
 	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 0);
 	vk2dRendererWait();

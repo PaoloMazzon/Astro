@@ -17,6 +17,7 @@ Filesystem access.
 Classes related to graphics.
 
  + [BitmapFont](classes/BitmapFont.md)
+ + [Font](classes/Font.md)
  + [Texture](classes/Texture.md)
  + [Sprite](classes/Sprite.md)
  + [Surface](classes/Surface.md)

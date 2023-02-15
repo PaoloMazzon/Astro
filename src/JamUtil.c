@@ -332,7 +332,7 @@ static int utf8Decode(const char *str, uint32_t *codePoints, int size) {
 			}
 		}
 
-		return expectedXBytes == 0 ? len : 0;
+		return expectedXBytes == 0 && !invalid ? len : 0;
 	}
 	return 0;
 }
@@ -788,46 +788,41 @@ double juClockGetAverage(JUClock *clock) {
 
 /********************** Font **********************/
 
+void juFontUTF8Size(JUFont font, float *w, float *h, const char *fmt, ...) {
+	// Var args stuff
+	unsigned char buffer[JU_STRING_BUFFER];
+	va_list va;
+	va_start(va, fmt);
+	vsprintf((void*)buffer, fmt, va);
+	va_end(va);
+
+	// Information needed to draw the text
+	float x = 0;
+	*w = 0;
+	*h = font->newLineHeight;
+	float startX = x;
+	int len = utf8Decode((void*)buffer, gStringBuffer, gStringBufferSize);
+
+	// Loop through each character and render individually
+	for (int i = 0; i < len; i++) {
+		if (font->unicodeStart <= gStringBuffer[i] && font->unicodeEnd > gStringBuffer[i]) {
+			JUCharacter *c = &font->characters[gStringBuffer[i] - font->unicodeStart];
+
+			// Move to the next line if we're about to go over
+			if (gStringBuffer[i] == '\n') {
+				if (x > *w) *w = x;
+				x = startX;
+				*h += font->newLineHeight;
+			}
+			if (gStringBuffer[i] != '\n') x += c->w;
+		}
+	}
+}
+
 JUFont juFontLoad(const char *filename) {
 	JUFont font = juMalloc(sizeof(struct JUFont));
-	bool error;
-	JUBinaryFont binaryFont = juLoadBinaryFont(filename, &error);
 
-	if (!error) {
-		// Create an SDL surface for the png
-		int w, h, channels;
-		void *pixels = stbi_load_from_memory(binaryFont.png, binaryFont.size, &w, &h, &channels, 4);
-
-		if (pixels != NULL) {
-			font->image = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, w, h);
-			free(pixels);
-			font->bitmap = vk2dTextureLoadFromImage(font->image);
-
-			// Basic data
-			font->unicodeStart = 1;
-			font->unicodeEnd = binaryFont.characters + 1;
-			font->characters = juMalloc(sizeof(struct JUCharacter) * binaryFont.characters);
-			font->newLineHeight = 0;
-
-			// Load the characters
-			int x = 0;
-			for (int i = 0; i < binaryFont.characters; i++) {
-				font->characters[i].x = x;
-				font->characters[i].y = 0;
-				font->characters[i].w = binaryFont.characterDimensions[i].width;
-				font->characters[i].h = binaryFont.characterDimensions[i].height;
-				if (font->newLineHeight < font->characters[i].h)
-					font->newLineHeight = font->characters[i].h;
-				x += binaryFont.characterDimensions[i].width;
-				font->characters[i].drawn = i >= 32;
-			}
-		} else {
-			juLog("Failed to load font's image");
-		}
-
-		free(binaryFont.png);
-		free(binaryFont.characterDimensions);
-	}
+	// nah im not using this
 
 	return font;
 }
@@ -854,6 +849,7 @@ JUFont juFontLoadFromImage(const char *image, uint32_t unicodeStart, uint32_t un
 			font->characters[i - unicodeStart].w = w;
 			font->characters[i - unicodeStart].h = h;
 			font->characters[i - unicodeStart].drawn = true;
+			font->characters[i - unicodeStart].ykern = 0;
 			if (x + w >= font->bitmap->img->width) {
 				y += h;
 				x = 0;
@@ -907,7 +903,7 @@ void juFontDraw(JUFont font, float x, float y, const char *fmt, ...) {
 
 			// Draw character (or not) and move the cursor forward
 			if (c->drawn)
-				vk2dRendererDrawTexture(font->bitmap, x, y, 1, 1, 0, 0, 0, c->x, c->y, c->w, c->h);
+				vk2dRendererDrawTexture(font->bitmap, x, y + c->ykern, 1, 1, 0, 0, 0, c->x, c->y, c->w, c->h);
 			if (gStringBuffer[i] != '\n') x += c->w;
 		}
 	}

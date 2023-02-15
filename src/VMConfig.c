@@ -92,6 +92,9 @@ WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module
 		if (strcmp(className, "BitmapFont") == 0) {
 			methods.allocate = vksk_RuntimeJUBitmapFontAllocate;
 			methods.finalize = vksk_RuntimeJUBitmapFontFinalize;
+		} else if (strcmp(className, "Font") == 0) {
+			methods.allocate = vksk_RuntimeFontAllocate;
+			methods.finalize = vksk_RuntimeFontFinalize;
 		} else if (strcmp(className, "Sprite") == 0) {
 			methods.allocate = vksk_RuntimeJUSpriteAllocate;
 			methods.finalize = vksk_RuntimeJUSpriteFinalize;
@@ -216,6 +219,9 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Surface", false, "height", vksk_RuntimeVK2DSurfaceHeight)
 		BIND_METHOD("Surface", false, "free()", vksk_RuntimeVK2DSurfaceFree)
 		BIND_METHOD("BitmapFont", false, "free()", vksk_RuntimeJUBitmapFontFree)
+		BIND_METHOD("BitmapFont", false, "size(_)", vksk_RuntimeJUBitmapFontSize)
+		BIND_METHOD("Font", false, "free()", vksk_RuntimeJUBitmapFontFree)
+		BIND_METHOD("Font", false, "size(_)", vksk_RuntimeJUBitmapFontSize)
 		BIND_METHOD("Sprite", true, "from(_,_,_,_,_,_,_)", vksk_RuntimeJUSpriteFrom)
 		BIND_METHOD("Sprite", false, "frame", vksk_RuntimeJUSpriteGetFrame)
 		BIND_METHOD("Sprite", false, "frame=(_)", vksk_RuntimeJUSpriteSetFrame)

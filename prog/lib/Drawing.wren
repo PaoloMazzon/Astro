@@ -8,6 +8,9 @@ foreign class BitmapFont {
     // least unicode_end-unicode_start characters of w*h size
     construct new(filename, unicode_start, unicode_end, w, h) {}
 
+    // Returns the size in pixels of a given string as [w, h]
+    foreign size(string)
+
     // Forces the font to be freed if you don't want to wait for the garbage collector
     foreign free()
 }
@@ -109,4 +112,16 @@ foreign class Sprite {
 
     // Returns the sprite's height
     foreign height
+}
+
+// TrueType fonts
+foreign class Font {
+    // Opens a ttf and caches it so it can be drawn faster
+    construct open(filename, size, aa, unicode_start, unicode_end) {}
+
+    // Returns the size in pixels of a given string as [w, h]
+    foreign size(string)
+
+    // Frees without waiting for the gc
+    foreign free()
 }

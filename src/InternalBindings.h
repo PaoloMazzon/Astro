@@ -81,3 +81,8 @@ void vksk_RuntimeControllerRightTrigger(WrenVM *vm);
 void vksk_RuntimeControllerRumble(WrenVM *vm);
 void vksk_RuntimeControllerIsConnected(WrenVM *vm);
 void vksk_RuntimeControllerName(WrenVM *vm);
+
+void vksk_RuntimeFontAllocate(WrenVM *vm);
+void vksk_RuntimeFontFinalize(void *data);
+void vksk_RuntimeFontSize(WrenVM *vm);
+void vksk_RuntimeFontFree(WrenVM *vm);

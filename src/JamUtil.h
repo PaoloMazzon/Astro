@@ -238,11 +238,12 @@ double juClockGetAverage(JUClock *clock);
 
 /// \brief Data as it relates to storing a bitmap character for VK2D
 struct JUCharacter {
-	float x;    ///< x position of this character in the bitmap
-	float y;    ///< y position of this character in the bitmap
-	float w;    ///< width of the character in the bitmap
-	float h;    ///< height of the character in the bitmap
-	bool drawn; ///< For invisible characters that have width but need not be drawn (ie space)
+	float x;     ///< x position of this character in the bitmap
+	float y;     ///< y position of this character in the bitmap
+	float w;     ///< width of the character in the bitmap
+	float h;     ///< height of the character in the bitmap
+	float ykern; ///< Vertical displacement of the character
+	bool drawn;  ///< For invisible characters that have width but need not be drawn (ie space)
 };
 
 /// \brief A bitmap font, essentially a sprite sheet and some characters
@@ -254,6 +255,9 @@ struct JUFont {
 	VK2DTexture bitmap;      ///< Bitmap of the characters
 	VK2DImage image;         ///< Bitmap image in case it was loaded from a jufnt
 };
+
+/// \brief Returns the size of a string
+void juFontUTF8Size(JUFont font, float *w, float *h, const char *fmt, ...);
 
 /// \brief Loads a font from a .jufnt file (create them with the python script)
 /// \return Returns a new font or NULL if it failed

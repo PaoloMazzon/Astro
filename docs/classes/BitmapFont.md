@@ -4,6 +4,7 @@ you load an image as a character set in a specified range - often 33 to 127 or `
 With that character set you may render text with a call to `lib/Renderer::draw_font`.
 
  + [new](#new)
+ + [size](#size)
  + [free](#free)
 
 ### new
@@ -21,6 +22,15 @@ you may wrap characters to have a more square image.
 
 > 📝 The image provided must be at least w * h * (unicode_end - unicode_start) pixels large or this
 > method will fail.
+
+### size
+`size(string)`
+
+Parameters
+ + `string -> String` String to check the size of.
+
+Returns a list of `[w, h]` representing the width and height of the string if it were to be
+rendered.
 
 ### free
 `free()`
