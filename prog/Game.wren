@@ -136,8 +136,6 @@ class Game is Level {
 
         // Find the player entity
         _player = get_entity(Player)
-
-        _ttf = Font.open("assets/Ubuntu.ttf", 48, true, 32, 128)
     }
 
     update() {
@@ -160,7 +158,6 @@ class Game is Level {
 
         super.update() // update all entities
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
-        Renderer.draw_font(_ttf, "The quick brown fox jumps over the lazy dog!", 0, 0)
     }
 
     destroy() {

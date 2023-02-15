@@ -896,7 +896,8 @@ static inline uint32_t *alphaToRGBA(uint8_t *pixels, int w, int h, bool aa) {
 		if (pixels[i] > 0) {
 			uint32_t t = pixels[i];
 			uint32_t alpha = amask == 0xff000000 ? t << 24 : pixels[i];
-			out[i] = rmask + gmask + bmask + (amask & alpha);
+			if (aa || (!aa && pixels[i] > 50))
+				out[i] = rmask + gmask + bmask + (amask & alpha);
 		}
 	}
 
@@ -928,7 +929,7 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 	float spaceSize = font->bitmapFont->newLineHeight / 2;
 
 	// Calculate the width and height of the image we'll need
-	font->bitmapFont->characters = calloc(uniEnd - uniStart, sizeof(struct JUCharacter));
+	font->bitmapFont->characters = calloc(uniEnd - uniStart + 1, sizeof(struct JUCharacter));
 	float w = 0;
 	float h = 0;
 	for (int i = 0; i <= (uniEnd - uniStart); i++) {
@@ -937,7 +938,7 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 		JUCharacter *c = &font->bitmapFont->characters[i];
 		stbtt_GetCodepointBox(&info, codePoint, &x0, &y0, &x1, &y1);
 		if (x1 != 0) {
-			c->w = (x1 * scale) - (x0 * scale) + 2;
+			c->w = (x1 * scale) - (x0 * scale);
 			c->h = (y1 * scale) - (y0 * scale);
 			c->x = w;
 			c->drawn = true;
@@ -947,7 +948,7 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 			c->x = w;
 			c->drawn = false;
 		}
-		w += c->w;
+		w += c->w + 4;
 		if (h < c->h) h = c->h;
 	}
 	SDL_Surface *bitmap = SDL_CreateRGBSurface(0, w, h, 32, rmask, gmask, bmask, amask);
@@ -958,12 +959,13 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 		int codePoint = i + uniStart;
 		JUCharacter *c = &font->bitmapFont->characters[i];
 		if (c->drawn) {
-			c->ykern = h - c->h;
+			c->ykern = c->h;
 			int xoff, yoff, width, height;
 			uint8_t *alpha = stbtt_GetCodepointBitmap(&info, scale, scale, codePoint, &width, &height, &xoff, &yoff);
 			uint32_t *pixels = alphaToRGBA(alpha, width, height, aa);
 			SDL_Surface *temp = SDL_CreateRGBSurfaceFrom(pixels, width, height, 32, 4 * width, rmask, gmask, bmask, amask);
 			VALIDATE_SDL(temp)
+			c->ykern = ((-(float)ascent * scale) + yoff) + ((ascent * scale) * 2);
 			SDL_Rect dst = {c->x, c->y, width, height};
 			SDL_BlitSurface(temp, NULL, bitmap, &dst);
 			SDL_FreeSurface(temp);
@@ -972,7 +974,6 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 	}
 
 	// Create image and texture from surface
-	SDL_SaveBMP(bitmap, "out.bmp");
 	SDL_LockSurface(bitmap);
 	font->bitmapFont->image = vk2dImageFromPixels(vk2dRendererGetDevice(), bitmap->pixels, bitmap->w, bitmap->h);
 	SDL_UnlockSurface(bitmap);

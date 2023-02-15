@@ -30,6 +30,7 @@ Prefixes
  + Textures - `tex_*`
  + Audio - `aud_*`
  + Bitmap fonts - `fnt_*`
+ + TrueType fonts - `fnt_*`
 
 ## Loading Sprites and Bitmap Fonts
 Because bitmap fonts and sprites both just come from images, you have to tell the asset compiler
@@ -58,6 +59,18 @@ An example of an `assets/asset.ini` file
 For each file you want to load as something other than a texture, you need a corresponding
 header in the INI file with the filename as the header, and a few other variables you can
 see in the example above.
+
+## TrueType Fonts
+You must also outline `.ttf` files in the `assets.ini` file as well, its quite simple.
+
+    [my_font.ttf]
+    size=50
+    ustart=32
+    uend=128
+    aa=true
+
+`size` is the height of the font in pixels, and `ustart` to `uend` is the unicode range to
+preload. `aa` is whether or not to apply anti-aliasing to the font.
 
 --------
 

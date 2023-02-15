@@ -10,7 +10,7 @@
 #include "src/Validation.h"
 #include "src/ConfigFile.h"
 
-const char *OUTPUT_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont\nimport \"lib/Audio\" for AudioData\n"
+const char *OUTPUT_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont, Font\nimport \"lib/Audio\" for AudioData\n"
 							"\n"
 							"class Assets {\n";
 
@@ -118,6 +118,20 @@ static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFun
 
 		// Getter
 		snprintf(tmpCode, 1024, "    static aud_%s { __aud%s }\n", tmpName, tmpName);
+		appendString(getterFunctions, tmpCode);
+	} else if (strcmp(ext, "ttf") == 0 && vksk_ConfigHeaderExists(conf, file)) {
+		double ustart, uend, size;
+		bool aa;
+		ustart = vksk_ConfigGetDouble(conf, file, "ustart", 0);
+		uend = vksk_ConfigGetDouble(conf, file, "uend", 0);
+		size = vksk_ConfigGetDouble(conf, file, "size", 0);
+		aa = vksk_ConfigGetBool(conf, file, "aa", 0);
+		// Generate loader function bit first
+		snprintf(tmpCode, 1024, "        __fnt%s = Font.open(\"assets/%s\", %f, %s, %f, %f)\n        __asset_map[\"fnt_%s\"] = __fnt%s\n", tmpName, file, size, aa ? "true" : "false", ustart, uend, tmpName, tmpName);
+		appendString(spriteLoader, tmpCode);
+
+		// Getter
+		snprintf(tmpCode, 1024, "    static fnt_%s { __fnt%s }\n", tmpName, tmpName);
 		appendString(getterFunctions, tmpCode);
 	}
 }
