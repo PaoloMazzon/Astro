@@ -1,7 +1,7 @@
 import "lib/Engine" for Engine, Level, Entity
 import "lib/Input" for Keyboard, Gamepad
 import "lib/Renderer" for Renderer, Camera
-import "lib/Drawing" for BitmapFont, Sprite, Surface
+import "lib/Drawing" for BitmapFont, Sprite, Surface, Font
 import "lib/Audio" for Audio
 import "lib/Util" for Tileset, Hitbox, Math
 import "Assets" for Assets
@@ -136,6 +136,8 @@ class Game is Level {
 
         // Find the player entity
         _player = get_entity(Player)
+
+        var ttf = Font.open("assets/Ubuntu.ttf", 16, true, 32, 128)
     }
 
     update() {
