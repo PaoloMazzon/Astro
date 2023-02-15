@@ -781,7 +781,7 @@ void vksk_RuntimeControllerLeftStickX(WrenVM *vm) {
 	int index = (int)wrenGetSlotDouble(vm, 1);
 	if (index >= 0 && index < 4) {
 		double val = (double)SDL_GameControllerGetAxis(gControllers[index], SDL_CONTROLLER_AXIS_LEFTX) / (double)INT16_MAX;
-		if (val > gAxisDeadzone || val < gAxisDeadzone)
+		if (!(val > -gAxisDeadzone && val < gAxisDeadzone))
 			wrenSetSlotDouble(vm, 0, val);
 		else
 			wrenSetSlotDouble(vm, 0, 0);
@@ -795,7 +795,7 @@ void vksk_RuntimeControllerLeftStickY(WrenVM *vm) {
 	int index = (int)wrenGetSlotDouble(vm, 1);
 	if (index >= 0 && index < 4) {
 		double val = (double)SDL_GameControllerGetAxis(gControllers[index], SDL_CONTROLLER_AXIS_LEFTY) / (double)INT16_MAX;
-		if (val > gAxisDeadzone || val < gAxisDeadzone)
+		if (!(val > -gAxisDeadzone && val < gAxisDeadzone))
 			wrenSetSlotDouble(vm, 0, val);
 		else
 			wrenSetSlotDouble(vm, 0, 0);
@@ -809,7 +809,7 @@ void vksk_RuntimeControllerRightStickX(WrenVM *vm) {
 	int index = (int)wrenGetSlotDouble(vm, 1);
 	if (index >= 0 && index < 4) {
 		double val = (double)SDL_GameControllerGetAxis(gControllers[index], SDL_CONTROLLER_AXIS_RIGHTX) / (double)INT16_MAX;
-		if (val > gAxisDeadzone || val < gAxisDeadzone)
+		if (!(val > -gAxisDeadzone && val < gAxisDeadzone))
 			wrenSetSlotDouble(vm, 0, val);
 		else
 			wrenSetSlotDouble(vm, 0, 0);
@@ -823,7 +823,7 @@ void vksk_RuntimeControllerRightStickY(WrenVM *vm) {
 	int index = (int)wrenGetSlotDouble(vm, 1);
 	if (index >= 0 && index < 4) {
 		double val = (double)SDL_GameControllerGetAxis(gControllers[index], SDL_CONTROLLER_AXIS_RIGHTY) / (double)INT16_MAX;
-		if (val > gAxisDeadzone || val < gAxisDeadzone)
+		if (!(val > -gAxisDeadzone && val < gAxisDeadzone))
 			wrenSetSlotDouble(vm, 0, val);
 		else
 			wrenSetSlotDouble(vm, 0, 0);
@@ -837,7 +837,7 @@ void vksk_RuntimeControllerLeftTrigger(WrenVM *vm) {
 	int index = (int)wrenGetSlotDouble(vm, 1);
 	if (index >= 0 && index < 4) {
 		double val = (double)SDL_GameControllerGetAxis(gControllers[index], SDL_CONTROLLER_AXIS_TRIGGERLEFT) / (double)INT16_MAX;
-		if (val > gTriggerDeadzone || val < gTriggerDeadzone)
+		if (!(val > -gTriggerDeadzone && val < gTriggerDeadzone))
 			wrenSetSlotDouble(vm, 0, val);
 		else
 			wrenSetSlotDouble(vm, 0, 0);
@@ -851,7 +851,7 @@ void vksk_RuntimeControllerRightTrigger(WrenVM *vm) {
 	int index = (int)wrenGetSlotDouble(vm, 1);
 	if (index >= 0 && index < 4) {
 		double val = (double)SDL_GameControllerGetAxis(gControllers[index], SDL_CONTROLLER_AXIS_TRIGGERRIGHT) / (double)INT16_MAX;
-		if (val > gTriggerDeadzone || val < gTriggerDeadzone)
+		if (!(val > -gTriggerDeadzone && val < gTriggerDeadzone))
 			wrenSetSlotDouble(vm, 0, val);
 		else
 			wrenSetSlotDouble(vm, 0, 0);
