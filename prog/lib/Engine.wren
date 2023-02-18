@@ -205,6 +205,8 @@ class Level {
                     var internal = Engine.get_class(entity["class"])
                     if (internal != null) {
                         var e = add_entity(internal, entity)
+                    } else {
+                        System.print("Unable to find entity \"" + entity["class"] + "\" in map " + filename)
                     }
                 }
             } else if (layer == TiledMap.TILE_LAYER) {
