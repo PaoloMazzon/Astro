@@ -362,6 +362,7 @@ void vksk_RuntimeGetClass(WrenVM *vm) {
 
 	if (temp != NULL) {
 		strncpy(module, fullName, temp - fullName);
+		module[temp - fullName] = 0;
 		temp += 2;
 		if (wrenHasModule(vm, module) && wrenHasVariable(vm, module, temp)) {
 			wrenGetVariable(vm, module, temp, 0);
