@@ -12,6 +12,7 @@
 typedef struct VKSK_EngineConfig {
 	bool enableTypeChecking;
 	bool enableDebugOverlay;
+	bool enableAssetsPrint;
 } VKSK_EngineConfig;
 
 // Starts the runtime

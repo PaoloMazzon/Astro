@@ -11,6 +11,7 @@ int main() {
 	VKSK_Config engineConfig = vksk_ConfigLoad("Astro.ini");
 	gEngineConfig.enableTypeChecking = vksk_ConfigGetBool(engineConfig, "engine", "enableTypeChecking", false);
 	gEngineConfig.enableDebugOverlay = vksk_ConfigGetBool(engineConfig, "engine", "enableDebugOverlay", false);
+	gEngineConfig.enableAssetsPrint = vksk_ConfigGetBool(engineConfig, "engine", "enableAssetsPrint", false);
 	vksk_ConfigFree(engineConfig);
 
 	vksk_Start();

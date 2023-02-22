@@ -127,7 +127,8 @@ void _vksk_RuntimeControllersUpdate(); // From InternalBindings.c
 void vksk_Start() {
 	// Compile the assets code
 	gAssetsFile = vksk_CompileAssetFile();
-	vksk_Log("---------------------Compiled assets file---------------------\n%s\n---------------------Compiled assets file---------------------", gAssetsFile);
+	if (gEngineConfig.enableAssetsPrint)
+		vksk_Log("---------------------Compiled assets file---------------------\n%s\n---------------------Compiled assets file---------------------", gAssetsFile);
 
 	// Wren config and VM initialization
 	vksk_Log("Starting VM...");
@@ -301,7 +302,6 @@ void vksk_Start() {
 }
 
 void vksk_RuntimeSwitchLevel(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	gNextLevel = wrenGetSlotHandle(vm, 1);
 }
 
