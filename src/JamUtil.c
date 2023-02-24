@@ -892,19 +892,18 @@ void juFontDraw(JUFont font, float x, float y, const char *fmt, ...) {
 
 	// Loop through each character and render individually
 	for (int i = 0; i < len; i++) {
-		if (font->unicodeStart <= gStringBuffer[i] && font->unicodeEnd > gStringBuffer[i]) {
-			JUCharacter *c = &font->characters[gStringBuffer[i] - font->unicodeStart];
+		if ((font->unicodeStart <= gStringBuffer[i] && font->unicodeEnd > gStringBuffer[i]) || gStringBuffer[i] == '\n') {
+			if (gStringBuffer[i] != '\n') {
+				JUCharacter *c = &font->characters[gStringBuffer[i] - font->unicodeStart];
 
-			// Move to the next line if we're about to go over
-			if (gStringBuffer[i] == '\n') {
+				// Draw character (or not) and move the cursor forward
+				if (c->drawn)
+					vk2dRendererDrawTexture(font->bitmap, x, y + c->ykern, 1, 1, 0, 0, 0, c->x, c->y, c->w, c->h);
+				x += c->w;
+			} else {
 				x = startX;
 				y += font->newLineHeight;
 			}
-
-			// Draw character (or not) and move the cursor forward
-			if (c->drawn)
-				vk2dRendererDrawTexture(font->bitmap, x, y + c->ykern, 1, 1, 0, 0, 0, c->x, c->y, c->w, c->h);
-			if (gStringBuffer[i] != '\n') x += c->w;
 		}
 	}
 }
