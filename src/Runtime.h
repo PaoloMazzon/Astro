@@ -18,6 +18,9 @@ typedef struct VKSK_EngineConfig {
 // Starts the runtime
 void vksk_Start();
 
+// Prints a stack trace
+void vksk_PrintStackTrace();
+
 // Searches through the assets folder and makes a wren source file loading it all
 const char *vksk_CompileAssetFile();
 

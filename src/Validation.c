@@ -57,6 +57,7 @@ void _vksk_ValidateForeignArgs(WrenVM *vm, const char *function, ...) {
 		while (type != FOREIGN_END) {
 			if (!checkType(vm, slot, type)) {
 				vksk_Log("Argument %i in foreign function \"%s\" is of incorrect type %#010x", slot, function, type);
+				vksk_PrintStackTrace();
 				abort();
 			}
 			slot += 1;
