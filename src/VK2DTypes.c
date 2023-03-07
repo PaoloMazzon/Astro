@@ -12,6 +12,9 @@ void vksk_RuntimeVK2DTextureAllocate(WrenVM *vm) {
 	VKSK_RuntimeForeign* tex = (VKSK_RuntimeForeign*)wrenSetSlotNewForeign(vm,0, 0, sizeof(VKSK_RuntimeForeign));
 	tex->texture = vk2dTextureLoad(wrenGetSlotString(vm, 1));
 	tex->type = FOREIGN_TEXTURE;
+	if (tex->texture == NULL) {
+		vksk_Error(false, "Failed to load texture '%s'", wrenGetSlotString(vm, 1));
+	}
 }
 
 void vksk_RuntimeVK2DTextureFinalize(void *data) {
@@ -42,6 +45,9 @@ void vksk_RuntimeVK2DSurfaceAllocate(WrenVM *vm) {
 	VKSK_RuntimeForeign* tex = (VKSK_RuntimeForeign*)wrenSetSlotNewForeign(vm,0, 0, sizeof(VKSK_RuntimeForeign));
 	tex->surface = vk2dTextureCreate(wrenGetSlotDouble(vm, 1), wrenGetSlotDouble(vm, 2));
 	tex->type = FOREIGN_SURFACE;
+	if (tex->surface == NULL) {
+		vksk_Error(false, "Failed to create surface of size %fx%f", wrenGetSlotDouble(vm, 1), wrenGetSlotDouble(vm, 2));
+	}
 }
 
 void vksk_RuntimeVK2DSurfaceFinalize(void *data) {

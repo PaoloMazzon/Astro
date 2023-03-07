@@ -56,9 +56,7 @@ void _vksk_ValidateForeignArgs(WrenVM *vm, const char *function, ...) {
 		int slot = 1;
 		while (type != FOREIGN_END) {
 			if (!checkType(vm, slot, type)) {
-				vksk_Log("Argument %i in foreign function \"%s\" is of incorrect type %#010x", slot, function, type);
-				vksk_PrintStackTrace();
-				abort();
+				vksk_Error(true, "Argument %i in foreign function \"%s\" is of incorrect type %#010x", slot, function, type);
 			}
 			slot += 1;
 
@@ -76,4 +74,17 @@ void vksk_Log(const char *fmt, ...) {
 	printf("\n");
 	fflush(stdout);
 	va_end(list);
+}
+
+void vksk_PrintStackTrace(const char *errorString);
+void vksk_Error(bool fatal, const char *fmt, ...) {
+	char buffer[1024];
+	va_list list;
+	va_start(list, fmt);
+	vsnprintf(buffer, 1023, fmt, list);
+	fflush(stdout);
+	va_end(list);
+	vksk_PrintStackTrace(buffer);
+	if (fatal)
+		abort();
 }

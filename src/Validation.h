@@ -18,3 +18,6 @@ void _vksk_ValidateForeignArgs(WrenVM *vm, const char *function, ...);
 
 // Log a message
 void vksk_Log(const char *fmt, ...);
+
+// Throw an error
+void vksk_Error(bool fatal, const char *fmt, ...);

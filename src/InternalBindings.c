@@ -133,6 +133,9 @@ void vksk_RuntimeTiledAllocate(WrenVM *vm) {
 	tiled->type = FOREIGN_TILED_MAP;
 	fflush(stdout);
 	fflush(stderr);
+	if (tiled->tiled.map == NULL) {
+		vksk_Error(false, "Failed to load Tiled map '%s'", wrenGetSlotString(vm, 1));
+	}
 }
 
 void vksk_RuntimeTiledFinalize(void *data) {

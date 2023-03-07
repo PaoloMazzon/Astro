@@ -120,7 +120,7 @@ static void _vksk_FinalizeDebug() {
 	vk2dImageFree(gDebugGraphImage);
 }
 
-void vksk_PrintStackTrace() {
+void vksk_PrintStackTrace(const char *errorString) {
 	// Bail if the host doesn't enable printing errors.
 	if (vm->config.errorFn == NULL) return;
 
@@ -135,7 +135,7 @@ void vksk_PrintStackTrace() {
 		// TODO: Print something a little useful here. Maybe the name of the error's
 		// class?
 		vm->config.errorFn(vm, WREN_ERROR_RUNTIME,
-						   NULL, -1, "Stack trace");
+						   NULL, -1, errorString);
 	}
 
 	for (int i = fiber->numFrames - 1; i >= 0; i--)
