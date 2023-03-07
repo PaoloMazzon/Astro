@@ -224,7 +224,7 @@ void vksk_RuntimeVK2DShaderAllocate(WrenVM *vm) {
 			(int)wrenGetSlotDouble(vm, 3)
 	);
 	if (shader->shader == NULL) {
-		vksk_Log("Failed to load shader %s/%s with uniform buffer size of %i.", wrenGetSlotString(vm, 1), wrenGetSlotString(vm, 2), (int)wrenGetSlotDouble(vm, 3));
+		vksk_Error(false, "Failed to load shader %s/%s with uniform buffer size of %i.", wrenGetSlotString(vm, 1), wrenGetSlotString(vm, 2), (int)wrenGetSlotDouble(vm, 3));
 	}
 }
 

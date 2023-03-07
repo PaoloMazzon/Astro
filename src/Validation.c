@@ -76,6 +76,7 @@ void vksk_Log(const char *fmt, ...) {
 	va_end(list);
 }
 
+extern SDL_Window *gWindow;
 void vksk_PrintStackTrace(const char *errorString);
 void vksk_Error(bool fatal, const char *fmt, ...) {
 	char buffer[1024];
@@ -85,6 +86,8 @@ void vksk_Error(bool fatal, const char *fmt, ...) {
 	fflush(stdout);
 	va_end(list);
 	vksk_PrintStackTrace(buffer);
-	if (fatal)
+	if (fatal) {
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "An error has occurred. Check astroerror.txt for more information.", gWindow);
 		abort();
+	}
 }

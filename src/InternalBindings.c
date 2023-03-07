@@ -98,6 +98,7 @@ void vksk_RuntimeFileRead(WrenVM *vm) {
 		wrenSetSlotString(vm, 0, str);
 		free((void*)str);
 	} else {
+
 		wrenSetSlotNull(vm, 0);
 	}
 }
