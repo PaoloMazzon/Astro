@@ -17,7 +17,22 @@ Parameters
  + `width -> Num` Width of the new surface in pixels.
  + `height -> Num` Height of the new surface in pixels.
 
-Creates of a new surface of specified dimensions.
+Creates of a new surface of specified dimensions. It is important that you clear
+new surfaces if you don't intend to completely fill it as their contents are undefined
+by default which will result in weird behaviour.
+
+A good way to get a complete clear surface after creating it is
+
+    var surf = Surface.new(100, 100)
+    var original_blend_mode = Renderer.blend_mode
+    var original_colour_mod = Renderer.colour_mod
+    Renderer.blend_mode = Renderer.BLEND_MODE_NONE
+    Renderer.colour_mod = [0, 0, 0, 0]
+    Renderer.target = surf
+    Renderer.clear()
+    Renderer.target = Renderer.RENDER_TARGET_DEFAULT
+    Renderer.colour_mod = original_colour_mod
+    Renderer.blend_mode = original_blend_mode
 
 ### width
 `width`

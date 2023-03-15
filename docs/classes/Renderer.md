@@ -4,15 +4,15 @@ The `Renderer` class contains methods that are used in drawing and managing the 
  + [draw_circle](#draw_circle)
  + [draw_texture](#draw_texture)
  + [draw_texture_part](#draw_texture_part)
- + [get_config](#get_config)
- + [set_config](#set_config)
- + [set_target](#set_target)
- + [set_blend_mode](#set_blend_mode)
- + [get_blend_mode](#get_blend_mode)
- + [set_colour_mod](#set_colour_mod)
- + [get_colour_mod](#get_colour_mod)
- + [set_shader](#set_shader)
- + [set_texture_camera](#set_texture_camera)
+ + [config](#config-setter)
+ + [config](#config-getter)
+ + [target](#target-setter)
+ + [blend_mode](#blend_mode-setter)
+ + [blend_mode](#blend_mode-getter)
+ + [colour_mod](#colour_mod-setter)
+ + [colour_mod](#colour_mod-getter)
+ + [shader](#shader)
+ + [set_texture_camera](#use_cameras_on_surfaces)
  + [average_frame_time](#average_frame_time)
  + [lock_cameras](#lock_cameras)
  + [unlock_cameras](#unlock_cameras)
@@ -105,8 +105,8 @@ Parameters
 
 Draws a specific portion of a texture.
 
-## get_config
-`static get_config()`
+## config (getter)
+`static config`
 
 Returns a map containing the renderer's current configuration. This map will have the same
 keys as the map you pass in `init.wren`. For convenience, those keys are as follows:
@@ -123,8 +123,8 @@ keys as the map you pass in `init.wren`. For convenience, those keys are as foll
 > 32x MSAA but the host system only supports up to 8x MSAA, this will return 
 > MSAA_8X since that is what is actually being used.
 
-## set_config
-`static set_config(config)`
+## config (setter)
+`static config=(config)`
 
 Parameters
  + `config -> Map` Renderer settings to use.
@@ -140,30 +140,34 @@ the map must have the following keys:
 + `"screen_mode"` - Desired screen mode setting, will be a `SCREEN_MODE_*` value.
 + `"filter_type"` - Desired filter type, will be a `FILTER_TYPE_*` value.
 
-## set_target
-`static set_target(target)`
+## target (setter)
+`static target=(target)`
 
 Parameters
  + `target -> lib/Drawing::Surface` Surface to set as the new render target.
 
 Changes the render target to `target`, specify `RENDER_TARGET_DEFAULT` to draw to the
-window instead.
+window instead. This value is write-only.
 
-## set_blend_mode
-`static set_blend_mode(blend_mode)`
+> 📝 Switching targets is a somewhat resource-intensive task that must be done a
+> specific way. Anytime you switch the target to a surface you *MUST* switch the
+> target back to the `RENDER_TARGET_DEFAULT` before switching to a new surface.
+
+## blend_mode (setter)
+`static blend_mode=(blend_mode)`
 
 Parameters
  + `blend_mode -> Num` A `BLEND_MODE_*` value.
 
 Changes the blend mode.
 
-## get_blend_mode
-`static get_blend_mode()`
+## blend_mode (getter)
+`static blend_mode`
 
 Returns the current blend mode as a `BLEND_MODE_*` value.
 
-## set_colour_mod
-`static set_colour_mod(colour)`
+## colour_mod (setter)
+`static colour_mod=(colour)`
 
 Parameters
  + `colour -> List` A list of `[red, green, blue, alpha]` values from 0-1
@@ -171,23 +175,26 @@ Parameters
 Sets the colour mod for the renderer, this means all textures will have their colours
 multiplied by this value and all shapes you draw will be this colour.
 
-## get_colour_mod
-`static get_colour_mod()`
+## colour_mod (getter)
+`static colour_mod`
 
 Returns the current colour mod as a 4-element list of `[red, green, blue, alpha]` values
 from 0-1.
 
-## set_texture_camera
-`static set_texture_camera(enable)`
+## use_cameras_on_surfaces
+`static use_cameras_on_surfaces=(enable)`
 
 Parameters
  + `enable -> Bool` Whether or not to use cameras when rendering to surfaces.
 
 If enabled, when rendering to surfaces, the current renderer's camera will be used for
-vertex transformations. This is useful when rendering the game world to a surface.
+vertex transformations. This is useful when rendering the game world to a surface. By default
+this is disabled which means when rendering to surfaces, no cameras are applied and
+for example, a coordinate of (400, 200) is relative to the top-left of the surface like you
+would see in an image editor.
 
 ## average_frame_time
-`static average_frame_time()`
+`static average_frame_time`
 
 Returns the average time it takes to render a frame, slightly different from the engine's
 average frame time.
@@ -227,8 +234,8 @@ Parameters
 
 Draws a rectangle to the render target.
 
-## set_shader
-`static set_shader(shader)`
+## shader
+`static shader=(shader)`
 
 Parameters
  + `shader -> lib/Renderer::Shader` Shader to use for texture rendering.

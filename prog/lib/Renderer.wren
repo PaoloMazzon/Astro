@@ -47,39 +47,39 @@ class Renderer {
     foreign static draw_texture_part(texture, x, y, x_in_tex, y_in_tex, width, height, x_scale, y_scale, rotation, x_origin, y_origin)
 
     // Returns a map of the current renderer config
-    foreign static get_config()
+    foreign static config
 
     // Sets the renderer's config using a provided map formatted in the same way as
     // the map you set in `init.wren`
-    foreign static set_config(config)
+    foreign static config=(config)
 
     // Sets the target the renderer will draw to, can either be a Surface or
     // `Renderer.RENDER_TARGET_DEFAULT`
-    foreign static set_target(target)
+    foreign static target=(target)
 
     // Sets the renderer's blend mode, must be one of the `Renderer.BLEND_MODE_*`
     // values
-    foreign static set_blend_mode(blend_mode)
+    foreign static blend_mode=(blend_mode)
 
     // Returns the current blend mode, will be one of the `Renderer.BLEND_MODE_*`
     // values
-    foreign static get_blend_mode()
+    foreign static blend_mode
 
     // Sets the render colour all things are drawn with, must be a 4-element
     // RGBA list of values in the range [0,1]. You may also use the
     // `Renderer.COLOUR_*` values
-    foreign static set_colour_mod(colour)
+    foreign static colour_mod=(colour)
 
     // Returns a list of 4 RGBA values from 0 to 1
-    foreign static get_colour_mod()
+    foreign static colour_mod
 
     // If true, the renderer's cameras will be used when drawing to surfaces.
     // Otherwise everything drawn to a surface will be drawn from that surface's
     // origin in the top-left
-    foreign static set_texture_camera(enable)
+    foreign static use_cameras_on_surfaces=(enable)
 
     // Returns the average frame time in seconds
-    foreign static average_frame_time()
+    foreign static average_frame_time
 
     // Locks the cameras so only a selected camera will be rendered to, may
     // be either a `Camera` instance or `Renderer.DEFAULT_CAMERA`
@@ -89,7 +89,7 @@ class Renderer {
     foreign static unlock_cameras()
 
     // Sets the current rendering shader for textures (and sprites by extension)
-    foreign static set_shader(shader)
+    foreign static shader=(shader)
 
     // Wipes the screen with the current rendering colour
     foreign static clear()

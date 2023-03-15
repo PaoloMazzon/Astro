@@ -118,21 +118,21 @@ class Game is Level {
 
         // Pre-load the image of the foreground tileset
         _foreground_surface = Surface.new(_tileset.width, _tileset.height)
-        Renderer.set_target(_foreground_surface)
+        Renderer.target = _foreground_surface
         _tileset.draw()
-        Renderer.set_target(Renderer.RENDER_TARGET_DEFAULT)
+        Renderer.target = Renderer.RENDER_TARGET_DEFAULT
 
         // Pre-load the image of the backdrop tileset
         _backdrop_surface = Surface.new(_tilesets["background"].width, _tilesets["background"].height)
-        Renderer.set_target(_backdrop_surface)
+        Renderer.target = _backdrop_surface
         _tilesets["background"].draw()
-        Renderer.set_target(Renderer.RENDER_TARGET_DEFAULT)
+        Renderer.target = Renderer.RENDER_TARGET_DEFAULT
 
         // Pre-load the image of the background tileset
         _background_surface = Surface.new(_tilesets["distance"].width, _tilesets["distance"].height)
-        Renderer.set_target(_background_surface)
+        Renderer.target = _background_surface
         _tilesets["distance"].draw()
-        Renderer.set_target(Renderer.RENDER_TARGET_DEFAULT)
+        Renderer.target = Renderer.RENDER_TARGET_DEFAULT
 
         // Find the player entity
         _player = get_entity(Player)
@@ -149,11 +149,11 @@ class Game is Level {
         // Render game world
         Renderer.lock_cameras(_game_cam)
         Tileset.draw_tiling_background(Assets.tex_bg_blue, 0.7, _game_cam)
-        Renderer.set_colour_mod([0.4, 0.4, 0.4, 1])
+        Renderer.colour_mod = [0.4, 0.4, 0.4, 1]
         Renderer.draw_texture(_background_surface, _game_cam.x * 0.18, _game_cam.y * 0.18)
-        Renderer.set_colour_mod([0.5, 0.5, 0.5, 1])
+        Renderer.colour_mod = [0.5, 0.5, 0.5, 1]
         Renderer.draw_texture(_backdrop_surface, 0, 0)
-        Renderer.set_colour_mod(Renderer.COLOUR_DEFAULT)
+        Renderer.colour_mod = Renderer.COLOUR_DEFAULT
         Renderer.draw_texture(_foreground_surface, 0, 0)
 
         super.update() // update all entities
