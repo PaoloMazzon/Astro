@@ -215,7 +215,13 @@ void vksk_Start() {
 			windowHeight,
 			SDL_WINDOW_VULKAN | (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0)
 			);
-	vk2dRendererInit(gWindow, rendererConfig);
+	VK2DStartupOptions options;
+	options.enableDebug = false;
+	options.loadCustomShaders = false;
+	options.stdoutLogging = false;
+	options.quitOnError = true;
+	options.errorFile = "astroerror.txt";
+	vk2dRendererInit(gWindow, rendererConfig, &options);
 	juInit(gWindow, 0, 0);
 
 	// Internal stuff

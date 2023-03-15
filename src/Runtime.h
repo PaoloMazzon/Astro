@@ -6,7 +6,7 @@
 
 #define ASTRO_VERSION_MAJOR 0
 #define ASTRO_VERSION_MINOR 6
-#define ASTRO_VERSION_PATCH 8
+#define ASTRO_VERSION_PATCH 9
 
 // Engine configuration
 typedef struct VKSK_EngineConfig {

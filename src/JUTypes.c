@@ -224,7 +224,11 @@ void vksk_RuntimeJUAudioDataAllocate(WrenVM *vm) {
 		memset(&snd->audioData->soundInfo, 0, sizeof(snd->audioData->soundInfo));
 	} else {
 		snd->audioData = NULL;
-		vksk_Log("Unrecognized sound file type for file \"%s\"", fname);
+		vksk_Error(false, "Unrecognized sound file type for file \"%s\"", fname);
+	}
+
+	if (cs_error_reason != NULL) {
+		vksk_Error(false, "Error loading '%s', %s", wrenGetSlotString(vm, 1), cs_error_reason);
 	}
 
 	snd->type = FOREIGN_AUDIO_DATA;
