@@ -437,3 +437,12 @@ void vksk_RuntimeProcessFrame(WrenVM *vm) {
 void vksk_RuntimeTimeStepPercent(WrenVM *vm) {
 	wrenSetSlotDouble(vm, 0, (juTime() - gPreviousTimeStep) / (1.0 / gTimeStep));
 }
+
+void vksk_RuntimeArgv(WrenVM *vm) {
+	wrenEnsureSlots(vm, 2);
+	wrenSetSlotNewList(vm, 0);
+	for (int i = 0; i < gEngineConfig.argc; i++) {
+		wrenSetSlotString(vm, 1, gEngineConfig.argv[i]);
+		wrenInsertInList(vm, 0, -1, 1);
+	}
+}

@@ -13,6 +13,7 @@ aspects of game development.
  + [timestep=](#timestep)
  + [timestep_percent](#timestep_percent)
  + [process_frame](#process_frame)
+ + [argv](#argv)
  
 ### switch_level
 `static switch_level(level)`
@@ -104,6 +105,11 @@ Parameters
  
 This method finds a variable in a module and returns it, or returns `null` if the variable/module
 does not exist.
+
+### argv
+`static argv`
+
+Returns a list of command line parameters given to the program on startup.
 
 -----------
 

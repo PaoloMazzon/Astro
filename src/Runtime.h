@@ -13,6 +13,8 @@ typedef struct VKSK_EngineConfig {
 	bool enableTypeChecking;
 	bool enableDebugOverlay;
 	bool enableAssetsPrint;
+	int argc;
+	const char **argv;
 } VKSK_EngineConfig;
 
 // Starts the runtime
@@ -56,3 +58,6 @@ void vksk_RuntimeProcessFrame(WrenVM *vm);
 
 // Returns the percent we are through this timestep
 void vksk_RuntimeTimeStepPercent(WrenVM *vm);
+
+// Returns a list of the compiler options
+void vksk_RuntimeArgv(WrenVM *vm);

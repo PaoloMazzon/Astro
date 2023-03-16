@@ -41,6 +41,9 @@ class Engine {
     // Returns a Wren class with a given class name in the format `module::class`
     foreign static get_class(class_name)
 
+    // Returns a list of command line parameters
+    foreign static argv
+
     // For internal use
     foreign static report_debug(entity_count)
 }
