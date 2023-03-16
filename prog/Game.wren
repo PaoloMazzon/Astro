@@ -111,18 +111,33 @@ class Game is Level {
         // Pre-load the image of the foreground tileset
         _foreground_surface = Surface.new(_tileset.width, _tileset.height)
         Renderer.target = _foreground_surface
+        Renderer.blend_mode = Renderer.BLEND_MODE_NONE
+        Renderer.colour_mod = [0, 0, 0, 0]
+        Renderer.clear()
+        Renderer.blend_mode = Renderer.BLEND_MODE_BLEND
+        Renderer.colour_mod = [1, 1, 1, 1]
         _tileset.draw()
         Renderer.target = Renderer.RENDER_TARGET_DEFAULT
 
         // Pre-load the image of the backdrop tileset
         _backdrop_surface = Surface.new(_tilesets["background"].width, _tilesets["background"].height)
         Renderer.target = _backdrop_surface
+        Renderer.blend_mode = Renderer.BLEND_MODE_NONE
+        Renderer.colour_mod = [0, 0, 0, 0]
+        Renderer.clear()
+        Renderer.blend_mode = Renderer.BLEND_MODE_BLEND
+        Renderer.colour_mod = [1, 1, 1, 1]
         _tilesets["background"].draw()
         Renderer.target = Renderer.RENDER_TARGET_DEFAULT
 
         // Pre-load the image of the background tileset
         _background_surface = Surface.new(_tilesets["distance"].width, _tilesets["distance"].height)
         Renderer.target = _background_surface
+        Renderer.blend_mode = Renderer.BLEND_MODE_NONE
+        Renderer.colour_mod = [0, 0, 0, 0]
+        Renderer.clear()
+        Renderer.blend_mode = Renderer.BLEND_MODE_BLEND
+        Renderer.colour_mod = [1, 1, 1, 1]
         _tilesets["distance"].draw()
         Renderer.target = Renderer.RENDER_TARGET_DEFAULT
 
