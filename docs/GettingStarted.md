@@ -24,8 +24,7 @@ To launch a game in Astro you need 3 things:
  and `start_level`. `start_level` is an instance of `lib/Engine::Level` that the engine will use as the
  starting level. `renderer_config` must be a map containing specific keys. Additionally, you may provide
  a third variable, `window_icon`, which will be a path to an image Astro will set as the window's icon.
- 
-    import "lib/Renderer" for Renderer
+
     import "Game" for Game
     
     var renderer_config = {
@@ -47,8 +46,7 @@ Check [set_config](classes/Renderer.md#set_config) for details on each of the ma
 values.
 
 > 📝 When the `init.wren` file is loaded into Astro, the rest of the engine is yet to initialize.
-> In practice this means you may **not** call most engine-related methods (anything from
-> `lib/Engine`, anything drawing related, anything input related).    
+> In practice this means you may **not** call most engine-related methods.  
   
 After Astro loads this file and extracts the data it wants from it, it will then
 initialize the rest of the engine and call the level's `create()` method. From

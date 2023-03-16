@@ -10,6 +10,7 @@
 #include "src/Input.h"
 #include "src/JUTypes.h"
 #include "src/InternalBindings.h"
+#include "src/WrenPreprocessor.h"
 
 // Globals
 extern const char *gAssetsFile;
@@ -39,30 +40,6 @@ void vksk_WrenErrorFn(WrenVM* vm, WrenErrorType errorType, const char* module, c
 	fclose(f);
 }
 
-const char* loadFile(const char *filename) {
-	FILE* file = fopen(filename, "rb");
-	unsigned char *buffer = NULL;
-	int size = 0;
-
-	if (file != NULL) {
-		// Find file size
-		fseek(file, 0, SEEK_END);
-		size = ftell(file);
-		rewind(file);
-
-		buffer = malloc(size + 1);
-		buffer[size] = 0;
-
-		if (buffer != NULL) {
-			// Fill the buffer
-			fread(buffer, 1, size, file);
-		}
-		fclose(file);
-	}
-
-	return (const char*)buffer;
-}
-
 void vksk_WrenLoadModuleComplete(WrenVM* vm, const char* module, WrenLoadModuleResult result)
 {
 	if (result.source) {
@@ -78,7 +55,7 @@ WrenLoadModuleResult vksk_WrenLoadModule(WrenVM* vm, const char* name) {
 	WrenLoadModuleResult result = {0};
 	result.onComplete = vksk_WrenLoadModuleComplete;
 	if (strcmp(name, "Assets") != 0)
-		result.source = loadFile(fname);
+		result.source = vksk_PreprocessSource(fname);
 	else
 		result.source = gAssetsFile;
 	return result;

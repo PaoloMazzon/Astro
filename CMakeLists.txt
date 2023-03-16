@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(Astro)
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O2")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 
 find_package(Vulkan)
 find_package(SDL2 REQUIRED)

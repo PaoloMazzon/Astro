@@ -1,5 +1,3 @@
-import "lib/Renderer" for Renderer
-import "lib/Engine" for Engine
 import "Game" for Game
 
 var renderer_config = {

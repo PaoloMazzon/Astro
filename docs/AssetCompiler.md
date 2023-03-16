@@ -14,11 +14,11 @@ For example, if your `assets/` folder looks like
 
 You would be able to access the files with
 
-    import "Assets" for Assets
-    ...
     Renderer.draw_texture(Assets.tex_player, 0, 0)
     Renderer.draw_texture(Assets.tex_grass, 100, 100)
     Audio.play(Assets.aud_music, true, 1, 1)
+    
+The `Assets` class is automatically imported in every file.
 
 Based on the extension, the asset compiler will automatically load it as the proper class.
 The `Assets` class also provides a way to access assets via a string name of the asset by the

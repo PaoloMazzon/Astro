@@ -23,6 +23,7 @@ properly.
  4. Map file must be in `assets/` folder.
  5. All tilesets used must be loaded as textures by the asset compiler. You may only have one size
  of cell width/height per map.
+ 6. Any entities in the map must be imported by something to make it visible to the engine.
  
 ![JSON](./filedropdown.png)
 
