@@ -24,7 +24,7 @@ void vksk_PakExtract(VKSK_Pak pak, const char *outDir);
 VKSK_Pak vksk_PakCreate();
 
 // Places the contents of a directory into an existing pak, returns non-zero value on failure
-int vksk_PakAddDirectory(VKSK_Pak pak, const char *directory);
+void vksk_PakAddDirectory(VKSK_Pak pak, const char *directory);
 
 // Saves a pak created with vksk_PakCreate
 void vksk_PakSave(VKSK_Pak pak, const char *file);

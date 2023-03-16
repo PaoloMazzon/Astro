@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
 project(Astro)
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O2")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 
 find_package(Vulkan)
 find_package(SDL2 REQUIRED)
+
+add_subdirectory("Packer")
 
 # All source files are located in the VK2D folder
 file(GLOB C_FILES Vulkan2D/VK2D/*.c src/*.c wren/src/optional/*.c wren/src/vm/*.c)

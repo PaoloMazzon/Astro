@@ -87,7 +87,7 @@ static unsigned char* _vksk_LoadFileRaw(const char *filename, int *size) {
 
 static int _vksk_FileSize(const char *filename) {
 	int size = 0;
-	FILE *f = fopen(filename, "r");
+	FILE *f = fopen(filename, "rb");
 	fseek(f, 0, SEEK_END);
 	size = ftell(f);
 	fclose(f);
@@ -105,35 +105,21 @@ static int _vksk_CalculateHeaderSize(VKSK_Pak pak) {
 	return size;
 }
 
-VKSK_Pak vksk_PakLoad(const char *filename) {
-
+void _vksk_AddHeaderInfo(VKSK_Pak pak, const char *file) {
+	pak->header.files = realloc(pak->header.files, sizeof(VKSK_PakFileInfo) * (pak->header.fileCount + 1));
+	VKSK_PakFileInfo *info = &pak->header.files[pak->header.fileCount];
+	pak->header.fileCount += 1;
+	info->filename = _vksk_CopyString(file);
+	info->pointer = 0;
+	info->size = _vksk_FileSize(file);
 }
 
-bool vksk_PakFileExists(VKSK_Pak pak, const char *filename) {
-
-}
-
-uint8_t *vksk_PakGetFile(VKSK_Pak pak, const char *filename, int *size) {
-
-}
-
-void vksk_PakExtract(VKSK_Pak pak, const char *outDir) {
-
-}
-
-VKSK_Pak vksk_PakCreate() {
-	VKSK_Pak pak = _vksk_PakMakeEmpty(PAK_TYPE_WRITE);
-	return pak;
-}
-
-int vksk_PakAddDirectory(VKSK_Pak pak, const char *directory) {
+void _vksk_IterateDirectory(VKSK_Pak pak, const char *dir) {
 	struct dirent *dp;
 	DIR *dfd;
 
-	char *dir = "assets/";
-
 	if ((dfd = opendir(dir)) == NULL) {
-		return -1;
+		return;
 	}
 
 	char filename_qfd[1000] ;
@@ -146,18 +132,153 @@ int vksk_PakAddDirectory(VKSK_Pak pak, const char *directory) {
 			continue;
 		}
 
-		if ( ( stbuf.st_mode & S_IFMT ) != S_IFDIR ) {
-			// Load file into pak
+		if ((stbuf.st_mode & S_IFMT) != S_IFDIR) {
+			_vksk_AddHeaderInfo(pak, filename_qfd);
+		} else if (( stbuf.st_mode & S_IFMT ) == S_IFDIR) {
+			if (filename_qfd[strlen(filename_qfd) - 1] != '.') {
+				_vksk_IterateDirectory(pak, filename_qfd);
+			}
 		}
 		dp = readdir(dfd);
 	}
-	return 0;
+}
+
+int _vksk_SwapEndian(int valEnd, int val) {
+	if (valEnd != SDL_BYTEORDER)
+		return SDL_Swap32(val);
+	else
+		return val;
+}
+
+VKSK_Pak vksk_PakLoad(const char *filename) {
+	VKSK_Pak pak = _vksk_PakMakeEmpty(PAK_TYPE_READ);
+	FILE *f = fopen(filename, "rb");
+	int endian;
+	fread(&endian, 4, 1, f);
+	fread(&pak->header.fileCount, 4, 1, f);
+	pak->header.fileCount = _vksk_SwapEndian(endian, pak->header.fileCount);
+	pak->filename = _vksk_CopyString(filename);
+
+	// Create header
+	pak->header.files = malloc(sizeof(struct VKSK_PakFileInfo) * pak->header.fileCount);
+	for (int i = 0; i < pak->header.fileCount; i++) {
+		VKSK_PakFileInfo *fileInfo = &pak->header.files[i];
+
+		// String size
+		int stringSize;
+		fread(&stringSize, 4, 1, f);
+		stringSize = _vksk_SwapEndian(endian, stringSize);
+
+		// File size
+		fread(&fileInfo->size, 4, 1, f);
+		fileInfo->size = _vksk_SwapEndian(endian, fileInfo->size);
+
+		// Offset
+		fread(&fileInfo->pointer, 4, 1, f);
+		fileInfo->pointer = _vksk_SwapEndian(endian, fileInfo->pointer);
+
+		// Filename
+		char *fname = malloc(stringSize + 1);
+		fname[stringSize] = 0;
+		fread(fname, 1, stringSize, f);
+		fileInfo->filename = fname;
+	}
+	fclose(f);
+
+	return pak;
+}
+
+bool vksk_PakFileExists(VKSK_Pak pak, const char *filename) {
+	if (pak->type == PAK_TYPE_READ)
+		for (int i = 0; i < pak->header.fileCount; i++)
+			if (strcmp(pak->header.files->filename, filename) == 0)
+				return true;
+	return false;
+}
+
+uint8_t *vksk_PakGetFile(VKSK_Pak pak, const char *filename, int *size) {
+	*size = -1;
+	uint8_t *out = NULL;
+	if (pak->type == PAK_TYPE_READ) {
+		// Find the file
+		VKSK_PakFileInfo *found = NULL;
+		for (int i = 0; i < pak->header.fileCount && found == NULL; i++) {
+			if (strcmp(pak->header.files->filename, filename) == 0) {
+				found = &pak->header.files[i];
+			}
+		}
+
+		// Create a piece of memory for it
+		if (found != NULL) {
+			FILE *f = fopen(pak->filename, "rb");
+			out = malloc(found->size);
+			*size = found->size;
+			fseek(f, found->pointer, SEEK_SET);
+			fread(out, 1, *size, f);
+			fclose(f);
+		}
+	}
+
+	return out;
+}
+
+void vksk_PakExtract(VKSK_Pak pak, const char *outDir) {
+	if (pak->type == PAK_TYPE_READ) {
+		// TODO: This
+	}
+}
+
+VKSK_Pak vksk_PakCreate() {
+	VKSK_Pak pak = _vksk_PakMakeEmpty(PAK_TYPE_WRITE);
+	return pak;
+}
+
+void vksk_PakAddDirectory(VKSK_Pak pak, const char *directory) {
+	if (pak->type == PAK_TYPE_WRITE)
+		_vksk_IterateDirectory(pak, directory);
 }
 
 void vksk_PakSave(VKSK_Pak pak, const char *file) {
+	if (pak->type == PAK_TYPE_WRITE) {
+		int pointer = _vksk_CalculateHeaderSize(pak);
 
+		// Calculate pointers
+		for (int i = 0; i < pak->header.fileCount; i++) {
+			pak->header.files[i].pointer = pointer;
+			pointer += pak->header.files[i].size;
+		}
+
+		FILE *f = fopen(file, "wb");
+		fwrite(&pak->header.endian, 4, 1, f);
+		fwrite(&pak->header.fileCount, 4, 1, f);
+
+		// Output header
+		for (int i = 0; i < pak->header.fileCount; i++) {
+			VKSK_PakFileInfo *pakFile = &pak->header.files[i];
+			int strsize = strlen(pakFile->filename);
+			fwrite(&strsize, 4, 1, f);
+			fwrite(&pakFile->size, 4, 1, f);
+			fwrite(&pakFile->pointer, 4, 1, f);
+			fwrite(pakFile->filename, 1, strsize, f);
+		}
+
+		// Copy all files into the pak
+		for (int i = 0; i < pak->header.fileCount; i++) {
+			int fileSize = 0;
+			void *data = _vksk_LoadFileRaw(pak->header.files[i].filename, &fileSize);
+			fwrite(data, 1, fileSize, f);
+		}
+
+		fclose(f);
+	}
 }
 
 void vksk_PakFree(VKSK_Pak pak) {
-
+	if (pak != NULL) {
+		for (int i = 0; i < pak->header.fileCount; i++)
+			free((void*)pak->header.files[i].filename);
+		free(pak->header.files);
+		free((void*)pak->filename);
+		free(pak);
+	}
 }
