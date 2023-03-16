@@ -15,11 +15,6 @@ will use as an entry point and at least one level.
 
 A basic game
 ------------
-
-    import "lib/Engine" for Engine, Level
-    import "lib/Input" for Input
-    import "lib/Renderer" for Renderer
-    import "Assets" for Assets
     
     class Game is Level {
         construct new() { }
