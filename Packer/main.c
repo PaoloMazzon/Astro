@@ -3,11 +3,10 @@
 #include "src/Packer.h"
 
 int main(int argc, const char *argv[]) {
-	/*VKSK_Pak pak = vksk_PakCreate();
-	vksk_PakAddDirectory(pak, "assets");
-	vksk_PakSave(pak, "game.pak");*/
-
-	VKSK_Pak pak = vksk_PakLoad("game.pak");
-	vksk_PakFree(pak);
+	// Creates a pak from specified directories
+	VKSK_Pak pak = vksk_PakCreate();
+	for (int i = 1; i < argc; i++)
+		vksk_PakAddDirectory(pak, argv[i]);
+	vksk_PakSave(pak, "game.pak");
 	return 0;
 }

@@ -17,8 +17,8 @@ bool vksk_PakFileExists(VKSK_Pak pak, const char *filename);
 // Returns a binary buffer of the file, placing the size of the file into `size`
 uint8_t *vksk_PakGetFile(VKSK_Pak pak, const char *filename, int *size);
 
-// Extracts the contents of a pak into a directory
-void vksk_PakExtract(VKSK_Pak pak, const char *outDir);
+// Prints a list of the pak's contents to stdout
+void vksk_PakPrintContents(VKSK_Pak);
 
 // Creates an empty pak
 VKSK_Pak vksk_PakCreate();
