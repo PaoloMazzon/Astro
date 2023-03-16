@@ -47,6 +47,8 @@ An example of an `assets/asset.ini` file
     w=16
     h=16
     delay=0.2
+    origin_x=0
+    origin_y=0
     frames=4
     
     [font.png]

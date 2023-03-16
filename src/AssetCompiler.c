@@ -75,15 +75,17 @@ static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFun
 			snprintf(tmpCode, 1024, "    static tex_%s { __tex%s }\n", tmpName, tmpName);
 			appendString(getterFunctions, tmpCode);
 
-			double x, y, w, h, delay, frames;
+			double x, y, w, h, delay, frames, origin_x, origin_y;
 			x = vksk_ConfigGetDouble(conf, file, "x", 0);
 			y = vksk_ConfigGetDouble(conf, file, "y", 0);
+			origin_x = vksk_ConfigGetDouble(conf, file, "origin_x", 0);
+			origin_y = vksk_ConfigGetDouble(conf, file, "origin_y", 0);
 			w = vksk_ConfigGetDouble(conf, file, "w", 0);
 			h = vksk_ConfigGetDouble(conf, file, "h", 0);
 			delay = vksk_ConfigGetDouble(conf, file, "delay", 0);
 			frames = vksk_ConfigGetDouble(conf, file, "frames", 1);
 			// Generate loader function bit first
-			snprintf(tmpCode, 1024, "        __spr%s = Sprite.from(__tex%s, %f, %f, %f, %f, %f, %i)\n        __asset_map[\"spr_%s\"] = __spr%s\n", tmpName, tmpName, x, y, w, h, delay, (int)frames, tmpName, tmpName);
+			snprintf(tmpCode, 1024, "        __spr%s = Sprite.from(__tex%s, %f, %f, %f, %f, %f, %i)\n        __asset_map[\"spr_%s\"] = __spr%s\n        __spr%s.origin_x = %f\n        __spr%s.origin_y = %f\n", tmpName, tmpName, x, y, w, h, delay, (int)frames, tmpName, tmpName, tmpName, origin_x, tmpName, origin_y);
 			appendString(spriteLoader, tmpCode);
 
 			// Getter
