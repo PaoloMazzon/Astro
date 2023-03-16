@@ -66,7 +66,6 @@ Features
 TODO
 ====
 
- + More complete error checking
  + Improve TrueType font rendering
  + Built-in mod support
  + Way to package games
