@@ -827,12 +827,12 @@ JUFont juFontLoad(const char *filename) {
 	return font;
 }
 
-JUFont juFontLoadFromImage(const char *image, uint32_t unicodeStart, uint32_t unicodeEnd, float w, float h) {
+JUFont juFontLoadFromTexture(VK2DTexture texture, uint32_t unicodeStart, uint32_t unicodeEnd, float w, float h) {
 	// Setup font struct
 	JUFont font = juMalloc(sizeof(struct JUFont));
 	font->characters = juMalloc(sizeof(struct JUCharacter) * (unicodeEnd - unicodeStart));
-	font->bitmap = vk2dTextureLoad(image);
-	font->image = NULL;
+	font->bitmap = texture;
+	font->image = texture->img;
 	font->newLineHeight = h;
 	font->unicodeStart = unicodeStart;
 	font->unicodeEnd = unicodeEnd;
@@ -859,8 +859,6 @@ JUFont juFontLoadFromImage(const char *image, uint32_t unicodeStart, uint32_t un
 			i++;
 		}
 	} else {
-		juLog("Failed to load texture \"%s\"", image);
-		vk2dTextureFree(font->bitmap);
 		free(font->characters);
 		free(font);
 		font = NULL;

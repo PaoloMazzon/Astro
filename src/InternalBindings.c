@@ -11,6 +11,7 @@
 #include "src/Validation.h"
 #include "src/IntermediateTypes.h"
 #include "src/Runtime.h"
+#include "src/Util.h"
 
 static const double NO_MORE_LAYERS = 0;
 static const double TILE_LAYER = 1;
@@ -163,7 +164,9 @@ void vksk_RuntimeFileRename(WrenVM *vm) {
 void vksk_RuntimeTiledAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
 	VKSK_RuntimeForeign *tiled = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
-	tiled->tiled.map = cute_tiled_load_map_from_file(wrenGetSlotString(vm, 1), NULL);
+	int size;
+	void *buffer = vksk_GetFileBuffer(wrenGetSlotString(vm, 1), &size);
+	tiled->tiled.map = cute_tiled_load_map_from_memory(buffer, size, NULL);
 	tiled->tiled.layer = NULL;
 	tiled->type = FOREIGN_TILED_MAP;
 	fflush(stdout);
@@ -970,7 +973,7 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 
 	// Load initial font data
 	int bufferSize, lineGap, ascent, descent;
-	void *fntData = loadFileRaw(filename, &bufferSize);
+	void *fntData = vksk_GetFileBuffer(filename, &bufferSize);
 	stbtt_fontinfo info = {};
 	stbtt_InitFont(&info, fntData, 0);
 	float scale = stbtt_ScaleForPixelHeight(&info, size);

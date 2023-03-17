@@ -1,42 +1,60 @@
 /// \file VK2DTypes.c
 /// \author Paolo Mazzon
 #include <VK2D/VK2D.h>
+#include <VK2D/stb_image.h>
 
 #include "src/VK2DTypes.h"
 #include "src/IntermediateTypes.h"
 #include "src/Validation.h"
+#include "src/Util.h"
 
 /*************** Texture ***************/
 void vksk_RuntimeVK2DTextureAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
 	VKSK_RuntimeForeign* tex = (VKSK_RuntimeForeign*)wrenSetSlotNewForeign(vm,0, 0, sizeof(VKSK_RuntimeForeign));
-	tex->texture = vk2dTextureLoad(wrenGetSlotString(vm, 1));
+
+	int x, y, channels, size;
+	void *pixels;
+	void *buffer = vksk_GetFileBuffer(wrenGetSlotString(vm, 1), &size);
+	pixels = stbi_load_from_memory(buffer, size, &x, &y, &channels, 4);
+	tex->texture.img = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y);
+	stbi_image_free(pixels);
+
+	if (tex->texture.img == NULL) {
+		vksk_Error(false, "Failed to load texture image '%s'", wrenGetSlotString(vm, 1));
+	}
+
+	tex->texture.tex = vk2dTextureLoadFromImage(tex->texture.img);
+
 	tex->type = FOREIGN_TEXTURE;
-	if (tex->texture == NULL) {
+	if (tex->texture.tex == NULL) {
 		vksk_Error(false, "Failed to load texture '%s'", wrenGetSlotString(vm, 1));
 	}
 }
 
 void vksk_RuntimeVK2DTextureFinalize(void *data) {
 	vk2dRendererWait();
-	vk2dTextureFree(((VKSK_RuntimeForeign*)data)->texture);
+	vk2dTextureFree(((VKSK_RuntimeForeign*)data)->texture.tex);
+	vk2dImageFree(((VKSK_RuntimeForeign*)data)->texture.img);
 }
 
 void vksk_RuntimeVK2DTextureFree(WrenVM *vm) {
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 0);
 	vk2dRendererWait();
-	vk2dTextureFree(tex->texture);
-	tex->texture = NULL;
+	vk2dTextureFree(tex->texture.tex);
+	vk2dImageFree(tex->texture.img);
+	tex->texture.tex = NULL;
+	tex->texture.img = NULL;
 }
 
 void vksk_RuntimeVK2DTextureWidth(WrenVM *vm) {
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, tex->texture->img->width);
+	wrenSetSlotDouble(vm, 0, tex->texture.img->width);
 }
 
 void vksk_RuntimeVK2DTextureHeight(WrenVM *vm) {
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, tex->texture->img->height);
+	wrenSetSlotDouble(vm, 0, tex->texture.img->height);
 }
 
 /*************** Surface ***************/

@@ -6,23 +6,57 @@
 #define CUTE_SOUND_FORCE_SDL
 #define STB_VORBIS_INCLUDE_STB_VORBIS_H
 #include <src/cute_sound.h>
+#include <VK2D/stb_image.h>
 
 #include "src/Validation.h"
 #include "src/JUTypes.h"
 #include "src/IntermediateTypes.h"
+#include "src/Util.h"
 
 /********************* Bitmap Fonts *********************/
 void vksk_RuntimeJUBitmapFontAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *font = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
-	font->bitmapFont = juFontLoadFromImage(
-			wrenGetSlotString(vm, 1),
-			(int)wrenGetSlotDouble(vm, 2),
-			(int)wrenGetSlotDouble(vm, 3),
-			(int)wrenGetSlotDouble(vm, 4),
-			(int)wrenGetSlotDouble(vm, 5)
-			);
-	font->type = FOREIGN_BITMAP_FONT;
+	bool error = false;
+
+	VK2DTexture tex;
+	VK2DImage img;
+	int x, y, channels, size;
+	void *pixels;
+	void *buffer = vksk_GetFileBuffer(wrenGetSlotString(vm, 1), &size);
+	if (buffer != NULL) {
+		pixels = stbi_load_from_memory(buffer, size, &x, &y, &channels, 4);
+		if (pixels != NULL) {
+			img = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y);
+			stbi_image_free(pixels);
+			if (img != NULL) {
+				tex = vk2dTextureLoadFromImage(img);
+
+				if (tex != NULL) {
+					font->bitmapFont = juFontLoadFromTexture(
+							tex,
+							(int) wrenGetSlotDouble(vm, 2),
+							(int) wrenGetSlotDouble(vm, 3),
+							(int) wrenGetSlotDouble(vm, 4),
+							(int) wrenGetSlotDouble(vm, 5)
+					);
+					font->type = FOREIGN_BITMAP_FONT;
+				} else {
+					error = true;
+				}
+			} else {
+				error = true;
+			}
+		} else {
+			error = true;
+		}
+	} else {
+		error = true;
+	}
+	if (error) {
+		wrenSetSlotNull(vm, 0);
+		vksk_Error(false, "Failed to load bitmap font \"%s\"", wrenGetSlotString(vm, 1));
+	}
 }
 
 void vksk_RuntimeJUBitmapFontFinalize(void *data) {
@@ -55,37 +89,81 @@ void vksk_RuntimeJUBitmapFontFree(WrenVM *vm) {
 void vksk_RuntimeJUSpriteAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *spr = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
-	spr->type = FOREIGN_SPRITE;
-	spr->sprite = juSpriteCreate(
-			wrenGetSlotString(vm, 1),
-			wrenGetSlotDouble(vm, 2),
-			wrenGetSlotDouble(vm, 3),
-			wrenGetSlotDouble(vm, 4),
-			wrenGetSlotDouble(vm, 5),
-			wrenGetSlotDouble(vm, 6),
-			(int)wrenGetSlotDouble(vm, 7)
-	);
+	bool error = false;
+
+	const char *fname = wrenGetSlotString(vm, 1);
+	VK2DImage img;
+
+	int x, y, channels, size;
+	void *buffer = vksk_GetFileBuffer(fname, &size);
+	uint8_t *pixels = stbi_load_from_memory(buffer, size, &x, &y, &channels, 4);
+
+	if (pixels != NULL) {
+		img = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y);
+		if (img != NULL) {
+			spr->sprite.tex = vk2dTextureLoadFromImage(img);
+			if (spr->sprite.tex == NULL) {
+				vksk_Error(false, "Failed to create texture for sprite \"%s\"", wrenGetSlotString(vm, 1));
+				error = true;
+			}
+		} else {
+			vksk_Error(false, "Failed to create image for sprite \"%s\"", wrenGetSlotString(vm, 1));
+			error = true;
+		}
+		stbi_image_free(pixels);
+	} else {
+		vksk_Error(false, "Failed to load sprite \"%s\"", wrenGetSlotString(vm, 1));
+		error = true;
+	}
+
+	if (!error) {
+		spr->type = FOREIGN_SPRITE;
+		spr->sprite.spr = juSpriteFrom(
+				spr->sprite.tex,
+				wrenGetSlotDouble(vm, 2),
+				wrenGetSlotDouble(vm, 3),
+				wrenGetSlotDouble(vm, 4),
+				wrenGetSlotDouble(vm, 5),
+				wrenGetSlotDouble(vm, 6),
+				(int) wrenGetSlotDouble(vm, 7)
+		);
+	} else {
+		wrenSetSlotNull(vm, 0);
+	}
 }
 
 void vksk_RuntimeJUSpriteFinalize(void *data) {
 	VKSK_RuntimeForeign *spr = data;
 	vk2dRendererWait();
-	juSpriteFree(spr->sprite);
+	if (spr->sprite.tex != NULL) {
+		vk2dImageFree(spr->sprite.tex->img);
+	}
+	juSpriteFree(spr->sprite.spr);
 }
 
 void vksk_RuntimeJUSpriteFree(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
 	vk2dRendererWait();
-	juSpriteFree(spr->sprite);
-	spr->sprite = NULL;
+	if (spr->sprite.tex != NULL) {
+		vk2dImageFree(spr->sprite.tex->img);
+	}
+	juSpriteFree(spr->sprite.spr);
+	spr->sprite.tex = NULL;
+	spr->sprite.spr = NULL;
 }
 
 void vksk_RuntimeJUSpriteCopy(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
 	wrenGetVariable(vm, "lib/Drawing", "Sprite", 0);
 	VKSK_RuntimeForeign *newspr = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
-	newspr->sprite = juSpriteCopy(spr->sprite);
-	newspr->type = FOREIGN_SPRITE;
+	newspr->sprite.spr = juSpriteCopy(spr->sprite.spr);
+	if (newspr->sprite.spr != NULL) {
+		newspr->sprite.tex = NULL;
+		newspr->type = FOREIGN_SPRITE;
+	} else {
+		wrenSetSlotNull(vm, 0);
+		vksk_Error(false, "Failed to copy sprite.");
+	}
 }
 
 void vksk_RuntimeJUSpriteFrom(WrenVM *vm) {
@@ -99,8 +177,9 @@ void vksk_RuntimeJUSpriteFrom(WrenVM *vm) {
 	int frames = (int)wrenGetSlotDouble(vm, 7);
 	wrenGetVariable(vm, "lib/Drawing", "Sprite", 0);
 	VKSK_RuntimeForeign *newspr = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
-	newspr->sprite = juSpriteFrom(
-			tex->type == FOREIGN_SURFACE ? tex->surface : tex->texture,
+	newspr->sprite.tex = NULL;
+	newspr->sprite.spr = juSpriteFrom(
+			tex->type == FOREIGN_SURFACE ? tex->surface : tex->texture.tex,
 			x,
 			y,
 			w,
@@ -108,11 +187,15 @@ void vksk_RuntimeJUSpriteFrom(WrenVM *vm) {
 			delay,
 			frames);
 	newspr->type = FOREIGN_SPRITE;
+	if (newspr->sprite.spr == NULL) {
+		wrenSetSlotNull(vm, 0);
+		vksk_Error(false, "Failed to create sprite from texture.");
+	}
 }
 
 void vksk_RuntimeJUSpriteGetFrame(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, spr->sprite->Internal.frame);
+	wrenSetSlotDouble(vm, 0, spr->sprite.spr->Internal.frame);
 }
 
 void vksk_RuntimeJUSpriteSetFrame(WrenVM *vm) {
@@ -120,93 +203,93 @@ void vksk_RuntimeJUSpriteSetFrame(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
 	int frame = wrenGetSlotDouble(vm, 1);
 	if (frame == -1)
-		spr->sprite->Internal.frame = spr->sprite->Internal.frames - 1;
-	else if (frame < 0 || frame > spr->sprite->Internal.frames - 1)
-		spr->sprite->Internal.frame = 0;
+		spr->sprite.spr->Internal.frame = spr->sprite.spr->Internal.frames - 1;
+	else if (frame < 0 || frame > spr->sprite.spr->Internal.frames - 1)
+		spr->sprite.spr->Internal.frame = 0;
 	else
-		spr->sprite->Internal.frame = frame;
-	spr->sprite->Internal.lastTime = SDL_GetPerformanceCounter();
+		spr->sprite.spr->Internal.frame = frame;
+	spr->sprite.spr->Internal.lastTime = SDL_GetPerformanceCounter();
 }
 
 void vksk_RuntimeJUSpriteGetFrameCount(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, spr->sprite->Internal.frames);
+	wrenSetSlotDouble(vm, 0, spr->sprite.spr->Internal.frames);
 }
 
 void vksk_RuntimeJUSpriteGetDelay(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, spr->sprite->delay);
+	wrenSetSlotDouble(vm, 0, spr->sprite.spr->delay);
 }
 
 void vksk_RuntimeJUSpriteSetDelay(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	spr->sprite->delay = wrenGetSlotDouble(vm, 1);
+	spr->sprite.spr->delay = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeJUSpriteGetOriginX(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, spr->sprite->originX);
+	wrenSetSlotDouble(vm, 0, spr->sprite.spr->originX);
 }
 
 void vksk_RuntimeJUSpriteSetOriginX(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	spr->sprite->originX = wrenGetSlotDouble(vm, 1);
+	spr->sprite.spr->originX = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeJUSpriteGetOriginY(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, spr->sprite->originY);
+	wrenSetSlotDouble(vm, 0, spr->sprite.spr->originY);
 }
 
 void vksk_RuntimeJUSpriteSetOriginY(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	spr->sprite->originY = wrenGetSlotDouble(vm, 1);
+	spr->sprite.spr->originY = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeJUSpriteGetScaleX(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, spr->sprite->scaleX);
+	wrenSetSlotDouble(vm, 0, spr->sprite.spr->scaleX);
 }
 
 void vksk_RuntimeJUSpriteSetScaleX(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	spr->sprite->scaleX = wrenGetSlotDouble(vm, 1);
+	spr->sprite.spr->scaleX = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeJUSpriteGetScaleY(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, spr->sprite->scaleY);
+	wrenSetSlotDouble(vm, 0, spr->sprite.spr->scaleY);
 }
 
 void vksk_RuntimeJUSpriteSetScaleY(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	spr->sprite->scaleY = wrenGetSlotDouble(vm, 1);
+	spr->sprite.spr->scaleY = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeJUSpriteGetRotation(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, spr->sprite->rotation);
+	wrenSetSlotDouble(vm, 0, spr->sprite.spr->rotation);
 }
 
 void vksk_RuntimeJUSpriteSetRotation(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	spr->sprite->rotation = wrenGetSlotDouble(vm, 1);
+	spr->sprite.spr->rotation = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeJUSpriteGetWidth(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, spr->sprite->Internal.w);
+	wrenSetSlotDouble(vm, 0, spr->sprite.spr->Internal.w);
 }
 
 void vksk_RuntimeJUSpriteGetHeight(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, spr->sprite->Internal.h);
+	wrenSetSlotDouble(vm, 0, spr->sprite.spr->Internal.h);
 }
 
 
@@ -216,15 +299,23 @@ void vksk_RuntimeJUAudioDataAllocate(WrenVM *vm) {
 	VKSK_RuntimeForeign *snd = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
 	const char *fname = wrenGetSlotString(vm, 1);
 	const char *ext = strrchr(fname, '.');
-	if (strcmp(ext, ".wav") == 0) {
-		snd->audioData = juSoundLoad(fname);
-	} else if (strcmp(ext, ".ogg") == 0) {
-		snd->audioData = malloc(sizeof(struct JUSound));
-		snd->audioData->sound = cs_load_ogg(fname);
-		memset(&snd->audioData->soundInfo, 0, sizeof(snd->audioData->soundInfo));
+	int size;
+	void *buffer = vksk_GetFileBuffer(fname, &size);
+	if (buffer != NULL) {
+		if (strcmp(ext, ".wav") == 0) {
+			snd->audioData = malloc(sizeof(struct JUSound));
+			cs_read_mem_wav(buffer, size, &snd->audioData->sound);
+			memset(&snd->audioData->soundInfo, 0, sizeof(snd->audioData->soundInfo));
+		} else if (strcmp(ext, ".ogg") == 0) {
+			snd->audioData = malloc(sizeof(struct JUSound));
+			cs_read_mem_ogg(buffer, size, &snd->audioData->sound);
+			memset(&snd->audioData->soundInfo, 0, sizeof(snd->audioData->soundInfo));
+		} else {
+			snd->audioData = NULL;
+			vksk_Error(false, "Unrecognized sound file type for file \"%s\"", fname);
+		}
 	} else {
-		snd->audioData = NULL;
-		vksk_Error(false, "Unrecognized sound file type for file \"%s\"", fname);
+		vksk_Error(false, "Failed to load audio file \"%s\"", fname);
 	}
 
 	if (cs_error_reason != NULL) {

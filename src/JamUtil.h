@@ -273,7 +273,7 @@ JUFont juFontLoad(const char *filename);
 ///
 /// This can only load mono-spaced fonts and it expects the font to have at least
 /// an amount of characters in the image equal to unicodeEnd - unicodeStart.
-JUFont juFontLoadFromImage(const char *image, uint32_t unicodeStart, uint32_t unicodeEnd, float w, float h);
+JUFont juFontLoadFromTexture(VK2DTexture texture, uint32_t unicodeStart, uint32_t unicodeEnd, float w, float h);
 
 /// \brief Frees a font
 void juFontFree(JUFont font);
