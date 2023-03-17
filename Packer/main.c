@@ -8,5 +8,10 @@ int main(int argc, const char *argv[]) {
 	for (int i = 1; i < argc; i++)
 		vksk_PakAddDirectory(pak, argv[i]);
 	vksk_PakSave(pak, "game.pak");
+	vksk_PakFree(pak);
+
+	pak = vksk_PakLoad("game.pak");
+	vksk_PakPrintContents(pak);
+	vksk_PakFree(pak);
 	return 0;
 }

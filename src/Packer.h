@@ -20,6 +20,12 @@ uint8_t *vksk_PakGetFile(VKSK_Pak pak, const char *filename, int *size);
 // Prints a list of the pak's contents to stdout
 void vksk_PakPrintContents(VKSK_Pak);
 
+// Begins iterating through the contents of a pak starting at a given root directory, returns NULL if there are none
+const char *vksk_PakBeginLoop(VKSK_Pak pak, const char *dir);
+
+// Gets the next filename from vksk_PakBeginLoop, returns NULL if there are no more
+const char *vksk_PakNext(VKSK_Pak pak);
+
 // Creates an empty pak
 VKSK_Pak vksk_PakCreate();
 

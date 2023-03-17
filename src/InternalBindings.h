@@ -18,6 +18,8 @@ void vksk_RuntimeINISetBool(WrenVM *vm);
 void vksk_RuntimeFileRead(WrenVM *vm);
 void vksk_RuntimeFileWrite(WrenVM *vm);
 void vksk_RuntimeFileExists(WrenVM *vm);
+void vksk_RuntimeFileRemove(WrenVM *vm);
+void vksk_RuntimeFileRename(WrenVM *vm);
 
 void vksk_RuntimeTiledAllocate(WrenVM *vm);
 void vksk_RuntimeTiledFinalize(void *data);

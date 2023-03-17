@@ -161,7 +161,8 @@ VKSK_Pak vksk_PakLoad(const char *filename) {
 
 	// Create header
 	pak->header.files = malloc(sizeof(struct VKSK_PakFileInfo) * pak->header.fileCount);
-	for (int i = 0; i < pak->header.fileCount; i++) {
+	int filesProcessed = 0;
+	for (int i = 0; i < pak->header.fileCount && !feof(f); i++) {
 		VKSK_PakFileInfo *fileInfo = &pak->header.files[i];
 
 		// String size
@@ -182,8 +183,18 @@ VKSK_Pak vksk_PakLoad(const char *filename) {
 		fname[stringSize] = 0;
 		fread(fname, 1, stringSize, f);
 		fileInfo->filename = fname;
+		filesProcessed += 1;
 	}
 	fclose(f);
+
+	if (filesProcessed != pak->header.fileCount) {
+		for (int i = 0; i < filesProcessed; i++)
+			free((void*)pak->header.files[i].filename);
+		free(pak->header.files);
+		free((void*)pak->filename);
+		free(pak);
+		return NULL;
+	}
 
 	return pak;
 }
@@ -226,6 +237,14 @@ void vksk_PakPrintContents(VKSK_Pak pak) {
 	for (int i = 0; i < pak->header.fileCount; i++) {
 		printf("%s\n  Size: %i\n  Offset: %i\n", pak->header.files[i].filename, pak->header.files[i].size, pak->header.files[i].pointer);
 	}
+}
+
+const char *vksk_PakBeginLoop(VKSK_Pak pak, const char *dir) {
+	// TODO: This
+}
+
+const char *vksk_PakNext(VKSK_Pak pak) {
+	// TODO: This
 }
 
 VKSK_Pak vksk_PakCreate() {

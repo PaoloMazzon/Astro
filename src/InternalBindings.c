@@ -125,6 +125,19 @@ void vksk_RuntimeFileExists(WrenVM *vm) {
 	wrenSetSlotBool(vm, 0, _vk2dFileExists(fname));
 }
 
+void vksk_RuntimeFileRemove(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	const char *fname = wrenGetSlotString(vm, 1);
+	remove(fname);
+}
+
+void vksk_RuntimeFileRename(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_STRING, FOREIGN_END)
+	const char *fname = wrenGetSlotString(vm, 1);
+	const char *newfname = wrenGetSlotString(vm, 2);
+	rename(fname, newfname);
+}
+
 void vksk_RuntimeTiledAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
 	VKSK_RuntimeForeign *tiled = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
