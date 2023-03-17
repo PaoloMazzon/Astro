@@ -166,12 +166,18 @@ void vksk_RuntimeTiledAllocate(WrenVM *vm) {
 	VKSK_RuntimeForeign *tiled = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
 	int size;
 	void *buffer = vksk_GetFileBuffer(wrenGetSlotString(vm, 1), &size);
-	tiled->tiled.map = cute_tiled_load_map_from_memory(buffer, size, NULL);
-	tiled->tiled.layer = NULL;
-	tiled->type = FOREIGN_TILED_MAP;
-	fflush(stdout);
-	fflush(stderr);
-	if (tiled->tiled.map == NULL) {
+	if (buffer != NULL) {
+		tiled->tiled.map = cute_tiled_load_map_from_memory(buffer, size, NULL);
+		tiled->tiled.layer = NULL;
+		tiled->type = FOREIGN_TILED_MAP;
+		fflush(stdout);
+		fflush(stderr);
+		if (tiled->tiled.map == NULL) {
+			vksk_Error(false, "Failed to load Tiled map '%s'", wrenGetSlotString(vm, 1));
+			wrenSetSlotNull(vm, 0);
+		}
+		free(buffer);
+	} else {
 		vksk_Error(false, "Failed to load Tiled map '%s'", wrenGetSlotString(vm, 1));
 		wrenSetSlotNull(vm, 0);
 	}
@@ -1044,6 +1050,7 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 		} else {
 			error = true;
 		}
+		free(fntData);
 	} else {
 		error = true;
 	}

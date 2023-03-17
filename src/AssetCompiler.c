@@ -138,11 +138,8 @@ static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFun
 	}
 }
 
-const char *vksk_CompileAssetFile() {
+static bool _vksk_CompileAssetsFromDir(String loadFunction, String getterFunctions, String spriteLoadFunction) {
 	struct dirent *dp;
-	String loadFunction = appendString(newString(), LOAD_HEADER);
-	String getterFunctions = newString();
-	String spriteLoadFunction = newString();
 	DIR *dfd;
 	VKSK_Config conf = vksk_ConfigLoad("assets/assets.ini");
 
@@ -150,7 +147,7 @@ const char *vksk_CompileAssetFile() {
 
 	if ((dfd = opendir(dir)) == NULL) {
 		vksk_Log("Can't access assets directory");
-		return NULL;
+		return false;
 	}
 
 	char filename_qfd[100] ;
@@ -169,6 +166,22 @@ const char *vksk_CompileAssetFile() {
 		}
 		dp = readdir(dfd);
 	}
+	vksk_ConfigFree(conf);
+	return true;
+}
+
+static bool _vksk_CompileAssetsFromPak(String loadFunction, String getterFunctions, String spriteLoadFunction) {
+
+}
+
+const char *vksk_CompileAssetFile() {
+	String loadFunction = appendString(newString(), LOAD_HEADER);
+	String getterFunctions = newString();
+	String spriteLoadFunction = newString();
+
+	if (!_vksk_CompileAssetsFromDir(loadFunction, getterFunctions, spriteLoadFunction)) {
+		vksk_Log("Failed to compile asset file.");
+	}
 
 	// Build output string
 	appendString(loadFunction, spriteLoadFunction->str);
@@ -183,7 +196,6 @@ const char *vksk_CompileAssetFile() {
 
 	const char *out = compiledAssets->str;
 	free(compiledAssets);
-	vksk_ConfigFree(conf);
 
 	return out;
 }

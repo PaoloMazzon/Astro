@@ -50,6 +50,7 @@ void vksk_RuntimeJUBitmapFontAllocate(WrenVM *vm) {
 		} else {
 			error = true;
 		}
+		free(buffer);
 	} else {
 		error = true;
 	}
@@ -111,6 +112,7 @@ void vksk_RuntimeJUSpriteAllocate(WrenVM *vm) {
 			error = true;
 		}
 		stbi_image_free(pixels);
+		free(buffer);
 	} else {
 		vksk_Error(false, "Failed to load sprite \"%s\"", wrenGetSlotString(vm, 1));
 		error = true;
@@ -314,6 +316,7 @@ void vksk_RuntimeJUAudioDataAllocate(WrenVM *vm) {
 			snd->audioData = NULL;
 			vksk_Error(false, "Unrecognized sound file type for file \"%s\"", fname);
 		}
+		free(buffer);
 	} else {
 		vksk_Error(false, "Failed to load audio file \"%s\"", fname);
 	}

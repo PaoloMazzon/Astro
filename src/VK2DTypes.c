@@ -16,21 +16,32 @@ void vksk_RuntimeVK2DTextureAllocate(WrenVM *vm) {
 	int x, y, channels, size;
 	void *pixels;
 	void *buffer = vksk_GetFileBuffer(wrenGetSlotString(vm, 1), &size);
-	pixels = stbi_load_from_memory(buffer, size, &x, &y, &channels, 4);
-	tex->texture.img = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y);
-	stbi_image_free(pixels);
+	if (buffer != NULL) {
+		pixels = stbi_load_from_memory(buffer, size, &x, &y, &channels, 4);
+		if (pixels != NULL) {
+			tex->texture.img = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y);
+			stbi_image_free(pixels);
 
-	if (tex->texture.img == NULL) {
-		vksk_Error(false, "Failed to load texture image '%s'", wrenGetSlotString(vm, 1));
-		wrenSetSlotNull(vm, 0);
-	} else {
-		tex->texture.tex = vk2dTextureLoadFromImage(tex->texture.img);
-		tex->type = FOREIGN_TEXTURE;
-		if (tex->texture.tex == NULL) {
-			vk2dImageFree(tex->texture.img);
-			vksk_Error(false, "Failed to load texture '%s'", wrenGetSlotString(vm, 1));
+			if (tex->texture.img == NULL) {
+				vksk_Error(false, "Failed to load texture image '%s'", wrenGetSlotString(vm, 1));
+				wrenSetSlotNull(vm, 0);
+			} else {
+				tex->texture.tex = vk2dTextureLoadFromImage(tex->texture.img);
+				tex->type = FOREIGN_TEXTURE;
+				if (tex->texture.tex == NULL) {
+					vk2dImageFree(tex->texture.img);
+					vksk_Error(false, "Failed to load texture '%s'", wrenGetSlotString(vm, 1));
+					wrenSetSlotNull(vm, 0);
+				}
+			}
+		} else {
+			vksk_Error(false, "Failed to load texture pixels '%s'", wrenGetSlotString(vm, 1));
 			wrenSetSlotNull(vm, 0);
 		}
+		free(buffer);
+	} else {
+		vksk_Error(false, "Failed to load texture buffer '%s'", wrenGetSlotString(vm, 1));
+		wrenSetSlotNull(vm, 0);
 	}
 }
 

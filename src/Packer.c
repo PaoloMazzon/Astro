@@ -245,6 +245,10 @@ uint8_t *vksk_PakGetFile(VKSK_Pak pak, const char *filename, int *size) {
 	return out;
 }
 
+const char *vksk_PakGetFileString(VKSK_Pak pak, const char *filename) {
+
+}
+
 void vksk_PakPrintContents(VKSK_Pak pak) {
 	for (int i = 0; i < pak->header.fileCount; i++) {
 		printf("%s\n  Size: %i\n  Offset: %i\n", pak->header.files[i].filename, pak->header.files[i].size, pak->header.files[i].pointer);

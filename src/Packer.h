@@ -14,8 +14,11 @@ VKSK_Pak vksk_PakLoad(const char *filename);
 // Returns true if a file exists in a pak
 bool vksk_PakFileExists(VKSK_Pak pak, const char *filename);
 
-// Returns a binary buffer of the file, placing the size of the file into `size`
+// Returns a binary buffer of the file, placing the size of the file into `size` (must free memory manually)
 uint8_t *vksk_PakGetFile(VKSK_Pak pak, const char *filename, int *size);
+
+// Same as vksk_PakGetFile but ensures trailing 0
+const char *vksk_PakGetFileString(VKSK_Pak, const char *filename);
 
 // Prints a list of the pak's contents to stdout
 void vksk_PakPrintContents(VKSK_Pak);
