@@ -9,6 +9,9 @@
 
 #include "src/Packer.h"
 
+static int gFileIndex = -1;
+static char gCurrentDir[1024];
+
 /*
  * .pak file specification
  *
@@ -105,7 +108,7 @@ static int _vksk_CalculateHeaderSize(VKSK_Pak pak) {
 	return size;
 }
 
-void _vksk_AddHeaderInfo(VKSK_Pak pak, const char *file) {
+static void _vksk_AddHeaderInfo(VKSK_Pak pak, const char *file) {
 	pak->header.files = realloc(pak->header.files, sizeof(VKSK_PakFileInfo) * (pak->header.fileCount + 1));
 	VKSK_PakFileInfo *info = &pak->header.files[pak->header.fileCount];
 	pak->header.fileCount += 1;
@@ -114,7 +117,7 @@ void _vksk_AddHeaderInfo(VKSK_Pak pak, const char *file) {
 	info->size = _vksk_FileSize(file);
 }
 
-void _vksk_IterateDirectory(VKSK_Pak pak, const char *dir) {
+static void _vksk_IterateDirectory(VKSK_Pak pak, const char *dir) {
 	struct dirent *dp;
 	DIR *dfd;
 
@@ -143,7 +146,13 @@ void _vksk_IterateDirectory(VKSK_Pak pak, const char *dir) {
 	}
 }
 
-int _vksk_SwapEndian(int valEnd, int val) {
+static bool _vksk_IsFromDirectory(const char *fname, const char *dir) {
+	if (strstr(fname, dir) == fname || dir[0] == 0)
+		return true;
+	return false;
+}
+
+static int _vksk_SwapEndian(int valEnd, int val) {
 	if (valEnd != SDL_BYTEORDER)
 		return SDL_Swap32(val);
 	else
@@ -240,11 +249,49 @@ void vksk_PakPrintContents(VKSK_Pak pak) {
 }
 
 const char *vksk_PakBeginLoop(VKSK_Pak pak, const char *dir) {
-	// TODO: This
+	// Setup the directory properly
+	if (strcmp(dir, "./") == 0 || strcmp(dir, ".") == 0) {
+		gCurrentDir[0] = 0;
+	} else {
+		int len = strlen(dir);
+		if (dir[len - 1] == '/') {
+			memcpy(gCurrentDir, dir, len - 1);
+			gCurrentDir[len] = 0;
+		} else {
+			memcpy(gCurrentDir, dir, len);
+			gCurrentDir[len + 1] = 0;
+		}
+	}
+
+	// Locate the first file in the dir
+	const char *out = NULL;
+	gFileIndex = -1;
+	for (int i = 0; i < pak->header.fileCount && out == NULL; i++) {
+		if (_vksk_IsFromDirectory(pak->header.files[i].filename, gCurrentDir)) {
+			gFileIndex = i + 1;
+			out = pak->header.files[i].filename;
+		}
+	}
+
+	return out;
 }
 
 const char *vksk_PakNext(VKSK_Pak pak) {
-	// TODO: This
+	if (gFileIndex != -1) {
+		const char *out = NULL;
+		for (int i = gFileIndex; i < pak->header.fileCount && out == NULL; i++) {
+			if (_vksk_IsFromDirectory(pak->header.files[i].filename, gCurrentDir)) {
+				gFileIndex = i + 1;
+				out = pak->header.files[i].filename;
+			}
+		}
+
+		if (out == NULL) {
+			gFileIndex = -1;
+		}
+		return out;
+	}
+	return NULL;
 }
 
 VKSK_Pak vksk_PakCreate() {
