@@ -12,6 +12,7 @@ int main(int argc, const char *argv[]) {
 	gEngineConfig.enableTypeChecking = vksk_ConfigGetBool(engineConfig, "engine", "enableTypeChecking", false);
 	gEngineConfig.enableDebugOverlay = vksk_ConfigGetBool(engineConfig, "engine", "enableDebugOverlay", false);
 	gEngineConfig.enableAssetsPrint = vksk_ConfigGetBool(engineConfig, "engine", "enableAssetsPrint", false);
+	gEngineConfig.disableGamePak = vksk_ConfigGetBool(engineConfig, "engine", "disableGamePak", false);
 	vksk_ConfigFree(engineConfig);
 	gEngineConfig.argc = argc;
 	gEngineConfig.argv = argv;

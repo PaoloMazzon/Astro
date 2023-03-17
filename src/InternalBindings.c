@@ -10,6 +10,7 @@
 #include "src/ConfigFile.h"
 #include "src/Validation.h"
 #include "src/IntermediateTypes.h"
+#include "src/Runtime.h"
 
 static const double NO_MORE_LAYERS = 0;
 static const double TILE_LAYER = 1;
@@ -102,6 +103,21 @@ void vksk_RuntimeFileRead(WrenVM *vm) {
 	}
 }
 
+void vksk_RuntimeFileReadFromPak(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	const char *fname = wrenGetSlotString(vm, 1);
+	if (!vksk_PakFileExists(gGamePak, fname)) {
+		wrenSetSlotNull(vm, 0);
+	} else {
+		int size;
+		char *out = (void*)vksk_PakGetFile(gGamePak, fname, &size);
+		out = realloc(out, size + 1);
+		out[size] = 0;
+		wrenSetSlotString(vm, 0, out);
+		free(out);
+	}
+}
+
 void vksk_RuntimeFileWrite(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_STRING | FOREIGN_BUFFER, FOREIGN_END)
 	if (wrenGetSlotType(vm, 2) == WREN_TYPE_STRING) {
@@ -123,6 +139,12 @@ void vksk_RuntimeFileExists(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
 	const char *fname = wrenGetSlotString(vm, 1);
 	wrenSetSlotBool(vm, 0, _vk2dFileExists(fname));
+}
+
+void vksk_RuntimeFileExistsInPak(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	const char *fname = wrenGetSlotString(vm, 1);
+	wrenSetSlotBool(vm, 0, vksk_PakFileExists(gGamePak, fname));
 }
 
 void vksk_RuntimeFileRemove(WrenVM *vm) {
@@ -388,6 +410,20 @@ void vksk_RuntimeBufferOpen(WrenVM *vm) {
 		vksk_Log("Could not open buffer from \"%s\"\n", wrenGetSlotString(vm, 1));
 	}
 	buffer->type = FOREIGN_BUFFER;
+}
+
+void vksk_RuntimeBufferOpenFromPak(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	wrenGetVariable(vm, "lib/Util", "Buffer", 0);
+	VKSK_RuntimeForeign *buffer = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
+	buffer->buffer.pointer = 0;
+	buffer->buffer.data = 0;
+	buffer->buffer.size = 0;
+	const char *fname = wrenGetSlotString(vm, 1);
+
+	if (vksk_PakFileExists(gGamePak, fname)) {
+		buffer->buffer.data = (void*)vksk_PakGetFile(gGamePak, fname, &buffer->buffer.size);
+	}
 }
 
 void vksk_RuntimeBufferResize(WrenVM *vm) {

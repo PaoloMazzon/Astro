@@ -16,8 +16,10 @@ void vksk_RuntimeINIGetBool(WrenVM *vm);
 void vksk_RuntimeINISetBool(WrenVM *vm);
 
 void vksk_RuntimeFileRead(WrenVM *vm);
+void vksk_RuntimeFileReadFromPak(WrenVM *vm);
 void vksk_RuntimeFileWrite(WrenVM *vm);
 void vksk_RuntimeFileExists(WrenVM *vm);
+void vksk_RuntimeFileExistsInPak(WrenVM *vm);
 void vksk_RuntimeFileRemove(WrenVM *vm);
 void vksk_RuntimeFileRename(WrenVM *vm);
 
@@ -36,6 +38,7 @@ void vksk_RuntimeTiledGetTilesets(WrenVM *vm);
 void vksk_RuntimeBufferAllocate(WrenVM *vm);
 void vksk_RuntimeBufferFinalize(void *data);
 void vksk_RuntimeBufferOpen(WrenVM *vm);
+void vksk_RuntimeBufferOpenFromPak(WrenVM *vm);
 void vksk_RuntimeBufferResize(WrenVM *vm);
 void vksk_RuntimeBufferSize(WrenVM *vm);
 void vksk_RuntimeBufferSetPointer(WrenVM *vm);

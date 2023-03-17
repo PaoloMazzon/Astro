@@ -294,6 +294,9 @@ foreign class Buffer {
     // Creates a buffer from a file
     foreign static open(filename)
 
+    // Same as above but from game.pak
+    foreign static open_from_pak(filename)
+
     // Resizes a buffer, doesn't move the pointer
     foreign resize(size)
 

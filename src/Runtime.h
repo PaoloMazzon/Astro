@@ -3,6 +3,7 @@
 /// \brief The top-level runtime and meta functions that are binded to the VM but dont exist in VK2D/JamUtil
 #pragma once
 #include <wren.h>
+#include "src/Packer.h"
 
 #define ASTRO_VERSION_MAJOR 0
 #define ASTRO_VERSION_MINOR 6
@@ -13,9 +14,13 @@ typedef struct VKSK_EngineConfig {
 	bool enableTypeChecking;
 	bool enableDebugOverlay;
 	bool enableAssetsPrint;
+	bool disableGamePak;
 	int argc;
 	const char **argv;
 } VKSK_EngineConfig;
+
+// Pak file that may be present for the game
+extern VKSK_Pak gGamePak;
 
 // Starts the runtime
 void vksk_Start();

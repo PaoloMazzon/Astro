@@ -3,8 +3,10 @@
 that you are free to use before the engine is initialized.
 
 + [read](#read)
++ [read_from_pak](#read_from_pak)
 + [write](#write)
 + [exists](#exists)
++ [exists_in_pak](#exists_in_pak)
 + [remove](#remove)
 + [rename](#rename)
 
@@ -15,6 +17,15 @@ Parameters
  + `filename -> String` filename to read from.
  
 Reads an entire file into a string and returns it. The file is not kept open.
+
+### read_from_pak
+`static read_from_pak(filename)`
+
+Parameters
+ + `filename -> String` filename to read from.
+ 
+Reads an entire file into a string and returns it from `game.pak`. See [pak](../Pak.md) for
+more information.
 
 ### write
 `static write(filename, contents)`
@@ -33,6 +44,15 @@ Parameters
  + `filename -> String` filename to check.
  
 Returns true if the given `filename` exists and false otherwise.
+
+### exists_in_pak
+`static exists_in_pak(filename)`
+
+Parameters
+ + `filename -> String` filename to check.
+ 
+Returns true if the given `filename` exists in `game.pak` and false otherwise. See [pak](../Pak.md) for
+more information.
 
 ### remove
 `static remove(filename)`

@@ -161,55 +161,58 @@ static int _vksk_SwapEndian(int valEnd, int val) {
 
 VKSK_Pak vksk_PakLoad(const char *filename) {
 	VKSK_Pak pak = _vksk_PakMakeEmpty(PAK_TYPE_READ);
-	FILE *f = fopen(filename, "rb");
-	int endian;
-	fread(&endian, 4, 1, f);
-	fread(&pak->header.fileCount, 4, 1, f);
-	pak->header.fileCount = _vksk_SwapEndian(endian, pak->header.fileCount);
+	pak->header.files = NULL;
 	pak->filename = _vksk_CopyString(filename);
+	FILE *f = fopen(filename, "rb");
+	if (f != NULL) {
+		int endian;
+		fread(&endian, 4, 1, f);
+		fread(&pak->header.fileCount, 4, 1, f);
+		pak->header.fileCount = _vksk_SwapEndian(endian, pak->header.fileCount);
 
-	// Create header
-	pak->header.files = malloc(sizeof(struct VKSK_PakFileInfo) * pak->header.fileCount);
-	int filesProcessed = 0;
-	for (int i = 0; i < pak->header.fileCount && !feof(f); i++) {
-		VKSK_PakFileInfo *fileInfo = &pak->header.files[i];
+		// Create header
+		pak->header.files = malloc(sizeof(struct VKSK_PakFileInfo) * pak->header.fileCount);
+		int filesProcessed = 0;
+		for (int i = 0; i < pak->header.fileCount && !feof(f); i++) {
+			VKSK_PakFileInfo *fileInfo = &pak->header.files[i];
 
-		// String size
-		int stringSize;
-		fread(&stringSize, 4, 1, f);
-		stringSize = _vksk_SwapEndian(endian, stringSize);
+			// String size
+			int stringSize;
+			fread(&stringSize, 4, 1, f);
+			stringSize = _vksk_SwapEndian(endian, stringSize);
 
-		// File size
-		fread(&fileInfo->size, 4, 1, f);
-		fileInfo->size = _vksk_SwapEndian(endian, fileInfo->size);
+			// File size
+			fread(&fileInfo->size, 4, 1, f);
+			fileInfo->size = _vksk_SwapEndian(endian, fileInfo->size);
 
-		// Offset
-		fread(&fileInfo->pointer, 4, 1, f);
-		fileInfo->pointer = _vksk_SwapEndian(endian, fileInfo->pointer);
+			// Offset
+			fread(&fileInfo->pointer, 4, 1, f);
+			fileInfo->pointer = _vksk_SwapEndian(endian, fileInfo->pointer);
 
-		// Filename
-		char *fname = malloc(stringSize + 1);
-		fname[stringSize] = 0;
-		fread(fname, 1, stringSize, f);
-		fileInfo->filename = fname;
-		filesProcessed += 1;
-	}
-	fclose(f);
+			// Filename
+			char *fname = malloc(stringSize + 1);
+			fname[stringSize] = 0;
+			fread(fname, 1, stringSize, f);
+			fileInfo->filename = fname;
+			filesProcessed += 1;
+		}
+		fclose(f);
 
-	if (filesProcessed != pak->header.fileCount) {
-		for (int i = 0; i < filesProcessed; i++)
-			free((void*)pak->header.files[i].filename);
-		free(pak->header.files);
-		free((void*)pak->filename);
-		free(pak);
-		return NULL;
+		if (filesProcessed != pak->header.fileCount) {
+			for (int i = 0; i < filesProcessed; i++)
+				free((void *) pak->header.files[i].filename);
+			free(pak->header.files);
+			free((void *) pak->filename);
+			free(pak);
+			return NULL;
+		}
 	}
 
 	return pak;
 }
 
 bool vksk_PakFileExists(VKSK_Pak pak, const char *filename) {
-	if (pak->type == PAK_TYPE_READ)
+	if (pak != NULL && pak->type == PAK_TYPE_READ)
 		for (int i = 0; i < pak->header.fileCount; i++)
 			if (strcmp(pak->header.files->filename, filename) == 0)
 				return true;
@@ -219,7 +222,7 @@ bool vksk_PakFileExists(VKSK_Pak pak, const char *filename) {
 uint8_t *vksk_PakGetFile(VKSK_Pak pak, const char *filename, int *size) {
 	*size = -1;
 	uint8_t *out = NULL;
-	if (pak->type == PAK_TYPE_READ) {
+	if (pak != NULL && pak->type == PAK_TYPE_READ) {
 		// Find the file
 		VKSK_PakFileInfo *found = NULL;
 		for (int i = 0; i < pak->header.fileCount && found == NULL; i++) {

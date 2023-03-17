@@ -7,11 +7,20 @@ class File {
     // Reads an entire file into a string and returns it or NULL if the file doesn't exist
     foreign static read(filename)
 
+    // Same as read but from game.pak
+    foreign static read_from_pak(filename)
+
     // Writes a string to a file
     foreign static write(filename, contents)
 
     // Returns true if a file exists, false otherwise
     foreign static exists(filename)
+
+    foreign static exists_in_pak(filename)
+
+    foreign static remove(filename)
+
+    foreign static rename(old, new)
 }
 
 // Easy access for configuration files

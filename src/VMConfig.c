@@ -261,8 +261,10 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("INI", false, "get_num(_,_,_)", vksk_RuntimeINIGetNum)
 		BIND_METHOD("INI", false, "set_num(_,_,_)", vksk_RuntimeINISetNum)
 		BIND_METHOD("File", true, "read(_)", vksk_RuntimeFileRead)
+		BIND_METHOD("File", true, "read_from_pak(_)", vksk_RuntimeFileReadFromPak)
 		BIND_METHOD("File", true, "write(_,_)", vksk_RuntimeFileWrite)
 		BIND_METHOD("File", true, "exists(_)", vksk_RuntimeFileExists)
+		BIND_METHOD("File", true, "exists_in_pak(_)", vksk_RuntimeFileExistsInPak)
 		BIND_METHOD("File", true, "remove(_)", vksk_RuntimeFileRemove)
 		BIND_METHOD("File", true, "rename(_,_)", vksk_RuntimeFileRename)
 	} else if (strcmp(module, "lib/Audio") == 0) {
@@ -286,6 +288,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Buffer", false, "resize(_)", vksk_RuntimeBufferResize)
 		BIND_METHOD("Buffer", false, "size", vksk_RuntimeBufferSize)
 		BIND_METHOD("Buffer", true, "open(_)", vksk_RuntimeBufferOpen)
+		BIND_METHOD("Buffer", true, "open_from_pak(_)", vksk_RuntimeBufferOpenFromPak)
 		BIND_METHOD("Buffer", false, "pointer=(_)", vksk_RuntimeBufferSetPointer)
 		BIND_METHOD("Buffer", false, "pointer", vksk_RuntimeBufferGetPointer)
 		BIND_METHOD("Buffer", false, "read_double()", vksk_RuntimeBufferReadDouble)

@@ -12,6 +12,7 @@ You may write `Buffer`s to file using [write](File.md#write).
 
  + [new](#new)
  + [open](#open)
+ + [open_from_pak](#open_from_pak)
  + [resize](#resize)
  + [size](#size)
  + [pointer](#pointer-getter)
@@ -56,6 +57,14 @@ Parameters
  + `filename -> String` File to read the buffer from.
  
 Loads a buffer from a file.
+
+### open_from_pak
+`open_from_pak(filename)`
+
+Parameters
+ + `filename -> String` File to read the buffer from.
+ 
+Loads a buffer from a file in `game.pak`. See [pak](../Pak.md) for more information.
 
 ### resize
 `resize(size)`

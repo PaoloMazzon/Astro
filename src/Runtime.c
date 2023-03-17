@@ -29,6 +29,7 @@ double gFrames = 0;
 double gFPS = 0;
 extern VKSK_EngineConfig gEngineConfig;
 static WrenVM *vm;
+VKSK_Pak gGamePak = NULL;
 
 // Local globals
 static VK2DTexture gDebugFont;
@@ -169,6 +170,12 @@ void vksk_Start() {
 	gAssetsFile = vksk_CompileAssetFile();
 	if (gEngineConfig.enableAssetsPrint)
 		vksk_Log("---------------------Compiled assets file---------------------\n%s\n---------------------Compiled assets file---------------------", gAssetsFile);
+
+	// Load pak file
+	if (gEngineConfig.disableGamePak)
+		gGamePak = NULL;
+	else
+		gGamePak = vksk_PakLoad("game.pak");
 
 	// Wren config and VM initialization
 	vksk_Log("Starting VM...");
@@ -345,6 +352,7 @@ void vksk_Start() {
 	juQuit();
 	vk2dRendererQuit();
 	SDL_DestroyWindow(gWindow);
+	vksk_PakFree(gGamePak);
 }
 
 void vksk_RuntimeSwitchLevel(WrenVM *vm) {
