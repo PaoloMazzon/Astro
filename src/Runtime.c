@@ -312,6 +312,8 @@ void vksk_Start() {
 			wrenCall(vm, destroyHandle);
             wrenReleaseHandle(vm, gCurrentLevel);
 			if (gNextLevel != NULL) {
+				if (gEngineConfig.gcBetweenLevels)
+					wrenCollectGarbage(vm);
 				gCurrentLevel = gNextLevel;
 				gNextLevel = NULL;
 				wrenSetSlotHandle(vm, 0, gCurrentLevel);

@@ -13,6 +13,7 @@ int main(int argc, const char *argv[]) {
 	gEngineConfig.enableDebugOverlay = vksk_ConfigGetBool(engineConfig, "engine", "enableDebugOverlay", false);
 	gEngineConfig.enableAssetsPrint = vksk_ConfigGetBool(engineConfig, "engine", "enableAssetsPrint", false);
 	gEngineConfig.disableGamePak = vksk_ConfigGetBool(engineConfig, "engine", "disableGamePak", false);
+	gEngineConfig.gcBetweenLevels = vksk_ConfigGetBool(engineConfig, "engine", "gcBetweenLevels", true);
 	vksk_ConfigFree(engineConfig);
 	gEngineConfig.argc = argc;
 	gEngineConfig.argv = argv;

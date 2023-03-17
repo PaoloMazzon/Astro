@@ -22,13 +22,15 @@ void vksk_RuntimeVK2DTextureAllocate(WrenVM *vm) {
 
 	if (tex->texture.img == NULL) {
 		vksk_Error(false, "Failed to load texture image '%s'", wrenGetSlotString(vm, 1));
-	}
-
-	tex->texture.tex = vk2dTextureLoadFromImage(tex->texture.img);
-
-	tex->type = FOREIGN_TEXTURE;
-	if (tex->texture.tex == NULL) {
-		vksk_Error(false, "Failed to load texture '%s'", wrenGetSlotString(vm, 1));
+		wrenSetSlotNull(vm, 0);
+	} else {
+		tex->texture.tex = vk2dTextureLoadFromImage(tex->texture.img);
+		tex->type = FOREIGN_TEXTURE;
+		if (tex->texture.tex == NULL) {
+			vk2dImageFree(tex->texture.img);
+			vksk_Error(false, "Failed to load texture '%s'", wrenGetSlotString(vm, 1));
+			wrenSetSlotNull(vm, 0);
+		}
 	}
 }
 
@@ -65,6 +67,7 @@ void vksk_RuntimeVK2DSurfaceAllocate(WrenVM *vm) {
 	tex->type = FOREIGN_SURFACE;
 	if (tex->surface == NULL) {
 		vksk_Error(false, "Failed to create surface of size %fx%f", wrenGetSlotDouble(vm, 1), wrenGetSlotDouble(vm, 2));
+		wrenSetSlotNull(vm, 0);
 	}
 }
 
@@ -97,6 +100,10 @@ void vksk_RuntimeVK2DCameraAllocate(WrenVM *vm) {
 	cam->camera.spec = vk2dRendererGetCamera();
 	cam->camera.index = vk2dCameraCreate(cam->camera.spec);
 	cam->type = FOREIGN_CAMERA;
+	if (cam->camera.index == VK2D_INVALID_CAMERA) {
+		wrenSetSlotNull(vm, 0);
+		vksk_Error(false, "Failed to create additional cameras.");
+	}
 }
 
 void vksk_RuntimeVK2DCameraFinalize(void *data) {

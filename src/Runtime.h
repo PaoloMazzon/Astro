@@ -15,6 +15,7 @@ typedef struct VKSK_EngineConfig {
 	bool enableDebugOverlay;
 	bool enableAssetsPrint;
 	bool disableGamePak;
+	bool gcBetweenLevels;
 	int argc;
 	const char **argv;
 } VKSK_EngineConfig;

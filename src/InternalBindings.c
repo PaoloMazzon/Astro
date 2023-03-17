@@ -173,6 +173,7 @@ void vksk_RuntimeTiledAllocate(WrenVM *vm) {
 	fflush(stderr);
 	if (tiled->tiled.map == NULL) {
 		vksk_Error(false, "Failed to load Tiled map '%s'", wrenGetSlotString(vm, 1));
+		wrenSetSlotNull(vm, 0);
 	}
 }
 
@@ -970,70 +971,86 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 	bool aa = wrenGetSlotBool(vm, 3);
 	int uniStart = wrenGetSlotDouble(vm, 4);
 	int uniEnd = wrenGetSlotDouble(vm, 5);
+	bool error = false;
 
 	// Load initial font data
 	int bufferSize, lineGap, ascent, descent;
 	void *fntData = vksk_GetFileBuffer(filename, &bufferSize);
-	stbtt_fontinfo info = {};
-	stbtt_InitFont(&info, fntData, 0);
-	float scale = stbtt_ScaleForPixelHeight(&info, size);
-	stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
-	font->bitmapFont->newLineHeight = (ascent * scale) - (descent * scale) + (lineGap * scale);
-	font->bitmapFont->unicodeStart = uniStart;
-	font->bitmapFont->unicodeEnd = uniEnd;
-	float spaceSize = font->bitmapFont->newLineHeight / 2;
+	if (fntData != NULL) {
+		stbtt_fontinfo info = {};
+		if (stbtt_InitFont(&info, fntData, 0)) {
+			float scale = stbtt_ScaleForPixelHeight(&info, size);
+			stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
+			font->bitmapFont->newLineHeight = (ascent * scale) - (descent * scale) + (lineGap * scale);
+			font->bitmapFont->unicodeStart = uniStart;
+			font->bitmapFont->unicodeEnd = uniEnd;
+			float spaceSize = font->bitmapFont->newLineHeight / 2;
 
-	// Calculate the width and height of the image we'll need
-	font->bitmapFont->characters = calloc(uniEnd - uniStart + 1, sizeof(struct JUCharacter));
-	float w = 0;
-	float h = 0;
-	for (int i = 0; i <= (uniEnd - uniStart); i++) {
-		int codePoint = i + uniStart;
-		int x0, y0, x1, y1;
-		JUCharacter *c = &font->bitmapFont->characters[i];
-		stbtt_GetCodepointBox(&info, codePoint, &x0, &y0, &x1, &y1);
-		if (x1 != 0) {
-			c->w = (x1 * scale) - (x0 * scale);
-			c->h = (y1 * scale) - (y0 * scale);
-			c->x = w;
-			c->drawn = true;
+			// Calculate the width and height of the image we'll need
+			font->bitmapFont->characters = calloc(uniEnd - uniStart + 1, sizeof(struct JUCharacter));
+			float w = 0;
+			float h = 0;
+			for (int i = 0; i <= (uniEnd - uniStart); i++) {
+				int codePoint = i + uniStart;
+				int x0, y0, x1, y1;
+				JUCharacter *c = &font->bitmapFont->characters[i];
+				stbtt_GetCodepointBox(&info, codePoint, &x0, &y0, &x1, &y1);
+				if (x1 != 0) {
+					c->w = (x1 * scale) - (x0 * scale);
+					c->h = (y1 * scale) - (y0 * scale);
+					c->x = w;
+					c->drawn = true;
+				} else {
+					c->w = spaceSize;
+					c->h = 0;
+					c->x = w;
+					c->drawn = false;
+				}
+				w += c->w + 4;
+				if (h < c->h) h = c->h;
+			}
+			SDL_Surface *bitmap = SDL_CreateRGBSurface(0, w, h, 32, rmask, gmask, bmask, amask);
+			VALIDATE_SDL(bitmap)
+
+			// Draw each glyph to the surface
+			for (int i = 0; i <= (uniEnd - uniStart); i++) {
+				int codePoint = i + uniStart;
+				JUCharacter *c = &font->bitmapFont->characters[i];
+				if (c->drawn) {
+					c->ykern = c->h;
+					int xoff, yoff, width, height;
+					uint8_t *alpha = stbtt_GetCodepointBitmap(&info, scale, scale, codePoint, &width, &height, &xoff,
+															  &yoff);
+					uint32_t *pixels = alphaToRGBA(alpha, width, height, aa);
+					SDL_Surface *temp = SDL_CreateRGBSurfaceFrom(pixels, width, height, 32, 4 * width, rmask, gmask,
+																 bmask,
+																 amask);
+					VALIDATE_SDL(temp)
+					c->ykern = ((-(float) ascent * scale) + yoff) + ((ascent * scale) * 2);
+					SDL_Rect dst = {c->x, c->y, width, height};
+					SDL_BlitSurface(temp, NULL, bitmap, &dst);
+					SDL_FreeSurface(temp);
+					free(pixels);
+				}
+			}
+
+			// Create image and texture from surface
+			SDL_LockSurface(bitmap);
+			font->bitmapFont->image = vk2dImageFromPixels(vk2dRendererGetDevice(), bitmap->pixels, bitmap->w,
+														  bitmap->h);
+			SDL_UnlockSurface(bitmap);
+			SDL_FreeSurface(bitmap);
+			font->bitmapFont->bitmap = vk2dTextureLoadFromImage(font->bitmapFont->image);
 		} else {
-			c->w = spaceSize;
-			c->h = 0;
-			c->x = w;
-			c->drawn = false;
+			error = true;
 		}
-		w += c->w + 4;
-		if (h < c->h) h = c->h;
+	} else {
+		error = true;
 	}
-	SDL_Surface *bitmap = SDL_CreateRGBSurface(0, w, h, 32, rmask, gmask, bmask, amask);
-	VALIDATE_SDL(bitmap)
-
-	// Draw each glyph to the surface
-	for (int i = 0; i <= (uniEnd - uniStart); i++) {
-		int codePoint = i + uniStart;
-		JUCharacter *c = &font->bitmapFont->characters[i];
-		if (c->drawn) {
-			c->ykern = c->h;
-			int xoff, yoff, width, height;
-			uint8_t *alpha = stbtt_GetCodepointBitmap(&info, scale, scale, codePoint, &width, &height, &xoff, &yoff);
-			uint32_t *pixels = alphaToRGBA(alpha, width, height, aa);
-			SDL_Surface *temp = SDL_CreateRGBSurfaceFrom(pixels, width, height, 32, 4 * width, rmask, gmask, bmask, amask);
-			VALIDATE_SDL(temp)
-			c->ykern = ((-(float)ascent * scale) + yoff) + ((ascent * scale) * 2);
-			SDL_Rect dst = {c->x, c->y, width, height};
-			SDL_BlitSurface(temp, NULL, bitmap, &dst);
-			SDL_FreeSurface(temp);
-			free(pixels);
-		}
+	if (error) {
+		vksk_Error(false, "Failed to load font \"%s\"", wrenGetSlotString(vm, 1));
+		wrenSetSlotNull(vm, 0);
 	}
-
-	// Create image and texture from surface
-	SDL_LockSurface(bitmap);
-	font->bitmapFont->image = vk2dImageFromPixels(vk2dRendererGetDevice(), bitmap->pixels, bitmap->w, bitmap->h);
-	SDL_UnlockSurface(bitmap);
-	SDL_FreeSurface(bitmap);
-	font->bitmapFont->bitmap = vk2dTextureLoadFromImage(font->bitmapFont->image);
 }
 
 void vksk_RuntimeFontFinalize(void *data) {
