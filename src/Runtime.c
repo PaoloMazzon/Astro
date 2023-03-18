@@ -165,9 +165,11 @@ void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitl
 void _vksk_RuntimeControllerRefresh(); // From InternalBindings.c
 void _vksk_RuntimeControllersUpdate(); // From InternalBindings.c
 
+bool _vk2dFileExists(const char *filename);
+
 void vksk_Start() {
 	// Load pak file
-	if (gEngineConfig.disableGamePak)
+	if (gEngineConfig.disableGamePak || !_vk2dFileExists("game.pak"))
 		gGamePak = NULL;
 	else
 		gGamePak = vksk_PakLoad("game.pak");
@@ -223,7 +225,7 @@ void vksk_Start() {
 			SDL_WINDOW_VULKAN | (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0)
 			);
 	VK2DStartupOptions options;
-	options.enableDebug = false;
+	options.enableDebug = true;
 	options.loadCustomShaders = false;
 	options.stdoutLogging = false;
 	options.quitOnError = true;
@@ -310,10 +312,10 @@ void vksk_Start() {
 		if (gQuit || gNextLevel != NULL) {
 			wrenSetSlotHandle(vm, 0, gCurrentLevel);
 			wrenCall(vm, destroyHandle);
+			if (gEngineConfig.gcBetweenLevels)
+				wrenCollectGarbage(vm);
             wrenReleaseHandle(vm, gCurrentLevel);
 			if (gNextLevel != NULL) {
-				if (gEngineConfig.gcBetweenLevels)
-					wrenCollectGarbage(vm);
 				gCurrentLevel = gNextLevel;
 				gNextLevel = NULL;
 				wrenSetSlotHandle(vm, 0, gCurrentLevel);

@@ -56,13 +56,16 @@ const char *vksk_PreprocessSource(const char *filename) {
 			temp = loadFile(filename);
 		}
 
-		char *final = malloc(strlen(temp) + strlen(WREN_SOURCE_FOOTER) + strlen(WREN_SOURCE_HEADER) + 1);
-		strncpy(final, WREN_SOURCE_HEADER, strlen(WREN_SOURCE_HEADER));
-		strncpy(final + strlen(WREN_SOURCE_HEADER), temp, strlen(temp));
-		strncpy(final + strlen(WREN_SOURCE_HEADER) + +strlen(temp), WREN_SOURCE_FOOTER, strlen(WREN_SOURCE_FOOTER));
-		final[strlen(temp) + strlen(WREN_SOURCE_FOOTER) + strlen(WREN_SOURCE_HEADER)] = 0;
-		free((void *) temp);
-		return final;
+		if (temp != NULL) {
+			char *final = malloc(strlen(temp) + strlen(WREN_SOURCE_FOOTER) + strlen(WREN_SOURCE_HEADER) + 1);
+			strncpy(final, WREN_SOURCE_HEADER, strlen(WREN_SOURCE_HEADER));
+			strncpy(final + strlen(WREN_SOURCE_HEADER), temp, strlen(temp));
+			strncpy(final + strlen(WREN_SOURCE_HEADER) + +strlen(temp), WREN_SOURCE_FOOTER, strlen(WREN_SOURCE_FOOTER));
+			final[strlen(temp) + strlen(WREN_SOURCE_FOOTER) + strlen(WREN_SOURCE_HEADER)] = 0;
+			free((void *) temp);
+			return final;
+		}
+		return NULL;
 	} else {
 		const char *bytes = NULL;
 		int size = 0;

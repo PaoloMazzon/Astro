@@ -24,12 +24,12 @@ void vksk_WrenErrorFn(WrenVM* vm, WrenErrorType errorType, const char* module, c
 	FILE *f = fopen("astroerror.txt", "a");
 	switch (errorType) {
 		case WREN_ERROR_COMPILE: {
-			printf("[%s line %d] [Error] %s\n", module, line, msg);
-			fprintf(f, "[%s line %d] [Error] %s\n", module, line, msg);
+			printf("[%s line %d] [Error] %s\n", module, line - 9, msg); // - 9 because of preprocessor
+			fprintf(f, "[%s line %d] [Error] %s\n", module, line - 9, msg);
 		} break;
 		case WREN_ERROR_STACK_TRACE: {
-			printf("[%s line %d] in %s\n", module, line, msg);
-			fprintf(f, "[%s line %d] in %s\n", module, line, msg);
+			printf("[%s line %d] in %s\n", module, line - 9, msg);
+			fprintf(f, "[%s line %d] in %s\n", module, line - 9, msg);
 		} break;
 		case WREN_ERROR_RUNTIME: {
 			printf("[Runtime Error] %s\n", msg);
