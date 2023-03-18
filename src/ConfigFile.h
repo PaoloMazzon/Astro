@@ -26,6 +26,13 @@ typedef struct VKSK_Config {
 //  + if its not a header and there is a '=', everything before it is the key and everything after is the value
 VKSK_Config vksk_ConfigLoad(const char *filename);
 
+// Loads an ini file or returns an empty config if it doesn't exist
+// The parser is not fancy
+//  + if a line starts with ';' its a comment and ignored
+//  + if a line starts with '[' and ends with ']' everything between is the header
+//  + if its not a header and there is a '=', everything before it is the key and everything after is the value
+VKSK_Config vksk_ConfigLoadFromString(const char *string);
+
 // Saves a config to a file
 void vksk_ConfigFlush(VKSK_Config config, const char *filename);
 

@@ -63,5 +63,4 @@ TODO
 
  + Improve TrueType font rendering
  + Built-in mod support
- + Way to package games
  + Spatial hash maps

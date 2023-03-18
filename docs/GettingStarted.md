@@ -54,6 +54,12 @@ there your game starts. See the [API Reference](API.md) for help and check the
 [Asset Compiler](AssetCompiler.md) for info on how to automate asset management.
 Feel free to play around with the demo game.
 
+## Packaging Your Game
+
+Once you wish to ship your game, you may either just ship the code and assets as they
+are, or alternatively you may use `Packer.exe` to package your game into a single file
+and executable. See [Pak](Pak.md) for more details.
+
 -----------
 
 [Getting Started](GettingStarted.md) | [API Reference](API.md)

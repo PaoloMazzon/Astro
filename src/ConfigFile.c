@@ -65,15 +65,13 @@ static const char *cleanINIString(const char *ini) {
 	return new;
 }
 
-const char* loadFile(const char *filename); // from VMConfig.c
-
-VKSK_Config vksk_ConfigLoad(const char *filename) {
+VKSK_Config vksk_ConfigLoadFromString(const char *string) {
 	VKSK_Config conf = malloc(sizeof(struct VKSK_Config));
 	conf->size = 0;
 	conf->headers = NULL;
 
-	if (_vk2dFileExists(filename)) {
-		const char *file = cleanINIString(loadFile(filename));
+	if (string != NULL) {
+		const char *file = cleanINIString(string);
 		char header[100] = "none";
 		char key[100] = "";
 		const char *line = file;
@@ -103,8 +101,8 @@ VKSK_Config vksk_ConfigLoad(const char *filename) {
 					key[equal - line] = 0;
 					_VKSK_ConfigKey *newkey = _vksk_ConfigGetKey(conf, header, key);
 					newkey->val = malloc((line + len) - equal);
-					strncpy((void*)newkey->val, equal + 1, (line + len) - equal - 1);
-					((char*)newkey->val)[(line + len) - equal - 1] = 0;
+					strncpy((void *) newkey->val, equal + 1, (line + len) - equal - 1);
+					((char *) newkey->val)[(line + len) - equal - 1] = 0;
 				}
 			}
 
@@ -113,7 +111,24 @@ VKSK_Config vksk_ConfigLoad(const char *filename) {
 		}
 
 
-		free((void*)file);
+		free((void *) file);
+	}
+
+	return conf;
+}
+
+const char* loadFile(const char *filename); // from VMConfig.c
+
+VKSK_Config vksk_ConfigLoad(const char *filename) {
+	VKSK_Config conf = NULL;
+	if (_vk2dFileExists(filename)) {
+		char *file = (void*)loadFile(filename);
+		conf = vksk_ConfigLoadFromString(file);
+		free(file);
+	} else {
+		conf = malloc(sizeof(struct VKSK_Config));
+		conf->size = 0;
+		conf->headers = NULL;
 	}
 
 	return conf;

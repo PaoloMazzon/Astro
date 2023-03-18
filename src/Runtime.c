@@ -166,16 +166,16 @@ void _vksk_RuntimeControllerRefresh(); // From InternalBindings.c
 void _vksk_RuntimeControllersUpdate(); // From InternalBindings.c
 
 void vksk_Start() {
-	// Compile the assets code
-	gAssetsFile = vksk_CompileAssetFile();
-	if (gEngineConfig.enableAssetsPrint)
-		vksk_Log("---------------------Compiled assets file---------------------\n%s\n---------------------Compiled assets file---------------------", gAssetsFile);
-
 	// Load pak file
 	if (gEngineConfig.disableGamePak)
 		gGamePak = NULL;
 	else
 		gGamePak = vksk_PakLoad("game.pak");
+
+	// Compile the assets code
+	gAssetsFile = vksk_CompileAssetFile();
+	if (gEngineConfig.enableAssetsPrint)
+		vksk_Log("---------------------Compiled assets file---------------------\n%s\n---------------------Compiled assets file---------------------", gAssetsFile);
 
 	// Wren config and VM initialization
 	vksk_Log("Starting VM...");

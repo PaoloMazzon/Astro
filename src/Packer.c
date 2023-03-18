@@ -214,7 +214,7 @@ VKSK_Pak vksk_PakLoad(const char *filename) {
 bool vksk_PakFileExists(VKSK_Pak pak, const char *filename) {
 	if (pak != NULL && pak->type == PAK_TYPE_READ)
 		for (int i = 0; i < pak->header.fileCount; i++)
-			if (strcmp(pak->header.files->filename, filename) == 0)
+			if (strcmp(pak->header.files[i].filename, filename) == 0)
 				return true;
 	return false;
 }
@@ -226,7 +226,7 @@ uint8_t *vksk_PakGetFile(VKSK_Pak pak, const char *filename, int *size) {
 		// Find the file
 		VKSK_PakFileInfo *found = NULL;
 		for (int i = 0; i < pak->header.fileCount && found == NULL; i++) {
-			if (strcmp(pak->header.files->filename, filename) == 0) {
+			if (strcmp(pak->header.files[i].filename, filename) == 0) {
 				found = &pak->header.files[i];
 			}
 		}
@@ -246,7 +246,13 @@ uint8_t *vksk_PakGetFile(VKSK_Pak pak, const char *filename, int *size) {
 }
 
 const char *vksk_PakGetFileString(VKSK_Pak pak, const char *filename) {
-
+	int size;
+	char *buffer = (void*)vksk_PakGetFile(pak, filename, &size);
+	if (buffer != NULL) {
+		buffer = realloc(buffer, size + 1);
+		buffer[size] = 0;
+	}
+	return buffer;
 }
 
 void vksk_PakPrintContents(VKSK_Pak pak) {

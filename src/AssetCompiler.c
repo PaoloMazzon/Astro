@@ -171,7 +171,20 @@ static bool _vksk_CompileAssetsFromDir(String loadFunction, String getterFunctio
 }
 
 static bool _vksk_CompileAssetsFromPak(String loadFunction, String getterFunctions, String spriteLoadFunction) {
+	const char *confString = vksk_PakGetFileString(gGamePak, "assets/assets.ini");
+	VKSK_Config conf = vksk_ConfigLoadFromString(confString);
+	free((void*)confString);
 
+	const char *fname = vksk_PakBeginLoop(gGamePak, "assets");
+	while (fname != NULL) {
+		const char *temp = fname + 7;
+		addFileToAssets(conf, temp, loadFunction, spriteLoadFunction, getterFunctions);
+		fname = vksk_PakNext(gGamePak);
+	}
+
+	vksk_ConfigFree(conf);
+
+	return true;
 }
 
 const char *vksk_CompileAssetFile() {
@@ -179,8 +192,14 @@ const char *vksk_CompileAssetFile() {
 	String getterFunctions = newString();
 	String spriteLoadFunction = newString();
 
-	if (!_vksk_CompileAssetsFromDir(loadFunction, getterFunctions, spriteLoadFunction)) {
-		vksk_Log("Failed to compile asset file.");
+	if (gGamePak != NULL) {
+		if (!_vksk_CompileAssetsFromPak(loadFunction, getterFunctions, spriteLoadFunction)) {
+			vksk_Log("Failed to compile asset file.");
+		}
+	} else {
+		if (!_vksk_CompileAssetsFromDir(loadFunction, getterFunctions, spriteLoadFunction)) {
+			vksk_Log("Failed to compile asset file.");
+		}
 	}
 
 	// Build output string

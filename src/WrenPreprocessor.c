@@ -6,6 +6,8 @@
 
 #include "src/WrenPreprocessor.h"
 #include "src/WrenHeaders.h"
+#include "src/Packer.h"
+#include "src/Runtime.h"
 
 const char WREN_SOURCE_HEADER[] = "import \"lib/Audio\" for AudioData, Audio\n"
 								  "import \"lib/Drawing\" for Surface, Font, BitmapFont, Sprite, Texture\n"
@@ -46,7 +48,14 @@ const char *vksk_PreprocessSource(const char *filename) {
 	if (strcmp(filename, "prog/lib/Renderer.wren") != 0 && strcmp(filename, "prog/lib/Engine.wren") != 0 && strcmp(filename, "prog/lib/Util.wren") != 0 &&
 			strcmp(filename, "prog/lib/Input.wren") != 0 && strcmp(filename, "prog/lib/File.wren") != 0 && strcmp(filename, "prog/lib/Drawing.wren") != 0 &&
 			strcmp(filename, "prog/lib/Audio.wren") != 0 && strcmp(filename, "prog/lib/Tiled.wren") != 0 && strcmp(filename, "Assets.wren") != 0) {
-		const char *temp = loadFile(filename);
+		const char *temp;
+
+		if (vksk_PakFileExists(gGamePak, filename)) {
+			temp = vksk_PakGetFileString(gGamePak, filename);
+		} else {
+			temp = loadFile(filename);
+		}
+
 		char *final = malloc(strlen(temp) + strlen(WREN_SOURCE_FOOTER) + strlen(WREN_SOURCE_HEADER) + 1);
 		strncpy(final, WREN_SOURCE_HEADER, strlen(WREN_SOURCE_HEADER));
 		strncpy(final + strlen(WREN_SOURCE_HEADER), temp, strlen(temp));
