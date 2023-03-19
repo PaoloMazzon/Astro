@@ -38,8 +38,8 @@ static VK2DTexture gDebugGraph;
 static VK2DImage gDebugGraphImage;
 static int gEntityCount;
 static bool gProcessFrame; // Whether or not we call update methods this frame
-static double gPreviousTimeStep; // Previous time gProcessFrame was enabled
-static double gTimeStep; // How many frames are allowed to update each second
+static double gPreviousTimeStep = 0; // Previous time gProcessFrame was enabled
+static double gTimeStep = 0; // How many frames are allowed to update each second
 static double gTimeStepPercentProc = 0.95;
 static double gAverageTimeStep = 0;
 static double gTotalTimeSteps = 0;
@@ -337,8 +337,8 @@ void vksk_Start() {
 				gTimeStepDistributions = 0;
 				if (gTotalTimeSteps + 1 < gTimeStep)
 					gTimeStepPercentProc = gTotalTimeSteps / gTimeStep;
-				if (gAverageTimeStepDistribution < 0.45)
-					gTimeStepPercentProc += 0.05;
+				if (gAverageTimeStepDistribution < 0.49)
+					gTimeStepPercentProc += 0.01;
 				gAverageTimeStep = gTotalTimeSteps / (juTime() - gLastTime);
 				gTotalTimeSteps = 0;
 			}
@@ -447,7 +447,8 @@ void vksk_RuntimeProcessFrame(WrenVM *vm) {
 }
 
 void vksk_RuntimeTimeStepPercent(WrenVM *vm) {
-	wrenSetSlotDouble(vm, 0, (juTime() - gPreviousTimeStep) / (1.0 / gTimeStep));
+	double val = (juTime() - gPreviousTimeStep) / (1.0 / gTimeStep);
+	wrenSetSlotDouble(vm, 0, val);
 }
 
 void vksk_RuntimeArgv(WrenVM *vm) {

@@ -60,6 +60,8 @@ set to true to let the user handle their own fixed-timestep code. Level's [updat
 method will only update entities when `process_frame` is true automatically. Set this to 0 (the default)
 to disable fixed-timestep.
 
+> 📝 Do not set this value before the first level is initialized; ie, in `init.wren`.
+
 ### timestep_percent
 `timestep_percent`
 

@@ -2,6 +2,9 @@
 class Player is Entity {
     construct new() { super() }
 
+    int_x { Math.lerp(Engine.timestep_percent, prev_x, x) }
+    int_y { Math.lerp(Engine.timestep_percent, prev_y, y) }
+
     create(level, tiled_data) {
         sprite = Assets.spr_player_idle
         hitbox = Hitbox.new_rectangle(sprite.width - 4, sprite.height - 1)
@@ -16,7 +19,7 @@ class Player is Entity {
 
     update(level) {
         // Speeds
-        var speed = 4
+        var speed = 8
         _hspeed = 0
 
         // Left/right
@@ -41,9 +44,9 @@ class Player is Entity {
                 sprite = Assets.spr_player_jump
             }
             _jumps = _jumps - 1
-            _vspeed = -5
+            _vspeed = -9
         }
-        _vspeed = _vspeed + 0.25
+        _vspeed = _vspeed + 0.8
 
         // Handle collisions
         if (level.tileset.collision(hitbox, x + _hspeed, y)) {
@@ -79,9 +82,9 @@ class Player is Entity {
         // Draw the player
         sprite.scale_x = _scalex
         if (sprite.scale_x == -1) {
-            Renderer.draw_sprite(sprite, x + sprite.width, y)
+            Renderer.draw_sprite(sprite, int_x + sprite.width, int_y)
         } else {
-            Renderer.draw_sprite(sprite, x, y)
+            Renderer.draw_sprite(sprite, int_x, int_y)
         }
     }
 }
@@ -103,6 +106,7 @@ class Game is Level {
         _game_cam.w_on_screen = 832
         _game_cam.h_on_screen = 640
         _game_cam.update()
+        Engine.timestep = 30
 
         // Load the level and tilesets
         _tilesets = load("assets/level0.tmj")
@@ -147,11 +151,9 @@ class Game is Level {
 
     update() {
         // Center the camera on the player
-        if (Engine.process_frame) {
-            _game_cam.x = (_game_cam.x + (((_player.x + 16 - (_game_cam.width / 2)) - _game_cam.x) * 5 * Engine.delta))
-            _game_cam.y = (_game_cam.y + (((_player.y + 16 - (_game_cam.height / 2)) - _game_cam.y) * 5 * Engine.delta))
-            _game_cam.update()
-        }
+        _game_cam.x = (_game_cam.x + (((_player.int_x + 16 - (_game_cam.width / 2)) - _game_cam.x) * 0.6 * Engine.delta))
+        _game_cam.y = (_game_cam.y + (((_player.int_y + 16 - (_game_cam.height / 2)) - _game_cam.y) * 0.6 * Engine.delta))
+        _game_cam.update()
 
         // Render game world
         Renderer.lock_cameras(_game_cam)
