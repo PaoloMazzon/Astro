@@ -147,11 +147,6 @@ class Game is Level {
     }
 
     update() {
-        // Center the camera on the player
-        _game_cam.x = (_game_cam.x + (((_player.int_x + 16 - (_game_cam.width / 2)) - _game_cam.x) * 0.6 * Engine.delta))
-        _game_cam.y = (_game_cam.y + (((_player.int_y + 16 - (_game_cam.height / 2)) - _game_cam.y) * 0.6 * Engine.delta))
-        _game_cam.update()
-
         // Render game world
         Renderer.lock_cameras(_game_cam)
         Tileset.draw_tiling_background(Assets.tex_bg_blue, 0.7, _game_cam)
@@ -164,6 +159,11 @@ class Game is Level {
 
         super.update() // update all entities
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
+
+        // Center the camera on the player
+        _game_cam.x = (_player.int_x + 16 - (_game_cam.width / 2))
+        _game_cam.y = (_player.int_y + 16 - (_game_cam.height / 2))
+        _game_cam.update()
     }
 
     destroy() {

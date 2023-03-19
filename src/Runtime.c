@@ -346,9 +346,9 @@ void vksk_Start() {
 					// Adjust drifting time step
 					if (gTotalTimeSteps + 1 < gTimeStep)
 						gTimeStepPercentProc = gTotalTimeSteps / gTimeStep;
-					if (gAverageTimeStepDistribution < 0.49) {
+					if (gAverageTimeStepDistribution < 0.48 && gTimeStepPercentProc < 1) {
 						gTimeStepPercentProc += 0.01;
-					} else if (gAverageTimeStepDistribution > 0.51) {
+					} else if (gAverageTimeStepDistribution > 0.52) {
 						gTimeStepPercentProc -= 0.01;
 					}
 				}
@@ -384,6 +384,7 @@ void vksk_RuntimeQuit(WrenVM *vm) {
 void vksk_RuntimeCapFPS(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	gFPSCap = wrenGetSlotDouble(vm, 1);
+	gTimeStepPercentProc = 0.95;
 	juClockStart(&gFPSClock);
 }
 
@@ -462,6 +463,10 @@ void vksk_RuntimeProcessFrame(WrenVM *vm) {
 
 void vksk_RuntimeTimeStepPercent(WrenVM *vm) {
 	double val = (juTime() - gPreviousTimeStep) / (1.0 / gTimeStep);
+	if (val > 1)
+		val = 1;
+	else if (val < 0)
+		val = 0;
 	wrenSetSlotDouble(vm, 0, val);
 }
 
