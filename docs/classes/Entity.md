@@ -11,6 +11,9 @@ This class on its own does nothing.
  + [prev_x=](#prev_x-setter)
  + [prev_y](#prev_y-getter)
  + [prev_y=](#prev_y-setter)
+ + [int_x](#int_x)
+ + [int_y](#int_y)
+ + [set_pos](#set_pos)
  + [hitbox](#hitbox-getter)
  + [hitbox=](#hitbox-setter)
  + [sprite](#sprite-getter)
@@ -66,6 +69,26 @@ Parameters
  
 Sets the previous y value. This is mostly for internal use.
 
+### int_x
+`int_x`
+
+Returns the entity's x value interpolated between it current and previous x value by
+`Engine.timstep_percent`.
+
+### int_y
+`int_y`
+
+Returns the entity's y value interpolated between it current and previous y value by
+`Engine.timstep_percent`.
+
+### set_pos
+`set_pos(x, y)`
+
+Parameters
+ + `x -> Num` New x position of the entity.
+ + `y -> Num` New y position of the entity.
+
+Sets the position of an entity without allowing for inter-frame interpolation.
 
 ### hitbox (Getter)
 `hitbox`

@@ -1,7 +1,7 @@
 // Engine.wren
 // Author: Paolo Mazzon
 // Top-level meta functions for the framework
-import "lib/Util" for Hitbox, Tileset
+import "lib/Util" for Hitbox, Tileset, Math
 import "lib/Renderer" for Renderer
 import "lib/Tiled" for TiledMap
 import "Assets" for Assets
@@ -60,6 +60,9 @@ class Entity {
         _hitbox = Hitbox.NO_HIT
     }
 
+    int_x { Math.lerp(Engine.timestep_percent, _prev_x, _x) }
+    int_y { Math.lerp(Engine.timestep_percent, _prev_y, _y) }
+
     // Returns the previous x
     prev_x { _prev_x }
 
@@ -83,6 +86,14 @@ class Entity {
 
     // Sets the y position
     y=(new_y) { _y = new_y }
+
+    // Sets the position without leaving a prev_x/y trace
+    set_pos(x, y) {
+        _x = x
+        _y = y
+        _prev_x = x
+        _prev_y = y
+    }
 
     // Returns the entity's hitbox
     hitbox { _hitbox }
