@@ -2,6 +2,7 @@
 class Player is Entity {
     construct new() { super() }
 
+    // For interpolating between two frames for smooth animation between updates due to the fixed-timestep
     int_x { Math.lerp(Engine.timestep_percent, prev_x, x) }
     int_y { Math.lerp(Engine.timestep_percent, prev_y, y) }
 

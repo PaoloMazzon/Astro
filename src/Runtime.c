@@ -41,6 +41,7 @@ static bool gProcessFrame; // Whether or not we call update methods this frame
 static double gPreviousTimeStep = 0; // Previous time gProcessFrame was enabled
 static double gTimeStep = 0; // How many frames are allowed to update each second
 static double gTimeStepPercentProc = 0.95;
+static double gTimeStepRecovery = 0.95;
 static double gAverageTimeStep = 0;
 static double gTotalTimeSteps = 0;
 static double gTimeStepDistributions = 0;
@@ -335,10 +336,23 @@ void vksk_Start() {
 			if (gTimeStep != 0) {
 				gAverageTimeStepDistribution = gTimeStepDistributions / gTotalTimeSteps;
 				gTimeStepDistributions = 0;
-				if (gTotalTimeSteps + 1 < gTimeStep)
-					gTimeStepPercentProc = gTotalTimeSteps / gTimeStep;
-				if (gAverageTimeStepDistribution < 0.49)
-					gTimeStepPercentProc += 0.01;
+
+				// Recover from bad time step
+				if (gAverageTimeStepDistribution > 0.49 && gAverageTimeStepDistribution < 0.51) {
+					gTimeStepRecovery = gTimeStepPercentProc;
+				} else if (gAverageTimeStepDistribution > 0.6 || gAverageTimeStepDistribution < 0.4) {
+					gTimeStepPercentProc = gTimeStepRecovery;
+				} else {
+					// Adjust drifting time step
+					if (gTotalTimeSteps + 1 < gTimeStep)
+						gTimeStepPercentProc = gTotalTimeSteps / gTimeStep;
+					if (gAverageTimeStepDistribution < 0.49) {
+						gTimeStepPercentProc += 0.01;
+					} else if (gAverageTimeStepDistribution > 0.51) {
+						gTimeStepPercentProc -= 0.01;
+					}
+				}
+
 				gAverageTimeStep = gTotalTimeSteps / (juTime() - gLastTime);
 				gTotalTimeSteps = 0;
 			}
