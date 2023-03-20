@@ -254,7 +254,7 @@ void vksk_RuntimeVK2DShaderAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *shader = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
 	shader->type = FOREIGN_SHADER;
-	shader->shader = vk2dShaderCreate(
+	shader->shader = vk2dShaderLoad(
 			wrenGetSlotString(vm, 1),
 			wrenGetSlotString(vm, 2),
 			(int)wrenGetSlotDouble(vm, 3)
@@ -274,5 +274,5 @@ void vksk_RuntimeVK2DShaderSetData(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BUFFER, FOREIGN_END)
 	VKSK_RuntimeForeign *shader = wrenGetSlotForeign(vm, 0);
 	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 1);
-	vk2dShaderUpdate(shader->shader, buffer->buffer.data, buffer->buffer.size);
+	vk2dShaderUpdate(shader->shader, buffer->buffer.data);
 }

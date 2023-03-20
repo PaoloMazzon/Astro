@@ -58,6 +58,7 @@ class Entity {
         _prev_y = 0
         _sprite = null
         _hitbox = Hitbox.NO_HIT
+        _update_enabled = true
     }
 
     int_x { Math.lerp(Engine.timestep_percent, _prev_x, _x) }
@@ -95,6 +96,9 @@ class Entity {
         _prev_y = y
     }
 
+    update_enabled { _update_enabled }
+    update_enabled=(s) { _update_enabled = s }
+
     // Returns the entity's hitbox
     hitbox { _hitbox }
 
@@ -111,7 +115,10 @@ class Entity {
     create(level, tiled_data) {}
 
     // Called each frame of the level
-    update(level) {}
+    update(level) {
+        prev_x = x
+        prev_y = y
+    }
 
     // Draws the entity each frame
     draw(level) {
@@ -136,6 +143,9 @@ class Level {
         new.create(this, null)
         return new
     }
+
+    update_enabled { _update_enabled }
+    update_enabled=(s) { _update_enabled = s }
 
     // Same as add_entity but provides tiled_data as well
     add_entity(entity, tiled_data) {
@@ -241,15 +251,18 @@ class Level {
     // Called when the level is loaded, call the super to create the entity list
     create() {
         _entity_list = []
+        _update_enabled = true
+    }
+
+    pre_draw() {
+
     }
 
     // Called each frame while the level is loaded, call the super to process
     // the entities in the level and handle debug stuff
     update() {
         for (entity in _entity_list) {
-            if (Engine.process_frame) {
-                entity.prev_x = entity.x
-                entity.prev_y = entity.y
+            if (Engine.process_frame && entity.update_enabled && _update_enabled) {
                 entity.update(this)
             }
             entity.draw(this)

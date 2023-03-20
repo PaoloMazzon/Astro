@@ -3,6 +3,8 @@ All levels in Astro must inherit from this class. See [switch_level](Engine.md#s
 
  + [add_entity](#add_entity)
  + [remove_entity](#remove_entity)
+ + [update_enabled](#update_enabled-getter)
+ + [update_enabled=](#update_enabled-setter)
  + [remove_all_entities](#remove_all_entities)
  + [entity_count](#entity_count)
  + [get_entity](#get_entity)
@@ -10,6 +12,7 @@ All levels in Astro must inherit from this class. See [switch_level](Engine.md#s
  + [get_entities](#get_entities)
  + [load](#load)
  + [create](#create)
+ + [pre_frame](#pre_frame)
  + [update](#update)
  + [destroy](#destroy)
 
@@ -43,6 +46,20 @@ Removes all entities in the level, calling each `destroy` method.
 `entity_count`
 
 Returns the number of entities in the level.
+
+### update_enabled (getter)
+`update_enabled`
+
+Returns whether or not entities' update methods will be called when you call `super.update(level)`.
+
+### update_enabled= (setter)
+`update_enabled=(enabled)`
+
+Parameters
+ + `enabled -> Bool` Whether or not to allow entities to update each frame.
+
+Controls whether or not entities' update methods will be called when you call `super.update(level)`.
+This is often useful when you want something like a pause menu.
 
 ### get_entity
 `get_entity(base_class)`
@@ -85,20 +102,29 @@ instance if you had two tileset layers in Tiled, 'Foreground' and 'Background', 
 ### create
 `create()`
 
-May be overridden in child classes, called when the level is loaded by Astro. If this method
-is overridden, you must call `super.create()` somewhere in the new method.
+Must be overridden in child classes, called when the level is loaded by Astro. Be sure
+to call `super.create()` somewhere in the new method.
+
+### pre_frame
+`pre_frame()`
+
+Must be overridden in child classes, called before the rendering frame begins each frame.
+This is useful because once the rendering frame begins any camera updates and shader buffer
+updates will not be applied until the next time rendering begins. Be sure to call 
+`super.create()` somewhere in the new method.
 
 ### update
 `update()`
 
-May be overridden in child classes, called each frame by Astro. If this method
-is overridden, you must call `super.update()` somewhere in the new method.
+Must be overridden in child classes, called each frame by Astro. Be sure
+to call `super.update()` somewhere in the new method, as it calls the update/draw method
+of each entity.
 
 ### destroy
 `destroy()`
 
-May be overridden in child classes, called when the level is unloaded by Astro. If this method
-is overridden, you must call `super.destroy()` somewhere in the new method.
+Must be overridden in child classes, called when the level is unloaded by Astro. Be sure
+to call `super.destroy()` somewhere in the new method.
 
 
 -----------

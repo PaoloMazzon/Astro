@@ -12,9 +12,12 @@ class Player is Entity {
         _gravity = 0
         _jumps = 2 // resets when you touch the ground
         _scalex = 1
+        update_enabled = false
     }
 
     update(level) {
+        super.update(level)
+
         // Speeds
         var speed = 8
         _hspeed = 0
@@ -146,6 +149,18 @@ class Game is Level {
         _player = get_entity(Player)
     }
 
+    pre_frame() {
+        // So the player's position gets used for the camera
+        if (Engine.process_frame) {
+            _player.update(this)
+        }
+
+        // Center the camera on the player
+        _game_cam.x = (_player.int_x + 16 - (_game_cam.width / 2))
+        _game_cam.y = (_player.int_y + 16 - (_game_cam.height / 2))
+        _game_cam.update()
+    }
+
     update() {
         // Render game world
         Renderer.lock_cameras(_game_cam)
@@ -159,11 +174,6 @@ class Game is Level {
 
         super.update() // update all entities
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
-
-        // Center the camera on the player
-        _game_cam.x = (_player.int_x + 16 - (_game_cam.width / 2))
-        _game_cam.y = (_player.int_y + 16 - (_game_cam.height / 2))
-        _game_cam.update()
     }
 
     destroy() {

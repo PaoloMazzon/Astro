@@ -30,6 +30,7 @@ double gFPS = 0;
 extern VKSK_EngineConfig gEngineConfig;
 static WrenVM *vm;
 VKSK_Pak gGamePak = NULL;
+bool gOutsideFrame = false; // this specifies if the user is allowed to draw or not
 
 // Local globals
 static VK2DTexture gDebugFont;
@@ -199,6 +200,7 @@ void vksk_Start() {
 	// Create handles for the 3 primary functions of a level
 	WrenHandle *createHandle = wrenMakeCallHandle(vm, "create()");
 	WrenHandle *updateHandle = wrenMakeCallHandle(vm, "update()");
+	WrenHandle *preFrameHandle = wrenMakeCallHandle(vm, "pre_frame()");
 	WrenHandle *destroyHandle = wrenMakeCallHandle(vm, "destroy()");
 
 	// Load the first level into gCurrentLevel
@@ -296,6 +298,12 @@ void vksk_Start() {
 			gMouseButtons[1] = buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE);
 			gMouseButtons[2] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
 		}
+
+		// Run the pre-frame method
+		wrenSetSlotHandle(vm, 0, gCurrentLevel);
+		gOutsideFrame = true;
+		wrenCall(vm, preFrameHandle);
+		gOutsideFrame = false;
 
 		// Start the frame and run update
 		vk2dRendererStartFrame(VK2D_BLACK);

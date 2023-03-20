@@ -81,6 +81,19 @@ Returns the entity's x value interpolated between it current and previous x valu
 Returns the entity's y value interpolated between it current and previous y value by
 `Engine.timstep_percent`.
 
+### update_enabled (getter)
+`update_enabled`
+
+Returns whether or not this entity's `update(level)` method will be called by the level each frame.
+
+### update_enabled= (setter)
+`update_enabled=(enabled)`
+
+Parameters
+ + `enabled -> Bool` Whether or not to allow the level to update this entity.
+ 
+Controls whether or not this entity's `update(level)` method will be called by the level each frame.
+
 ### set_pos
 `set_pos(x, y)`
 

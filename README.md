@@ -23,6 +23,8 @@ A basic game
             _x = 100
             _y = 100
         }
+        
+        pre_frame() { }
     
         update() {
             var speed = Engine.delta * 100

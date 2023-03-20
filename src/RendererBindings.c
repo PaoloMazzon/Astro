@@ -10,7 +10,11 @@
 
 // Globals
 extern SDL_Window *gWindow; // -- from src/Runtime.c
+extern bool gOutsideFrame; // -- from src/Runtime.c
 static VK2DShader gShader = NULL;
+
+// Macro for not letting user draw outside of frame
+#define CHECK_VALID_DRAW() if (gOutsideFrame) {vksk_Error(false, "Drawing may not be performed in Level.pre_frame()");return;}
 
 VK2DMSAA convertToMSAAEnum(double wrenVal) {
 	if (wrenVal == 2)
@@ -114,6 +118,7 @@ void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitl
 
 void vksk_RuntimeRendererDrawCircle(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
 	vk2dRendererDrawCircle(
 			wrenGetSlotDouble(vm, 1),
 			wrenGetSlotDouble(vm, 2),
@@ -123,6 +128,7 @@ void vksk_RuntimeRendererDrawCircle(WrenVM *vm) {
 
 void vksk_RuntimeRendererDrawTextureExt(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE | FOREIGN_SURFACE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
@@ -139,6 +145,7 @@ void vksk_RuntimeRendererDrawTextureExt(WrenVM *vm) {
 
 void vksk_RuntimeRendererDrawTexture(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE | FOREIGN_SURFACE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
@@ -150,6 +157,7 @@ void vksk_RuntimeRendererDrawTexture(WrenVM *vm) {
 
 void vksk_RuntimeRendererDrawTexturePartExt(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE | FOREIGN_SURFACE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
@@ -170,6 +178,7 @@ void vksk_RuntimeRendererDrawTexturePartExt(WrenVM *vm) {
 
 void vksk_RuntimeRendererDrawTexturePart(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE | FOREIGN_SURFACE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
@@ -244,6 +253,7 @@ void vksk_RuntimeRendererSetConfig(WrenVM *vm) {
 
 // vksk_RuntimeRendererSetTarget(VK2DTexture target) - set_target(_)
 void vksk_RuntimeRendererSetTarget(WrenVM *vm) {
+	CHECK_VALID_DRAW()
 	if (wrenGetSlotType(vm, 1) != WREN_TYPE_NULL) {
 		VALIDATE_FOREIGN_ARGS(vm, FOREIGN_SURFACE, FOREIGN_END)
 		VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
@@ -290,6 +300,7 @@ void vksk_RuntimeRendererGetColourMod(WrenVM *vm) {
 
 void vksk_RuntimeRendererSetShader(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_SHADER | FOREIGN_NULL, FOREIGN_END)
+	CHECK_VALID_DRAW()
 	if (wrenGetSlotType(vm, 1) == WREN_TYPE_NULL) {
 		gShader = NULL;
 	} else {
@@ -333,6 +344,7 @@ void vksk_RuntimeRendererClear(WrenVM *vm) {
 // vksk_RuntimeRendererDrawRectangle(float x, float y, float w, float h, float r, float ox, float oy) - draw_rectangle(_,_,_,_,_,_,_)
 void vksk_RuntimeRendererDrawRectangle(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
 	float x = wrenGetSlotDouble(vm, 1);
 	float y = wrenGetSlotDouble(vm, 2);
 	float w = wrenGetSlotDouble(vm, 3);
@@ -346,6 +358,7 @@ void vksk_RuntimeRendererDrawRectangle(WrenVM *vm) {
 // vksk_RuntimeRendererDrawRectangleOutline(float x, float y, float w, float h, float r, float ox, float oy, float lineWidth) - draw_rectangle_outline(_,_,_,_,_,_,_,_)
 void vksk_RuntimeRendererDrawRectangleOutline(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
 	float x = wrenGetSlotDouble(vm, 1);
 	float y = wrenGetSlotDouble(vm, 2);
 	float w = wrenGetSlotDouble(vm, 3);
@@ -360,6 +373,7 @@ void vksk_RuntimeRendererDrawRectangleOutline(WrenVM *vm) {
 // vksk_RuntimeRendererDrawCircleOutline(float x, float y, float r, float lineWidth) - draw_circle_outline(_,_,_,_)
 void vksk_RuntimeRendererDrawCircleOutline(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
 	float x = wrenGetSlotDouble(vm, 1);
 	float y = wrenGetSlotDouble(vm, 2);
 	float w = wrenGetSlotDouble(vm, 3);
@@ -370,6 +384,7 @@ void vksk_RuntimeRendererDrawCircleOutline(WrenVM *vm) {
 // vksk_RuntimeRendererDrawLine(float x1, float y1, float x2, float y2) - draw_line(_,_,_,_)
 void vksk_RuntimeRendererDrawLine(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
 	float x = wrenGetSlotDouble(vm, 1);
 	float y = wrenGetSlotDouble(vm, 2);
 	float w = wrenGetSlotDouble(vm, 3);
@@ -384,6 +399,7 @@ void vksk_RuntimeRendererDrawPolygon(WrenVM *vm) {
 
 void vksk_RuntimeRendererDrawFont(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BITMAP_FONT, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
 	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 1);
 	const char *str = wrenGetSlotString(vm, 2);
 	float x = wrenGetSlotDouble(vm, 3);
@@ -393,6 +409,7 @@ void vksk_RuntimeRendererDrawFont(WrenVM *vm) {
 
 void vksk_RuntimeRendererDrawSpritePos(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_SPRITE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 1);
 	if (gShader == NULL) {
 		juSpriteDraw(spr->sprite.spr, wrenGetSlotDouble(vm, 2), wrenGetSlotDouble(vm, 3));
@@ -426,6 +443,7 @@ void vksk_RuntimeRendererDrawSpritePos(WrenVM *vm) {
 
 void vksk_RuntimeRendererDrawSpriteFrame(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_SPRITE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 1);
 	if (gShader == NULL) {
 		juSpriteDrawFrame(spr->sprite.spr, wrenGetSlotDouble(vm, 2), wrenGetSlotDouble(vm, 3), wrenGetSlotDouble(vm, 4));
