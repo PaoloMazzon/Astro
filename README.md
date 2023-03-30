@@ -28,21 +28,21 @@ A basic game
     
         update() {
             var speed = Engine.delta * 100
-            if (Input.keyboard_get_key(Input.KEY_A)) {
+            if (Keyboard.key(Keyboard.KEY_A)) {
                 _x = _x - speed
             }
-            if (Input.keyboard_get_key(Input.KEY_D)) {
+            if (Keyboard.key(Keyboard.KEY_D)) {
                 _x = _x + speed
             }
-            if (Input.keyboard_get_key(Input.KEY_W)) {
+            if (Keyboard.key(Keyboard.KEY_W)) {
                 _y = _y - speed
             }
-            if (Input.keyboard_get_key(Input.KEY_S)) {
+            if (Keyboard.key(Keyboard.KEY_S)) {
                 _y = _y + speed
             }
     
-            Renderer.draw_sprite(Assets.sprite, _x, _y)
-            Renderer.draw_font(Assets.font, "The quick brown fox jumps over the lazy dog.", 0, 0)
+            Renderer.draw_sprite(Assets.spr_sprite, _x, _y)
+            Renderer.draw_font(Assets.fnt_font, "The quick brown fox jumps over the lazy dog.", 0, 0)
         }
     
         destroy() { }

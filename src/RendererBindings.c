@@ -14,7 +14,7 @@ extern bool gOutsideFrame; // -- from src/Runtime.c
 static VK2DShader gShader = NULL;
 
 // Macro for not letting user draw outside of frame
-#define CHECK_VALID_DRAW() if (gOutsideFrame) {vksk_Error(false, "Drawing may not be performed in Level.pre_frame()");return;}
+#define CHECK_VALID_DRAW() if (gOutsideFrame) {vksk_Error(true, "Drawing may not be performed in Level.pre_frame()");return;}
 
 VK2DMSAA convertToMSAAEnum(double wrenVal) {
 	if (wrenVal == 2)

@@ -53,12 +53,29 @@ static void freeString(String s) {
 	free(s);
 }
 
+static bool filenameIsValid(const char *s) {
+	if (*s >= '0' && *s <= '9')
+		return false;
+	while (*s != 0) {
+		if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') || (*s >= '0' && *s <= '9') || *s == '_'))
+			return false;
+		s++;
+	}
+	return true;
+}
+
 static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFunction, String spriteLoader, String getterFunctions) {
 	char tmpCode[1024]; // Code will be generated in here
 	char tmpName[1024]; // Name will be manipulated here
 	memcpy(tmpName, file, strlen(file) + 1);
 	const char *ext = strrchr(tmpName, '.') + 1;
 	tmpName[ext - 1 - tmpName] = 0; // grr memory tomfoolery
+
+	// Make sure the filename is valid
+	if (!filenameIsValid(tmpName)) {
+		vksk_Log("Asset filename \"%s\" is invalid, file is being ignored.", file);
+		return;
+	}
 
 	// Sprites textures and bitmap fonts
 	if (strcmp(ext, "png") == 0 || strcmp(ext, "jpg") == 0 || strcmp(ext, "jpeg") == 0 ||

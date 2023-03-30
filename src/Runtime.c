@@ -170,13 +170,17 @@ void _vksk_RuntimeControllersUpdate(); // From InternalBindings.c
 bool _vk2dFileExists(const char *filename);
 
 void vksk_Start() {
+	vksk_Log("Locating game pak...");
 	// Load pak file
-	if (gEngineConfig.disableGamePak || !_vk2dFileExists("game.pak"))
+	if (gEngineConfig.disableGamePak || !_vk2dFileExists("game.pak")) {
 		gGamePak = NULL;
-	else
+	} else {
 		gGamePak = vksk_PakLoad("game.pak");
+		vksk_Log("Game pak located and loaded.");
+	}
 
 	// Compile the assets code
+	vksk_Log("Compiling assets file...");
 	gAssetsFile = vksk_CompileAssetFile();
 	if (gEngineConfig.enableAssetsPrint)
 		vksk_Log("---------------------Compiled assets file---------------------\n%s\n---------------------Compiled assets file---------------------", gAssetsFile);
