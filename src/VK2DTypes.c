@@ -243,6 +243,96 @@ void vksk_RuntimeVK2DCameraSetHOnScreen(WrenVM *vm) {
 	cam->camera.spec.hOnScreen = wrenGetSlotDouble(vm, 1);
 }
 
+void vksk_RuntimeVK2DCameraGetEyes(WrenVM *vm) {
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	wrenEnsureSlots(vm, 2);
+	wrenSetSlotNewList(vm, 0);
+	wrenSetSlotDouble(vm, 1, cam->camera.spec.Perspective.eyes[0]);
+	wrenInsertInList(vm, 0, -1, 1);
+	wrenSetSlotDouble(vm, 1, cam->camera.spec.Perspective.eyes[1]);
+	wrenInsertInList(vm, 0, -1, 1);
+	wrenSetSlotDouble(vm, 1, cam->camera.spec.Perspective.eyes[2]);
+	wrenInsertInList(vm, 0, -1, 1);
+}
+
+void vksk_RuntimeVK2DCameraSetEyes(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST, FOREIGN_END)
+	wrenEnsureSlots(vm, 3);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	if (wrenGetListCount(vm, 1) >= 3) {
+		wrenGetListElement(vm, 1, 0, 2);
+		cam->camera.spec.Perspective.eyes[0] = wrenGetSlotDouble(vm, 2);
+		wrenGetListElement(vm, 1, 1, 2);
+		cam->camera.spec.Perspective.eyes[1] = wrenGetSlotDouble(vm, 2);
+		wrenGetListElement(vm, 1, 2, 2);
+		cam->camera.spec.Perspective.eyes[2] = wrenGetSlotDouble(vm, 2);
+	}
+}
+
+void vksk_RuntimeVK2DCameraGetCentre(WrenVM *vm) {
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	wrenEnsureSlots(vm, 2);
+	wrenSetSlotNewList(vm, 0);
+	wrenSetSlotDouble(vm, 1, cam->camera.spec.Perspective.centre[0]);
+	wrenInsertInList(vm, 0, -1, 1);
+	wrenSetSlotDouble(vm, 1, cam->camera.spec.Perspective.centre[1]);
+	wrenInsertInList(vm, 0, -1, 1);
+	wrenSetSlotDouble(vm, 1, cam->camera.spec.Perspective.centre[2]);
+	wrenInsertInList(vm, 0, -1, 1);
+}
+
+void vksk_RuntimeVK2DCameraSetCentre(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST, FOREIGN_END)
+	wrenEnsureSlots(vm, 3);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	if (wrenGetListCount(vm, 1) >= 3) {
+		wrenGetListElement(vm, 1, 0, 2);
+		cam->camera.spec.Perspective.centre[0] = wrenGetSlotDouble(vm, 2);
+		wrenGetListElement(vm, 1, 1, 2);
+		cam->camera.spec.Perspective.centre[1] = wrenGetSlotDouble(vm, 2);
+		wrenGetListElement(vm, 1, 2, 2);
+		cam->camera.spec.Perspective.centre[2] = wrenGetSlotDouble(vm, 2);
+	}
+}
+
+void vksk_RuntimeVK2DCameraGetUp(WrenVM *vm) {
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	wrenEnsureSlots(vm, 2);
+	wrenSetSlotNewList(vm, 0);
+	wrenSetSlotDouble(vm, 1, cam->camera.spec.Perspective.up[0]);
+	wrenInsertInList(vm, 0, -1, 1);
+	wrenSetSlotDouble(vm, 1, cam->camera.spec.Perspective.up[1]);
+	wrenInsertInList(vm, 0, -1, 1);
+	wrenSetSlotDouble(vm, 1, cam->camera.spec.Perspective.up[2]);
+	wrenInsertInList(vm, 0, -1, 1);
+}
+
+void vksk_RuntimeVK2DCameraSetUp(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST, FOREIGN_END)
+	wrenEnsureSlots(vm, 3);
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	if (wrenGetListCount(vm, 1) >= 3) {
+		wrenGetListElement(vm, 1, 0, 2);
+		cam->camera.spec.Perspective.up[0] = wrenGetSlotDouble(vm, 2);
+		wrenGetListElement(vm, 1, 1, 2);
+		cam->camera.spec.Perspective.up[1] = wrenGetSlotDouble(vm, 2);
+		wrenGetListElement(vm, 1, 2, 2);
+		cam->camera.spec.Perspective.up[2] = wrenGetSlotDouble(vm, 2);
+	}
+}
+
+void vksk_RuntimeVK2DCameraGetFov(WrenVM *vm) {
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	wrenSetSlotDouble(vm, 0, cam->camera.spec.Perspective.fov);
+}
+
+void vksk_RuntimeVK2DCameraSetFov(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
+	cam->camera.spec.Perspective.fov = wrenGetSlotDouble(vm, 0);
+}
+
+
 void vksk_RuntimeVK2DCameraUpdate(WrenVM *vm) {
 	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
 	vk2dCameraUpdate(cam->camera.index, cam->camera.spec);

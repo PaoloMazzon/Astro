@@ -125,3 +125,32 @@ foreign class Font {
     // Frees without waiting for the gc
     foreign free()
 }
+
+// For 3D models
+foreign class Model {
+    vertex3d(position, uv) {
+        return position + uv
+    }
+
+    // Creates a 3D model from a list of vertices - expects triangles
+    construct create(vertices, indices, texture) {}
+
+    // Loads a 3D model from a .obj file
+    foreign load(obj_file, texture)
+
+    // Forces the engine to free a model
+    foreign free()
+}
+
+// A 2D polygon
+foreign class Polygon {
+    static vertex2d(position, colour) {
+        return position + colour
+    }
+
+    // Creates a polygon from a list of vertices - triangulates automatically
+    construct create(vertices) {}
+
+    // Forces the engine to free a polygon
+    foreign free()
+}

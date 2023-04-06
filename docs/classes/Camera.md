@@ -31,7 +31,21 @@ do things like 4-player split screen, or have the first default camera for the U
  + [w_on_screen=](#w_on_screen-setter)
  + [h_on_screen](#h_on_screen-getter)
  + [h_on_screen=](#h_on_screen-setter)
+ + [eyes](#eyes-getter)
+ + [eyes=](#eyes-setter)
+ + [centre](#centre-getter)
+ + [centre=](#centre-setter)
+ + [up](#up-getter)
+ + [up=](#up-setter)
+ + [fov](#fov-getter)
+ + [fov=](#fov-setter)
  + [update](#update)
+
+Additionally, cameras are all one of these class-defined types:
+
+ + `CAMERA_TYPE_DEFAULT` - 2D camera
+ + `CAMERA_TYPE_PERSPECTIVE` - Perspective camera for 3D rendering
+ + `CAMERA_TYPE_ORTHOGRAPHIC` - Orthographic camera for 3D rendering
 
 ### new
 `construct new()`
@@ -42,12 +56,15 @@ of the window.
 ### type (getter)
 `type`
 
-Not currently implemented.
+Returns the camera's type, will be one of .
 
 ### type (setter)
 `type=(type)`
 
-Not currently implemented.
+Parameters
+ + `type -> Num` Should be one of the `CAMERA_TYPE_*` constants defined above.
+
+Sets the camera's type.
 
 ### x (getter)
 `x`
@@ -178,6 +195,58 @@ Parameters
  + `h_on_screen -> Num` Height on screen for the camera.
  
 Sets the `h_on_screen`.
+
+### eyes (Getter)
+`eyes`
+
+Returns the eyes vector as a list `[x, y, z]`.
+
+### eyes= (Setter)
+`eyes=(eyes)`
+
+Parameters
+ + `eyes -> List` A list containing three elements specifying the x, y, and z components of the eyes vector.
+
+Sets the eyes vector for 3D rendering.
+
+### centre (Getter)
+`centre`
+
+Returns the centre vector as a list `[x, y, z]`.
+
+### centre= (Setter)
+`centre=(centre)`
+
+Parameters
+ + `centre -> List` A list containing three elements specifying the x, y, and z components of the centre vector.
+
+Sets the centre vector for 3D rendering.
+
+### up (Getter)
+`up`
+
+Returns the up vector as a list `[x, y, z]`.
+
+### up= (Setter)
+`up=(up)`
+
+Parameters
+ + `up -> List` A list containing three elements specifying the x, y, and z components of the up vector.
+
+Sets the up vector for 3D rendering.
+
+### fov (Getter)
+`fov`
+
+Returns this camera's field of view in radians.
+
+### fov= (Setter)
+`fov=(fov)`
+
+Parameters
+ + `fov -> List` Field of view in radians.
+
+Sets the fov vector for 3D rendering.
 
 ### update
 `update()`

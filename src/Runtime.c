@@ -232,7 +232,7 @@ void vksk_Start() {
 			SDL_WINDOW_VULKAN | (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0)
 			);
 	VK2DStartupOptions options;
-	options.enableDebug = true;
+	options.enableDebug = false;
 	options.loadCustomShaders = false;
 	options.stdoutLogging = false;
 	options.quitOnError = true;

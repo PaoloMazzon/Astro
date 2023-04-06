@@ -117,6 +117,18 @@ class Renderer {
 
     // Draws a specific frame of a sprite at a specific position, sprite MUST be a `Sprite`
     foreign static draw_sprite(sprite, frame, x, y)
+
+    // Draws a model with less arguments
+    foreign static draw_model(model, x, y, z)
+
+    // Draws a model in detail
+    foreign static draw_model(model, x, y, z, x_scale, y_scale, z_scale, rotation, axis, origin_x, origin_y, origin_z)
+
+    // Draws a polygon with less arguments
+    foreign static draw_polygon(polygon, x, y)
+
+    // Draws a polygon in detail
+    foreign static draw_polygon(polygon, x, y, z, x_scale, y_scale, rotation, origin_x, origin_y)
 }
 
 // Cameras that allow you to control what is displayed on screen
@@ -192,6 +204,15 @@ foreign class Camera {
 
     // Sets this camera's h_on_screen
     foreign h_on_screen=(h_on_screen)
+
+    foreign eyes
+    foreign eyes=(s)
+    foreign centre
+    foreign centre=(s)
+    foreign up
+    foreign up=(s)
+    foreign fov
+    foreign fov=(s)
 
     // Applies current settings for the camera
     foreign update()
