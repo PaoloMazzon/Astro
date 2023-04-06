@@ -113,7 +113,7 @@ void vksk_RuntimeVK2DCameraAllocate(WrenVM *vm) {
 	cam->type = FOREIGN_CAMERA;
 	if (cam->camera.index == VK2D_INVALID_CAMERA) {
 		wrenSetSlotNull(vm, 0);
-		vksk_Error(false, "Failed to create additional cameras.");
+		vksk_Error(true, "Failed to create additional cameras.");
 	}
 }
 
