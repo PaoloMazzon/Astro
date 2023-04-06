@@ -1,0 +1,1617 @@
+[Runtime Error] Could not find foreign method 'width()' for class Sprite in module 'lib/Drawing'.
+[lib/Drawing line 97] in (script)
+[Game line 4] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[lib/Util line 118] [Error] Error at 'cell': Expect newline after statement.
+[lib/Util line 118] [Error] Error at '=': Expected expression.
+[lib/Util line 118] [Error] Error at 'null': Expect newline after statement.
+[lib/Util line 144] [Error] Error at 'Renderer': Variable is used but not defined.
+[Runtime Error] Could not compile module 'lib/Util'.
+[Game line 7] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[lib/Util line 144] [Error] Error at 'Renderer': Variable is used but not defined.
+[Runtime Error] Could not compile module 'lib/Util'.
+[Game line 7] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Tileset does not implement 'list'.
+[lib/Util line 142] in draw()
+[Game line 67] in update()
+[Runtime Error] Tileset does not implement 'sprite'.
+[lib/Util line 146] in draw()
+[Game line 67] in update()
+[lib/Util line 145] [Error] Error at newline: Expected expression.
+[lib/Util line 146] [Error] Error at 'Renderer': Expect newline after statement.
+[lib/Util line 146] [Error] Error at '.': Expected expression.
+[lib/Util line 146] [Error] Error at 'draw_sprite': Expect newline after statement.
+[lib/Util line 146] [Error] Error at ',': Expect ')' after expression.
+[lib/Util line 146] [Error] Error at 'cell': Expect newline after statement.
+[lib/Util line 146] [Error] Error at ',': Expect newline after statement.
+[lib/Util line 146] [Error] Error at ',': Expect newline after statement.
+[lib/Util line 146] [Error] Error at ')': Expect newline after statement.
+[Runtime Error] Could not compile module 'lib/Util'.
+[Game line 7] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Renderer metaclass does not implement 'draw_rectangle(_,_,_,_)'.
+[lib/Util line 147] in draw()
+[Game line 69] in update()
+[Runtime Error] Tileset does not implement 'sprite'.
+[lib/Util line 118] in width
+[Game line 42] in create()
+[Runtime Error] Surface metaclass does not implement 'create(_,_)'.
+[Game line 42] in create()
+[Runtime Error] Null does not implement 'create()'.
+[lib/Engine line 34] [Error] Error at 'Hitbox': Variable is used but not defined.
+[lib/Engine line 68] [Error] Error at 'NULL': Variable is used but not defined.
+[Runtime Error] Could not compile module 'lib/Engine'.
+[Game line 1] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Game does not implement 'player'.
+[Game line 82] in update()
+[Runtime Error] Player does not implement 'sprite'.
+[lib/Engine line 61] in draw(_)
+[lib/Engine line 110] in update()
+[Game line 88] in update()
+[Game line 33] [Error] Error at 'Syste': Variable is used but not defined.
+[Runtime Error] Could not compile module 'Game'.
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Null does not implement 'get_x()'.
+[Game line 48] in update(_)
+[lib/Engine line 109] in update()
+[Game line 90] in update()
+[Runtime Error] Player does not implement 'leve'.
+[Game line 48] in update(_)
+[lib/Engine line 109] in update()
+[Game line 96] in update()
+[Runtime Error] Entity does not implement 'init new()'.
+[Game line 24] in init new()
+[Game line 24] in 
+[lib/Engine line 60] in add_entity(_)
+[Game line 88] in create()
+[Runtime Error] Could not find foreign method 'get_w()' for class Camera in module 'lib/Renderer'.
+[lib/Renderer line 153] in (script)
+[init line 1] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Could not find foreign method 'get_w()' for class Camera in module 'lib/Renderer'.
+[lib/Renderer line 153] in (script)
+[init line 1] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Could not find foreign method 'width' for class Camera in module 'lib/Renderer'.
+[lib/Renderer line 153] in (script)
+[init line 1] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Camera does not implement 'set_h(_)'.
+[Game line 73] in create()
+[Runtime Error] Camera does not implement 'set_x(_)'.
+[Game line 93] in update()
+[Runtime Error] Camera does not implement 'get_x()'.
+[lib/Util line 165] in draw_tiling_background(_,_,_)
+[Game line 99] in update()
+[Runtime Error] Could not find foreign method 'delta()' for class Engine metaclass in module 'lib/Engine'.
+[lib/Engine line 18] in (script)
+[Game line 1] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Engine metaclass does not implement 'info()'.
+[Game line 67] in create()
+[Runtime Error] Engine metaclass does not implement 'delta()'.
+[Game line 93] in update()
+[Runtime Error] Sprite does not implement 'width()'.
+[lib/Util line 119] in width
+[Game line 82] in create()
+[Runtime Error] Sprite does not implement 'width()'.
+[lib/Util line 155] in draw()
+[Game line 84] in create()
+[Runtime Error] Texture does not implement 'width()'.
+[lib/Util line 167] in draw_tiling_background(_,_,_)
+[Game line 99] in update()
+[Runtime Error] Texture does not implement 'width()'.
+[lib/Util line 169] in draw_tiling_background(_,_,_)
+[Game line 99] in update()
+[Game line 32] [Error] Error at 'Hitbox': Variable is used but not defined.
+[Runtime Error] Could not compile module 'Game'.
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Tileset does not implement 'bb'.
+[lib/Util line 148] in collision(_,_,_)
+[Game line 60] in update(_)
+[lib/Engine line 94] in update()
+[Game line 108] in update()
+[Game line 60] [Error] Error at '=': Expected expression.
+[Game line 60] [Error] Error at '_hspeed': Expect '}' at end of block.
+[Game line 60] [Error] Error at '.': Expect newline after statement.
+[Game line 60] [Error] Error at '}': Expect newline after statement.
+[Game line 65] [Error] Error at '=': Expected expression.
+[Game line 65] [Error] Error at '_vspeed': Expect '}' at end of block.
+[Game line 65] [Error] Error at '.': Expect newline after statement.
+[Game line 65] [Error] Error at '}': Expect newline after statement.
+[Runtime Error] Could not compile module 'Game'.
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Game line 61] [Error] Error at 'else': Expected expression.
+[Game line 61] [Error] Error at '{': Expect newline after statement.
+[Game line 61] [Error] Error at '}': Expect newline after statement.
+[Game line 67] [Error] Error at 'else': Expected expression.
+[Game line 67] [Error] Error at '{': Expect newline after statement.
+[Game line 67] [Error] Error at '}': Expect newline after statement.
+[Runtime Error] Could not compile module 'Game'.
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Null does not implement 'sign'.
+[Game line 66] in update(_)
+[lib/Engine line 94] in update()
+[Game line 122] in update()
+[Game line 66] [Error] Error at 'Engine': Expect newline after statement.
+[Game line 66] [Error] Error at '.': Expected expression.
+[Game line 66] [Error] Error at 'delta': Expect newline after statement.
+[Runtime Error] Could not compile module 'Game'.
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Player does not implement 'delta'.
+[Game line 62] in update(_)
+[lib/Engine line 94] in update()
+[Game line 128] in update()
+[Runtime Error] Sprite does not implement 'x_scale'.
+[Game line 87] in update(_)
+[lib/Engine line 94] in update()
+[Game line 136] in update()
+[Runtime Error] Assets metaclass does not implement 'player_falling'.
+[Game line 92] in update(_)
+[lib/Engine line 94] in update()
+[Game line 149] in update()
+[Runtime Error] Assets metaclass does not implement 'player_jumping'.
+[Game line 90] in update(_)
+[lib/Engine line 94] in update()
+[Game line 149] in update()
+[Runtime Error] Player does not implement 'scale_x=(_)'.
+[Game line 54] in update(_)
+[lib/Engine line 94] in update()
+[Game line 151] in update()
+[Runtime Error] Null does not implement 'add(_)'.
+[lib/Engine line 61] in add_entity(_)
+[Game line 127] in create()
+[Runtime Error] Null does not implement '+(_)'.
+[Game line 29] in create(_)
+[lib/Engine line 64] in add_entity(_)
+[Game line 129] in create()
+[Assets line 6] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 6] [Error] Error at '__apple': Expect newline after statement.
+[Assets line 6] [Error] Error at '=': Expected expression.
+[Assets line 6] [Error] Error at 'Sprite': Expect newline after statement.
+[Assets line 6] [Error] Error at '.': Expected expression.
+[Assets line 6] [Error] Error at 'new': Expect newline after statement.
+[Assets line 6] [Error] Error at ',': Expect ')' after expression.
+[Assets line 6] [Error] Error at '0.000000': Expect newline after statement.
+[Assets line 6] [Error] Error at ',': Expected expression.
+[Assets line 6] [Error] Error at '0.000000': Expect newline after statement.
+[Assets line 6] [Error] Error at ',': Expected expression.
+[Assets line 6] [Error] Error at '32.000000': Expect newline after statement.
+[Assets line 6] [Error] Error at ',': Expected expression.
+[Assets line 6] [Error] Error at '32.000000': Expect newline after statement.
+[Assets line 6] [Error] Error at ',': Expected expression.
+[Assets line 6] [Error] Error at '0.070000': Expect newline after statement.
+[Assets line 6] [Error] Error at ',': Expected expression.
+[Assets line 6] [Error] Error at '17': Expect newline after statement.
+[Assets line 6] [Error] Error at ')': Expected expression.
+[Assets line 7] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 9] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 11] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 13] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 15] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 17] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 19] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 21] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 23] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 25] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 27] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 29] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 31] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 33] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 35] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 37] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 39] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 41] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 43] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 45] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 47] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 49] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 51] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Runtime Error] Could not compile module 'Assets'.
+[Game line 8] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Assets line 6] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 6] [Error] Error at '__apple': Expect newline after statement.
+[Assets line 6] [Error] Error at '=': Expected expression.
+[Assets line 6] [Error] Error at 'Sprite': Expect newline after statement.
+[Assets line 6] [Error] Error at '.': Expected expression.
+[Assets line 6] [Error] Error at 'new': Expect newline after statement.
+[Assets line 6] [Error] Error at ',': Expect ')' after expression.
+[Assets line 6] [Error] Error at '0.000000': Expect newline after statement.
+[Assets line 6] [Error] Error at ',': Expected expression.
+[Assets line 6] [Error] Error at '0.000000': Expect newline after statement.
+[Assets line 6] [Error] Error at ',': Expected expression.
+[Assets line 6] [Error] Error at '32.000000': Expect newline after statement.
+[Assets line 6] [Error] Error at ',': Expected expression.
+[Assets line 6] [Error] Error at '32.000000': Expect newline after statement.
+[Assets line 6] [Error] Error at ',': Expected expression.
+[Assets line 6] [Error] Error at '0.070000': Expect newline after statement.
+[Assets line 6] [Error] Error at ',': Expected expression.
+[Assets line 6] [Error] Error at '17': Expect newline after statement.
+[Assets line 6] [Error] Error at ')': Expected expression.
+[Assets line 7] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 9] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 11] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 13] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 15] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 17] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 19] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 21] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 23] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 25] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 27] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 29] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 31] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 33] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 35] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 37] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 39] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 41] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 43] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 45] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 47] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 49] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 51] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Runtime Error] Could not compile module 'Assets'.
+[Game line 8] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Assets line 6] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 8] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 10] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 12] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 14] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 16] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 18] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 20] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 22] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 24] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 26] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 28] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 30] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 32] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 34] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 36] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 38] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 40] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 42] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 44] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 46] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 48] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 50] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Assets line 52] [Error] Error at '_asset_map': Cannot use an instance field in a static method.
+[Runtime Error] Could not compile module 'Assets'.
+[Game line 8] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Assets metaclass does not implement 'asset(_)'.
+[Game line 131] in create()
+[Runtime Error] Assets metaclass does not implement 'asset(_)'.
+[Game line 131] in create()
+[Runtime Error] Renderer metaclass does not implement 'drawsprite(_,_,_)'.
+[Game line 152] in update()
+[Runtime Error] Renderer metaclass does not implement 'drawsprite(_,_,_)'.
+[Game line 152] in update()
+[Runtime Error] Sprite does not implement 'scalex=(_)'.
+[Game line 89] in update(_)
+[lib/Engine line 119] in update()
+[Game line 155] in update()
+[lib/Engine line 77] [Error] Error at 'Renderer': Variable is used but not defined.
+[Runtime Error] Could not compile module 'lib/Engine'.
+[Game line 1] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Null does not implement 'width'.
+[lib/Util line 145] in width
+[Game line 121] in create()
+[Runtime Error] Null does not implement 'width'.
+[lib/Util line 217] in draw()
+[Game line 123] in create()
+[Runtime Error] Null does not implement 'width'.
+[lib/Util line 217] in draw()
+[Game line 123] in create()
+[Runtime Error] Subscript out of bounds.
+[lib/Util line 197] in internal_draw_sprite(_,_,_)
+[lib/Util line 215] in draw()
+[Game line 123] in create()
+[Runtime Error] Subscript out of bounds.
+[lib/Util line 197] in internal_draw_sprite(_,_,_)
+[lib/Util line 215] in draw()
+[Game line 123] in create()
+[Runtime Error] Null does not implement 'width'.
+[lib/Util line 181] in collision(_,_,_)
+[Game line 44] in update(_)
+[lib/Engine line 134] in update()
+[Game line 143] in update()
+[Runtime Error] Subscript out of bounds.
+[Game line 119] in create()
+[Runtime Error] List does not implement 'width'.
+[Game line 122] in create()
+[Runtime Error] Subscript out of bounds.
+[Game line 119] in create()
+[Runtime Error] Right operand must be a string.
+[lib/Util line 157] in test()
+[Game line 118] in create()
+[lib/Util line 268] [Error] Error at newline: Expect '(' after '='.
+[lib/Util line 269] [Error] Error at newline: Expect variable name.
+[lib/Util line 270] [Error] Error at newline: Expect ')' after parameter name.
+[lib/Util line 271] [Error] Error at 'foreign': Expect newline after definition in class.
+[lib/Util line 271] [Error] Error at newline: Expect '{' to begin method body.
+[lib/Util line 274] [Error] Error at 'read_double': Expect 'class' after 'foreign'.
+[lib/Util line 274] [Error] Error at '(': Expect variable name.
+[lib/Util line 274] [Error] Error at ')': Expect '{' after class declaration.
+[lib/Util line 345] [Error] Error at end of file: Expect newline after statement.
+[lib/Util line 345] [Error] Error at end of file: Expect '}' at end of block.
+[lib/Util line 345] [Error] Error at end of file: Expect newline after definition in class.
+[lib/Util line 345] [Error] Error at end of file: Expect method definition.
+[Runtime Error] Could not compile module 'lib/Util'.
+[lib/Engine line 4] in (script)
+[Game line 1] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Could not find foreign method 'pointer=(_)' for class Buffer in module 'lib/Util'.
+[lib/Util line 268] in (script)
+[lib/Engine line 4] in (script)
+[Game line 1] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Could not find foreign method 'read_string(_)' for class Buffer in module 'lib/Util'.
+[lib/Util line 334] in (script)
+[lib/Engine line 4] in (script)
+[Game line 1] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Buffer does not implement 'get_uint32()'.
+[Game line 128] in create()
+[lib/Util line 205] [Error] Error at '>': Expected expression.
+[lib/Util line 205] [Error] Error at 'Internal': Expect ')' after expression.
+[lib/Util line 205] [Error] Error at '>': Expected expression.
+[lib/Util line 205] [Error] Error at 'img': Expect newline after statement.
+[lib/Util line 205] [Error] Error at '>': Expected expression.
+[lib/Util line 205] [Error] Error at 'width': Expect newline after statement.
+[lib/Util line 205] [Error] Error at ')': Expected expression.
+[lib/Util line 205] [Error] Error at '.': Expect newline after statement.
+[Runtime Error] Could not compile module 'lib/Util'.
+[lib/Engine line 4] in (script)
+[Game line 1] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Tileset does not implement 'sprite'.
+[lib/Util line 127] in init new(_,_,_,_)
+[lib/Util line 136] in 
+[lib/Engine line 148] in load(_)
+[Game line 116] in create()
+[Runtime Error] Tileset does not implement 'sprite'.
+[lib/Util line 127] in init new(_,_,_,_)
+[lib/Util line 136] in 
+[lib/Engine line 148] in load(_)
+[Game line 116] in create()
+[Runtime Error] Game does not implement 'report_to_engine()'.
+[Runtime Error] Could not find foreign method 'report_debug(_)' for class Level in module 'lib/Engine'.
+[lib/Engine line 92] in (script)
+[Game line 1] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Game does not implement 'report_debug(_)'.
+[lib/Engine line 176] in update()
+[Game line 139] in update()
+[Runtime Error] Engine metaclass does not implement 'set_fps(_)'.
+[Game line 104] in create()
+[Runtime Error] Engine metaclass does not implement 'time_step=(_)'.
+[Game line 103] in create()
+[Runtime Error] Engine metaclass does not implement 'fps_cap=(_)'.
+[Game line 104] in create()
+[Runtime Error] Could not find foreign method 'key(_)' for class Keyboard metaclass in module 'lib/Input'.
+[lib/Input line 251] in (script)
+[Game line 2] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Could not find foreign method 'key(_)' for class Keyboard metaclass in module 'lib/Input'.
+[lib/Input line 251] in (script)
+[Game line 2] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Game line 57] [Error] Error at newline: Expected expression.
+[Game line 58] [Error] Error at 'y': Expect newline after statement.
+[Game line 58] [Error] Error at '=': Expected expression.
+[Game line 58] [Error] Error at 'y': Expect newline after statement.
+[Game line 58] [Error] Error at '+': Expected expression.
+[Game line 58] [Error] Error at '_vspeed': Expect newline after statement.
+[Game line 58] [Error] Error at '.': Expected expression.
+[Game line 58] [Error] Error at 'sign': Expect newline after statement.
+[Runtime Error] Could not compile module 'Game'.
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Hitbox does not implement 'y_offset=(_)'.
+[Game line 17] in create(_,_)
+[lib/Engine line 116] in add_entity(_,_)
+[lib/Engine line 155] in load(_)
+[Game line 113] in create()
+[Assets line 37] [Error] Error at '=': Expect newline after statement.
+[Assets line 72] [Error] Error at '-': Expect '{' to begin method body.
+[Assets line 72] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 73] [Error] Error at 'static': Expect newline after definition in class.
+[Runtime Error] Could not compile module 'Assets'.
+[lib/Engine line 7] in (script)
+[Game line 1] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Tileset does not implement '[_]'.
+[Game line 124] in create()
+[Runtime Error] Tileset does not implement '[_]'.
+[Game line 125] in create()
+[Runtime Error] Null does not implement 'png'.
+[Assets line 53] in load_assets()
+[__top__ line 2] in (script)
+[Runtime Error] Assets metaclass does not implement 'player_idle'.
+[Game line 15] in create(_,_)
+[lib/Engine line 116] in add_entity(_,_)
+[lib/Engine line 155] in load(_)
+[Game line 116] in create()
+[Runtime Error] Assets metaclass does not implement 'texapple'.
+[Assets line 53] in load_assets()
+[__top__ line 2] in (script)
+[Runtime Error] Null does not implement 'width'.
+[Game line 16] in create(_,_)
+[lib/Engine line 116] in add_entity(_,_)
+[lib/Engine line 155] in load(_)
+[Game line 116] in create()
+[Runtime Error] Null does not implement 'width'.
+[lib/Util line 219] in internal_draw_sprite(_,_,_)
+[lib/Util line 234] in draw()
+[Game line 122] in create()
+[Runtime Error] Null does not implement 'width'.
+[lib/Util line 219] in internal_draw_sprite(_,_,_)
+[lib/Util line 234] in draw()
+[Game line 122] in create()
+[Runtime Error] Null does not implement 'width'.
+[lib/Util line 219] in internal_draw_sprite(_,_,_)
+[lib/Util line 234] in draw()
+[Game line 122] in create()
+[Runtime Error] Assets metaclass does not implement 'sample'.
+[Game line 140] in create()
+[Runtime Error] Could not find foreign method 'set_shader(_)' for class Renderer metaclass in module 'lib/Renderer'.
+[lib/Renderer line 92] in (script)
+[init line 1] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Gamepad metaclass does not implement 'BUTTON_DPAD_LEFT'.
+[Game line 31] in update(_)
+[lib/Engine line 199] in update()
+[Game line 158] in update()
+[lib/Util line 211] [Error] Error at 'return': Expected expression.
+[lib/Util line 211] [Error] Error at 'true': Expect '}' at end of block.
+[Runtime Error] Could not compile module 'lib/Util'.
+[lib/Engine line 4] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[lib/Util line 210] [Error] Error at 'return': Expected expression.
+[lib/Util line 210] [Error] Error at 'true': Expect '}' at end of block.
+[Runtime Error] Could not compile module 'lib/Util'.
+[lib/Engine line 4] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Assets metaclass does not implement 'spr_player_idle'.
+[Game line 14] in create(_,_)
+[lib/Engine line 130] in add_entity(_,_)
+[lib/Engine line 207] in load(_)
+[Game line 116] in create()
+[Runtime Error] Font metaclass does not implement 'load(_,_,_,_,_)'.
+[Game line 140] in create()
+[Assets line 75] [Error] Error at '&': Expected expression.
+[Assets line 75] [Error] Error at 'f': Expect ')' after arguments.
+[Runtime Error] Could not compile module 'Assets'.
+[lib/Engine line 7] in (script)
+[init line 2] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Assets metaclass does not implement 'fnt_ttf'.
+[Game line 161] in update()
+[Runtime Error] [Stack Trace]
+[lib/Engine line 201] in load(_)
+[Game line 116] in create()
+[Runtime Error] error cuz frig you
+[lib/Engine line 216] in load(_)
+[Game line 116] in create()
+[Runtime Error] Failed to load Tiled map 'assets/level0.tmj'
+[lib/Tiled line 806189527] in 
+[lib/Engine line 196] in load(_)
+[Game line 116] in create()
+[Runtime Error] Failed to load Tiled map 'assets/level0.tmj'
+[lib/Tiled line 806218789] in 
+[lib/Engine line 196] in load(_)
+[Game line 116] in create()
+[Runtime Error] Failed to load Tiled map 'assets/level0.tmj'
+testtaskjda
+askidjalskdj
+alskdja
+[lib/Tiled line 806172880] in 
+[lib/Engine line 196] in load(_)
+[Game line 116] in create()
+[Runtime Error] Failed to load Tiled map 'assets/level0.tmj'
+testtaskjda
+askidjalskdj
+alskdja
+[lib/Tiled line 806188092] in 
+[lib/Engine line 196] in load(_)
+[Game line 116] in create()
+[Runtime Error] Failed to load Tiled map 'assets/level0.tmj'
+[lib/Tiled line 806175582] in 
+[lib/Engine line 196] in load(_)
+[Game line 116] in create()
+[init line 10] [Error] Error at 'Renderer': Module variable is already defined.
+[init line 11] [Error] Error at 'Engine': Module variable is already defined.
+[Runtime Error] Could not compile module 'init'.
+[__top__ line 1] in (script)
+[lib/Audio line 15] [Error] Error at 'AudioData': Module variable is already defined.
+[lib/Audio line 24] [Error] Error at 'Audio': Module variable is already defined.
+[Runtime Error] Could not compile module 'lib/Audio'.
+[init line 1] in (script)
+[__top__ line 1] in (script)
+[lib/Audio line 15] [Error] Error at 'AudioData': Module variable is already defined.
+[lib/Audio line 24] [Error] Error at 'Audio': Module variable is already defined.
+[Runtime Error] Could not compile module 'lib/Audio'.
+[init line 1] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Could not find foreign method 'free()' for class AudioData in module 'aalib/Audio'.
+[aalib/Audio line 11] in (script)
+[init line 1] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Engine metaclass does not implement 'argv'.
+[Game line 156] in create()
+[Runtime Error] Could not find foreign method 'argv' for class Engine metaclass in module 'lib/Engine'.
+[lib/Engine line 45] in (script)
+[init line 3] in (script)
+[__top__ line 1] in (script)
+[Assets line 7] [Error] Error at '=': Expect newline after statement.
+[Assets line 9] [Error] Error at '=': Expect newline after statement.
+[Assets line 11] [Error] Error at '=': Expect newline after statement.
+[Assets line 13] [Error] Error at '=': Expect newline after statement.
+[Assets line 15] [Error] Error at '=': Expect newline after statement.
+[Assets line 17] [Error] Error at '=': Expect newline after statement.
+[Assets line 19] [Error] Error at '=': Expect newline after statement.
+[Assets line 21] [Error] Error at '=': Expect newline after statement.
+[Assets line 23] [Error] Error at '=': Expect newline after statement.
+[Assets line 25] [Error] Error at '=': Expect newline after statement.
+[Assets line 27] [Error] Error at '=': Expect newline after statement.
+[Assets line 29] [Error] Error at '=': Expect newline after statement.
+[Assets line 31] [Error] Error at '=': Expect newline after statement.
+[Assets line 33] [Error] Error at '=': Expect newline after statement.
+[Assets line 35] [Error] Error at '=': Expect newline after statement.
+[Assets line 37] [Error] Error at '=': Expect newline after statement.
+[Assets line 39] [Error] Error at '=': Expect newline after statement.
+[Assets line 41] [Error] Error at '=': Expect newline after statement.
+[Assets line 43] [Error] Error at '=': Expect newline after statement.
+[Assets line 45] [Error] Error at '=': Expect newline after statement.
+[Assets line 47] [Error] Error at '=': Expect newline after statement.
+[Assets line 49] [Error] Error at '=': Expect newline after statement.
+[Assets line 51] [Error] Error at '=': Expect newline after statement.
+[Assets line 55] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 55] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 56] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 56] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 56] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 57] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 57] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 57] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 57] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 58] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 58] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 58] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 58] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 59] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 59] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 59] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 59] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 60] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 60] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 60] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 60] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 61] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 61] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 61] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 61] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 62] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 62] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 62] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 62] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 63] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 63] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 63] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 63] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 64] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 64] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 64] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 64] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 65] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 65] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 65] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 65] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 66] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 66] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 66] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 66] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 67] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 67] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 67] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 67] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 68] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 68] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 68] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 68] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 69] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 69] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 69] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 69] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 70] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 70] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 70] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 70] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 71] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 71] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 71] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 71] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 72] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 72] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 72] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 72] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 73] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 73] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 73] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 73] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 74] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 74] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 74] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 74] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 75] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 75] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 75] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 76] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 76] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 76] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 76] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 77] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 77] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 77] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 77] [Error] Error at newline: Expect '}' at end of block.
+[Runtime Error] Could not compile module 'Assets'.
+[lib/Engine line 7] in (script)
+[init line 3] in (script)
+[__top__ line 1] in (script)
+[Assets line 7] [Error] Error at '=': Expect newline after statement.
+[Assets line 9] [Error] Error at '=': Expect newline after statement.
+[Assets line 11] [Error] Error at '=': Expect newline after statement.
+[Assets line 13] [Error] Error at '=': Expect newline after statement.
+[Assets line 15] [Error] Error at '=': Expect newline after statement.
+[Assets line 17] [Error] Error at '=': Expect newline after statement.
+[Assets line 19] [Error] Error at '=': Expect newline after statement.
+[Assets line 21] [Error] Error at '=': Expect newline after statement.
+[Assets line 23] [Error] Error at '=': Expect newline after statement.
+[Assets line 25] [Error] Error at '=': Expect newline after statement.
+[Assets line 27] [Error] Error at '=': Expect newline after statement.
+[Assets line 29] [Error] Error at '=': Expect newline after statement.
+[Assets line 31] [Error] Error at '=': Expect newline after statement.
+[Assets line 33] [Error] Error at '=': Expect newline after statement.
+[Assets line 35] [Error] Error at '=': Expect newline after statement.
+[Assets line 37] [Error] Error at '=': Expect newline after statement.
+[Assets line 39] [Error] Error at '=': Expect newline after statement.
+[Assets line 41] [Error] Error at '=': Expect newline after statement.
+[Assets line 43] [Error] Error at '=': Expect newline after statement.
+[Assets line 45] [Error] Error at '=': Expect newline after statement.
+[Assets line 47] [Error] Error at '=': Expect newline after statement.
+[Assets line 49] [Error] Error at '=': Expect newline after statement.
+[Assets line 51] [Error] Error at '=': Expect newline after statement.
+[Assets line 55] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 55] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 56] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 56] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 56] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 57] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 57] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 57] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 57] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 58] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 58] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 58] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 58] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 59] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 59] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 59] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 59] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 60] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 60] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 60] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 60] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 61] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 61] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 61] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 61] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 62] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 62] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 62] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 62] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 63] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 63] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 63] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 63] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 64] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 64] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 64] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 64] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 65] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 65] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 65] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 65] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 66] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 66] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 66] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 66] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 67] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 67] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 67] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 67] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 68] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 68] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 68] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 68] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 69] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 69] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 69] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 69] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 70] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 70] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 70] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 70] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 71] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 71] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 71] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 71] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 72] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 72] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 72] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 72] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 73] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 73] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 73] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 73] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 74] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 74] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 74] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 74] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 75] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 75] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 75] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 76] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 76] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 76] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 76] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 77] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 77] [Error] Error at 'tex_assets': Class Assets already defines a method 'tex_assets'.
+[Assets line 77] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 77] [Error] Error at newline: Expect '}' at end of block.
+[Runtime Error] Could not compile module 'Assets'.
+[lib/Engine line 7] in (script)
+[init line 3] in (script)
+[__top__ line 1] in (script)
+[Assets line 7] [Error] Error at '=': Expect newline after statement.
+[Assets line 9] [Error] Error at '=': Expect newline after statement.
+[Assets line 11] [Error] Error at '=': Expect newline after statement.
+[Assets line 13] [Error] Error at '=': Expect newline after statement.
+[Assets line 15] [Error] Error at '=': Expect newline after statement.
+[Assets line 17] [Error] Error at '=': Expect newline after statement.
+[Assets line 19] [Error] Error at '=': Expect newline after statement.
+[Assets line 21] [Error] Error at '=': Expect newline after statement.
+[Assets line 23] [Error] Error at '=': Expect newline after statement.
+[Assets line 25] [Error] Error at '=': Expect newline after statement.
+[Assets line 27] [Error] Error at '=': Expect newline after statement.
+[Assets line 29] [Error] Error at '=': Expect newline after statement.
+[Assets line 31] [Error] Error at '=': Expect newline after statement.
+[Assets line 33] [Error] Error at '=': Expect newline after statement.
+[Assets line 35] [Error] Error at '=': Expect newline after statement.
+[Assets line 37] [Error] Error at '=': Expect newline after statement.
+[Assets line 39] [Error] Error at '=': Expect newline after statement.
+[Assets line 41] [Error] Error at '=': Expect newline after statement.
+[Assets line 43] [Error] Error at '=': Expect newline after statement.
+[Assets line 45] [Error] Error at '=': Expect newline after statement.
+[Assets line 47] [Error] Error at '=': Expect newline after statement.
+[Assets line 49] [Error] Error at '=': Expect newline after statement.
+[Assets line 51] [Error] Error at '=': Expect newline after statement.
+[Assets line 55] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 55] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 56] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 56] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 56] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 57] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 57] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 57] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 57] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 58] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 58] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 58] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 58] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 59] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 59] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 59] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 59] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 60] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 60] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 60] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 60] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 61] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 61] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 61] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 61] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 62] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 62] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 62] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 62] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 63] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 63] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 63] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 63] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 64] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 64] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 64] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 64] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 65] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 65] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 65] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 65] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 66] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 66] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 66] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 66] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 67] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 67] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 67] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 67] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 68] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 68] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 68] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 68] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 69] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 69] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 69] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 69] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 70] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 70] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 70] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 70] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 71] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 71] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 71] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 71] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 72] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 72] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 72] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 72] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 73] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 73] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 73] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 73] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 74] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 74] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 74] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 74] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 75] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 75] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 75] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 76] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 76] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 76] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 76] [Error] Error at newline: Expect '}' at end of block.
+[Assets line 77] [Error] Error at 'static': Expect newline after definition in class.
+[Assets line 77] [Error] Error at 'tex_': Class Assets already defines a method 'tex_'.
+[Assets line 77] [Error] Error at '/': Expect '{' to begin method body.
+[Assets line 77] [Error] Error at newline: Expect '}' at end of block.
+[Runtime Error] Could not compile module 'Assets'.
+[lib/Engine line 7] in (script)
+[init line 3] in (script)
+[__top__ line 1] in (script)
+[Runtime Error] Could not load module 'init'.
+[__top__ line 1] in (script)
+[Runtime Error] Assets metaclass does not implement 'spr_player_idle'.
+[Game line 6] in create(_,_)
+[lib/Engine line 124] in add_entity(_,_)
+[lib/Engine line 201] in load(_)
+[Game line 108] in create()
+[Runtime Error] Player does not implement 'x_prev'.
+[Game line 5] in int_x
+[Game line 154] in update()
+[Runtime Error] Player does not implement 'int_x'.
+[Game line 151] in update()
+[Runtime Error] Player does not implement 'int_x'.
+[Game line 151] in update()
+[Runtime Error] Game does not implement 'pre_frame()'.
+[Runtime Error] Entity does not implement 'update()'.
+[Game line 19] in update(_)
+[lib/Engine line 253] in update()
+[Game line 174] in update()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043593] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line -1879043337] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[lib/Renderer line -1879035145] in DEFAULT_CAMERA
+[Game line -1879048201] in pre_frame()
+[Runtime Error] Drawing may not be performed in Level.pre_frame()
+[Game line 78] in update(_)
+[Game line 155] in pre_frame()
