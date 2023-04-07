@@ -17,6 +17,7 @@ The `Renderer` class contains methods that are used in drawing and managing the 
  + [lock_cameras](#lock_cameras)
  + [unlock_cameras](#unlock_cameras)
  + [clear](#clear)
+ + [clear_blank](#clear_blank)
  + [draw_rectangle](#draw_rectangle)
  + [draw_rectangle_outline](#draw_rectangle_outline)
  + [draw_circle_outline](#draw_circle_outline)
@@ -219,6 +220,12 @@ Undoes the effects of [lock_cameras](#lock_cameras).
 `static clear()`
 
 Fills the render target with the current colour mod.
+
+## clear_blank
+`static clear_blank()`
+
+Fills the render target with no colour and no transparency. This is primarily for blanking out
+new surfaces.
 
 ## draw_rectangle
 `static draw_rectangle(x, y, w, h, rotation, x_origin, y_origin)`

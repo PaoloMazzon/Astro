@@ -341,6 +341,10 @@ void vksk_RuntimeRendererClear(WrenVM *vm) {
 	vk2dRendererClear();
 }
 
+void vksk_RuntimeRendererClearBlank(WrenVM *vm) {
+	vk2dRendererEmpty();
+}
+
 // vksk_RuntimeRendererDrawRectangle(float x, float y, float w, float h, float r, float ox, float oy) - draw_rectangle(_,_,_,_,_,_,_)
 void vksk_RuntimeRendererDrawRectangle(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
@@ -390,11 +394,6 @@ void vksk_RuntimeRendererDrawLine(WrenVM *vm) {
 	float w = wrenGetSlotDouble(vm, 3);
 	float h = wrenGetSlotDouble(vm, 4);
 	vk2dRendererDrawLine(x, y, w, h);
-}
-
-// vksk_RuntimeRendererDrawPolygon(VK2DPolygon polygon, float x, float y, bool filled, float lineWidth, float xscale, float yscale, float rot, float originX, float originY) - draw_polygon(_,_,_,_,_,_,_,_,_,_)
-void vksk_RuntimeRendererDrawPolygon(WrenVM *vm) {
-	// TODO: This
 }
 
 void vksk_RuntimeRendererDrawFont(WrenVM *vm) {
@@ -471,3 +470,69 @@ void vksk_RuntimeRendererDrawSpriteFrame(WrenVM *vm) {
 	}
 }
 
+void vksk_RuntimeRendererDrawModel(WrenVM *vm) {
+	// model, x, y, z
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_MODEL, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
+	VKSK_RuntimeForeign *model = wrenGetSlotForeign(vm, 1);
+	float x = wrenGetSlotDouble(vm, 2);
+	float y = wrenGetSlotDouble(vm, 3);
+	float z = wrenGetSlotDouble(vm, 4);
+	vec3 axis = {};
+	vk2dRendererDrawModel(model->model, x, y, z, 1, 1, 1, 0, axis, 0, 0, 0);
+}
+
+void vksk_RuntimeRendererDrawModelExt(WrenVM *vm) {
+	// model, x, y, z, x_scale, y_scale, z_scale, rotation, axis, origin_x, origin_y, origin_z
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_MODEL, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_LIST, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
+	VKSK_RuntimeForeign *model = wrenGetSlotForeign(vm, 1);
+	float x = wrenGetSlotDouble(vm, 2);
+	float y = wrenGetSlotDouble(vm, 3);
+	float z = wrenGetSlotDouble(vm, 4);
+	float xScale = wrenGetSlotDouble(vm, 5);
+	float yScale = wrenGetSlotDouble(vm, 6);
+	float zScale = wrenGetSlotDouble(vm, 7);
+	float rot = wrenGetSlotDouble(vm, 8);
+	float xOrigin = wrenGetSlotDouble(vm, 10);
+	float yOrigin = wrenGetSlotDouble(vm, 11);
+	float zOrigin = wrenGetSlotDouble(vm, 12);
+	vec3 axis = {};
+	if (wrenGetListCount(vm, 9) >= 3) {
+		wrenGetListElement(vm, 9, 0, 1);
+		axis[0] = wrenGetSlotDouble(vm, 1);
+		wrenGetListElement(vm, 9, 1, 1);
+		axis[1] = wrenGetSlotDouble(vm, 1);
+		wrenGetListElement(vm, 9, 2, 1);
+		axis[2] = wrenGetSlotDouble(vm, 1);
+	}
+
+	vk2dRendererDrawModel(model->model, x, y, z, xScale, yScale, zScale, rot, axis, xOrigin, yOrigin, zOrigin);
+}
+
+void vksk_RuntimeRendererDrawPolygon(WrenVM *vm) {
+	// polygon, x, y
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_POLYGON, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
+	VKSK_RuntimeForeign *polygon = wrenGetSlotForeign(vm, 1);
+	float x = wrenGetSlotDouble(vm, 2);
+	float y = wrenGetSlotDouble(vm, 3);
+	vk2dDrawPolygon(polygon->polygon, x, y);
+}
+
+void vksk_RuntimeRendererDrawPolygonExt(WrenVM *vm) {
+	// polygon, x, y, x_scale, y_scale, rotation, origin_x, origin_y, outline, lineWidth
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_POLYGON, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_BOOL, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
+	VKSK_RuntimeForeign *polygon = wrenGetSlotForeign(vm, 1);
+	float x = wrenGetSlotDouble(vm, 2);
+	float y = wrenGetSlotDouble(vm, 3);
+	float xScale = wrenGetSlotDouble(vm, 4);
+	float yScale = wrenGetSlotDouble(vm, 5);
+	float rot = wrenGetSlotDouble(vm, 6);
+	float xOrigin = wrenGetSlotDouble(vm, 7);
+	float yOrigin = wrenGetSlotDouble(vm, 8);
+	bool outline = wrenGetSlotBool(vm, 9);
+	float lineWidth = wrenGetSlotDouble(vm, 10);
+	vk2dRendererDrawPolygon(polygon->polygon, x, y, !outline, lineWidth, xScale, yScale, rot, xOrigin, yOrigin);
+}

@@ -81,6 +81,12 @@ WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module
 		} else if (strcmp(className, "Texture") == 0) {
 			methods.allocate = vksk_RuntimeVK2DTextureAllocate;
 			methods.finalize = vksk_RuntimeVK2DTextureFinalize;
+		} else if (strcmp(className, "Model") == 0) {
+			methods.allocate = vksk_RuntimeVK2DModelAllocate;
+			methods.finalize = vksk_RuntimeVK2DModelFinalize;
+		} else if (strcmp(className, "Polygon") == 0) {
+			methods.allocate = vksk_RuntimeVK2DPolygonAllocate;
+			methods.finalize = vksk_RuntimeVK2DPolygonFinalize;
 		}
 	} else if (strcmp(module, "lib/Renderer") == 0) {
 		if (strcmp(className, "Camera") == 0) {
@@ -151,6 +157,11 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Renderer", true, "draw_font(_,_,_,_)", vksk_RuntimeRendererDrawFont)
 		BIND_METHOD("Renderer", true, "draw_sprite(_,_,_)", vksk_RuntimeRendererDrawSpritePos)
 		BIND_METHOD("Renderer", true, "draw_sprite(_,_,_,_)", vksk_RuntimeRendererDrawSpriteFrame)
+		BIND_METHOD("Renderer", true, "clear_blank()", vksk_RuntimeRendererClearBlank)
+		BIND_METHOD("Renderer", true, "draw_model(_,_,_,_)", vksk_RuntimeRendererDrawModel)
+		BIND_METHOD("Renderer", true, "draw_model(_,_,_,_,_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawModelExt)
+		BIND_METHOD("Renderer", true, "draw_polygon(_,_,_)", vksk_RuntimeRendererDrawPolygon)
+		BIND_METHOD("Renderer", true, "draw_polygon(_,_,_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawPolygonExt)
 		BIND_METHOD("Camera", false, "type", vksk_RuntimeVK2DCameraGetType)
 		BIND_METHOD("Camera", false, "type=(_)", vksk_RuntimeVK2DCameraSetType)
 		BIND_METHOD("Camera", false, "x", vksk_RuntimeVK2DCameraGetX)
@@ -208,6 +219,9 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("BitmapFont", false, "size(_)", vksk_RuntimeJUBitmapFontSize)
 		BIND_METHOD("Font", false, "free()", vksk_RuntimeJUBitmapFontFree)
 		BIND_METHOD("Font", false, "size(_)", vksk_RuntimeJUBitmapFontSize)
+		BIND_METHOD("Model", false, "free()", vksk_RuntimeVK2DModelFree)
+		BIND_METHOD("Model", true, "load(_,_)", vksk_RuntimeVK2DModelLoad)
+		BIND_METHOD("Polygon", false, "free()", vksk_RuntimeVK2DPolygonFree)
 		BIND_METHOD("Sprite", true, "from(_,_,_,_,_,_,_)", vksk_RuntimeJUSpriteFrom)
 		BIND_METHOD("Sprite", false, "frame", vksk_RuntimeJUSpriteGetFrame)
 		BIND_METHOD("Sprite", false, "frame=(_)", vksk_RuntimeJUSpriteSetFrame)

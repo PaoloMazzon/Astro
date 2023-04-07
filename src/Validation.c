@@ -28,6 +28,8 @@ const uint64_t FOREIGN_AUDIO = 1<<14;
 const uint64_t FOREIGN_TILED_MAP = 1<<15;
 const uint64_t FOREIGN_BUFFER = 1<<16;
 const uint64_t FOREIGN_SHADER = 1<<17;
+const uint64_t FOREIGN_MODEL = 1<<18;
+const uint64_t FOREIGN_POLYGON = 1<<19;
 
 extern VKSK_EngineConfig gEngineConfig;
 

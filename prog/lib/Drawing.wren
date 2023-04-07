@@ -136,7 +136,7 @@ foreign class Model {
     construct create(vertices, indices, texture) {}
 
     // Loads a 3D model from a .obj file
-    foreign load(obj_file, texture)
+    foreign static load(obj_file, texture)
 
     // Forces the engine to free a model
     foreign free()

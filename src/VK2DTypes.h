@@ -56,3 +56,12 @@ void vksk_RuntimeVK2DCameraUpdate(WrenVM *vm);
 void vksk_RuntimeVK2DShaderAllocate(WrenVM *vm);
 void vksk_RuntimeVK2DShaderFinalize(void *data);
 void vksk_RuntimeVK2DShaderSetData(WrenVM *vm);
+
+void vksk_RuntimeVK2DPolygonAllocate(WrenVM *vm);
+void vksk_RuntimeVK2DPolygonFinalize(void *data);
+void vksk_RuntimeVK2DPolygonFree(WrenVM *vm);
+
+void vksk_RuntimeVK2DModelAllocate(WrenVM *vm);
+void vksk_RuntimeVK2DModelLoad(WrenVM *vm);
+void vksk_RuntimeVK2DModelFinalize(void *data);
+void vksk_RuntimeVK2DModelFree(WrenVM *vm);

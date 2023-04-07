@@ -366,3 +366,144 @@ void vksk_RuntimeVK2DShaderSetData(WrenVM *vm) {
 	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 1);
 	vk2dShaderUpdate(shader->shader, buffer->buffer.data);
 }
+
+
+void vksk_RuntimeVK2DPolygonAllocate(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST, FOREIGN_END)
+	VKSK_RuntimeForeign *polygon = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
+	polygon->type = FOREIGN_POLYGON;
+	const int vertexListSize = wrenGetListCount(vm, 1);
+	VK2DVertexColour *vertices = malloc(sizeof(VK2DVertexColour) * vertexListSize);
+	wrenEnsureSlots(vm, 4);
+	const int vertexSlot = 2;
+	const int valueSlot = 3;
+
+	for (int i = 0; i < vertexListSize; i++) {
+		wrenGetListElement(vm, 1, i, vertexSlot);
+		wrenGetListElement(vm, vertexSlot, 0, valueSlot);
+		vertices[i].pos[0] = wrenGetSlotDouble(vm, valueSlot);
+		wrenGetListElement(vm, vertexSlot, 1, valueSlot);
+		vertices[i].pos[1] = wrenGetSlotDouble(vm, valueSlot);
+		wrenGetListElement(vm, vertexSlot, 2, valueSlot);
+		vertices[i].pos[2] = wrenGetSlotDouble(vm, valueSlot);
+		wrenGetListElement(vm, vertexSlot, 0, valueSlot);
+		vertices[i].colour[0] = wrenGetSlotDouble(vm, valueSlot);
+		wrenGetListElement(vm, vertexSlot, 1, valueSlot);
+		vertices[i].colour[1] = wrenGetSlotDouble(vm, valueSlot);
+		wrenGetListElement(vm, vertexSlot, 2, valueSlot);
+		vertices[i].colour[2] = wrenGetSlotDouble(vm, valueSlot);
+		wrenGetListElement(vm, vertexSlot, 3, valueSlot);
+		vertices[i].colour[3] = wrenGetSlotDouble(vm, valueSlot);
+	}
+
+	polygon->polygon = vk2dPolygonShapeCreateRaw(vertices, vertexListSize);
+	if (polygon->polygon == NULL) {
+		wrenSetSlotNull(vm, 0);
+		vksk_Error(false, "Failed to create polygon");
+	}
+}
+
+void vksk_RuntimeVK2DPolygonFinalize(void *data) {
+	VKSK_RuntimeForeign *f = data;
+	vk2dPolygonFree(f->polygon);
+}
+
+void vksk_RuntimeVK2DPolygonFree(WrenVM *vm) {
+	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
+	vk2dPolygonFree(f->polygon);
+	f->model = NULL;
+}
+
+
+void vksk_RuntimeVK2DModelAllocate(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST, FOREIGN_LIST, FOREIGN_TEXTURE | FOREIGN_SURFACE, FOREIGN_END)
+	VKSK_RuntimeForeign *model = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
+	model->type = FOREIGN_MODEL;
+	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 3);
+	VK2DTexture target;
+	if (tex->type == FOREIGN_SURFACE)
+		target = tex->surface;
+	else
+		target = tex->texture.tex;
+	// Slot 0 - Output model
+	// Slot 1 - Vertex list
+	// Slot 2 - Index list
+	// Slot 3 - Output list from vertices
+	// Slot 4 - Output value from either slot 3 list or slot 2 list
+	const int vertexListSlot = 1;
+	const int indexListSlot = 2;
+	const int vertexSlot = 3;
+	const int valueSlot = 4;
+	const int vertexListSize = wrenGetListCount(vm, vertexListSlot);
+	const int indexListSize = wrenGetListCount(vm, indexListSlot);
+	wrenEnsureSlots(vm, 5);
+
+	VK2DVertex3D *vertices = malloc(sizeof(VK2DVertex3D) * vertexListSize);
+	uint16_t *indices = malloc(sizeof(uint16_t) * indexListSize);
+
+	// Copy all the vertices from wren
+	for (int i = 0; i < vertexListSize; i++) {
+		VK2DVertex3D vertex;
+		wrenGetListElement(vm, vertexListSlot, i, vertexSlot);
+		wrenGetListElement(vm, vertexSlot, 0, valueSlot);
+		vertex.pos[0] = wrenGetSlotDouble(vm, valueSlot);
+		wrenGetListElement(vm, vertexSlot, 1, valueSlot);
+		vertex.pos[1] = wrenGetSlotDouble(vm, valueSlot);
+		wrenGetListElement(vm, vertexSlot, 2, valueSlot);
+		vertex.pos[2] = wrenGetSlotDouble(vm, valueSlot);
+		wrenGetListElement(vm, vertexSlot, 0, valueSlot);
+		vertex.uv[0] = wrenGetSlotDouble(vm, valueSlot);
+		wrenGetListElement(vm, vertexSlot, 1, valueSlot);
+		vertex.uv[1] = wrenGetSlotDouble(vm, valueSlot);
+		vertices[i] = vertex;
+	}
+
+	// Copy the indices
+	for (int i = 0; i < indexListSize; i++) {
+		wrenGetListElement(vm, indexListSlot, i, valueSlot);
+		indices[i] = (uint16_t)wrenGetSlotDouble(vm, valueSlot);
+	}
+
+	model->model = vk2dModelCreate(vertices, vertexListSize, indices, indexListSize, target);
+	if (model->model == NULL) {
+		wrenSetSlotNull(vm, 0);
+		vksk_Error(false, "Failed to load model");
+	}
+
+	free(vertices);
+	free(indices);
+}
+
+void vksk_RuntimeVK2DModelLoad(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_TEXTURE | FOREIGN_SURFACE, FOREIGN_END)
+	wrenGetVariable(vm, "Drawing", "Model", 0);
+	VKSK_RuntimeForeign *model = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
+	const char *fname = wrenGetSlotString(vm, 1);
+	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 2);
+	VK2DTexture target;
+	if (tex->type == FOREIGN_SURFACE)
+		target = tex->surface;
+	else
+		target = tex->texture.tex;
+
+	int size;
+	void *buffer = vksk_GetFileBuffer(fname, &size);
+	model->type = FOREIGN_MODEL;
+	model->model = vk2dModelFrom(buffer, size, target);
+
+	if (model->model == NULL) {
+		wrenSetSlotNull(vm, 0);
+		vksk_Error(false, "Failed to load model \"%s\"", fname);
+	}
+}
+
+void vksk_RuntimeVK2DModelFinalize(void *data) {
+	VKSK_RuntimeForeign *f = data;
+	vk2dModelFree(f->model);
+}
+
+void vksk_RuntimeVK2DModelFree(WrenVM *vm) {
+	VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, 0);
+	vk2dModelFree(f->model);
+	f->model = NULL;
+}

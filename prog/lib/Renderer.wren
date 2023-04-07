@@ -94,6 +94,9 @@ class Renderer {
     // Wipes the screen with the current rendering colour
     foreign static clear()
 
+    // Wipes the screen to 0 everything
+    foreign static clear_blank()
+
     // Draws a rectangle with the current render colour
     foreign static draw_rectangle(x, y, w, h, rotation, x_origin, y_origin)
 
@@ -105,9 +108,6 @@ class Renderer {
 
     // Draws a line with the current render colour
     foreign static draw_line(x1, y1, x2, y2)
-
-    // Draws a polygon, polygon MUST be `Polygon`
-    foreign static draw_polygon(polygon, x, y, filled, line_width, x_scale, y_scale, rot, origin_x, origin_y)
 
     // Draws text, font MUST be a `BitmapFont`
     foreign static draw_font(font, text, x, y)
@@ -128,7 +128,7 @@ class Renderer {
     foreign static draw_polygon(polygon, x, y)
 
     // Draws a polygon in detail
-    foreign static draw_polygon(polygon, x, y, z, x_scale, y_scale, rotation, origin_x, origin_y)
+    foreign static draw_polygon(polygon, x, y, x_scale, y_scale, rotation, origin_x, origin_y, outline, line_width)
 }
 
 // Cameras that allow you to control what is displayed on screen
