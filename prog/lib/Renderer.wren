@@ -134,8 +134,8 @@ class Renderer {
 // Cameras that allow you to control what is displayed on screen
 foreign class Camera {
     static CAMERA_TYPE_DEFAULT { 0 }
-    static CAMERA_TYPE_PERSPECTIVE { 1 }
-    static CAMERA_TYPE_ORTHOGRAPHIC { 2 }
+    static CAMERA_TYPE_ORTHOGRAPHIC { 1 }
+    static CAMERA_TYPE_PERSPECTIVE { 2 }
 
     construct new() {}
 

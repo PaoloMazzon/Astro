@@ -329,7 +329,7 @@ void vksk_RuntimeVK2DCameraGetFov(WrenVM *vm) {
 void vksk_RuntimeVK2DCameraSetFov(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 0);
-	cam->camera.spec.Perspective.fov = wrenGetSlotDouble(vm, 0);
+	cam->camera.spec.Perspective.fov = wrenGetSlotDouble(vm, 1);
 }
 
 
@@ -476,7 +476,7 @@ void vksk_RuntimeVK2DModelAllocate(WrenVM *vm) {
 
 void vksk_RuntimeVK2DModelLoad(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_TEXTURE | FOREIGN_SURFACE, FOREIGN_END)
-	wrenGetVariable(vm, "Drawing", "Model", 0);
+	wrenGetVariable(vm, "lib/Drawing", "Model", 0);
 	VKSK_RuntimeForeign *model = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
 	const char *fname = wrenGetSlotString(vm, 1);
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 2);
