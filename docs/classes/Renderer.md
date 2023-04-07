@@ -27,6 +27,8 @@ The `Renderer` class contains methods that are used in drawing and managing the 
  + [draw_model](#draw_model)
  + [draw_font](#draw_font)
  + [draw_sprite](#draw_sprite)
+ + [draw_polygon](#draw_polygon)
+ + [draw_model](#draw_model)
  
 As well as the above methods, the renderer also contains a number of values that some of its
 methods expect as parameters:
@@ -324,6 +326,46 @@ Parameters
  
 Draws a sprite, automatically handling its animations. If you specify a frame to
 draw, the animation will not be played out or manipulated.
+
+## draw_polygon
+`static draw_polygon(polygon, x, y)`
+
+`static draw_polygon(polygon, x, y, x_scale, y_scale, rotation, origin_x, origin_y, outline, line_width)`
+
+Parameters
+  + `polygon -> Polygon` Polygon to draw.
+  + `x -> Num` X position to draw to.
+  + `y -> Num` Y position to draw to.
+  + `x_scale -> Num` X scale of the polygon.
+  + `y_scale -> Num` Y scale of the polygon.
+  + `rotation -> Num` Rotation of the polygon.
+  + `origin_x -> Num` X origin for rotation.
+  + `origin_y -> Num` Y origin for rotation.
+  + `outline -> Bool` Whether or not to draw it only as an outline.
+  + `line_width -> Num` If drawn as an outline, how thick should the outline be.
+
+Draws a polygon. See [Polygon](Polygon.md).
+
+## draw_model
+`static draw_model(model, x, y, z)`
+
+`static draw_model(model, x, y, z, x_scale, y_scale, z_scale, rotation, axis, origin_x, origin_y, origin_z)`
+
+Parameters
+ + `model -> Model` Model to draw.
+ + `x -> Num` X position of the model.
+ + `y -> Num` Y position of the model.
+ + `z -> Num` Z position of the model.
+ + `x_scale -> Num` X scale of the model.
+ + `y_scale -> Num` Y scale of the model.
+ + `z_scale -> Num` Z scale of the model.
+ + `rotation -> Num` Rotation of the model.
+ + `axis -> List` Axis to rotate on as a list of `[x, y, z]`.
+ + `origin_x -> Num` X origin for rotation.
+ + `origin_y -> Num` Y origin for rotation.
+ + `origin_z -> Num` Z origin for rotation.
+
+Draws a model. See [Model](Model.md).
 
 -----------
 

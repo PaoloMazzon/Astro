@@ -128,8 +128,8 @@ foreign class Font {
 
 // For 3D models
 foreign class Model {
-    vertex3d(position, uv) {
-        return position + uv
+    vertex(x, y, z, u, v) {
+        return [x, y, z, u, v]
     }
 
     // Creates a 3D model from a list of vertices - expects triangles
@@ -144,8 +144,8 @@ foreign class Model {
 
 // A 2D polygon
 foreign class Polygon {
-    static vertex2d(position, colour) {
-        return position + colour
+    static vertex(x, y, r, g, b, a) {
+        return [x, y, r, g, b, a]
     }
 
     // Creates a polygon from a list of vertices - triangulates automatically

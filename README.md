@@ -66,3 +66,5 @@ TODO
  + Improve TrueType font rendering
  + Built-in mod support
  + Spatial hash maps
+ + Shaders should be able to pull from the game pak
+ + More example projects

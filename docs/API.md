@@ -11,6 +11,8 @@ Every class is automatically imported in every file.
  + [Font](classes/Font.md)
  + [Texture](classes/Texture.md)
  + [Sprite](classes/Sprite.md)
+ + [Polygon](classes/Polygon.md)
+ + [Model](classes/Model.md)
  + [Surface](classes/Surface.md)
  + [Mouse](classes/Mouse.md)
  + [Keyboard](classes/Keyboard.md)

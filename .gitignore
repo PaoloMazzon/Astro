@@ -18,3 +18,4 @@ doxygen_sqlite3.db
 vk2derror.log
 out/
 *.exe
+*.pak
