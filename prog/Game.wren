@@ -147,6 +147,21 @@ class Game is Level {
 
         // Find the player entity
         _player = get_entity(Player)
+
+        // Setup 3D rendering
+        _surface3D = Surface.new(200, 200)
+        _model = Model.load("assets/testmodel.obj", Assets.tex_testuv)
+        _camera3D = Camera.new()
+        _camera3D.type = Camera.CAMERA_TYPE_PERSPECTIVE
+        _camera3D.eyes = [4, 1, 0]
+        _camera3D.centre = [0, 0, 0]
+        _camera3D.up = [0, 1, 0]
+        _camera3D.fov = Num.pi * 0.2
+        _camera3D.width = 200
+        _camera3D.height = 200
+        _camera3D.zoom = 1
+        _camera3D.update()
+        Renderer.use_cameras_on_surfaces = true
     }
 
     pre_frame() {
@@ -170,7 +185,18 @@ class Game is Level {
         Renderer.colour_mod = [0.5, 0.5, 0.5, 1]
         Renderer.draw_texture(_backdrop_surface, 0, 0)
         Renderer.colour_mod = Renderer.COLOUR_DEFAULT
+        
+        // Draw 3D model
+        Renderer.lock_cameras(_camera3D)
+        Renderer.target = _surface3D
+        Renderer.clear_blank()
+        Renderer.draw_model(_model, 0, 0, 0, 1, 1, 1, Engine.time, [0, 1, 0], 0, 0, 0)
+        Renderer.target = Renderer.RENDER_TARGET_DEFAULT
+        Renderer.lock_cameras(_game_cam)
+
+        // Draw foreground
         Renderer.draw_texture(_foreground_surface, 0, 0)
+        Renderer.draw_texture(_surface3D, 240 - 37, 320 - (16 * 8))
 
         super.update() // update all entities
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)

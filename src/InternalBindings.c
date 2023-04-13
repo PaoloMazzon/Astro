@@ -1063,6 +1063,7 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 void vksk_RuntimeFontFinalize(void *data) {
 	VKSK_RuntimeForeign *font = data;
 	vk2dRendererWait();
+	vk2dImageFree(vk2dTextureGetImage(font->bitmapFont->bitmap));
 	juFontFree(font->bitmapFont);
 }
 
@@ -1082,6 +1083,7 @@ void vksk_RuntimeFontSize(WrenVM *vm) {
 void vksk_RuntimeFontFree(WrenVM *vm) {
 	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 0);
 	vk2dRendererWait();
+	vk2dImageFree(vk2dTextureGetImage(font->bitmapFont->bitmap));
 	juFontFree(font->bitmapFont);
 	font->bitmapFont = NULL;
 }

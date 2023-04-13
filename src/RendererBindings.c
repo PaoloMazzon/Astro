@@ -12,62 +12,64 @@
 extern SDL_Window *gWindow; // -- from src/Runtime.c
 extern bool gOutsideFrame; // -- from src/Runtime.c
 static VK2DShader gShader = NULL;
+static int gShaderSize = 0;
+static WrenHandle *gShaderBuffer;
 
 // Macro for not letting user draw outside of frame
 #define CHECK_VALID_DRAW() if (gOutsideFrame) {vksk_Error(true, "Drawing may not be performed in Level.pre_frame()");return;}
 
 VK2DMSAA convertToMSAAEnum(double wrenVal) {
 	if (wrenVal == 2)
-		return msaa_2x;
+		return VK2D_MSAA_2X;
 	if (wrenVal == 4)
-		return msaa_4x;
+		return VK2D_MSAA_4X;
 	if (wrenVal == 8)
-		return msaa_8x;
+		return VK2D_MSAA_8X;
 	if (wrenVal == 16)
-		return msaa_16x;
+		return VK2D_MSAA_16X;
 	if (wrenVal == 32)
-		return msaa_32x;
-	return msaa_1x;
+		return VK2D_MSAA_32X;
+	return VK2D_MSAA_1X;
 }
 
 VK2DFilterType convertToFilterTypeEnum(double wrenVal) {
 	if (wrenVal == 1)
-		return ft_Linear;
-	return ft_Nearest;
+		return VK2D_FILTER_TYPE_LINEAR;
+	return VK2D_FILTER_TYPE_NEAREST;
 }
 
 VK2DScreenMode convertToScreenModeEnum(double wrenVal) {
 	if (wrenVal == 1)
-		return sm_VSync;
+		return VK2D_SCREEN_MODE_VSYNC;
 	if (wrenVal == 2)
-		return sm_TripleBuffer;
-	return sm_Immediate;
+		return VK2D_SCREEN_MODE_TRIPLE_BUFFER;
+	return VK2D_SCREEN_MODE_IMMEDIATE;
 }
 
 double convertFromMSAAEnum(VK2DMSAA val) {
-	if (val == msaa_2x)
+	if (val == VK2D_MSAA_2X)
 		return 2;
-	if (val == msaa_4x)
+	if (val == VK2D_MSAA_4X)
 		return 4;
-	if (val == msaa_8x)
+	if (val == VK2D_MSAA_8X)
 		return 8;
-	if (val == msaa_16x)
+	if (val == VK2D_MSAA_16X)
 		return 16;
-	if (val == msaa_32x)
+	if (val == VK2D_MSAA_32X)
 		return 32;
 	return 1;
 }
 
 double convertFromFilterTypeEnum(VK2DFilterType val) {
-	if (val == ft_Linear)
+	if (val == VK2D_FILTER_TYPE_LINEAR)
 		return 1;
 	return 0;
 }
 
 double convertFromScreenModeEnum(VK2DScreenMode val) {
-	if (val == sm_VSync)
+	if (val == VK2D_SCREEN_MODE_VSYNC)
 		return 1;
-	if (val == sm_TripleBuffer)
+	if (val == VK2D_SCREEN_MODE_TRIPLE_BUFFER)
 		return 2;
 	return 0;
 }
@@ -116,6 +118,17 @@ void vksk_LoadVK2DConfigFromMap(WrenVM *vm, int mapSlot, const char **windowTitl
 	config->filterMode = convertToFilterTypeEnum(wrenGetSlotDouble(vm, valueSlot));
 }
 
+static void *vksk_GetShaderData(WrenVM *vm) {
+	if (gShaderBuffer != NULL) {
+		wrenSetSlotHandle(vm, 0, gShaderBuffer);
+		VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 0);
+		return buffer->buffer.data;
+	} else if (gShaderBuffer == NULL && gShaderSize > 0) {
+		vksk_Error(true, "Shader expected buffer data but none was provided.");
+	}
+	return NULL;
+}
+
 void vksk_RuntimeRendererDrawCircle(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	CHECK_VALID_DRAW()
@@ -138,9 +151,9 @@ void vksk_RuntimeRendererDrawTextureExt(WrenVM *vm) {
 	float ox = wrenGetSlotDouble(vm, 7);
 	float oy = wrenGetSlotDouble(vm, 8);
 	if (gShader == NULL)
-		vk2dRendererDrawTexture(tex->texture.tex, x, y, xscale, yscale, rot, ox, oy, 0, 0, tex->texture.tex->img->width, tex->texture.tex->img->height);
+		vk2dRendererDrawTexture(tex->texture.tex, x, y, xscale, yscale, rot, ox, oy, 0, 0, vk2dTextureWidth(tex->texture.tex), vk2dTextureHeight(tex->texture.tex));
 	else
-		vk2dRendererDrawShader(gShader, tex->texture.tex, x, y, xscale, yscale, rot, ox, oy, 0, 0, tex->texture.tex->img->width, tex->texture.tex->img->height);
+		vk2dRendererDrawShader(gShader, vksk_GetShaderData(vm), tex->texture.tex, x, y, xscale, yscale, rot, ox, oy, 0, 0, vk2dTextureWidth(tex->texture.tex), vk2dTextureHeight(tex->texture.tex));
 }
 
 void vksk_RuntimeRendererDrawTexture(WrenVM *vm) {
@@ -150,9 +163,9 @@ void vksk_RuntimeRendererDrawTexture(WrenVM *vm) {
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
 	if (gShader == NULL)
-		vk2dRendererDrawTexture(tex->texture.tex, x, y, 1, 1, 0, 0, 0, 0, 0, tex->texture.tex->img->width, tex->texture.tex->img->height);
+		vk2dRendererDrawTexture(tex->texture.tex, x, y, 1, 1, 0, 0, 0, 0, 0, vk2dTextureWidth(tex->texture.tex), vk2dTextureHeight(tex->texture.tex));
 	else
-		vk2dRendererDrawShader(gShader, tex->texture.tex, x, y, 1, 1, 0, 0, 0, 0, 0, tex->texture.tex->img->width, tex->texture.tex->img->height);
+		vk2dRendererDrawShader(gShader, vksk_GetShaderData(vm), tex->texture.tex, x, y, 1, 1, 0, 0, 0, 0, 0, vk2dTextureWidth(tex->texture.tex), vk2dTextureHeight(tex->texture.tex));
 }
 
 void vksk_RuntimeRendererDrawTexturePartExt(WrenVM *vm) {
@@ -173,7 +186,7 @@ void vksk_RuntimeRendererDrawTexturePartExt(WrenVM *vm) {
 	if (gShader == NULL)
 		vk2dRendererDrawTexture(tex->texture.tex, x, y, xscale, yscale, rot, ox, oy, xt, yt, tw, th);
 	else
-		vk2dRendererDrawShader(gShader, tex->texture.tex, x, y, xscale, yscale, rot, ox, oy, xt, yt, tw, th);
+		vk2dRendererDrawShader(gShader, vksk_GetShaderData(vm), tex->texture.tex, x, y, xscale, yscale, rot, ox, oy, xt, yt, tw, th);
 }
 
 void vksk_RuntimeRendererDrawTexturePart(WrenVM *vm) {
@@ -189,7 +202,7 @@ void vksk_RuntimeRendererDrawTexturePart(WrenVM *vm) {
 	if (gShader == NULL)
 		vk2dRendererDrawTexture(tex->texture.tex, x, y, 1, 1, 0, 0, 0, xt, yt, tw, th);
 	else
-		vk2dRendererDrawShader(gShader, tex->texture.tex, x, y, 1, 1, 0, 0, 0, xt, yt, tw, th);
+		vk2dRendererDrawShader(gShader, vksk_GetShaderData(vm), tex->texture.tex, x, y, 1, 1, 0, 0, 0, xt, yt, tw, th);
 }
 
 // vksk_RuntimeRendererGetConfig() - get_config()
@@ -303,9 +316,13 @@ void vksk_RuntimeRendererSetShader(WrenVM *vm) {
 	CHECK_VALID_DRAW()
 	if (wrenGetSlotType(vm, 1) == WREN_TYPE_NULL) {
 		gShader = NULL;
+		gShaderSize = 0;
+		gShaderBuffer = NULL;
 	} else {
 		VKSK_RuntimeForeign *shader = wrenGetSlotForeign(vm, 1);
-		gShader = shader->shader;
+		gShader = shader->shader.shader;
+		gShaderSize = shader->shader.size;
+		gShaderBuffer = shader->shader.data;
 	}
 }
 
@@ -420,11 +437,12 @@ void vksk_RuntimeRendererDrawSpritePos(WrenVM *vm) {
 		}
 
 		// Calculate where in the texture to draw
-		float drawX = roundf(spr->sprite.spr->x + ((int)(spr->sprite.spr->Internal.frame * spr->sprite.spr->Internal.w) % (int)(spr->sprite.spr->Internal.tex->img->width - spr->sprite.spr->x)));
-		float drawY = roundf(spr->sprite.spr->y + (spr->sprite.spr->Internal.h * floorf((spr->sprite.spr->Internal.frame * spr->sprite.spr->Internal.w) / (spr->sprite.spr->Internal.tex->img->width - spr->sprite.spr->x))));
+		float drawX = roundf(spr->sprite.spr->x + ((int)(spr->sprite.spr->Internal.frame * spr->sprite.spr->Internal.w) % (int)(vk2dTextureWidth(spr->sprite.spr->Internal.tex) - spr->sprite.spr->x)));
+		float drawY = roundf(spr->sprite.spr->y + (spr->sprite.spr->Internal.h * floorf((spr->sprite.spr->Internal.frame * spr->sprite.spr->Internal.w) / (vk2dTextureWidth(spr->sprite.spr->Internal.tex) - spr->sprite.spr->x))));
 
 		vk2dRendererDrawShader(
 				gShader,
+				vksk_GetShaderData(vm),
 				spr->sprite.spr->Internal.tex,
 				wrenGetSlotDouble(vm, 2) - (spr->sprite.spr->originX * spr->sprite.spr->scaleX),
 				wrenGetSlotDouble(vm, 3) - (spr->sprite.spr->originY * spr->sprite.spr->scaleY),
@@ -450,10 +468,12 @@ void vksk_RuntimeRendererDrawSpriteFrame(WrenVM *vm) {
 		int index = (int)wrenGetSlotDouble(vm, 2);
 		if (index >= 0 && index < spr->sprite.spr->Internal.frames) {
 			// Calculate where in the texture to draw
-			float drawX = roundf(spr->sprite.spr->x + ((int)(index * spr->sprite.spr->Internal.w) % (int)(spr->sprite.spr->Internal.tex->img->width - spr->sprite.spr->x)));
-			float drawY = roundf(spr->sprite.spr->y + (spr->sprite.spr->Internal.h * floorf((index * spr->sprite.spr->Internal.w) / (spr->sprite.spr->Internal.tex->img->width - spr->sprite.spr->x))));
+			float drawX = roundf(spr->sprite.spr->x + ((int)(index * spr->sprite.spr->Internal.w) % (int)(vk2dTextureWidth(spr->sprite.spr->Internal.tex) - spr->sprite.spr->x)));
+			float drawY = roundf(spr->sprite.spr->y + (spr->sprite.spr->Internal.h * floorf((index * spr->sprite.spr->Internal.w) / (vk2dTextureWidth(spr->sprite.spr->Internal.tex) - spr->sprite.spr->x))));
 
-			vk2dRendererDrawTexture(
+			vk2dRendererDrawShader(
+					gShader,
+					vksk_GetShaderData(vm),
 					spr->sprite.spr->Internal.tex,
 					wrenGetSlotDouble(vm, 3) - spr->sprite.spr->originX,
 					wrenGetSlotDouble(vm, 4) - spr->sprite.spr->originY,

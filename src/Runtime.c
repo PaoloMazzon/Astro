@@ -195,6 +195,7 @@ void vksk_Start() {
 	config.bindForeignMethodFn = &vksk_WrenBindForeignMethod;
 	config.bindForeignClassFn = &vksk_WrenBindForeignClass;
 	config.initialHeapSize = 1024 * 1024 * 100; // 100mb
+	config.heapGrowthPercent = 25;
 	vm = wrenNewVM(&config);
 
 	// Import the initialization module
@@ -383,6 +384,10 @@ void vksk_Start() {
 	vk2dRendererQuit();
 	SDL_DestroyWindow(gWindow);
 	vksk_PakFree(gGamePak);
+}
+
+WrenVM *vksk_GetVM() {
+	return vm;
 }
 
 void vksk_RuntimeSwitchLevel(WrenVM *vm) {

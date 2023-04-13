@@ -832,13 +832,12 @@ JUFont juFontLoadFromTexture(VK2DTexture texture, uint32_t unicodeStart, uint32_
 	JUFont font = juMalloc(sizeof(struct JUFont));
 	font->characters = juMalloc(sizeof(struct JUCharacter) * (unicodeEnd - unicodeStart));
 	font->bitmap = texture;
-	font->image = texture->img;
 	font->newLineHeight = h;
 	font->unicodeStart = unicodeStart;
 	font->unicodeEnd = unicodeEnd;
 
 	// Make sure the texture loaded and the texture has enough space to load the desired characters
-	if (font->bitmap != NULL && w * h * (unicodeEnd - unicodeStart) <= font->bitmap->img->width * font->bitmap->img->height) {
+	if (font->bitmap != NULL && w * h * (unicodeEnd - unicodeStart) <= vk2dTextureWidth(font->bitmap) * vk2dTextureHeight(font->bitmap)) {
 		// Calculate positions of every character in the font
 		float x = 0;
 		float y = 0;
@@ -850,7 +849,7 @@ JUFont juFontLoadFromTexture(VK2DTexture texture, uint32_t unicodeStart, uint32_
 			font->characters[i - unicodeStart].h = h;
 			font->characters[i - unicodeStart].drawn = true;
 			font->characters[i - unicodeStart].ykern = 0;
-			if (x + w >= font->bitmap->img->width) {
+			if (x + w >= vk2dTextureWidth(font->bitmap)) {
 				y += h;
 				x = 0;
 			} else {
@@ -870,7 +869,6 @@ JUFont juFontLoadFromTexture(VK2DTexture texture, uint32_t unicodeStart, uint32_
 void juFontFree(JUFont font) {
 	if (font != NULL) {
 		vk2dTextureFree(font->bitmap);
-		vk2dImageFree(font->image);
 		free(font->characters);
 		free(font);
 	}
@@ -1681,8 +1679,8 @@ void juSpriteDraw(JUSprite spr, float x, float y) {
 	}
 
 	// Calculate where in the texture to draw
-	float drawX = roundf(spr->x + ((int)(spr->Internal.frame * spr->Internal.w) % (int)(spr->Internal.tex->img->width - spr->x)));
-	float drawY = roundf(spr->y + (spr->Internal.h * floorf((spr->Internal.frame * spr->Internal.w) / (spr->Internal.tex->img->width - spr->x))));
+	float drawX = roundf(spr->x + ((int)(spr->Internal.frame * spr->Internal.w) % (int)(vk2dTextureWidth(spr->Internal.tex) - spr->x)));
+	float drawY = roundf(spr->y + (spr->Internal.h * floorf((spr->Internal.frame * spr->Internal.w) / (vk2dTextureWidth(spr->Internal.tex) - spr->x))));
 
 	vk2dRendererDrawTexture(
 			spr->Internal.tex,
@@ -1702,8 +1700,8 @@ void juSpriteDraw(JUSprite spr, float x, float y) {
 void juSpriteDrawFrame(JUSprite spr, uint32_t index, float x, float y) {
 	if (index >= 0 && index < spr->Internal.frames) {
 		// Calculate where in the texture to draw
-		float drawX = roundf(spr->x + ((int)(index * spr->Internal.w) % (int)(spr->Internal.tex->img->width - spr->x)));
-		float drawY = roundf(spr->y + (spr->Internal.h * floorf((index * spr->Internal.w) / (spr->Internal.tex->img->width - spr->x))));
+		float drawX = roundf(spr->x + ((int)(index * spr->Internal.w) % (int)(vk2dTextureWidth(spr->Internal.tex) - spr->x)));
+		float drawY = roundf(spr->y + (spr->Internal.h * floorf((index * spr->Internal.w) / (vk2dTextureWidth(spr->Internal.tex) - spr->x))));
 
 		vk2dRendererDrawTexture(
 				spr->Internal.tex,

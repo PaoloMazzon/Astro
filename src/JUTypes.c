@@ -20,33 +20,20 @@ void vksk_RuntimeJUBitmapFontAllocate(WrenVM *vm) {
 	bool error = false;
 
 	VK2DTexture tex;
-	VK2DImage img;
-	int x, y, channels, size;
-	void *pixels;
+	int size;
 	void *buffer = vksk_GetFileBuffer(wrenGetSlotString(vm, 1), &size);
 	if (buffer != NULL) {
-		pixels = stbi_load_from_memory(buffer, size, &x, &y, &channels, 4);
-		if (pixels != NULL) {
-			img = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y);
-			stbi_image_free(pixels);
-			if (img != NULL) {
-				tex = vk2dTextureLoadFromImage(img);
+		tex = vk2dTextureFrom(buffer, size);
 
-				if (tex != NULL) {
-					font->bitmapFont = juFontLoadFromTexture(
-							tex,
-							(int) wrenGetSlotDouble(vm, 2),
-							(int) wrenGetSlotDouble(vm, 3),
-							(int) wrenGetSlotDouble(vm, 4),
-							(int) wrenGetSlotDouble(vm, 5)
-					);
-					font->type = FOREIGN_BITMAP_FONT;
-				} else {
-					error = true;
-				}
-			} else {
-				error = true;
-			}
+		if (tex != NULL) {
+			font->bitmapFont = juFontLoadFromTexture(
+					tex,
+					(int) wrenGetSlotDouble(vm, 2),
+					(int) wrenGetSlotDouble(vm, 3),
+					(int) wrenGetSlotDouble(vm, 4),
+					(int) wrenGetSlotDouble(vm, 5)
+			);
+			font->type = FOREIGN_BITMAP_FONT;
 		} else {
 			error = true;
 		}
@@ -93,25 +80,15 @@ void vksk_RuntimeJUSpriteAllocate(WrenVM *vm) {
 	bool error = false;
 
 	const char *fname = wrenGetSlotString(vm, 1);
-	VK2DImage img;
-
-	int x, y, channels, size;
+	int size;
 	void *buffer = vksk_GetFileBuffer(fname, &size);
-	uint8_t *pixels = stbi_load_from_memory(buffer, size, &x, &y, &channels, 4);
 
-	if (pixels != NULL) {
-		img = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y);
-		if (img != NULL) {
-			spr->sprite.tex = vk2dTextureLoadFromImage(img);
-			if (spr->sprite.tex == NULL) {
-				vksk_Error(false, "Failed to create texture for sprite \"%s\"", wrenGetSlotString(vm, 1));
-				error = true;
-			}
-		} else {
-			vksk_Error(false, "Failed to create image for sprite \"%s\"", wrenGetSlotString(vm, 1));
+	if (buffer != NULL) {
+		spr->sprite.tex = vk2dTextureFrom(buffer, size);
+		if (spr->sprite.tex == NULL) {
+			vksk_Error(false, "Failed to create texture for sprite \"%s\"", wrenGetSlotString(vm, 1));
 			error = true;
 		}
-		stbi_image_free(pixels);
 		free(buffer);
 	} else {
 		vksk_Error(false, "Failed to load sprite \"%s\"", wrenGetSlotString(vm, 1));
@@ -137,19 +114,15 @@ void vksk_RuntimeJUSpriteAllocate(WrenVM *vm) {
 void vksk_RuntimeJUSpriteFinalize(void *data) {
 	VKSK_RuntimeForeign *spr = data;
 	vk2dRendererWait();
-	if (spr->sprite.tex != NULL) {
-		vk2dImageFree(spr->sprite.tex->img);
-	}
+	vk2dTextureFree(spr->sprite.tex);
 	juSpriteFree(spr->sprite.spr);
 }
 
 void vksk_RuntimeJUSpriteFree(WrenVM *vm) {
 	VKSK_RuntimeForeign *spr = wrenGetSlotForeign(vm, 0);
 	vk2dRendererWait();
-	if (spr->sprite.tex != NULL) {
-		vk2dImageFree(spr->sprite.tex->img);
-	}
 	juSpriteFree(spr->sprite.spr);
+	vk2dTextureFree(spr->sprite.tex);
 	spr->sprite.tex = NULL;
 	spr->sprite.spr = NULL;
 }

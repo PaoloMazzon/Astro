@@ -35,7 +35,6 @@ extern const uint64_t FOREIGN_MODEL;
 // To protect Textures from garbage collection kinda
 typedef struct _vksk_RuntimeTexture {
 	VK2DTexture tex;
-	VK2DImage img;
 }_vksk_RuntimeTexture;
 
 // VK2D cameras in Wren are both index and spec because there is no access to the default camera
@@ -62,6 +61,12 @@ typedef struct _vksk_RuntimeSprite {
 	VK2DTexture tex;
 } _vksk_RuntimeSprite;
 
+typedef struct _vksk_RuntimeShader {
+	VK2DShader shader;
+	WrenHandle *data;
+	int size;
+} _vksk_RuntimeShader;
+
 // All foreign types come from this for type checking purposes
 typedef struct VKSK_RuntimeForeign {
 	uint64_t type;
@@ -76,7 +81,7 @@ typedef struct VKSK_RuntimeForeign {
 		JUPlayingSound audio;
 		_vksk_RuntimeTiledMap tiled;
 		_vksk_RuntimeBuffer buffer;
-		VK2DShader shader;
+		_vksk_RuntimeShader shader;
 		VK2DPolygon polygon;
 		VK2DModel model;
 	};

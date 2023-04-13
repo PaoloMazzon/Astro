@@ -7,35 +7,20 @@
 #include "src/IntermediateTypes.h"
 #include "src/Validation.h"
 #include "src/Util.h"
+#include "src/Runtime.h"
 
 /*************** Texture ***************/
 void vksk_RuntimeVK2DTextureAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
 	VKSK_RuntimeForeign* tex = (VKSK_RuntimeForeign*)wrenSetSlotNewForeign(vm,0, 0, sizeof(VKSK_RuntimeForeign));
 
-	int x, y, channels, size;
-	void *pixels;
+	int size;
 	void *buffer = vksk_GetFileBuffer(wrenGetSlotString(vm, 1), &size);
 	if (buffer != NULL) {
-		pixels = stbi_load_from_memory(buffer, size, &x, &y, &channels, 4);
-		if (pixels != NULL) {
-			tex->texture.img = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y);
-			stbi_image_free(pixels);
-
-			if (tex->texture.img == NULL) {
-				vksk_Error(false, "Failed to load texture image '%s'", wrenGetSlotString(vm, 1));
-				wrenSetSlotNull(vm, 0);
-			} else {
-				tex->texture.tex = vk2dTextureLoadFromImage(tex->texture.img);
-				tex->type = FOREIGN_TEXTURE;
-				if (tex->texture.tex == NULL) {
-					vk2dImageFree(tex->texture.img);
-					vksk_Error(false, "Failed to load texture '%s'", wrenGetSlotString(vm, 1));
-					wrenSetSlotNull(vm, 0);
-				}
-			}
-		} else {
-			vksk_Error(false, "Failed to load texture pixels '%s'", wrenGetSlotString(vm, 1));
+		tex->texture.tex = vk2dTextureFrom(buffer, size);
+		tex->type = FOREIGN_TEXTURE;
+		if (tex->texture.tex == NULL) {
+			vksk_Error(false, "Failed to load texture '%s'", wrenGetSlotString(vm, 1));
 			wrenSetSlotNull(vm, 0);
 		}
 		free(buffer);
@@ -48,26 +33,23 @@ void vksk_RuntimeVK2DTextureAllocate(WrenVM *vm) {
 void vksk_RuntimeVK2DTextureFinalize(void *data) {
 	vk2dRendererWait();
 	vk2dTextureFree(((VKSK_RuntimeForeign*)data)->texture.tex);
-	vk2dImageFree(((VKSK_RuntimeForeign*)data)->texture.img);
 }
 
 void vksk_RuntimeVK2DTextureFree(WrenVM *vm) {
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 0);
 	vk2dRendererWait();
 	vk2dTextureFree(tex->texture.tex);
-	vk2dImageFree(tex->texture.img);
 	tex->texture.tex = NULL;
-	tex->texture.img = NULL;
 }
 
 void vksk_RuntimeVK2DTextureWidth(WrenVM *vm) {
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, tex->texture.img->width);
+	wrenSetSlotDouble(vm, 0, vk2dTextureWidth(tex->texture.tex));
 }
 
 void vksk_RuntimeVK2DTextureHeight(WrenVM *vm) {
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, tex->texture.img->height);
+	wrenSetSlotDouble(vm, 0, vk2dTextureHeight(tex->texture.tex));
 }
 
 /*************** Surface ***************/
@@ -96,12 +78,12 @@ void vksk_RuntimeVK2DSurfaceFree(WrenVM *vm) {
 
 void vksk_RuntimeVK2DSurfaceWidth(WrenVM *vm) {
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, tex->surface->img->width);
+	wrenSetSlotDouble(vm, 0, vk2dTextureWidth(tex->texture.tex));
 }
 
 void vksk_RuntimeVK2DSurfaceHeight(WrenVM *vm) {
 	VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 0);
-	wrenSetSlotDouble(vm, 0, tex->surface->img->height);
+	wrenSetSlotDouble(vm, 0, vk2dTextureHeight(tex->texture.tex));
 }
 
 /*************** Camera ***************/
@@ -119,7 +101,7 @@ void vksk_RuntimeVK2DCameraAllocate(WrenVM *vm) {
 
 void vksk_RuntimeVK2DCameraFinalize(void *data) {
 	VKSK_RuntimeForeign *cam = data;
-	vk2dCameraSetState(cam->camera.index, cs_Deleted);
+	vk2dCameraSetState(cam->camera.index, VK2D_CAMERA_STATE_DELETED);
 }
 
 void vksk_RuntimeVK2DCameraGetType(WrenVM *vm) {
@@ -344,27 +326,46 @@ void vksk_RuntimeVK2DShaderAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *shader = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
 	shader->type = FOREIGN_SHADER;
-	shader->shader = vk2dShaderLoad(
-			wrenGetSlotString(vm, 1),
-			wrenGetSlotString(vm, 2),
+
+	// Load shaders from pak or otherwise
+	void *vert, *frag;
+	int vertSize, fragSize;
+	vert = vksk_GetFileBuffer(wrenGetSlotString(vm, 1), &vertSize);
+	frag = vksk_GetFileBuffer(wrenGetSlotString(vm, 2), &fragSize);
+
+	shader->shader.shader = vk2dShaderFrom(
+			vert,
+			vertSize,
+			frag,
+			fragSize,
 			(int)wrenGetSlotDouble(vm, 3)
 	);
-	if (shader->shader == NULL) {
+	shader->shader.size = (int)wrenGetSlotDouble(vm, 3);
+	shader->shader.data = NULL;
+	if (shader->shader.shader == NULL) {
 		vksk_Error(false, "Failed to load shader %s/%s with uniform buffer size of %i.", wrenGetSlotString(vm, 1), wrenGetSlotString(vm, 2), (int)wrenGetSlotDouble(vm, 3));
+		wrenSetSlotNull(vm, 0);
 	}
 }
 
 void vksk_RuntimeVK2DShaderFinalize(void *data) {
 	VKSK_RuntimeForeign *shader = data;
 	vk2dRendererWait();
-	vk2dShaderFree(shader->shader);
+	wrenReleaseHandle(vksk_GetVM(), shader->shader.data);
+	vk2dShaderFree(shader->shader.shader);
 }
 
 void vksk_RuntimeVK2DShaderSetData(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BUFFER, FOREIGN_END)
 	VKSK_RuntimeForeign *shader = wrenGetSlotForeign(vm, 0);
-	VKSK_RuntimeForeign *buffer = wrenGetSlotForeign(vm, 1);
-	vk2dShaderUpdate(shader->shader, buffer->buffer.data);
+	VKSK_RuntimeForeign *data = wrenGetSlotForeign(vm, 1);
+	if (shader->shader.data != NULL)
+		wrenReleaseHandle(vm, shader->shader.data);
+	shader->shader.data = wrenGetSlotHandle(vm, 1);
+
+	if (data->buffer.size < shader->shader.size) {
+		vksk_Error(true, "Buffer provided to shader is too small; shader expects buffer of size at least %i but was instead given a buffer of size %i.", shader->shader.size, data->buffer.size);
+	}
 }
 
 
