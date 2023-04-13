@@ -355,6 +355,7 @@ void vksk_RuntimeVK2DShaderFinalize(void *data) {
 	vk2dShaderFree(shader->shader.shader);
 }
 
+void _vksk_RendererUpdateShaderBinding(VK2DShader shader, WrenHandle *buffer);
 void vksk_RuntimeVK2DShaderSetData(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BUFFER, FOREIGN_END)
 	VKSK_RuntimeForeign *shader = wrenGetSlotForeign(vm, 0);
@@ -362,6 +363,9 @@ void vksk_RuntimeVK2DShaderSetData(WrenVM *vm) {
 	if (shader->shader.data != NULL)
 		wrenReleaseHandle(vm, shader->shader.data);
 	shader->shader.data = wrenGetSlotHandle(vm, 1);
+
+	// In case this shader is currently bound we need to update the renderer's expected data
+	_vksk_RendererUpdateShaderBinding(shader->shader.shader, shader->shader.data);
 
 	if (data->buffer.size < shader->shader.size) {
 		vksk_Error(true, "Buffer provided to shader is too small; shader expects buffer of size at least %i but was instead given a buffer of size %i.", shader->shader.size, data->buffer.size);

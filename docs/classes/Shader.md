@@ -1,7 +1,7 @@
 ## Shader
 In Astro shaders provide a way to manipulate how textures and sprites are rendered.
 You may load shaders in a vertex/fragment pair and then tell the renderer to use
-your shader instead of its default shader with [set_shader](Renderer.md#set_shader).
+your shader instead of its default shader with [shader=](Renderer.md#shader).
 The default shader just outputs the texture/sprite with the colour mod applied.
 
  + [load](#load)
@@ -89,9 +89,10 @@ and [vertex shader](https://github.com/PaoloMazzon/Vulkan2D/blob/master/shaders/
 Parameters
  + `data -> lib/Util::Buffer` Buffer containing the uniform buffer's data.
 
-Sets the uniform buffer's data. This must be used each frame if the `buffer_size`
-size set in [load](#load) was non-zero. `data.size` must be exactly that specified
-amount.
+Sets the uniform buffer's data. This must be used at least once if the `buffer_size`
+size set in [load](#load) was non-zero. `data.size` must be at least that specified
+amount. Each time the shader is used, this data will be provided to the shader until
+this is updated. You may update shader data as many times as you wish per frame.
 
 -----------
 

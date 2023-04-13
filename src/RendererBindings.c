@@ -15,6 +15,12 @@ static VK2DShader gShader = NULL;
 static int gShaderSize = 0;
 static WrenHandle *gShaderBuffer;
 
+// Updates shader data
+void _vksk_RendererUpdateShaderBinding(VK2DShader shader, WrenHandle *buffer) {
+	if (gShader == shader)
+		gShaderBuffer = buffer;
+}
+
 // Macro for not letting user draw outside of frame
 #define CHECK_VALID_DRAW() if (gOutsideFrame) {vksk_Error(true, "Drawing may not be performed in Level.pre_frame()");return;}
 

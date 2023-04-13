@@ -22,7 +22,6 @@ The `Renderer` class contains methods that are used in drawing and managing the 
  + [draw_rectangle_outline](#draw_rectangle_outline)
  + [draw_circle_outline](#draw_circle_outline)
  + [draw_line](#draw_line)
- + [draw_shader](#draw_shader)
  + [draw_polygon](#draw_polygon)
  + [draw_model](#draw_model)
  + [draw_font](#draw_font)
@@ -252,6 +251,9 @@ Parameters
 Sets the shader that will be used for all further texture rendering (including
 sprites). Set `shader` to `null` to use the default texture shader.
 
+> 📝 It is an error to bind and use a shader without providing a buffer to the shader
+> if it expects one.
+
 ## draw_rectangle_outline
 `static draw_rectangle_outline(x, y, w, h, rotation, x_origin, y_origin, outline_thickness)`
 
@@ -286,21 +288,6 @@ Parameters
  + `y1 -> Num` First pair of coordinates for the line
  + `x2 -> Num` Second pair of coordinates for the line
  + `y2 -> Num` Second pair of coordinates for the line
-
-## draw_shader
-`static draw_shader(shader, tex, x, y, x_scale, y_scale, rot, origin_x, origin_y, x_in_tex, y_in_tex, tex_width, tex_height)`
-
-Not yet implemented.
-
-## draw_polygon
-`static draw_polygon(polygon, x, y, filled, line_width, x_scale, y_scale, rot, origin_x, origin_y)`
-
-Not yet implemented.
-
-## draw_model
-`static draw_model(model, x, y, z, xscale, yscale, zscale, rot, axis, origin_x, origin_y, origin_z)`
-
-Not yet implemented.
 
 ## draw_font
 `static draw_font(font, text, x, y)`
