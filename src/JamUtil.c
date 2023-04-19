@@ -91,6 +91,8 @@ static JUJobSystem gJobSystem;                           // Information for the 
 static JUECS gECS;                                       // Entity component system
 static uint32_t gStringBuffer[1000];                     // For UTF-8 decoding
 static int gStringBufferSize = 1000;                     // For UTF-8 decoding
+static VK2DDrawInstance gStringInstances[1000] = {0};    // For instancing
+static int gStringInstanceCount = 1000;                  // For instancing
 
 /********************** Static Functions **********************/
 
@@ -379,6 +381,11 @@ void juInit(SDL_Window *window, int jobChannels, int minimumThreads) {
 		pthread_mutex_init(&gJobSystem.queueAccess, &attr);
 		pthread_mutexattr_init(&attr);
 		pthread_mutex_init(&gECS.createEntityAccess, &attr);
+	}
+
+	// Give every instance an identity matrix
+	for (int i = 0; i < gStringInstanceCount; i++) {
+		vk2dInstanceSetFast(&gStringInstances[i], 0, 0, 0, 0, 0, 0, VK2D_DEFAULT_COLOUR_MOD);
 	}
 
 	// Delta and other timing
@@ -885,6 +892,9 @@ void juFontDraw(JUFont font, float x, float y, const char *fmt, ...) {
 	// Information needed to draw the text
 	float startX = x;
 	int len = utf8Decode((void*)buffer, gStringBuffer, gStringBufferSize);
+	if (len > gStringInstanceCount)
+		len = gStringInstanceCount;
+	int instance = 0;
 
 	// Loop through each character and render individually
 	for (int i = 0; i < len; i++) {
@@ -893,14 +903,31 @@ void juFontDraw(JUFont font, float x, float y, const char *fmt, ...) {
 				JUCharacter *c = &font->characters[gStringBuffer[i] - font->unicodeStart];
 
 				// Draw character (or not) and move the cursor forward
-				if (c->drawn)
-					vk2dRendererDrawTexture(font->bitmap, x, y + c->ykern, 1, 1, 0, 0, 0, c->x, c->y, c->w, c->h);
+				if (c->drawn) {
+					gStringInstances[instance].pos[0] = x;
+					gStringInstances[instance].pos[1] = y + c->ykern;
+					gStringInstances[instance].texturePos[0] = c->x;
+					gStringInstances[instance].texturePos[1] = c->y;
+					gStringInstances[instance].texturePos[2] = c->w;
+					gStringInstances[instance].texturePos[3] = c->h;
+					vec4 colour;
+					vk2dRendererGetColourMod(colour);
+					gStringInstances[instance].colour[0] = colour[0];
+					gStringInstances[instance].colour[1] = colour[1];
+					gStringInstances[instance].colour[2] = colour[2];
+					gStringInstances[instance].colour[3] = colour[3];
+					instance++;
+				}
 				x += c->w;
 			} else {
 				x = startX;
 				y += font->newLineHeight;
 			}
 		}
+	}
+
+	if (instance > 0) {
+		vk2dRendererDrawInstanced(font->bitmap, gStringInstances, instance);
 	}
 }
 
@@ -916,6 +943,10 @@ void juFontDrawWrapped(JUFont font, float x, float y, float w, const char *fmt, 
 	float startX = x;
 	int len = strlen((void*)buffer);
 	bool justMadeNewline = false;
+
+	if (len > gStringInstanceCount)
+		len = gStringInstanceCount;
+	int instance = 0;
 
 	// Loop through each character and render individually
 	for (int i = 0; i < len; i++) {
@@ -933,11 +964,28 @@ void juFontDrawWrapped(JUFont font, float x, float y, float w, const char *fmt, 
 
 			// Draw character (or not) and move the cursor forward
 			if (!(buffer[i] == ' ' && justMadeNewline)) {
-				if (c->drawn)
-					vk2dRendererDrawTexture(font->bitmap, x, y, 1, 1, 0, 0, 0, c->x, c->y, c->w, c->h);
+				if (c->drawn) {
+					gStringInstances[instance].pos[0] = x;
+					gStringInstances[instance].pos[1] = y + c->ykern;
+					gStringInstances[instance].texturePos[0] = c->x;
+					gStringInstances[instance].texturePos[1] = c->y;
+					gStringInstances[instance].texturePos[2] = c->w;
+					gStringInstances[instance].texturePos[3] = c->h;
+					vec4 colour;
+					vk2dRendererGetColourMod(colour);
+					gStringInstances[instance].colour[0] = colour[0];
+					gStringInstances[instance].colour[1] = colour[1];
+					gStringInstances[instance].colour[2] = colour[2];
+					gStringInstances[instance].colour[3] = colour[3];
+					instance++;
+					//vk2dRendererDrawTexture(font->bitmap, x, y, 1, 1, 0, 0, 0, c->x, c->y, c->w, c->h);
+				}
 				if (buffer[i] != '\n') x += c->w;
 			}
 		}
+	}
+	if (instance > 0) {
+		vk2dRendererDrawInstanced(font->bitmap, gStringInstances, instance);
 	}
 }
 
