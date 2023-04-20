@@ -504,7 +504,7 @@ void vksk_RuntimeRendererDrawModel(WrenVM *vm) {
 	float x = wrenGetSlotDouble(vm, 2);
 	float y = wrenGetSlotDouble(vm, 3);
 	float z = wrenGetSlotDouble(vm, 4);
-	vec3 axis = {};
+	vec3 axis = {0};
 	vk2dRendererDrawModel(model->model, x, y, z, 1, 1, 1, 0, axis, 0, 0, 0);
 }
 
@@ -523,7 +523,7 @@ void vksk_RuntimeRendererDrawModelExt(WrenVM *vm) {
 	float xOrigin = wrenGetSlotDouble(vm, 10);
 	float yOrigin = wrenGetSlotDouble(vm, 11);
 	float zOrigin = wrenGetSlotDouble(vm, 12);
-	vec3 axis = {};
+	vec3 axis = {0};
 	if (wrenGetListCount(vm, 9) >= 3) {
 		wrenGetListElement(vm, 9, 0, 1);
 		axis[0] = wrenGetSlotDouble(vm, 1);

@@ -216,7 +216,7 @@ static uint8_t *juGetFile(const char *filename, uint32_t *size) {
 
 // Loads all jufnt data into a struct
 static JUBinaryFont juLoadBinaryFont(const char *file, bool *error) {
-	JUBinaryFont font = {};
+	JUBinaryFont font = {0};
 	*error = false;
 	uint32_t size;
 	uint8_t *buffer = juGetFile(file, &size);
@@ -1380,7 +1380,7 @@ double juClamp(double x, double min, double max) {
 JUSave juSaveLoad(const char *filename) {
 	JUSave save = juMallocZero(sizeof(JUSave));
 	FILE *buffer = fopen(filename, "rb");
-	char header[6] = {};
+	char header[6] = {0};
 
 	if (buffer != NULL) {
 		// Grab total size

@@ -4,7 +4,7 @@
 #include "src/Runtime.h"
 #include "src/ConfigFile.h"
 
-VKSK_EngineConfig gEngineConfig = {};
+VKSK_EngineConfig gEngineConfig = {0};
 
 int main(int argc, const char *argv[]) {
 	// Read engine config ini

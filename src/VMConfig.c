@@ -63,7 +63,7 @@ WrenLoadModuleResult vksk_WrenLoadModule(WrenVM* vm, const char* name) {
 
 /*************** Foreign Class bindings ***************/
 WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module, const char* className) {
-	WrenForeignClassMethods methods = {};
+	WrenForeignClassMethods methods = {0};
 
 	if (strcmp(module, "lib/Drawing") == 0) {
 		if (strcmp(className, "BitmapFont") == 0) {

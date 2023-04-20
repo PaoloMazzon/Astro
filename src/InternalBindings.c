@@ -24,9 +24,9 @@ typedef struct _VKSK_GamepadInputs {
 } _VKSK_GamepadInputs;
 
 // Globals
-static SDL_GameController *gControllers[4] = {};
-static _VKSK_GamepadInputs gInputPrevious[4] = {};
-static _VKSK_GamepadInputs gInput[4] = {};
+static SDL_GameController *gControllers[4] = {0};
+static _VKSK_GamepadInputs gInputPrevious[4] = {0};
+static _VKSK_GamepadInputs gInput[4] = {0};
 static double gAxisDeadzone = 0.1;
 static double gTriggerDeadzone = 0.1;
 
@@ -752,7 +752,7 @@ void _vksk_RuntimeControllerRefresh() {
 void _vksk_RuntimeControllersUpdate() {
 	for (int i = 0; i < 4; i++) {
 		if (gControllers[i] != NULL) {
-			_VKSK_GamepadInputs input = {};
+			_VKSK_GamepadInputs input = {0};
 			input.inputs[0] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_A);
 			input.inputs[1] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_B);
 			input.inputs[2] = SDL_GameControllerGetButton(gControllers[i], SDL_CONTROLLER_BUTTON_X);
@@ -983,7 +983,7 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 	int bufferSize, lineGap, ascent, descent;
 	void *fntData = vksk_GetFileBuffer(filename, &bufferSize);
 	if (fntData != NULL) {
-		stbtt_fontinfo info = {};
+		stbtt_fontinfo info = {0};
 		if (stbtt_InitFont(&info, fntData, 0)) {
 			float scale = stbtt_ScaleForPixelHeight(&info, size);
 			stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
