@@ -22,7 +22,7 @@ class Math {
 
     // Calculates the angle between two points
     static point_angle(x1, y1, x2, y2) {
-        return ((x2 - x1).atan(y2 - y1)) - (Num.pi / 2)
+        return -(((x2 - x1).atan(y2 - y1)) - (Num.pi / 2))
     }
 
     // Calculates the distance between two points
@@ -52,12 +52,12 @@ class Math {
 
     // Casts a coordinate by an angle
     static cast_x(length, angle) {
-        return length * (-angle).cos
+        return length * (angle).cos
     }
 
     // Casts a coordinate by an angle
     static cast_y(length, angle) {
-        return length * (-angle).sin
+        return length * (angle).sin
     }
 
     // Keeps a number between two numbers and returns it
