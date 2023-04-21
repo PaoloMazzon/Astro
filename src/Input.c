@@ -32,11 +32,13 @@ void vksk_RuntimeInputGetMousePosition(WrenVM *vm) {
 	SDL_GetMouseState(&x, &y);
 	if (wrenGetSlotType(vm, 1) != WREN_TYPE_NULL) {
 		VALIDATE_FOREIGN_ARGS(vm, FOREIGN_CAMERA, FOREIGN_END)
+		VKSK_RuntimeForeign *cam = wrenGetSlotForeign(vm, 1);
 		int w, h;
 		SDL_GetWindowSize(gWindow, &w, &h);
-		_vksk_RuntimeCamera *cam = wrenGetSlotForeign(vm, 1);
-		vec[0] = (((double)x / cam->spec.w) * cam->spec.w) + cam->spec.x;
-		vec[1] = (((double)y / cam->spec.h) * cam->spec.h) + cam->spec.y;
+		float horizontalFactor = cam->camera.spec.w / (float)w;
+		float verticalFactor = cam->camera.spec.h / (float)h;
+		vec[0] = ((double)x * horizontalFactor) + cam->camera.spec.x;
+		vec[1] = ((double)y * verticalFactor) + cam->camera.spec.y;
 	} else {
 		vec[0] = x;
 		vec[1] = y;

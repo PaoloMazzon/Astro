@@ -193,7 +193,7 @@ class Game is Level {
         Renderer.draw_model(_model, 0, 0, 0, 1, 1, 1, Engine.time, [0, 1, 0], 0, 0, 0)
         Renderer.target = Renderer.RENDER_TARGET_DEFAULT
         Renderer.lock_cameras(_game_cam)
-
+        
         // Draw foreground
         Renderer.draw_texture(_foreground_surface, 0, 0)
         Renderer.draw_texture(_surface3D, 240 - 37, 320 - (16 * 8))
