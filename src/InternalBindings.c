@@ -426,6 +426,7 @@ void vksk_RuntimeBufferOpenFromPak(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
 	wrenGetVariable(vm, "lib/Util", "Buffer", 0);
 	VKSK_RuntimeForeign *buffer = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
+	buffer->type = FOREIGN_BUFFER;
 	buffer->buffer.pointer = 0;
 	buffer->buffer.data = 0;
 	buffer->buffer.size = 0;

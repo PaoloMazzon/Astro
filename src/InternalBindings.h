@@ -39,6 +39,7 @@ void vksk_RuntimeBufferAllocate(WrenVM *vm);
 void vksk_RuntimeBufferFinalize(void *data);
 void vksk_RuntimeBufferOpen(WrenVM *vm);
 void vksk_RuntimeBufferOpenFromPak(WrenVM *vm);
+void vksk_RuntimeBufferCreateForShader(WrenVM *vm);
 void vksk_RuntimeBufferResize(WrenVM *vm);
 void vksk_RuntimeBufferSize(WrenVM *vm);
 void vksk_RuntimeBufferSetPointer(WrenVM *vm);
