@@ -965,28 +965,31 @@ void juFontFree(JUFont font) {
 	}
 }
 
-void juFontDraw(JUFont font, float x, float y, const char *fmt, ...) {
-	// Var args stuff
-	unsigned char buffer[JU_STRING_BUFFER];
-	va_list va;
-	va_start(va, fmt);
-	vsprintf((void*)buffer, fmt, va);
-	va_end(va);
-
+static void _juFontDrawInternal(JUFont font, float x, float y, float w, const char *string) {
 	// Information needed to draw the text
 	float startX = x;
-	int len = utf8Decode((void*)buffer, gStringBuffer, gStringBufferSize);
+	bool justMadeNewline = false;
+	int len = utf8Decode((void*)string, gStringBuffer, gStringBufferSize);
 	if (len > gStringInstanceCount)
 		len = gStringInstanceCount;
 	int instance = 0;
 
 	// Loop through each character and render individually
 	for (int i = 0; i < len; i++) {
-		if ((font->unicodeStart <= gStringBuffer[i] && font->unicodeEnd > gStringBuffer[i]) || gStringBuffer[i] == '\n') {
-			if (gStringBuffer[i] != '\n') {
-				JUCharacter *c = &font->characters[gStringBuffer[i] - font->unicodeStart];
+		if (font->unicodeStart <= gStringBuffer[i] && font->unicodeEnd > gStringBuffer[i]) {
+			JUCharacter *c = &font->characters[gStringBuffer[i] - font->unicodeStart];
 
-				// Draw character (or not) and move the cursor forward
+			// Move to the next line if we're about to go over
+			if ((w > 0 && (c->w + x) - startX > w) || gStringBuffer[i] == '\n') {
+				x = startX;
+				y += font->newLineHeight;
+				justMadeNewline = true;
+			} else {
+				justMadeNewline = false;
+			}
+
+			// Draw character (or not) and move the cursor forward
+			if (!(gStringBuffer[i] == ' ' && justMadeNewline)) {
 				if (c->drawn) {
 					gStringInstances[instance].pos[0] = x;
 					gStringInstances[instance].pos[1] = y + c->ykern;
@@ -1002,17 +1005,24 @@ void juFontDraw(JUFont font, float x, float y, const char *fmt, ...) {
 					gStringInstances[instance].colour[3] = colour[3];
 					instance++;
 				}
-				x += c->w;
-			} else {
-				x = startX;
-				y += font->newLineHeight;
+				if (gStringBuffer[i] != '\n') x += c->w;
 			}
 		}
 	}
-
 	if (instance > 0) {
 		vk2dRendererDrawInstanced(font->bitmap, gStringInstances, instance);
 	}
+}
+
+void juFontDraw(JUFont font, float x, float y, const char *fmt, ...) {
+	// Var args stuff
+	unsigned char buffer[JU_STRING_BUFFER];
+	va_list va;
+	va_start(va, fmt);
+	vsprintf((void*)buffer, fmt, va);
+	va_end(va);
+
+	_juFontDrawInternal(font, x, y, 0, (void*)buffer);
 }
 
 void juFontDrawWrapped(JUFont font, float x, float y, float w, const char *fmt, ...) {
@@ -1023,54 +1033,7 @@ void juFontDrawWrapped(JUFont font, float x, float y, float w, const char *fmt, 
 	vsprintf((void*)buffer, fmt, va);
 	va_end(va);
 
-	// Information needed to draw the text
-	float startX = x;
-	int len = strlen((void*)buffer);
-	bool justMadeNewline = false;
-
-	if (len > gStringInstanceCount)
-		len = gStringInstanceCount;
-	int instance = 0;
-
-	// Loop through each character and render individually
-	for (int i = 0; i < len; i++) {
-		if (font->unicodeStart <= buffer[i] && font->unicodeEnd > buffer[i]) {
-			JUCharacter *c = &font->characters[buffer[i] - font->unicodeStart];
-
-			// Move to the next line if we're about to go over
-			if ((c->w + x) - startX > w || buffer[i] == '\n') {
-				x = startX;
-				y += font->newLineHeight;
-				justMadeNewline = true;
-			} else {
-				justMadeNewline = false;
-			}
-
-			// Draw character (or not) and move the cursor forward
-			if (!(buffer[i] == ' ' && justMadeNewline)) {
-				if (c->drawn) {
-					gStringInstances[instance].pos[0] = x;
-					gStringInstances[instance].pos[1] = y + c->ykern;
-					gStringInstances[instance].texturePos[0] = c->x;
-					gStringInstances[instance].texturePos[1] = c->y;
-					gStringInstances[instance].texturePos[2] = c->w;
-					gStringInstances[instance].texturePos[3] = c->h;
-					vec4 colour;
-					vk2dRendererGetColourMod(colour);
-					gStringInstances[instance].colour[0] = colour[0];
-					gStringInstances[instance].colour[1] = colour[1];
-					gStringInstances[instance].colour[2] = colour[2];
-					gStringInstances[instance].colour[3] = colour[3];
-					instance++;
-					//vk2dRendererDrawTexture(font->bitmap, x, y, 1, 1, 0, 0, 0, c->x, c->y, c->w, c->h);
-				}
-				if (buffer[i] != '\n') x += c->w;
-			}
-		}
-	}
-	if (instance > 0) {
-		vk2dRendererDrawInstanced(font->bitmap, gStringInstances, instance);
-	}
+	_juFontDrawInternal(font, x, y, w, (void*)buffer);
 }
 
 /********************** Buffer **********************/

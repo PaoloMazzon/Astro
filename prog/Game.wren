@@ -197,6 +197,7 @@ class Game is Level {
         // Draw foreground
         Renderer.draw_texture(_foreground_surface, 0, 0)
         Renderer.draw_texture(_surface3D, 240 - 37, 320 - (16 * 8))
+        Renderer.draw_font(Assets.fnt_font, "the quick brown fox jumps over the lazy dog", 300, 300)
 
         super.update() // update all entities
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
