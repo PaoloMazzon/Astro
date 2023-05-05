@@ -795,6 +795,90 @@ double juClockGetAverage(JUClock *clock) {
 
 /********************** Font **********************/
 
+// modifiers for text
+//  + [#FF12E1] - colour
+//  + [15, -15] - x/y displacement
+//  + [~2] - wavy text followed by speed
+//  + [!2] - shaky text followed by max displacement
+//  + [*] - rainbow text
+//  + [] - clear all modifiers
+//  + #[...] - the # signifies that this should not be treated as a modifier
+//  and the pound will not be displayed
+
+// Parses a modifier token, the given string must start at the first bracket
+// and an integer representing how many characters the whole token takes up in
+// that string is returned. The value in the parsed token is returned in one
+// of the parameters, which is unidentified so just pass all the values and it
+// will only modify the one its supposed to.
+static const int TOKEN_INVALID = -1;
+static const int TOKEN_CLEAR = 0;
+static const int TOKEN_COLOUR = 1;
+static const int TOKEN_DISPLACEMENT = 2;
+static const int TOKEN_WAVY = 3;
+static const int TOKEN_SHAKY = 4;
+static const int TOKEN_RAINBOW = 5;
+int _juFontParseModifierToken(const char *str, vec4 colour, float *x, float *y, float *wave, float *shake, bool *rainbow) {
+	int len = 0;
+	static char token[100] = {0};
+
+	// Find the size of the token
+	for (int i = 0; str[i] != 0 && len == 0; i++)
+		if (str[i] == ']')
+			len = i;
+
+	// Its a valid token maybe
+	if (len != 0 && len != 1) {
+		str += 1;
+		int tokenType = TOKEN_INVALID;
+		bool nonSpace = false;
+		int tokenLen = 0;
+
+		// Decide the type while making a new string ignoring whitespace
+		for (int i = 0; i < len - 1 && i < 99; i++) {
+			if (isspace(str[i])) continue;
+			if (isdigit(str[i]) && !nonSpace) tokenType = TOKEN_DISPLACEMENT;
+			if (str[i] == '#' && !nonSpace) tokenType = TOKEN_COLOUR;
+			if (str[i] == '*' && !nonSpace) tokenType = TOKEN_RAINBOW;
+			if (str[i] == '~' && !nonSpace) tokenType = TOKEN_WAVY;
+			if (str[i] == '!' && !nonSpace) tokenType = TOKEN_SHAKY;
+			if (!nonSpace) nonSpace = true;
+			token[tokenLen] = str[i];
+			tokenLen++;
+		}
+		token[tokenLen] = 0;
+
+		// The string token is now a no-whitespace token of type tokenType
+		if (tokenType == TOKEN_DISPLACEMENT) {
+			char *comma = strchr(token, ',');
+			if (comma != NULL) {
+				*comma = 0;
+				comma += 1;
+				*x = strtof(token, NULL);
+				*y = strtof(comma, NULL);
+			}
+		} else if (tokenType == TOKEN_COLOUR) {
+			if (tokenLen == 7)
+				vk2dColourHex(colour, token);
+		} else if (tokenType == TOKEN_RAINBOW) {
+			*rainbow = true;
+		} else if (tokenType == TOKEN_WAVY) {
+			*wave = strtof(token + 1, NULL);
+		} else if (tokenType == TOKEN_SHAKY) {
+			*shake = strtof(token + 1, NULL);
+		}
+	} else if (len == 1) {
+		// Clear command
+		//vk2dRendererGetColourMod(colour);
+		*x = 0;
+		*y = 0;
+		*wave = 0;
+		*shake = 0;
+		*rainbow = false;
+	}
+
+	return len + 1;
+}
+
 void juFontUTF8Size(JUFont font, float *w, float *h, const char *fmt, ...) {
 	// Var args stuff
 	unsigned char buffer[JU_STRING_BUFFER];
