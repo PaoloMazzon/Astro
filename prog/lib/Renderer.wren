@@ -111,6 +111,15 @@ class Renderer {
 
     // Draws text, font MUST be a `BitmapFont`
     foreign static draw_font(font, text, x, y)
+    
+    // Draws text wrapped, font MUST be a `BitmapFont`
+    foreign static draw_font_wrapped(font, text, x, y, w)
+    
+    // Draws text, font MUST be a `BitmapFont`
+    foreign static draw_font_ext(font, text, x, y)
+    
+    // Draws text wrapped, font MUST be a `BitmapFont`
+    foreign static draw_font_ext_wrapped(font, text, x, y, w)
 
     // Draws a sprite at a specific position, sprite MUST be a `Sprite`
     foreign static draw_sprite(sprite, x, y)

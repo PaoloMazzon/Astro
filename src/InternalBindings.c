@@ -1044,7 +1044,7 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 			// Create image and texture from surface
 			SDL_LockSurface(bitmap);
 			font->bitmapFont->image = vk2dImageFromPixels(vk2dRendererGetDevice(), bitmap->pixels, bitmap->w,
-														  bitmap->h);
+														  bitmap->h, true);
 			SDL_UnlockSurface(bitmap);
 			SDL_FreeSurface(bitmap);
 			font->bitmapFont->bitmap = vk2dTextureLoadFromImage(font->bitmapFont->image);

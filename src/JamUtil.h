@@ -296,6 +296,12 @@ void juFontDraw(JUFont font, float x, float y, const char *fmt, ...);
 /// in this. Newlines (\n) are also allowed.
 void juFontDrawWrapped(JUFont font, float x, float y, float w, const char *fmt, ...);
 
+/// \brief Same as above but parses string tokens like [-15, 24]
+void juFontDrawExt(JUFont font, float x, float y, const char *string);
+
+/// \brief Same as above but parses string tokens like [-15, 24]
+void juFontDrawWrappedExt(JUFont font, float x, float y, float w, const char *string);
+
 /********************** Buffer **********************/
 
 /// \brief Simple buffer to make loading binary easier

@@ -93,6 +93,7 @@ static uint32_t gStringBuffer[1000];                     // For UTF-8 decoding
 static int gStringBufferSize = 1000;                     // For UTF-8 decoding
 static VK2DDrawInstance gStringInstances[1000] = {0};    // For instancing
 static int gStringInstanceCount = 1000;                  // For instancing
+static  vec4 gColours[7];
 
 /********************** Static Functions **********************/
 
@@ -392,6 +393,14 @@ void juInit(SDL_Window *window, int jobChannels, int minimumThreads) {
 	gLastTime = SDL_GetPerformanceCounter();
 	gDelta = 1;
 	gProgramStartTime = SDL_GetPerformanceCounter();
+
+	vk2dColourHex(gColours[0], "#d9453b");
+	vk2dColourHex(gColours[1], "#a18403");
+	vk2dColourHex(gColours[2], "#edf051");
+	vk2dColourHex(gColours[3], "#40cc3d");
+	vk2dColourHex(gColours[4], "#3eaba9");
+	vk2dColourHex(gColours[5], "#19248a");
+	vk2dColourHex(gColours[6], "#8a196d");
 }
 
 void juUpdate() {
@@ -817,7 +826,7 @@ static const int TOKEN_DISPLACEMENT = 2;
 static const int TOKEN_WAVY = 3;
 static const int TOKEN_SHAKY = 4;
 static const int TOKEN_RAINBOW = 5;
-int _juFontParseModifierToken(const char *str, vec4 colour, float *x, float *y, float *wave, float *shake, bool *rainbow) {
+int _juFontParseModifierToken(uint32_t *str, vec4 colour, float *x, float *y, float *wave, float *shake, bool *rainbow) {
 	int len = 0;
 	static char token[100] = {0};
 
@@ -868,7 +877,7 @@ int _juFontParseModifierToken(const char *str, vec4 colour, float *x, float *y, 
 		}
 	} else if (len == 1) {
 		// Clear command
-		//vk2dRendererGetColourMod(colour);
+		vk2dRendererGetColourMod(colour);
 		*x = 0;
 		*y = 0;
 		*wave = 0;
@@ -973,6 +982,8 @@ static void _juFontDrawInternal(JUFont font, float x, float y, float w, const ch
 	if (len > gStringInstanceCount)
 		len = gStringInstanceCount;
 	int instance = 0;
+	vec4 colour;
+	vk2dRendererGetColourMod(colour);
 
 	// Loop through each character and render individually
 	for (int i = 0; i < len; i++) {
@@ -997,12 +1008,90 @@ static void _juFontDrawInternal(JUFont font, float x, float y, float w, const ch
 					gStringInstances[instance].texturePos[1] = c->y;
 					gStringInstances[instance].texturePos[2] = c->w;
 					gStringInstances[instance].texturePos[3] = c->h;
-					vec4 colour;
-					vk2dRendererGetColourMod(colour);
 					gStringInstances[instance].colour[0] = colour[0];
 					gStringInstances[instance].colour[1] = colour[1];
 					gStringInstances[instance].colour[2] = colour[2];
 					gStringInstances[instance].colour[3] = colour[3];
+					instance++;
+				}
+				if (gStringBuffer[i] != '\n') x += c->w;
+			}
+		}
+	}
+	if (instance > 0) {
+		vk2dRendererDrawInstanced(font->bitmap, gStringInstances, instance);
+	}
+}
+
+static void _juFontDrawInternalExt(JUFont font, float x, float y, float w, const char *string) {
+	// Information needed to draw the text
+	float startX = x;
+	bool justMadeNewline = false;
+	int len = utf8Decode((void*)string, gStringBuffer, gStringBufferSize);
+	if (len > gStringInstanceCount)
+		len = gStringInstanceCount;
+	int instance = 0;
+	float displacementX = 0;
+	float displacementY = 0;
+	float wave = 0;
+	float shake = 0;
+	vec4 colour;
+	vk2dRendererGetColourMod(colour);
+	bool rainbow = false;
+
+	// Loop through each character and render individually
+	for (int i = 0; i < len; i++) {
+		if (font->unicodeStart <= gStringBuffer[i] && font->unicodeEnd > gStringBuffer[i]) {
+			// String tokens are parsed first
+			if (gStringBuffer[i] == '[' && (i == 0 || gStringBuffer[i - 1] != '#')) {
+				i += _juFontParseModifierToken(&gStringBuffer[i], colour, &displacementX, &displacementY, &wave, &shake, &rainbow) - 1;
+				continue;
+			} else if (gStringBuffer[i] == '#' && i < len - 1 && gStringBuffer[i + 1] == '[') {
+				continue;
+			}
+
+			JUCharacter *c = &font->characters[gStringBuffer[i] - font->unicodeStart];
+
+			// Move to the next line if we're about to go over
+			if ((w > 0 && (c->w + x) - startX > w) || gStringBuffer[i] == '\n') {
+				x = startX;
+				y += font->newLineHeight;
+				justMadeNewline = true;
+			} else {
+				justMadeNewline = false;
+			}
+
+			// Draw character (or not) and move the cursor forward
+			if (!(gStringBuffer[i] == ' ' && justMadeNewline)) {
+				if (c->drawn) {
+					float xoff = displacementX;
+					float yoff = displacementY;
+					if (wave != 0) {
+						yoff += sin((juTime() + ((float)instance / 3)) * 3) * wave;
+					}
+					if (shake != 0) {
+						xoff += vk2dRandom(-1, 1) * shake;
+						yoff += vk2dRandom(-1, 1) * shake;
+					}
+
+					gStringInstances[instance].pos[0] = x + xoff;
+					gStringInstances[instance].pos[1] = y + c->ykern + yoff;
+					gStringInstances[instance].texturePos[0] = c->x;
+					gStringInstances[instance].texturePos[1] = c->y;
+					gStringInstances[instance].texturePos[2] = c->w;
+					gStringInstances[instance].texturePos[3] = c->h;
+
+					if (rainbow) {
+						gStringInstances[instance].colour[0] = gColours[instance % 7][0];
+						gStringInstances[instance].colour[1] = gColours[instance % 7][1];
+						gStringInstances[instance].colour[2] = gColours[instance % 7][2];
+						gStringInstances[instance].colour[3] = gColours[instance % 7][3];
+					} else {
+						gStringInstances[instance].colour[0] = colour[0];
+						gStringInstances[instance].colour[1] = colour[1];
+						gStringInstances[instance].colour[2] = colour[2];
+						gStringInstances[instance].colour[3] = colour[3];
+					}
 					instance++;
 				}
 				if (gStringBuffer[i] != '\n') x += c->w;
@@ -1034,6 +1123,14 @@ void juFontDrawWrapped(JUFont font, float x, float y, float w, const char *fmt, 
 	va_end(va);
 
 	_juFontDrawInternal(font, x, y, w, (void*)buffer);
+}
+
+void juFontDrawExt(JUFont font, float x, float y, const char *string) {
+	_juFontDrawInternalExt(font, x, y, 0, (void*)string);
+}
+
+void juFontDrawWrappedExt(JUFont font, float x, float y, float w, const char *string) {
+	_juFontDrawInternalExt(font, x, y, w, (void*)string);
 }
 
 /********************** Buffer **********************/

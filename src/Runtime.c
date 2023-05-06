@@ -71,11 +71,11 @@ static void _vksk_SetWindowIcon(WrenVM *vm) {
 static void _vksk_InitializeDebug() {
 	int x, y, channels;
 	uint8_t *pixels = stbi_load_from_memory(DEBUG_FONT_PNG, sizeof(DEBUG_FONT_PNG), &x, &y, &channels, 4);
-	gDebugFontImage = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y);
+	gDebugFontImage = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y, true);
 	gDebugFont = vk2dTextureLoadFromImage(gDebugFontImage);
 	stbi_image_free(pixels);
 	pixels = stbi_load_from_memory(DEBUG_DISTRITUBTION_GRAPH_PNG, sizeof(DEBUG_DISTRITUBTION_GRAPH_PNG), &x, &y, &channels, 4);
-	gDebugGraphImage = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y);
+	gDebugGraphImage = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y, true);
 	gDebugGraph = vk2dTextureLoadFromImage(gDebugGraphImage);
 	stbi_image_free(pixels);
 }

@@ -425,6 +425,39 @@ void vksk_RuntimeRendererDrawFont(WrenVM *vm) {
 	juFontDraw(font->bitmapFont, x, y, "%s", str);
 }
 
+void vksk_RuntimeRendererDrawFontWrapped(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BITMAP_FONT, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
+	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 1);
+	const char *str = wrenGetSlotString(vm, 2);
+	float x = wrenGetSlotDouble(vm, 3);
+	float y = wrenGetSlotDouble(vm, 4);
+	float w = wrenGetSlotDouble(vm, 5);
+	juFontDrawWrapped(font->bitmapFont, x, y, w, "%s", str);
+}
+
+void vksk_RuntimeRendererDrawFontExt(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BITMAP_FONT, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
+	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 1);
+	const char *str = wrenGetSlotString(vm, 2);
+	float x = wrenGetSlotDouble(vm, 3);
+	float y = wrenGetSlotDouble(vm, 4);
+	juFontDrawExt(font->bitmapFont, x, y, str);
+}
+
+void vksk_RuntimeRendererDrawFontExtWrapped(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BITMAP_FONT, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	CHECK_VALID_DRAW()
+	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 1);
+	const char *str = wrenGetSlotString(vm, 2);
+	float x = wrenGetSlotDouble(vm, 3);
+	float y = wrenGetSlotDouble(vm, 4);
+	float w = wrenGetSlotDouble(vm, 5);
+	juFontDrawWrappedExt(font->bitmapFont, x, y, w, str);
+}
+
+
 void vksk_RuntimeRendererDrawSpritePos(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_SPRITE, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	CHECK_VALID_DRAW()
