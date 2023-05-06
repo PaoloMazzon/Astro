@@ -197,10 +197,14 @@ class Game is Level {
         // Draw foreground
         Renderer.draw_texture(_foreground_surface, 0, 0)
         Renderer.draw_texture(_surface3D, 240 - 37, 320 - (16 * 8))
-        Renderer.draw_font_ext(Assets.fnt_font, "the quick [*][~3]brown fox[] jumps over the lazy dog", 300, 300)
 
         super.update() // update all entities
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
+
+        Renderer.colour_mod = [0, 0, 0, 1]
+        Renderer.draw_rectangle(0, 640 - 38, (11 * 16) + 4, 38, 0, 0, 0)
+        Renderer.colour_mod = [1, 1, 1, 1]
+        Renderer.draw_font_ext(Assets.fnt_font, "[*][~2]Player:[] [#FF0000][!1]15\%", 2, 640 - 34)
     }
 
     destroy() {

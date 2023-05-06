@@ -25,6 +25,9 @@ The `Renderer` class contains methods that are used in drawing and managing the 
  + [draw_polygon](#draw_polygon)
  + [draw_model](#draw_model)
  + [draw_font](#draw_font)
+ + [draw_font_wrapped](#draw_font_wrapped)
+ + [draw_font_ext](#draw_font_ext)
+ + [draw_font_ext_wrapped](#draw_font_ext_wrapped)
  + [draw_sprite](#draw_sprite)
  + [draw_polygon](#draw_polygon)
  + [draw_model](#draw_model)
@@ -299,6 +302,67 @@ Parameters
  + `y -> Num` Y position to draw to.
 
 Draws a font. 
+
+## draw_font_wrapped
+`static draw_font_wrapped(font, text, x, y, w)`
+
+Parameters
+ + `font -> lib/Drawing::BitmapFont` Font to draw.
+ + `text -> String` Text to render with the font.
+ + `x -> Num` X position to draw to.
+ + `y -> Num` Y position to draw to.
+ + `w -> Num` Width in pixels to draw text before wrapping.
+
+Draws a font, wrapping text after `w` pixels. For example, if the text would take
+400 pixels horizontally to render but you specified a `w` of 300, only up to 300
+pixels would be rendered horizontally before automatically moving to the next line. 
+
+## draw_font_ext
+`static draw_font_ext(font, text, x, y)`
+
+Parameters
+ + `font -> lib/Drawing::BitmapFont` Font to draw.
+ + `text -> String` Text to render with the font.
+ + `x -> Num` X position to draw to.
+ + `y -> Num` Y position to draw to.
+
+Draws a font supporting tokens. 
+
+You may use tokens in the text you render to alter how the text after the token is displayed.
+This allows for more fine-tuned text rendering on-the-fly. Supported tokens are as follows:
+ 
+ + `[#FF12E1]` - Sets the colour to specified hex colour
+ + `[15, -15]` - Text will be displaced by a given x/y offset
+ + `[~2]` - Text will be wavy, waving up to a number of pixels up and down
+ + `[!2]` - Text will shake by up to a number of pixels
+ + `[*]` - Colour modifiers will be ignored and text will be rainbow.
+ + `[]` - Clears all active modifiers
+ + `#[...]` - The leading # signals that this should be treated as text and not a modifier
+
+## draw_font_wrapped_ext
+`static draw_font_wrapped_ext(font, text, x, y, w)`
+
+Parameters
+ + `font -> lib/Drawing::BitmapFont` Font to draw.
+ + `text -> String` Text to render with the font.
+ + `x -> Num` X position to draw to.
+ + `y -> Num` Y position to draw to.
+ + `w -> Num` Width in pixels to draw text before wrapping.
+
+Draws a font, wrapping text after `w` pixels. For example, if the text would take
+400 pixels horizontally to render but you specified a `w` of 300, only up to 300
+pixels would be rendered horizontally before automatically moving to the next line. 
+
+You may use tokens in the text you render to alter how the text after the token is displayed.
+This allows for more fine-tuned text rendering on-the-fly. Supported tokens are as follows:
+ 
+ + `[#FF12E1]` - Sets the colour to specified hex colour
+ + `[15, -15]` - Text will be displaced by a given x/y offset
+ + `[~2]` - Text will be wavy, waving up to a number of pixels up and down
+ + `[!2]` - Text will shake by up to a number of pixels
+ + `[*]` - Colour modifiers will be ignored and text will be rainbow.
+ + `[]` - Clears all active modifiers
+ + `#[...]` - The leading # signals that this should be treated as text and not a modifier
 
 ## draw_sprite
 `static draw_sprite(sprite, x, y)`
