@@ -44,6 +44,9 @@ class Engine {
     // Returns a list of command line parameters
     foreign static argv
 
+    // Returns whether or not the engine is running out of a game pak
+    foreign static using_pak
+
     // For internal use
     foreign static report_debug(entity_count)
 }

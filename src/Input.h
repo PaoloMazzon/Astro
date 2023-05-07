@@ -7,6 +7,9 @@
 void vksk_RuntimeInputCheckKey(WrenVM *vm);
 void vksk_RuntimeInputCheckKeyPressed(WrenVM *vm);
 void vksk_RuntimeInputCheckKeyReleased(WrenVM *vm);
+void vksk_RuntimeInputLastKey(WrenVM *vm);
+void vksk_RuntimeInputLastKeyCode(WrenVM *vm);
+void vksk_RuntimeInputKeyString(WrenVM *vm);
 void vksk_RuntimeInputGetMousePosition(WrenVM *vm);
 void vksk_RuntimeInputGetMouseLeftButton(WrenVM *vm);
 void vksk_RuntimeInputGetMouseLeftButtonPressed(WrenVM *vm);

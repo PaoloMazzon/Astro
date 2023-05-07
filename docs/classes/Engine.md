@@ -14,6 +14,7 @@ aspects of game development.
  + [timestep_percent](#timestep_percent)
  + [process_frame](#process_frame)
  + [argv](#argv)
+ + [using_pak](#using_pak)
  
 ### switch_level
 `static switch_level(level)`
@@ -112,6 +113,11 @@ does not exist.
 `static argv`
 
 Returns a list of command line parameters given to the program on startup.
+
+### using_pak
+`static using_pak`
+
+Returns true if Astro is using a `game.pak` file.
 
 -----------
 

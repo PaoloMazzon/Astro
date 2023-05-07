@@ -216,6 +216,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Engine", true, "get_class(_)", vksk_RuntimeGetClass)
 		BIND_METHOD("Engine", true, "report_debug(_)", vksk_RuntimeReportDebug)
 		BIND_METHOD("Engine", true, "argv", vksk_RuntimeArgv)
+		BIND_METHOD("Engine", true, "using_pak", vksk_RuntimeUsingPak)
 	} else if (strcmp(module, "lib/Drawing") == 0) {
 		BIND_METHOD("Texture", false, "width", vksk_RuntimeVK2DTextureWidth)
 		BIND_METHOD("Texture", false, "height", vksk_RuntimeVK2DTextureHeight)
@@ -260,6 +261,9 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Keyboard", true, "key(_)", vksk_RuntimeInputCheckKey)
 		BIND_METHOD("Keyboard", true, "key_pressed(_)", vksk_RuntimeInputCheckKeyPressed)
 		BIND_METHOD("Keyboard", true, "key_released(_)", vksk_RuntimeInputCheckKeyReleased)
+		BIND_METHOD("Keyboard", true, "last_key", vksk_RuntimeInputLastKey)
+		BIND_METHOD("Keyboard", true, "last_key_code", vksk_RuntimeInputLastKeyCode)
+		BIND_METHOD("Keyboard", true, "key_string(_)", vksk_RuntimeInputKeyString)
 		BIND_METHOD("Mouse", true, "position(_)", vksk_RuntimeInputGetMousePosition)
 		BIND_METHOD("Mouse", true, "left", vksk_RuntimeInputGetMouseLeftButton)
 		BIND_METHOD("Mouse", true, "left_pressed", vksk_RuntimeInputGetMouseLeftButtonPressed)

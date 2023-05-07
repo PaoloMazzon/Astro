@@ -10,20 +10,61 @@
 extern SDL_Window *gWindow; // -- from src/Runtime.c
 extern bool gMouseButtons[3]; // -- from src/Runtime.c
 extern bool gMouseButtonsPrevious[3]; // -- from src/Runtime.c
+extern bool gAnyKeyPressed; // -- from src/Runtime.c
+extern bool gAnyKeyReleased; // -- from src/Runtime.c
+extern bool gAnyKey; // -- from src/Runtime.c
+extern int gLastKeyCode; // -- from src/Runtime.c
+extern char gLastKey[100]; // -- from src/Runtime.c
+static const int KEY_ANY = -1;
+extern int gKeyboardSize; // -- from src/JamUtil.c
 
 void vksk_RuntimeInputCheckKey(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
-	wrenSetSlotBool(vm, 0, juKeyboardGetKey((int)wrenGetSlotDouble(vm, 1)));
+	int key = (int)wrenGetSlotDouble(vm, 1);
+	if (key == KEY_ANY) {
+		wrenSetSlotBool(vm, 0, gAnyKey);
+	} else if (key >= 0 && key < gKeyboardSize) {
+		wrenSetSlotBool(vm, 0, juKeyboardGetKey(key));
+	} else {
+		wrenSetSlotBool(vm, 0, false);
+	}
 }
 
 void vksk_RuntimeInputCheckKeyPressed(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
-	wrenSetSlotBool(vm, 0, juKeyboardGetKeyPressed((int)wrenGetSlotDouble(vm, 1)));
+	int key = (int)wrenGetSlotDouble(vm, 1);
+	if (key == KEY_ANY) {
+		wrenSetSlotBool(vm, 0, gAnyKeyPressed);
+	} else if (key >= 0 && key < gKeyboardSize) {
+		wrenSetSlotBool(vm, 0, juKeyboardGetKeyPressed(key));
+	} else {
+		wrenSetSlotBool(vm, 0, false);
+	}
 }
 
 void vksk_RuntimeInputCheckKeyReleased(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
-	wrenSetSlotBool(vm, 0, juKeyboardGetKeyReleased((int)wrenGetSlotDouble(vm, 1)));
+	int key = (int)wrenGetSlotDouble(vm, 1);
+	if (key == KEY_ANY) {
+		wrenSetSlotBool(vm, 0, gAnyKeyReleased);
+	} else if (key >= 0 && key < gKeyboardSize) {
+		wrenSetSlotBool(vm, 0, juKeyboardGetKeyReleased(key));
+	} else {
+		wrenSetSlotBool(vm, 0, false);
+	}
+}
+
+void vksk_RuntimeInputLastKey(WrenVM *vm) {
+	wrenSetSlotString(vm, 0, gLastKey);
+}
+
+void vksk_RuntimeInputLastKeyCode(WrenVM *vm) {
+	wrenSetSlotDouble(vm, 0, (double)gLastKeyCode);
+}
+
+void vksk_RuntimeInputKeyString(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+	wrenSetSlotString(vm, 0, SDL_GetKeyName(SDL_GetKeyFromScancode(wrenGetSlotDouble(vm, 1))));
 }
 
 void vksk_RuntimeInputGetMousePosition(WrenVM *vm) {

@@ -70,3 +70,6 @@ void vksk_RuntimeTimeStepPercent(WrenVM *vm);
 
 // Returns a list of the compiler options
 void vksk_RuntimeArgv(WrenVM *vm);
+
+// Returns whether or not Astro is using a game pak right now
+void vksk_RuntimeUsingPak(WrenVM *vm);

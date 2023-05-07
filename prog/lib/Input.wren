@@ -246,6 +246,7 @@ class Keyboard {
     static KEY_APP2 { 284 }
     static KEY_AUDIOREWIND { 285 }
     static KEY_AUDIOFASTFORWARD { 286 }
+    static KEY_ANY { -1 }
 
     // Returns true if a key is currently press (use `Input.KEY_*`)
     foreign static key(key)
@@ -255,6 +256,15 @@ class Keyboard {
 
     // Returns true if a key was just released this frame
     foreign static key_released(key)
+
+    // Returns the most recent key pressed as a string
+    foreign static last_key
+
+    // Returns the most recent key code
+    foreign static last_key_code
+
+    // Converts a key code to a string
+    foreign static key_string(key)
 }
 
 // Mouse-related input

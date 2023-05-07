@@ -63,7 +63,7 @@ Features
 TODO
 ====
 
- + Improve TrueType font rendering
+ + Networking support
  + Built-in mod support
  + Spatial hash maps
  + More example projects

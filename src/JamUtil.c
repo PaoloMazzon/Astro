@@ -82,7 +82,7 @@ typedef struct JUECS {
 
 /********************** Globals **********************/
 static cs_context_t *gSoundContext = NULL;               // For the audio player
-static int gKeyboardSize = 0;                            // For keeping track of keys through SDL
+int gKeyboardSize = 0;                                   // For keeping track of keys through SDL
 static uint8_t *gKeyboardState, *gKeyboardPreviousState; // Arrays for key states through SDL
 static double gDelta = 0;                                // Delta time
 static uint64_t gLastTime = 0;                           // For keeping track of delta

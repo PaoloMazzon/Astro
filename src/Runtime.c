@@ -31,6 +31,11 @@ extern VKSK_EngineConfig gEngineConfig;
 static WrenVM *vm;
 VKSK_Pak gGamePak = NULL;
 bool gOutsideFrame = false; // this specifies if the user is allowed to draw or not
+bool gAnyKeyPressed;        // Any key was just pressed
+bool gAnyKeyReleased;       // Any key was just released
+bool gAnyKey;               // Any key is pressed
+int gLastKeyCode = 0;       // Most recent key code
+char gLastKey[100] = {0};   // Most recent key pressed
 
 // Local globals
 static VK2DTexture gDebugFont;
@@ -285,11 +290,21 @@ void vksk_Start() {
 		if (gProcessFrame) {
 			juUpdate();
 			SDL_Event e;
+			gAnyKeyPressed = gAnyKey = gAnyKeyReleased = false;
 			while (SDL_PollEvent(&e)) {
 				if (e.type == SDL_QUIT) {
 					gQuit = true;
 				} else if (e.type == SDL_CONTROLLERDEVICEADDED || e.type == SDL_CONTROLLERDEVICEREMOVED) {
 					_vksk_RuntimeControllerRefresh();
+				} else if (e.type == SDL_KEYDOWN == e.key.repeat == 0) {
+					gAnyKey = gAnyKeyPressed = true;
+					const char *temp = SDL_GetKeyName(e.key.keysym.sym);
+					strncpy(gLastKey, temp, 99);
+					gLastKeyCode = e.key.keysym.scancode;
+				} else if (e.type == SDL_KEYDOWN == e.key.repeat != 0) {
+					gAnyKey = true;
+				} else if (e.type == SDL_KEYUP) {
+					gAnyKeyReleased = true;
 				}
 			}
 			_vksk_RuntimeControllersUpdate();
@@ -494,4 +509,8 @@ void vksk_RuntimeArgv(WrenVM *vm) {
 		wrenSetSlotString(vm, 1, gEngineConfig.argv[i]);
 		wrenInsertInList(vm, 0, -1, 1);
 	}
+}
+
+void vksk_RuntimeUsingPak(WrenVM *vm) {
+	wrenSetSlotBool(vm, 0, gGamePak != NULL);
 }
