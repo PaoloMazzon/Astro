@@ -143,6 +143,33 @@ static void _vksk_DrawTexture(WrenVM *vm, VK2DTexture tex, float x, float y, flo
 		vk2dRendererDrawShader(gShader, vksk_GetShaderData(vm), tex, x, y, xScale, yScale, rot, xOrigin, yOrigin, xInTex, yInTex, wInTex, hInTex);
 }
 
+void vksk_RuntimeRendererGetWindowWidth(WrenVM *vm) {
+	int w, h;
+	SDL_GetWindowSize(gWindow, &w, &h);
+	wrenSetSlotDouble(vm, 0, (double)w);
+}
+
+void vksk_RuntimeRendererGetWindowHeight(WrenVM *vm) {
+	int w, h;
+	SDL_GetWindowSize(gWindow, &w, &h);
+	wrenSetSlotDouble(vm, 0, (double)h);
+}
+
+void vksk_RuntimeRendererSetWindowSize(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+	SDL_SetWindowSize(gWindow, (int)wrenGetSlotDouble(vm, 1), (int)wrenGetSlotDouble(vm, 2));
+}
+
+void vksk_RuntimeRendererGetWindowFullscreen(WrenVM *vm) {
+	uint32_t flags = SDL_GetWindowFlags(gWindow);
+	wrenSetSlotBool(vm, 0, flags & SDL_WINDOW_FULLSCREEN || flags & SDL_WINDOW_FULLSCREEN_DESKTOP);
+}
+
+void vksk_RuntimeRendererSetWindowFullscreen(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BOOL, FOREIGN_END)
+	SDL_SetWindowFullscreen(gWindow, wrenGetSlotBool(vm, 1) ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+}
+
 void vksk_RuntimeRendererDrawCircle(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	CHECK_VALID_DRAW()

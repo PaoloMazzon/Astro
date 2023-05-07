@@ -12,6 +12,11 @@ The `Renderer` class contains methods that are used in drawing and managing the 
  + [colour_mod (Setter)](#colour_mod-setter)
  + [colour_mod (Getter)](#colour_mod-getter)
  + [shader](#shader)
+ + [set_window_size](#set_window_size)
+ + [window_width](#window_width)
+ + [window_height](#window_height)
+ + [fullscreen (Getter)](#fullscreen-getter)
+ + [fullscreen (Setter)](#fullscreen-setter)
  + [set_texture_camera](#use_cameras_on_surfaces)
  + [average_frame_time](#average_frame_time)
  + [lock_cameras](#lock_cameras)
@@ -219,6 +224,38 @@ for the UI and another for game world.
 `static unlock_cameras()`
 
 Undoes the effects of [lock_cameras](#lock_cameras).
+
+## set_window_size
+`static set_window_size(w, h)`
+
+Parameters
+ + `w -> Num` Width of the window.
+ + `h -> Num` Height of the window.
+
+Sets the size of the window in pixels.
+
+## window_width
+`static window_width`
+
+Returns the window's width in pixels.
+
+## window_height
+`static window_height`
+
+Returns the window's height in pixels.
+
+## fullscreen (Getter)
+`static fullscreen`
+
+Returns whether or not the window is in fullscreen mode.
+
+## fullscreen= (Setter)
+`static fullscreen=(fullscreen)`
+
+Parameters
+ + `fullscreen -> Bool` Whether or not the window should be fullscreen.
+
+Controls whether or not the window is fullscreen.
 
 ## clear
 `static clear()`

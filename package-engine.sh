@@ -1,3 +1,4 @@
+rmdir out
 echo Please enter the location of Astro.exe
 read astro
 mkdir out

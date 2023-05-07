@@ -4,6 +4,11 @@
 #pragma once
 #include "wren.h"
 
+void vksk_RuntimeRendererGetWindowWidth(WrenVM *vm);
+void vksk_RuntimeRendererGetWindowHeight(WrenVM *vm);
+void vksk_RuntimeRendererSetWindowSize(WrenVM *vm);
+void vksk_RuntimeRendererGetWindowFullscreen(WrenVM *vm);
+void vksk_RuntimeRendererSetWindowFullscreen(WrenVM *vm);
 void vksk_RuntimeRendererDrawCircle(WrenVM *vm);
 void vksk_RuntimeRendererDrawTextureExt(WrenVM *vm);
 void vksk_RuntimeRendererDrawTexture(WrenVM *vm);

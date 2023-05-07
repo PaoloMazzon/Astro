@@ -53,6 +53,21 @@ class Renderer {
     // the map you set in `init.wren`
     foreign static config=(config)
 
+    // Sets window size
+    foreign static set_window_size(width, height)
+
+    // Returns window width
+    foreign static window_width
+
+    // Returns window height
+    foreign static window_height
+
+    // Returns whether or not the window is in fullscreen mode
+    foreign static fullscreen
+
+    // Sets fullscreen
+    foreign static fullscreen=(s)
+
     // Sets the target the renderer will draw to, can either be a Surface or
     // `Renderer.RENDER_TARGET_DEFAULT`
     foreign static target=(target)

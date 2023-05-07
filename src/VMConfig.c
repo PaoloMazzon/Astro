@@ -131,6 +131,11 @@ WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module
 
 WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, const char* className, bool isStatic, const char* signature) {
 	if (strcmp(module, "lib/Renderer") == 0) {
+		BIND_METHOD("Renderer", true, "set_window_size(_,_)", vksk_RuntimeRendererSetWindowSize)
+		BIND_METHOD("Renderer", true, "window_width", vksk_RuntimeRendererGetWindowWidth)
+		BIND_METHOD("Renderer", true, "window_height", vksk_RuntimeRendererGetWindowHeight)
+		BIND_METHOD("Renderer", true, "fullscreen", vksk_RuntimeRendererGetWindowFullscreen)
+		BIND_METHOD("Renderer", true, "fullscreen=(_)", vksk_RuntimeRendererSetWindowFullscreen)
 		BIND_METHOD("Renderer", true, "draw_circle(_,_,_)", vksk_RuntimeRendererDrawCircle)
 		BIND_METHOD("Renderer", true, "draw_texture(_,_,_)", vksk_RuntimeRendererDrawTexture)
 		BIND_METHOD("Renderer", true, "draw_texture(_,_,_,_,_,_,_,_)", vksk_RuntimeRendererDrawTextureExt)
