@@ -93,7 +93,7 @@ Parameters
  + `y1 -> Num` Y coordinate for the first hitbox.
  + `x2 -> Num` X coordinate for the second hitbox.
  + `y2 -> Num` Y coordinate for the second hitbox.
- + `hitbox2 -> lib/Util::Hitbox` The second hitbox to check for collisions against.
+ + `hitbox2 -> Hitbox` The second hitbox to check for collisions against.
 
 Checks for a collision between two hitboxes, returning true if a collision has occurred.
 

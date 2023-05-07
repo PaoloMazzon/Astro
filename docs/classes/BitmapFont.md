@@ -1,7 +1,7 @@
 ## BitmapFont
 Bitmap fonts are a way to render images as text with complete control. With bitmap fonts,
 you load an image as a character set in a specified range - often 33 to 127 or `$` - `~`.
-With that character set you may render text with a call to `lib/Renderer::draw_font`.
+With that character set you may render text with a call to `Renderer.draw_font`.
 
  + [new](#new)
  + [size](#size)

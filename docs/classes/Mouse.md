@@ -16,7 +16,7 @@ Easy access for the mouse.
 `static position(camera)`
 
 Parameters
- + `camera -> lib/Renderer::Camera` or `null` Camera to check mouse relative to.
+ + `camera -> Camera` or `null` Camera to check mouse relative to.
  
 Returns the mouse position relative to a given camera, or `null` for the mouse position
 relative to the window. The mouse position is returned as a list with the values `[x, y]`.

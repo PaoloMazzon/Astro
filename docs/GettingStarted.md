@@ -15,13 +15,12 @@ To launch a game in Astro you need 3 things:
  two points.
  
  ## Astro Standard Library
- The standard library, located at `prog/lib/*` of this repo has all of the bindings for the engine
- as well as some other things you'll need to use the engine. The runtime always expect it to be
- located at `prog/lib/*`.
+ The Astro standard library is automatically imported in every file Astro loads. Check the
+ [API Reference](./API.md) for a complete list of all classes and methods in said classes.
  
  ## `prog/init.wren`
  You `init.wren` file is the "entry point" of your game. It must contain the two variables `renderer_config`
- and `start_level`. `start_level` is an instance of `lib/Engine::Level` that the engine will use as the
+ and `start_level`. `start_level` is an instance of `Level` that the engine will use as the
  starting level. `renderer_config` must be a map containing specific keys. Additionally, you may provide
  a third variable, `window_icon`, which will be a path to an image Astro will set as the window's icon.
 

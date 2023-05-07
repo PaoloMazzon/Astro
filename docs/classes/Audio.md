@@ -13,7 +13,7 @@ before its able to be played with this class.
 `construct play(audio_data, loop, left_volume, right_volume)`
 
 Parameters
- + `audio_data -> lib/Audio::AudioData` Audio to play.
+ + `audio_data -> AudioData` Audio to play.
  + `loop -> Bool` Whether or not to repeat the audio indefinitely.
  + `left_volume -> Num` Volume for the left ear from 0-1.
  + `right_volume -> Num` Volume for the right ear from 0-1.

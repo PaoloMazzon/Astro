@@ -36,7 +36,7 @@ Prefixes
 Because bitmap fonts and sprites both just come from images, you have to tell the asset compiler
 if you want it to load an image as a sprite or bitmap font with a file called `assets/assets.ini`.
 Any images not named in `assets/assets.ini` (or if the file doesn't exist) will be loaded as a
-`lib/Drawin::Texture`.
+`Texture`.
 
 An example of an `assets/asset.ini` file
 

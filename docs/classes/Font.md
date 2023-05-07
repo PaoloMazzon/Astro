@@ -1,5 +1,5 @@
 ## Font
-You may render text with a call to `lib/Renderer::draw_font`.
+You may render text with a call to `Renderer.draw_font`.
 
  + [open](#open)
  + [size](#size)

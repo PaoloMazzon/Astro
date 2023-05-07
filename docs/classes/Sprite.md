@@ -45,7 +45,7 @@ as many frames specified or this method will fail.
 `static from(texture, x, y, w, h, delay, frames)`
 
 Parameters:
- + `texture -> lib/Drawing::Texture` or `lib/Drawing::Surface` Texture to create the sprite from.
+ + `texture -> Texture` or `Surface` Texture to create the sprite from.
  + `x -> Num` X position in the sprite sheet to begin pulling the animation from.
  + `y -> Num` Y position in the sprite sheet to begin pulling the animation from.
  + `w -> Num` Width of each frame in pixels.

@@ -1,5 +1,5 @@
 ## Gamepad
-The `lib/Input::Gamepad` class is a simple way to manage gamepad input in Astro. They are automatically tracked
+The `Gamepad` class is a simple way to manage gamepad input in Astro. They are automatically tracked
 behind the scenes and you need only index the four possible gamepads with 0-3. Most of the methods are very self
 explanatory and they are all safe to use at any time regardless of whether or not the desired controller is currently
 connected.

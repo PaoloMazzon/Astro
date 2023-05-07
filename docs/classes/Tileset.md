@@ -23,7 +23,7 @@ weight regardless of how big the tileset is.
 
 Parameters
  + `tileset -> List` List of all indices in the tileset. See below.
- + `texture -> lib/Drawing::Texture` or `lib/Drawing::Surface` Texture that will be treated as a spritesheet and indexed into.
+ + `texture -> Texture` or `Surface` Texture that will be treated as a spritesheet and indexed into.
  + `w -> Num` Width of each cell in the texture
  + `h -> Num` Height of each cell in the texture
 
@@ -51,7 +51,7 @@ the bottom-right is at position (11, 8). Each non-zero value represents a cell -
 `add_tileset(texture, gid)`
 
 Parameters
- + `texture -> lib/Drawing::Texture` or `lib/Drawing::Surface` Texture for the tileset.
+ + `texture -> Texture` or `Surface` Texture for the tileset.
  + `gid -> Num` What number to start indexing this tileset at.
 
 Adds a new tileset to the tileset, using the GID to differentiate between textures.
@@ -101,7 +101,7 @@ Sets the cell's value at `(x, y)`.
 `collision(hitbox, x, y)`
 
 Parameters
- + `hitbox -> lib/Util::Hitbox` Hitbox to check a collision against.
+ + `hitbox -> Hitbox` Hitbox to check a collision against.
  + `x -> Num` X position of the hitbox.
  + `y -> Num` Y position of the hitbox.
 
@@ -117,9 +117,9 @@ Draws the entire tileset.
 `static draw_tiling_background(texture, parallax, camera)`
 
 Parameters
-+ `texture -> lib/Drawing::Texture` or `lib/Drawing::Surface` Texture to use as the tiling background.
++ `texture -> Texture` or `Surface` Texture to use as the tiling background.
 + `parallax -> Num` Parallax amount from 0-1, where 0 represents a static background and 1 means a background that follows the camera exactly.
-+ `camera -> lib/Renderer::Camera` or `null` Camera to use for parallax measurements or `null` for no camera.
++ `camera -> Camera` or `null` Camera to use for parallax measurements or `null` for no camera.
 
 Draws a background tiling to cover the entire camera and with a parallax value. If you specify
 a `parallax` value other that 0 or 1 you can create effects where it appears that the background

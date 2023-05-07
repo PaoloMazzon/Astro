@@ -1,6 +1,6 @@
 ## Surface
 Surfaces are textures that you may also render to. This means that you can use all
-the `lib/Renderer::draw_texture` methods on surfaces, as well as set the render target
+the `Renderer.draw_texture` methods on surfaces, as well as set the render target
 to a surface. Using surfaces you can do things like draw an entire menu to it and
 scroll through it, or render tile sets to the surface once and just render the surface
 for a performance boost. See [set_target](Renderer.md#set_target).

@@ -87,7 +87,7 @@ and [vertex shader](https://github.com/PaoloMazzon/Vulkan2D/blob/master/shaders/
 `data=(data)`
 
 Parameters
- + `data -> lib/Util::Buffer` Buffer containing the uniform buffer's data.
+ + `data -> Buffer` Buffer containing the uniform buffer's data.
 
 Sets the uniform buffer's data. This must be used at least once if the `buffer_size`
 size set in [load](#load) was non-zero. `data.size` must be at least that specified

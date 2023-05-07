@@ -20,10 +20,10 @@ aspects of game development.
 `static switch_level(level)`
 
 Parameters
- + `level -> lib/Engine::Level` level to switch to
+ + `level -> Level` level to switch to
 
 Switches the current level to `level`. `level` must be an instance of a class 
-that inherits from `lib/Engine::Level` and implements all its methods.
+that inherits from `Level` and implements all its methods.
 
 > 📝 After this method is called the current frame will finish execution, then
 > the current level's destruction method will be called before the new level's

@@ -43,12 +43,12 @@ Sets the x.
 
 Sets the y.
 
-### prev_x
+### prev_x (Getter)
 `prev_x`
 
 Returns the previous x value.
 
-### prev_x=(new_x)
+### prev_x= (Setter)
 `prev_x=(new_x)`
 
 Parameters
@@ -56,12 +56,12 @@ Parameters
  
 Sets the previous x value. This is mostly for internal use.
 
-### prev_y
+### prev_y (Getter)
 `prev_y`
 
 Returns the previous y value.
 
-### prev_y=(new_y)
+### prev_y= (Setter)
 `prev_y=(new_y)`
 
 Parameters
@@ -127,7 +127,7 @@ Sets the sprite.
 `create(level, tiled_data)`
 
 Parameters
- + `level -> lib/Engine::Level` Level that this instance was created for.
+ + `level -> Level` Level that this instance was created for.
  + `tiled_data -> Map` Map containing data from Tiled if this entity was loaded from a Tiled map.
 
 Called by the level when the entity is added to the level.
@@ -150,7 +150,7 @@ Called by the level when the entity is added to the level.
 `update(level)`
 
 Parameters
- + `level -> lib/Engine::Level` Level that this instance was created for.
+ + `level -> Level` Level that this instance was created for.
 
 Called by the level each frame.
 
@@ -158,7 +158,7 @@ Called by the level each frame.
 `draw(level)`
 
 Parameters
- + `level -> lib/Engine::Level` Level that this instance was created for.
+ + `level -> Level` Level that this instance was created for.
 
 Called by the level each frame, if this isn't overloaded and `sprite` is non-null this will
 render this entity's sprite.
@@ -167,7 +167,7 @@ render this entity's sprite.
 `destroy(level)`
 
 Parameters
- + `level -> lib/Engine::Level` Level that this instance was created for.
+ + `level -> Level` Level that this instance was created for.
 
 Called by the level at the end of the level or when the entity is destroyed.
 

@@ -83,7 +83,7 @@ Draws a circle using the current draw colour.
 `static draw_texture(texture, x, y, x_scale, y_scale, rotation, x_origin, y_origin)`
 
 Parameters
- + `texture -> lib/Drawing::Texture or lib/Drawing::Surface` Texture to draw
+ + `texture -> Texture or Surface` Texture to draw
  + `x -> Num` X position to draw the texture at.
  + `y -> Num` Y position to draw the texture at.
  + `x_scale -> Num` If specified, the x scale of the texture.
@@ -100,7 +100,7 @@ Draws a texture.
 `static draw_texture_part(texture, x, y, x_in_tex, y_in_tex, width, height, x_scale, y_scale, rotation, x_origin, y_origin)`
 
 Parameters
- + `texture -> lib/Drawing::Texture or lib/Drawing::Surface` Texture to draw
+ + `texture -> Texture or Surface` Texture to draw
  + `x -> Num` X position to draw the texture at.
  + `y -> Num` Y position to draw the texture at.
  + `x_in_tex -> Num` X position of the part to draw in the texture.
@@ -154,7 +154,7 @@ the map must have the following keys:
 `static target=(target)`
 
 Parameters
- + `target -> lib/Drawing::Surface` Surface to set as the new render target.
+ + `target -> Surface` Surface to set as the new render target.
 
 Changes the render target to `target`, specify `RENDER_TARGET_DEFAULT` to draw to the
 window instead. This value is write-only.
@@ -213,7 +213,7 @@ average frame time.
 `static lock_cameras(camera)`
 
 Parameters
- + `camera -> lib/Renderer::Camera` Camera to lock rendering to.
+ + `camera -> Camera` Camera to lock rendering to.
  
 By default, everytime you draw something it is drawn to every camera which allows you to do
 something like a minimap or split screen, but if you lock the camera with this method, you
@@ -286,7 +286,7 @@ Draws a rectangle to the render target.
 `static shader=(shader)`
 
 Parameters
- + `shader -> lib/Renderer::Shader` Shader to use for texture rendering.
+ + `shader -> Shader` Shader to use for texture rendering.
  
 Sets the shader that will be used for all further texture rendering (including
 sprites). Set `shader` to `null` to use the default texture shader.
@@ -333,7 +333,7 @@ Parameters
 `static draw_font(font, text, x, y)`
 
 Parameters
- + `font -> lib/Drawing::BitmapFont` Font to draw.
+ + `font -> BitmapFont` Font to draw.
  + `text -> String` Text to render with the font.
  + `x -> Num` X position to draw to.
  + `y -> Num` Y position to draw to.
@@ -344,7 +344,7 @@ Draws a font.
 `static draw_font_wrapped(font, text, x, y, w)`
 
 Parameters
- + `font -> lib/Drawing::BitmapFont` Font to draw.
+ + `font -> BitmapFont` Font to draw.
  + `text -> String` Text to render with the font.
  + `x -> Num` X position to draw to.
  + `y -> Num` Y position to draw to.
@@ -358,7 +358,7 @@ pixels would be rendered horizontally before automatically moving to the next li
 `static draw_font_ext(font, text, x, y)`
 
 Parameters
- + `font -> lib/Drawing::BitmapFont` Font to draw.
+ + `font -> BitmapFont` Font to draw.
  + `text -> String` Text to render with the font.
  + `x -> Num` X position to draw to.
  + `y -> Num` Y position to draw to.
@@ -380,7 +380,7 @@ This allows for more fine-tuned text rendering on-the-fly. Supported tokens are 
 `static draw_font_ext_wrapped(font, text, x, y, w)`
 
 Parameters
- + `font -> lib/Drawing::BitmapFont` Font to draw.
+ + `font -> BitmapFont` Font to draw.
  + `text -> String` Text to render with the font.
  + `x -> Num` X position to draw to.
  + `y -> Num` Y position to draw to.
@@ -407,7 +407,7 @@ This allows for more fine-tuned text rendering on-the-fly. Supported tokens are 
 `static draw_sprite(sprite, frame, x, y)` 
 
 Parameters
- + `sprite -> lib/Drawing::Sprite` Sprite to draw.
+ + `sprite -> Sprite` Sprite to draw.
  + `frame -> Num` If specified, the specific frame of the sprite to draw.
  + `x -> Num` X position to draw to.
  + `y -> Num` Y position to draw to.
