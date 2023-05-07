@@ -1019,6 +1019,11 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 			SDL_Surface *bitmap = SDL_CreateRGBSurface(0, w, h, 32, rmask, gmask, bmask, amask);
 			VALIDATE_SDL(bitmap)
 
+			for (int i = 0; i <= (uniEnd - uniStart); i++) {
+				JUCharacter *c = &font->bitmapFont->characters[i];
+				c->w += 1;
+			}
+
 			// Draw each glyph to the surface
 			for (int i = 0; i <= (uniEnd - uniStart); i++) {
 				int codePoint = i + uniStart;
@@ -1073,7 +1078,7 @@ void vksk_RuntimeFontSize(WrenVM *vm) {
 	float w, h;
 	const char *str = wrenGetSlotString(vm, 1);
 	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 0);
-	juFontUTF8Size(font->bitmapFont, &w, &h, "%s", str);
+	juFontUTF8Size(font->bitmapFont, &w, &h, 0, "%s", str);
 	wrenSetSlotNewList(vm, 0);
 	wrenSetSlotDouble(vm, 1, w);
 	wrenInsertInList(vm, 0, -1, 1);

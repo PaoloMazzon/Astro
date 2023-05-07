@@ -58,13 +58,53 @@ void vksk_RuntimeJUBitmapFontSize(WrenVM *vm) {
 	float w, h;
 	const char *str = wrenGetSlotString(vm, 1);
 	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 0);
-	juFontUTF8Size(font->bitmapFont, &w, &h, "%s", str);
+	juFontUTF8Size(font->bitmapFont, &w, &h, 0, "%s", str);
 	wrenSetSlotNewList(vm, 0);
 	wrenSetSlotDouble(vm, 1, w);
 	wrenInsertInList(vm, 0, -1, 1);
 	wrenSetSlotDouble(vm, 1, h);
 	wrenInsertInList(vm, 0, -1, 1);
 }
+
+void vksk_RuntimeJUBitmapFontSizeWrapped(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_END)
+	float w, h;
+	const char *str = wrenGetSlotString(vm, 1);
+	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 0);
+	juFontUTF8Size(font->bitmapFont, &w, &h, wrenGetSlotDouble(vm, 2), "%s", str);
+	wrenSetSlotNewList(vm, 0);
+	wrenSetSlotDouble(vm, 1, w);
+	wrenInsertInList(vm, 0, -1, 1);
+	wrenSetSlotDouble(vm, 1, h);
+	wrenInsertInList(vm, 0, -1, 1);
+}
+
+void vksk_RuntimeJUBitmapFontSizeExt(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	float w, h;
+	const char *str = wrenGetSlotString(vm, 1);
+	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 0);
+	juFontUTF8SizeExt(font->bitmapFont, &w, &h, 0, str);
+	wrenSetSlotNewList(vm, 0);
+	wrenSetSlotDouble(vm, 1, w);
+	wrenInsertInList(vm, 0, -1, 1);
+	wrenSetSlotDouble(vm, 1, h);
+	wrenInsertInList(vm, 0, -1, 1);
+}
+
+void vksk_RuntimeJUBitmapFontSizeExtWrapped(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_END)
+	float w, h;
+	const char *str = wrenGetSlotString(vm, 1);
+	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 0);
+	juFontUTF8SizeExt(font->bitmapFont, &w, &h, wrenGetSlotDouble(vm, 2), str);
+	wrenSetSlotNewList(vm, 0);
+	wrenSetSlotDouble(vm, 1, w);
+	wrenInsertInList(vm, 0, -1, 1);
+	wrenSetSlotDouble(vm, 1, h);
+	wrenInsertInList(vm, 0, -1, 1);
+}
+
 
 void vksk_RuntimeJUBitmapFontFree(WrenVM *vm) {
 	VKSK_RuntimeForeign *font = wrenGetSlotForeign(vm, 0);

@@ -11,6 +11,15 @@ foreign class BitmapFont {
     // Returns the size in pixels of a given string as [w, h]
     foreign size(string)
 
+    // Returns the size of a string as if it were wrapped
+    foreign size_wrapped(string, width)
+
+    // Same as above but ignores tokens
+    foreign size_ext(string)
+
+    // Same as above but wrapped
+    foreign size_ext_wrapped(string, width)
+
     // Forces the font to be freed if you don't want to wait for the garbage collector
     foreign free()
 }
@@ -121,6 +130,15 @@ foreign class Font {
 
     // Returns the size in pixels of a given string as [w, h]
     foreign size(string)
+
+    // Returns the size of a string as if it were wrapped
+    foreign size_wrapped(string, width)
+
+    // Same as above but ignores tokens
+    foreign size_ext(string)
+
+    // Same as above but wrapped
+    foreign size_ext_wrapped(string, width)
 
     // Frees without waiting for the gc
     foreign free()

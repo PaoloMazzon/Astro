@@ -257,7 +257,10 @@ struct JUFont {
 };
 
 /// \brief Returns the size of a string
-void juFontUTF8Size(JUFont font, float *w, float *h, const char *fmt, ...);
+void juFontUTF8Size(JUFont font, float *w, float *h, float width, const char *fmt, ...);
+
+/// \brief Returns the size of a string ignoring tokens
+void juFontUTF8SizeExt(JUFont font, float *w, float *h, float width, const char *string);
 
 /// \brief Loads a font from a .jufnt file (create them with the python script)
 /// \return Returns a new font or NULL if it failed

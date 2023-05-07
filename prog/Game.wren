@@ -201,10 +201,13 @@ class Game is Level {
         super.update() // update all entities
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
 
+        // Player UI
+        var string = "[*][~2]Player:[] [#FF0000][!1]15\%"
+        var size = Assets.fnt_Ubuntu.size_ext(string)
         Renderer.colour_mod = [0, 0, 0, 1]
-        Renderer.draw_rectangle(0, 640 - 38, (11 * 16) + 4, 38, 0, 0, 0)
+        Renderer.draw_rectangle(0, 640 - size[1] - 4, size[0] + 4, size[1] + 4, 0, 0, 0)
         Renderer.colour_mod = [1, 1, 1, 1]
-        Renderer.draw_font_ext(Assets.fnt_font, "[*][~2]Player:[] [#FF0000][!1]15\%", 2, 640 - 34)
+        Renderer.draw_font_ext(Assets.fnt_Ubuntu, string, 2, 640 - size[1] - 2)
     }
 
     destroy() {

@@ -826,7 +826,7 @@ static const int TOKEN_DISPLACEMENT = 2;
 static const int TOKEN_WAVY = 3;
 static const int TOKEN_SHAKY = 4;
 static const int TOKEN_RAINBOW = 5;
-int _juFontParseModifierToken(uint32_t *str, vec4 colour, float *x, float *y, float *wave, float *shake, bool *rainbow) {
+static int _juFontParseModifierToken(uint32_t *str, vec4 colour, float *x, float *y, float *wave, float *shake, bool *rainbow) {
 	int len = 0;
 	static char token[100] = {0};
 
@@ -888,7 +888,7 @@ int _juFontParseModifierToken(uint32_t *str, vec4 colour, float *x, float *y, fl
 	return len + 1;
 }
 
-void juFontUTF8Size(JUFont font, float *w, float *h, const char *fmt, ...) {
+void juFontUTF8Size(JUFont font, float *w, float *h, float width, const char *fmt, ...) {
 	// Var args stuff
 	unsigned char buffer[JU_STRING_BUFFER];
 	va_list va;
@@ -909,7 +909,7 @@ void juFontUTF8Size(JUFont font, float *w, float *h, const char *fmt, ...) {
 			JUCharacter *c = &font->characters[gStringBuffer[i] - font->unicodeStart];
 
 			// Move to the next line if we're about to go over
-			if (gStringBuffer[i] == '\n') {
+			if ((width > 0 && (c->w + x) - startX > width) || gStringBuffer[i] == '\n') {
 				if (x > *w) *w = x;
 				x = startX;
 				*h += font->newLineHeight;
@@ -917,6 +917,43 @@ void juFontUTF8Size(JUFont font, float *w, float *h, const char *fmt, ...) {
 			if (gStringBuffer[i] != '\n') x += c->w;
 		}
 	}
+	if (x > *w) *w = x;
+}
+
+void juFontUTF8SizeExt(JUFont font, float *w, float *h, float width, const char *string) {
+	// Information needed to draw the text
+	float x = 0;
+	*w = 0;
+	*h = font->newLineHeight;
+	float startX = x;
+	int len = utf8Decode((void*)string, gStringBuffer, gStringBufferSize);
+	vec4 colour;
+	float displacementX, displacementY, wave, shake;
+	bool rainbow;
+
+	// Loop through each character and render individually
+	for (int i = 0; i < len; i++) {
+		if (font->unicodeStart <= gStringBuffer[i] && font->unicodeEnd > gStringBuffer[i]) {
+			// String tokens are parsed first
+			if (gStringBuffer[i] == '[' && (i == 0 || gStringBuffer[i - 1] != '#')) {
+				i += _juFontParseModifierToken(&gStringBuffer[i], colour, &displacementX, &displacementY, &wave, &shake, &rainbow) - 1;
+				continue;
+			} else if (gStringBuffer[i] == '#' && i < len - 1 && gStringBuffer[i + 1] == '[') {
+				continue;
+			}
+
+			JUCharacter *c = &font->characters[gStringBuffer[i] - font->unicodeStart];
+
+			// Move to the next line if we're about to go over
+			if ((width > 0 && (c->w + x) - startX > width) || gStringBuffer[i] == '\n') {
+				if (x > *w) *w = x;
+				x = startX;
+				*h += font->newLineHeight;
+			}
+			if (gStringBuffer[i] != '\n') x += c->w;
+		}
+	}
+	if (x > *w) *w = x;
 }
 
 JUFont juFontLoad(const char *filename) {

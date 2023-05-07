@@ -339,8 +339,8 @@ This allows for more fine-tuned text rendering on-the-fly. Supported tokens are 
  + `[]` - Clears all active modifiers
  + `#[...]` - The leading # signals that this should be treated as text and not a modifier
 
-## draw_font_wrapped_ext
-`static draw_font_wrapped_ext(font, text, x, y, w)`
+## draw_font_ext_wrapped
+`static draw_font_ext_wrapped(font, text, x, y, w)`
 
 Parameters
  + `font -> lib/Drawing::BitmapFont` Font to draw.
