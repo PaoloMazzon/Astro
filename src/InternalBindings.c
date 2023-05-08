@@ -1,6 +1,9 @@
 /// \file InternalBindings.c
 /// \author Paolo Mazzon
 #include <stdio.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #include "stb_truetype.h"
@@ -159,6 +162,52 @@ void vksk_RuntimeFileRename(WrenVM *vm) {
 	const char *fname = wrenGetSlotString(vm, 1);
 	const char *newfname = wrenGetSlotString(vm, 2);
 	rename(fname, newfname);
+}
+
+void vksk_RuntimeFileDirExists(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	const char *fname = wrenGetSlotString(vm, 1);
+	bool exists = false;
+	DIR *dir = opendir(fname);
+	if (dir != NULL) {
+		exists = true;
+		closedir(dir);
+	}
+	wrenSetSlotBool(vm, 0, exists);
+}
+
+void vksk_RuntimeFileGetDirectory(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	const char *fname = wrenGetSlotString(vm, 1);
+	const int listSlot = 0;
+	const int elementSlot = 2;
+	wrenEnsureSlots(vm, 3);
+	wrenSetSlotNewList(vm, listSlot);
+	struct dirent *dp;
+	DIR *dfd = opendir(fname);
+	VKSK_Config conf = vksk_ConfigLoad("assets/assets.ini");
+
+	if (dfd != NULL) {
+
+		char filename_qfd[100];
+
+		dp = readdir(dfd);
+		while (dp != NULL) {
+			struct stat stbuf;
+			if (strlen(fname) == 0 || fname[strlen(fname) - 1] == '/')
+				sprintf(filename_qfd, "%s%s", fname, dp->d_name);
+			else
+				sprintf(filename_qfd, "%s/%s", fname, dp->d_name);
+			if (stat(filename_qfd, &stbuf) == -1) {
+				continue;
+			}
+			wrenSetSlotString(vm, elementSlot, filename_qfd);
+			wrenInsertInList(vm, listSlot, -1, elementSlot);
+			dp = readdir(dfd);
+		}
+	} else {
+		vksk_Error(false, "Directory \"%s\" does not exist.", fname);
+	}
 }
 
 void vksk_RuntimeTiledAllocate(WrenVM *vm) {

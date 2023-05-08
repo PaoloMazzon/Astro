@@ -22,6 +22,8 @@ void vksk_RuntimeFileExists(WrenVM *vm);
 void vksk_RuntimeFileExistsInPak(WrenVM *vm);
 void vksk_RuntimeFileRemove(WrenVM *vm);
 void vksk_RuntimeFileRename(WrenVM *vm);
+void vksk_RuntimeFileDirExists(WrenVM *vm);
+void vksk_RuntimeFileGetDirectory(WrenVM *vm);
 
 void vksk_RuntimeTiledAllocate(WrenVM *vm);
 void vksk_RuntimeTiledFinalize(void *data);

@@ -307,6 +307,8 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("File", true, "exists_in_pak(_)", vksk_RuntimeFileExistsInPak)
 		BIND_METHOD("File", true, "remove(_)", vksk_RuntimeFileRemove)
 		BIND_METHOD("File", true, "rename(_,_)", vksk_RuntimeFileRename)
+		BIND_METHOD("File", true, "dir_exists(_)", vksk_RuntimeFileDirExists)
+		BIND_METHOD("File", true, "get_directory(_)", vksk_RuntimeFileGetDirectory)
 	} else if (strcmp(module, "lib/Audio") == 0) {
 		BIND_METHOD("AudioData", false, "free()", vksk_RuntimeJUAudioDataFree)
 		BIND_METHOD("Audio", false, "update(_,_,_)", vksk_RuntimeJUAudioUpdate)

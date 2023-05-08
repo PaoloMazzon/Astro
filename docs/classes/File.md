@@ -6,9 +6,11 @@ that you are free to use before the engine is initialized.
 + [read_from_pak](#read_from_pak)
 + [write](#write)
 + [exists](#exists)
++ [dir_exists](#dir_exists)
 + [exists_in_pak](#exists_in_pak)
 + [remove](#remove)
 + [rename](#rename)
++ [get_directory](#get_directory)
 
 ### read
 `static read(filename)`
@@ -70,6 +72,24 @@ Parameters
  + `new_filename -> String` name to rename the file to.
  
 Attempts to rename a file.
+
+### dir_exists
+`static dir_exists(directory)`
+
+Parameters
+ + `directory -> String` The directory you want to check.
+
+Returns true if a given directory was located.
+
+### get_directory
+`static get_directory(directory)`
+
+Parameters
+ + `directory -> String` The directory you want to get the contents of.
+
+Returns a list of files and directories in a directory. The list does not differentiate
+between the two so you will need to use `dir_exists` and `exists` to discern between the
+two.
 
 -----------
 

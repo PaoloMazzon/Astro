@@ -21,6 +21,10 @@ class File {
     foreign static remove(filename)
 
     foreign static rename(old, new)
+
+    foreign static dir_exists(directory)
+
+    foreign static get_directory(directory)
 }
 
 // Easy access for configuration files

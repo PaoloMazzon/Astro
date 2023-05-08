@@ -183,6 +183,7 @@ static bool _vksk_CompileAssetsFromDir(String loadFunction, String getterFunctio
 		}
 		dp = readdir(dfd);
 	}
+	closedir(dfd);
 	vksk_ConfigFree(conf);
 	return true;
 }
