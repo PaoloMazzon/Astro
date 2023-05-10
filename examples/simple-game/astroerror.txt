@@ -1,0 +1,42 @@
+[Runtime Error] Level does not implement 'pre_frame()'.
+[Game line 9] in pre_frame()
+[Runtime Error] Entity does not implement 'new()'.
+[Player line 2] in init new()
+[Player line 2] in 
+[lib/Engine line 146] in add_entity(_,_)
+[lib/Engine line 225] in load(_)
+[Game line 9] in create()
+[Runtime Error] Null does not implement 'w=(_)'.
+[Game line 22] in create()
+[Runtime Error] Null does not implement 'width=(_)'.
+[Game line 22] in create()
+[Runtime Error] Null does not implement 'width=(_)'.
+[Game line 21] in create()
+[Runtime Error] Null does not implement 'width=(_)'.
+[Game line 21] in create()
+[Runtime Error] Null does not implement 'width=(_)'.
+[Game line 21] in create()
+[Runtime Error] Null does not implement 'width=(_)'.
+[Game line 22] in create()
+[Runtime Error] Null does not implement 'width=(_)'.
+[Game line 22] in create()
+[Runtime Error] Null does not implement 'width=(_)'.
+[Game line 14] in create()
+[Runtime Error] Game does not implement 'window_width'.
+[Game line 63] in update()
+[Runtime Error] Renderer metaclass does not implement 'draw_texture_ext(_,_,_,_,_,_,_,_)'.
+[Game line 63] in update()
+[Game line 58] [Error] Error: Expect '(' after '%'.
+[Game line 58] [Error] Error at ',': Expected expression.
+[Game line 58] [Error] Error at '0': Expect end of string interpolation.
+[Game line 70] [Error] Error: Unterminated string.
+[Game line 70] [Error] Error at ')
+
+        // Draw the game surface to the middle of the scree...': Expect ')' after arguments.
+[Game line 70] [Error] Error at end of file: Expect newline after statement.
+[Game line 70] [Error] Error at end of file: Expect '}' at end of block.
+[Game line 70] [Error] Error at end of file: Expect newline after definition in class.
+[Game line 70] [Error] Error at end of file: Expect method definition.
+[Runtime Error] Could not compile module 'Game'.
+[init line 1] in (script)
+[__top__ line -8] in (script)
