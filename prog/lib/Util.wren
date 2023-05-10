@@ -2,6 +2,7 @@
 // Author: Paolo Mazzon
 // Utilities for various aspects of a game
 import "lib/Renderer" for Renderer
+import "lib/Drawing" for Surface
 
 // Various math related methods
 class Math {
@@ -253,6 +254,15 @@ class Tileset {
         }
     }
 
+    draw_to_surface() {
+        var surf = Surface.new(width, height)
+        Renderer.target = surf
+        Renderer.clear_blank()
+        draw()
+        Renderer.target = Renderer.RENDER_TARGET_DEFAULT
+        return surf
+    }
+
     // Draws a tiling background with specified parallax (movement)
     // 0 for parallax would be static regardless of camera, 1 would
     // be moves with the camera. This doesn't work with rotated cameras.
@@ -267,9 +277,8 @@ class Tileset {
             cwidth = camera.width
             cheight = camera.height
         } else {
-            var conf = Renderer.get_config()
-            cwidth = conf["window_width"]
-            cheight = conf["window_height"]
+            cwidth = Renderer.window_width
+            cheight = Renderer.window_height
         }
 
         var tile_start_x = cx * parallax

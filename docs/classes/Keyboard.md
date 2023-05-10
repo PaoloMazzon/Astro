@@ -7,6 +7,7 @@ Easy access for the keyboard.
  + [last_key](#last_key)
  + [last_key_code](#last_key_code)
  + [key_string](#key_string)
+ + [keys_as_axis](#keys_as_axis)
 
 The following values are also provided:
 
@@ -296,6 +297,16 @@ Parameters:
  + `key -> Num` One of the `KEY_*` values to turn to a string.
 
 Returns a given key value as a string name, so for example `KEY_D` would be `"D"`.
+
+### keys_as_axis
+`static keys_as_axis(negative, positive)`
+
+Parameters
+ + `negative -> Num` One of the `KEY_*` values to use as the negative value.
+ + `positive -> Num` One of the `KEY_*` values to use as the positive value.
+
+Turns two keys into an axis. Simply, if both or neither key is pressed 0 is returned,
+if negative is pressed but not positive, -1 is returned, and vice versa for positive.  
 
 -----------
 

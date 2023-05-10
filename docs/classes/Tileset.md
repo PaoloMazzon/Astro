@@ -16,6 +16,7 @@ weight regardless of how big the tileset is.
  + [[x, y]=](#x-y-setter)
  + [collision](#collision)
  + [draw](#draw)
+ + [draw_to_surface](#draw_to_surface)
  + [draw_tiling_background](#draw_tiling_background)
 
 ### new
@@ -112,6 +113,12 @@ that has a non-zero value.
 `draw()`
 
 Draws the entire tileset.
+
+### draw_to_surface
+`draw_to_surface()`
+
+Creates a new surface and calls [draw](#draw) on it. This method will set the render
+target to the new surface and back to the screen when its finished.
 
 ### draw_tiling_background
 `static draw_tiling_background(texture, parallax, camera)`

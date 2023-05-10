@@ -318,12 +318,16 @@ void vksk_RuntimeRendererGetBlendMode(WrenVM *vm) {
 
 // vksk_RuntimeRendererSetColourMod(const vec4 mod) - set_colour_mod(_)
 void vksk_RuntimeRendererSetColourMod(WrenVM *vm) {
-	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST, FOREIGN_END)
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST | FOREIGN_STRING, FOREIGN_END)
 	vec4 vec;
-	wrenEnsureSlots(vm, 3);
-	for (int i = 0; i < 4; i++) {
-		wrenGetListElement(vm, 1, i, 2);
-		vec[i] = wrenGetSlotDouble(vm, 2);
+	if (wrenGetSlotType(vm, 1) == WREN_TYPE_LIST) {
+		wrenEnsureSlots(vm, 3);
+		for (int i = 0; i < 4; i++) {
+			wrenGetListElement(vm, 1, i, 2);
+			vec[i] = wrenGetSlotDouble(vm, 2);
+		}
+	} else {
+		vk2dColourHex(vec, wrenGetSlotString(vm, 1));
 	}
 	vk2dRendererSetColourMod(vec);
 }

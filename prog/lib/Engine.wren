@@ -257,7 +257,7 @@ class Level {
         _update_enabled = true
     }
 
-    pre_draw() {
+    pre_frame() {
 
     }
 

@@ -92,6 +92,7 @@ void vksk_RuntimeVK2DCameraAllocate(WrenVM *vm) {
 	memset(&cam->camera.spec, 0, sizeof(VK2DCameraSpec));
 	cam->camera.spec = vk2dRendererGetCamera();
 	cam->camera.index = vk2dCameraCreate(cam->camera.spec);
+	cam->camera.spec.zoom = 1;
 	cam->type = FOREIGN_CAMERA;
 	if (cam->camera.index == VK2D_INVALID_CAMERA) {
 		wrenSetSlotNull(vm, 0);

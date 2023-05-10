@@ -180,10 +180,12 @@ Returns the current blend mode as a `BLEND_MODE_*` value.
 `static colour_mod=(colour)`
 
 Parameters
- + `colour -> List` A list of `[red, green, blue, alpha]` values from 0-1
+ + `colour -> List or String` A list of `[red, green, blue, alpha]` values from 0-1, or a string containing a hex colour.
  
 Sets the colour mod for the renderer, this means all textures will have their colours
-multiplied by this value and all shapes you draw will be this colour.
+multiplied by this value and all shapes you draw will be this colour. If a hex colour is specified,
+the renderer expects the string to be formatted as `"#54403e"`, the leading '#' is required and
+no whitespace may be present.
 
 ## colour_mod (getter)
 `static colour_mod`

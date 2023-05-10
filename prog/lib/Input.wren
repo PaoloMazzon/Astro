@@ -265,6 +265,20 @@ class Keyboard {
 
     // Converts a key code to a string
     foreign static key_string(key)
+
+    // Turns a negative and positive input into a number thats either -1, 0, or 1
+    static keys_as_axis(negative, positive) {
+        var n = Keyboard.key(negative)
+        var p = Keyboard.key(positive)
+        if (n && p) {
+            return 0
+        } else if (n) {
+            return -1
+        } else if (p) {
+            return 1
+        }
+        return 0
+    }
 }
 
 // Mouse-related input
