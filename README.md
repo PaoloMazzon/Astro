@@ -7,6 +7,8 @@ scripting language.
 
 ![Example gif](./examples/fixed-timestep/assets/example.gif)
 
+![example](https://github.com/PaoloMazzon/Astro/assets/17896827/686ab0a6-b37d-4407-8e26-1b98d0bd00ab)
+
 Features
 ========
 
