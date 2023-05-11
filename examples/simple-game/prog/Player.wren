@@ -3,14 +3,77 @@ class Player is Entity {
 
     create(level, tiled_data) {
         super.create(level, tiled_data)
+        sprite = Assets.spr_player_idle
+        hitbox = Hitbox.new_rectangle(8, 8)
+        _hspeed = 0
+        _vspeed = 0
+        _facing = 1
     }
 
     update(level) {
         super.update(level)
-
+        // Move the player
         var speed = 1
-        level.camera.x = Math.clamp(level.camera.x + (speed * Keyboard.keys_as_axis(Keyboard.KEY_LEFT, Keyboard.KEY_RIGHT)), 0, level.tileset.width - (16 * 8))
-        level.camera.y = Math.clamp(level.camera.y + (speed * Keyboard.keys_as_axis(Keyboard.KEY_UP, Keyboard.KEY_DOWN)), 0, level.tileset.height - (15 * 8))
+        var gravity = 0.2
+        var jump_speed = 3
+        var ladder_speed = 1
+        var touching_ladder = level.ladder_tileset.collision(hitbox, x, y)
+        _hspeed = Keyboard.keys_as_axis(Keyboard.KEY_LEFT, Keyboard.KEY_RIGHT) * speed
+
+        // Adjust the facing direction for animation purposes
+        if (_hspeed > 0) {
+            _facing = 1
+        } else if (_hspeed < 0) {
+            _facing = -1
+        }
+
+        // Interact with ladders
+        if (!touching_ladder) {
+            // Player jump
+            if (Keyboard.key_pressed(Keyboard.KEY_UP) && level.tileset.collision(hitbox, x, y + 1)) {
+                _vspeed = -jump_speed
+            }
+            _vspeed = _vspeed + gravity
+        } else {
+            _vspeed = Keyboard.keys_as_axis(Keyboard.KEY_UP, Keyboard.KEY_DOWN) * ladder_speed
+        }
+
+        // Handle player collisions
+        if (level.tileset.collision(hitbox, x + _hspeed, y)) {
+            while (!level.tileset.collision(hitbox, x + _hspeed.sign, y)) {
+                x = x + _hspeed.sign
+            }
+            _hspeed = 0
+        }
+        if (level.tileset.collision(hitbox, x, y + _vspeed)) {
+            while (!level.tileset.collision(hitbox, x, y + _vspeed.sign)) {
+                y = y + _vspeed.sign
+            }
+            _vspeed = 0
+        }
+        x = Math.clamp(x + _hspeed, 0, level.tileset.width - 8)
+        y = Math.clamp(y + _vspeed, 0, level.tileset.height - 8)
+    
+        // Center the camera towards the player
+        var cameraSpeed = 0.15
+        level.camera.x = Math.clamp(level.camera.x + (((x - (level.game_width / 2)) - level.camera.x) * cameraSpeed), 0, level.tileset.width - level.game_width)
+        level.camera.y = Math.clamp(level.camera.y + (((y - (level.game_height / 2)) - level.camera.y) * cameraSpeed), 0, level.tileset.height - level.game_height)
         level.camera.update()
+
+        // Change animation depending on what the player is doing
+        if (!level.tileset.collision(hitbox, x, y + 1)) {
+            sprite = Assets.spr_player_jump
+        } else if (_hspeed != 0) {
+            sprite = Assets.spr_player_walk
+        } else {
+            sprite = Assets.spr_player_idle
+        }
+        if (_facing == 1) {
+            sprite.scale_x = 1
+            sprite.origin_x = 0
+        } else {
+            sprite.scale_x = -1
+            sprite.origin_x = 8
+        }
     }
 }

@@ -1,8 +1,10 @@
 import "Player" for Player
+import "Entities" for ResetPlayer, Water
 
 class Game is Level {
     // Random getters
     tileset { _collision_tileset }
+    ladder_tileset { _ladder_tileset }
     camera { _camera }
     ui_camera { _ui_camera }
     game_surface { _game_surface }
@@ -18,11 +20,18 @@ class Game is Level {
         // Load the level from tiled
         var tilesets = load("assets/level0.tmj")
         _collision_tileset = tilesets["collisions"]
+        _ladder_tileset = tilesets["ladder"]
         _tilset_surfaces = [
             tilesets["background"].draw_to_surface(),
             tilesets["collisions"].draw_to_surface(),
             tilesets["ladder"].draw_to_surface(),
         ]
+
+        // Create the game surface for proper pixel scaling
+        _game_surface = Surface.new(game_width, game_height)
+
+        // Locate the player in the level
+        _player_entity = get_entity(Player)
 
         // Create the game cameras
         _camera = Camera.new()
@@ -34,11 +43,9 @@ class Game is Level {
         }
         Renderer.use_cameras_on_surfaces = true
 
-        // Create the game surface for proper pixel scaling
-        _game_surface = Surface.new(game_width, game_height)
-
-        // Locate the player in the level
-        _player_entity = get_entity(Player)
+        // Center the game camera on the player initially
+        camera.x = player.x - (game_width / 2)
+        camera.y = player.y - (game_height / 2)
     }
 
     pre_frame() {
@@ -61,7 +68,7 @@ class Game is Level {
 
         // Draw UI
         Renderer.lock_cameras(ui_camera)
-        Renderer.draw_font_ext(Assets.fnt_FutilePro, "[*][~2]Player", 1, 0)
+        Renderer.draw_font_ext(Assets.fnt_FutilePro, "[*][~2]Alt+Enter", 1, 0)
 
         // Draw the game surface to the middle of the screen
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
