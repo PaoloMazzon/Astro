@@ -5,10 +5,10 @@ Allows for checking for collisions between two hitboxes and tilesets.
  + [r](#r)
  + [w](#w)
  + [h](#h)
- + [x_offset](#x_offset-getter)
- + [x_offset=](#x_offset-setter)
- + [y_offset](#y_offset-getter)
- + [y_offset=](#y_offset-setter)
+ + [offset_x](#offset_x-getter)
+ + [offset_x=](#offset_x-setter)
+ + [offset_y](#offset_y-getter)
+ + [offset_y=](#offset_y-setter)
  + [new_circle](#new_circle)
  + [new_rectangle](#new_rectangle)
  + [collision](#collision)
@@ -40,26 +40,26 @@ Returns the hitbox's width.
 
 Returns the hitbox's height.
 
-### x_offset (Getter)
-`x_offset`
+### offset_x (Getter)
+`offset_x`
 
 Returns the horizontal offset of the hitbox.
 
-### x_offset= (Setter)
-`x_offset=(offset)`
+### offset_x= (Setter)
+`offset_x=(offset)`
 
 Parameters
  + `offset -> Num` Horizontal offset.
 
 Sets the horizontal offset of the hitbox.
 
-### y_offset (Getter)
-`y_offset`
+### offset_y (Getter)
+`offset_y`
 
 Returns the vertical offset of the hitbox.
 
-### y_offset= (Setter)
-`y_offset=(offset)`
+### offset_y= (Setter)
+`offset_y=(offset)`
 
 Parameters
  + `offset -> Num` Vertical offset.
@@ -96,6 +96,7 @@ Parameters
  + `hitbox2 -> Hitbox` The second hitbox to check for collisions against.
 
 Checks for a collision between two hitboxes, returning true if a collision has occurred.
+If either hitboxes are from `Hitbox.NO_HIT`, this method is guaranteed to return false.
 
 ### bounding_box
 `bounding_box(x, y)`

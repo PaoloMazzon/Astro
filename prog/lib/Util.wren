@@ -107,6 +107,30 @@ class Hitbox {
         _type = Hitbox.TYPE_VOID
     }
 
+    // Returns true if there is a collision between a given circle and rectangle
+    static circle_rect_collision(rx, ry, w, h, cx, cy, r) {
+        if (Math.point_in_rectangle(rx, ry, w, h, cx, cy)) {
+            return true
+        }
+        // this is a mess but it just werks:tm:
+        // but like should be fixed, its not super efficient
+        var left = cx < rx
+        var right = cx > (rx + w)
+        var above = cy < ry
+        var below = cy > (ry + h)
+        if ((left && above && Math.point_distance(rx, ry, cx, cy) < r) ||
+            (left && below && Math.point_distance(rx, ry + h, cx, cy) < r) ||
+            (right && above && Math.point_distance(rx + w, ry, cx, cy) < r) ||
+            (right && below && Math.point_distance(rx + w, ry + h, cx, cy) < r) ||
+            (left && !below && !above && (cx - rx).abs < r) ||
+            (right && !below && !above && (cx - (rx + w)).abs < r) ||
+            (above && !left && !right && (cy - ry).abs < r) ||
+            (below && !left && !right && (cy - (ry + h)).abs < r)) {
+                return true
+        }
+        return false
+    }
+
     // Returns true if there is a collision between this and another hitbox
     collision(x1, y1, x2, y2, hitbox2) {
         x1 = x1 - offset_x
@@ -116,9 +140,9 @@ class Hitbox {
         if (hitbox2.type == Hitbox.TYPE_RECTANGLE && _type == Hitbox.TYPE_RECTANGLE) {
             return (y1 + _h > y2 && y1 < y2 + hitbox2.h && x1 + _w > x2 && x1 < x2 + hitbox2.w)
         } else if (hitbox2.type == Hitbox.TYPE_CIRCLE && _type == Hitbox.TYPE_RECTANGLE) {
-            return false
+            return Hitbox.circle_rect_collision(x1, y1, _w, _h, x2, y2, hitbox2.r)
         } else if (hitbox2.type == Hitbox.TYPE_RECTANGLE && _type == Hitbox.TYPE_CIRCLE) {
-            return false
+            return Hitbox.circle_rect_collision(x2, y2, hitbox2.w, hitbox2.h, x1, y1, _r)
         } else if (hitbox2.type == Hitbox.TYPE_CIRCLE && _type == Hitbox.TYPE_CIRCLE) {
             return Math.point_distance(x1, y1, x2, y2) < _r + hitbox2.r
         }
