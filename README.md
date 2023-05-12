@@ -24,9 +24,6 @@ Getting Started
 See [Getting Started](docs/GettingStarted.md) for a detailed breakdown, and check out the
 [API Reference](docs/API.md) for everything else. In short, you need a Wren file the engine
 will use as an entry point and at least one level.
-
-A basic game
-------------
     
     class Game is Level {
         construct new() { }
@@ -40,18 +37,8 @@ A basic game
     
         update() {
             var speed = Engine.delta * 100
-            if (Keyboard.key(Keyboard.KEY_A)) {
-                _x = _x - speed
-            }
-            if (Keyboard.key(Keyboard.KEY_D)) {
-                _x = _x + speed
-            }
-            if (Keyboard.key(Keyboard.KEY_W)) {
-                _y = _y - speed
-            }
-            if (Keyboard.key(Keyboard.KEY_S)) {
-                _y = _y + speed
-            }
+            _x = _x + Keyboard.keys_as_axis(Keyboard.KEY_A, Keyboard.KEY_D) * speed
+            _y = _y + Keyboard.keys_as_axis(Keyboard.KEY_W, Keyboard.KEY_S) * speed
     
             Renderer.draw_sprite(Assets.spr_sprite, _x, _y)
             Renderer.draw_font(Assets.fnt_font, "The quick brown fox jumps over the lazy dog.", 0, 0)
@@ -59,8 +46,6 @@ A basic game
     
         destroy() { }
     }
-
-See [Getting Started](docs/GettingStarted.md) for more information.
 
 Detailed Feature List
 =====================

@@ -74,16 +74,17 @@ class Math {
 class Hitbox {
     static TYPE_CIRCLE { 0 }
     static TYPE_RECTANGLE { 1 }
-    static NO_HIT { Hitbox.new_circle(0) }
+    static TYPE_VOID { -1 }
+    static NO_HIT { Hitbox.new_void() }
 
     type { _type }
     r { _r }
     w { _w }
     h { _h }
-    x_offset=(offset) { _x_offset = offset }
-    y_offset=(offset) { _y_offset = offset }
-    x_offset { _x_offset }
-    y_offset { _y_offset }
+    offset_x=(offset) { _x_offset = offset }
+    offset_y=(offset) { _y_offset = offset }
+    offset_x { _x_offset }
+    offset_y { _y_offset }
 
     // Creates a new circle hitbox
     construct new_circle(r) {
@@ -102,12 +103,16 @@ class Hitbox {
         _y_offset = 0
     }
 
+    construct new_void() {
+        _type = Hitbox.TYPE_VOID
+    }
+
     // Returns true if there is a collision between this and another hitbox
     collision(x1, y1, x2, y2, hitbox2) {
-        x1 = x1 - x_offset
-        y1 = y1 - y_offset
-        x2 = x2 - hitbox2.x_offset
-        y2 = y2 - hitbox2.y_offset
+        x1 = x1 - offset_x
+        y1 = y1 - offset_y
+        x2 = x2 - hitbox2.offset_x
+        y2 = y2 - hitbox2.offset_y
         if (hitbox2.type == Hitbox.TYPE_RECTANGLE && _type == Hitbox.TYPE_RECTANGLE) {
             return (y1 + _h > y2 && y1 < y2 + hitbox2.h && x1 + _w > x2 && x1 < x2 + hitbox2.w)
         } else if (hitbox2.type == Hitbox.TYPE_CIRCLE && _type == Hitbox.TYPE_RECTANGLE) {
@@ -117,17 +122,19 @@ class Hitbox {
         } else if (hitbox2.type == Hitbox.TYPE_CIRCLE && _type == Hitbox.TYPE_CIRCLE) {
             return Math.point_distance(x1, y1, x2, y2) < _r + hitbox2.r
         }
+        return false
     }
 
     // Returns this hitbox's bounding box as a list of [x1, y1, x2, y2]
     bounding_box(x, y) {
-        x = x - x_offset
-        y = y - y_offset
+        x = x - offset_x
+        y = y - offset_y
         if (_type == Hitbox.TYPE_CIRCLE) {
             return [x - _r, y - _r, x + _r, y + _r]
         } else if (_type == Hitbox.TYPE_RECTANGLE) {
             return [x, y, x + _w, y + _h]
         }
+        return [0, 0, 0, 0]
     }
 }
 

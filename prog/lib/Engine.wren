@@ -114,6 +114,11 @@ class Entity {
     // Sets the entity's sprite
     sprite=(new_sprite) { _sprite = new_sprite }
 
+    // Checks for a collision between this entity's hitbox and another's
+    colliding(entity) {
+        return hitbox.collision(x, y, entity.x, entity.y, entity.hitbox)
+    }
+
     // Called by the level when its added to the level list
     create(level, tiled_data) {}
 
@@ -154,9 +159,16 @@ class Level {
     add_entity(entity, tiled_data) {
         var new = entity.new()
         _entity_list.add(new)
-        new.create(this, tiled_data)
         new.x = tiled_data["x"]
         new.y = tiled_data["y"]
+
+        // Automatically create a new hitbox if a width and height is specified
+        if (tiled_data["width"] != 0 && tiled_data["height"] != 0) {
+            new.hitbox = Hitbox.new_rectangle(tiled_data["width"], tiled_data["height"])
+        }
+
+        new.create(this, tiled_data)
+
         return new
     }
 
@@ -198,6 +210,20 @@ class Level {
         for (ent in _entity_list) {
             if (ent is base_class) {
                 if (entity.hitbox.collision(entity.x, entity.y, ent.x, ent.y, ent.hitbox)) {
+                    out = ent
+                    break
+                }
+            }
+        }
+        return out
+    }
+
+    // Same as above but allows the user to specify a specific x/y
+    entity_collision(entity, x, y, base_class) {
+        var out = null
+        for (ent in _entity_list) {
+            if (ent is base_class) {
+                if (entity.hitbox.collision(x, y, ent.x, ent.y, ent.hitbox)) {
                     out = ent
                     break
                 }

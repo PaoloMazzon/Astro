@@ -71,9 +71,12 @@ Returns the first instance of `base_class` the level finds, or `null` if it can'
 
 ### entity_collision
 `entity_collision(entity, base_class)`
+`entity_collision(entity, x, y, base_class)`
 
 Parameters
  + `entity -> Entity` Entity instance to check for collisions against.
+ + `x -> Num` If specified, the virtual x position of `entity`.
+ + `y -> Num` If specified, the virtual y position of `entity`.
  + `base_class -> Entity` Base class of the entity to find, not an instance.
 
 Checks for a collision between an instance of an entity and every instance of `base_class`

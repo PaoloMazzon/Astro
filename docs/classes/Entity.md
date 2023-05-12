@@ -18,6 +18,7 @@ This class on its own does nothing.
  + [hitbox=](#hitbox-setter)
  + [sprite](#sprite-getter)
  + [sprite=](#sprite-setter)
+ + [colliding](#colliding)
  + [create](#create)
  + [update](#update)
  + [draw](#draw)
@@ -123,12 +124,20 @@ Returns the sprite.
 
 Sets the sprite.
 
+### colliding
+`colliding(entity)`
+
+Parameters
+ + `entity -> Entity` Entity to check for a collision against.
+
+Returns true if there is a collision between this entity and another. 
+
 ### create
 `create(level, tiled_data)`
 
 Parameters
  + `level -> Level` Level that this instance was created for.
- + `tiled_data -> Map` Map containing data from Tiled if this entity was loaded from a Tiled map.
+ + `tiled_data -> Map or null` Map containing data from Tiled if this entity was loaded from a Tiled map, `null` otherwise.
 
 Called by the level when the entity is added to the level.
 

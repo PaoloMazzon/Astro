@@ -8,7 +8,9 @@ In short you load Tiled maps by calling [load](./classes/Level.md#load) in your 
 method with the desired map filename. [load](./classes/Level.md#load) returns a map of every
 tile layer in the map as a `Tileset`, with which you may do as you like. The load method
 automatically creates all objects in the map, as well as automatically sets their x/y position and
-provides them with a map containing all the extra data they had in Tiled.
+provides them with a map containing all the extra data they had in Tiled. Additionally, if a width
+and height value is set in the Tiled editor, the entity will automatically be given a rectangular
+hitbox with the same width/height.
 
 ## How To Use Tiled
 There are some things you need to do on Tiled's side so that Astro knows how to load the map

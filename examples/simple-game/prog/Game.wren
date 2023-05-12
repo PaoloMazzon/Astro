@@ -19,9 +19,9 @@ class Game is Level {
         
         // Load the level from tiled
         var tilesets = load("assets/level0.tmj")
-        _collision_tileset = tilesets["collisions"]
-        _ladder_tileset = tilesets["ladder"]
-        _tilset_surfaces = [
+        _collision_tileset = tilesets["collisions"] // for player collisions
+        _ladder_tileset = tilesets["ladder"] // so the player can climb ladders
+        _tilset_surfaces = [ // for drawing the whole level more efficiently
             tilesets["background"].draw_to_surface(),
             tilesets["collisions"].draw_to_surface(),
             tilesets["ladder"].draw_to_surface(),
@@ -33,7 +33,8 @@ class Game is Level {
         // Locate the player in the level
         _player_entity = get_entity(Player)
 
-        // Create the game cameras
+        // Create the game cameras, one for the ui and another to follow
+        // the player around
         _camera = Camera.new()
         _ui_camera = Camera.new()
         for (cam in [_camera, _ui_camera]) {

@@ -1,0 +1,6 @@
+Font, dungeon tileset, and character sprite courtesy of the following itch.io links:
+https://krishna-palacio.itch.io/minifantasy-dungeon
+https://somepx.itch.io/humble-fonts-free
+https://adamatomic.itch.io/cavernas
+
+Code, level design, and (minor) modifications to MiniFantasy Dungeon and Caves of Gallet by Paolo Mazzon.

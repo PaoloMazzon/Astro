@@ -12,12 +12,13 @@ class Player is Entity {
 
     update(level) {
         super.update(level)
-        // Move the player
         var speed = 1
         var gravity = 0.2
         var jump_speed = 3
         var ladder_speed = 1
         var touching_ladder = level.ladder_tileset.collision(hitbox, x, y)
+
+        // Move the player left and right
         _hspeed = Keyboard.keys_as_axis(Keyboard.KEY_LEFT, Keyboard.KEY_RIGHT) * speed
 
         // Adjust the facing direction for animation purposes
@@ -29,16 +30,17 @@ class Player is Entity {
 
         // Interact with ladders
         if (!touching_ladder) {
-            // Player jump
+            // Player jump (if touching the ground)
             if (Keyboard.key_pressed(Keyboard.KEY_UP) && level.tileset.collision(hitbox, x, y + 1)) {
                 _vspeed = -jump_speed
             }
             _vspeed = _vspeed + gravity
         } else {
+            // If the user is touching a ladder they may simply move up or down
             _vspeed = Keyboard.keys_as_axis(Keyboard.KEY_UP, Keyboard.KEY_DOWN) * ladder_speed
         }
 
-        // Handle player collisions
+        // Handle player collisions by moving as close as possible to walls without colliding
         if (level.tileset.collision(hitbox, x + _hspeed, y)) {
             while (!level.tileset.collision(hitbox, x + _hspeed.sign, y)) {
                 x = x + _hspeed.sign
@@ -54,7 +56,7 @@ class Player is Entity {
         x = Math.clamp(x + _hspeed, 0, level.tileset.width - 8)
         y = Math.clamp(y + _vspeed, 0, level.tileset.height - 8)
     
-        // Center the camera towards the player
+        // Center the camera towards the player slowly
         var cameraSpeed = 0.15
         level.camera.x = Math.clamp(level.camera.x + (((x - (level.game_width / 2)) - level.camera.x) * cameraSpeed), 0, level.tileset.width - level.game_width)
         level.camera.y = Math.clamp(level.camera.y + (((y - (level.game_height / 2)) - level.camera.y) * cameraSpeed), 0, level.tileset.height - level.game_height)

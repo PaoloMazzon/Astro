@@ -1,22 +1,15 @@
 // Helper entities not deserving of their own file
-import "Player" for Player
 
 // This entity will move the player back to his spawn when
-// the player touches it. It simply grabs its hitbox size
-// from the tiled map.
+// the player touches it. This entity's hitbox is automatically
+// created when the Tiled map is loaded.
 class ResetPlayer is Entity {
     construct new() { super() }
 
-    create(level, tiled_data) {
-        super.create(level, tiled_data)
-        hitbox = Hitbox.new_rectangle(tiled_data["width"], tiled_data["height"])
-    }
-
     update(level) {
-        var player = level.entity_collision(this, Player)
-        if (player != null) {
-            player.x = 160
-            player.y = 152
+        if (colliding(level.player)) {
+            level.player.x = 160
+            level.player.y = 152
         }
     }
 }
@@ -40,7 +33,8 @@ class Water is Entity {
             _frame = (_frame + 1) % 3
         }
 
-        // Render tiles for each tile across
+        // Render tiles for each tile across, this is kinda
+        // fancy but not hugely important.
         for (i in 0..(_tiles_across - 1)) {
             Renderer.draw_texture_part(
                 Assets.tex_cavesofgallet_tiles,
