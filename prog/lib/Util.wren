@@ -194,10 +194,16 @@ class Tileset {
     height { _tileset.count * (_h) }
 
     // Returns the width of the tileset in tiles
-    tile_width { _tileset[0].count }
+    tiles_wide { _tileset[0].count }
 
     // Returns the height of the tileset in tiles
-    tile_height { _tileset.count }
+    tiles_tall { _tileset.count }
+
+    // Width of each tile
+    tile_width { _w }
+
+    // Height of each tile
+    tile_height { _h }
 
     // Returns an element in the tileset
     [x, y] {
@@ -268,14 +274,14 @@ class Tileset {
         Renderer.draw_texture_part(_sprites[sprite], x, y, draw_x, draw_y, _w, _h)
     }
 
-    // Draws the tileset
-    draw() {
+    // Draws a specific portion of the tileset
+    draw(x, y, w, h) {
         var y_offset = 0
 
         // Loop through each cell in the 2D grid
-        for (i in _tileset) {
+        for (i in _tileset[y..(y + h - 1)]) {
             var x_offset = 0
-            for (cell in i) {
+            for (cell in i[x..(x + w - 1)]) {
                 if (cell != 0) {
                     internal_draw_sprite(cell, x_offset, y_offset)
                 }
@@ -285,13 +291,24 @@ class Tileset {
         }
     }
 
-    draw_to_surface() {
-        var surf = Surface.new(width, height)
+    // Draws the tileset
+    draw() {
+        draw(0, 0, tiles_wide, tiles_tall)
+    }
+
+    // Draws a specific portion to a surface
+    draw_to_surface(x, y, w, h) {
+        var surf = Surface.new(w * _w, h * _h)
         Renderer.target = surf
         Renderer.clear_blank()
-        draw()
+        draw(x, y, w, h)
         Renderer.target = Renderer.RENDER_TARGET_DEFAULT
         return surf
+    }
+
+    // Draws the whole thing to a surface
+    draw_to_surface() {
+        return draw_to_surface(0, 0, tiles_wide, tiles_tall)
     }
 
     // Draws a tiling background with specified parallax (movement)

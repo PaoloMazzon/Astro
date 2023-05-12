@@ -10,6 +10,8 @@ weight regardless of how big the tileset is.
  + [add_tileset](#add_tileset)
  + [width](#width)
  + [height](#height)
+ + [tiles_wide](#tiles_wide)
+ + [tiles_tall](#tiles_tall)
  + [tile_width](#tile_width)
  + [tile_height](#tile_height)
  + [[x, y]](#x-y-getter)
@@ -71,15 +73,25 @@ Returns the total width of the tileset in pixels.
 
 Returns the total height of the tileset in pixels.
 
+### tiles_wide
+`tiles_wide`
+
+Returns the width of the tileset in tiles.
+
+### tiles_tall
+`tiles_tall`
+
+Returns the height of the tileset in tiles.
+
 ### tile_width
 `tile_width`
 
-Returns the width of the tileset in tiles.
+Returns the width of a tile in the tileset.
 
 ### tile_height
 `tile_height`
 
-Returns the height of the tileset in tiles.
+Returns the height of a tile in the tileset.
 
 ### [x, y] (getter)
 `[x, y]`
@@ -111,14 +123,30 @@ that has a non-zero value.
 
 ### draw
 `draw()`
+`draw(x, y, w, h)`
 
-Draws the entire tileset.
+Parameters
+ + `x -> Num` If specified, the x position in the tileset to begin drawing at
+ + `y -> Num` If specified, the y position in the tileset to begin drawing at 
+ + `w -> Num` If specified, the width of the region to draw
+ + `h -> Num` If specified, the height of the region to draw
+
+Draws either the entire tileset or a specified region in the tileset to (0,0) on
+screen.
 
 ### draw_to_surface
 `draw_to_surface()`
+`draw_to_surface(x, y, w, h)`
 
-Creates a new surface and calls [draw](#draw) on it. This method will set the render
-target to the new surface and back to the screen when its finished.
+Parameters
+ + `x -> Num` If specified, the x position in the tileset to begin drawing at
+ + `y -> Num` If specified, the y position in the tileset to begin drawing at 
+ + `w -> Num` If specified, the width of the region to draw
+ + `h -> Num` If specified, the height of the region to draw
+
+Draws the entire tileset to a surface if no arguments are specified. If a region is
+provided, a surface only big enough for that region is created and that region is
+drawn to it. In either case, the surface's background will be transparent.
 
 ### draw_tiling_background
 `static draw_tiling_background(texture, parallax, camera)`
