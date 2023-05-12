@@ -125,12 +125,15 @@ Returns the sprite.
 Sets the sprite.
 
 ### colliding
-`colliding(entity)`
+`colliding(object)`
+`colliding(object, x, y)`
 
 Parameters
- + `entity -> Entity` Entity to check for a collision against.
+ + `object -> Entity or Tileset` Entity or [Tileset](Tileset.md) to check for a collision against.
+ + `x -> Num` If specified, x position to use in place of the entity's actual x position.
+ + `y -> Num` If specified, y position to use in place of the entity's actual y position.
 
-Returns true if there is a collision between this entity and another. 
+Returns true if there is a collision between this entity and another entity or specified tileset. 
 
 ### create
 `create(level, tiled_data)`

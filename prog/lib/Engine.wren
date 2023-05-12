@@ -114,9 +114,24 @@ class Entity {
     // Sets the entity's sprite
     sprite=(new_sprite) { _sprite = new_sprite }
 
-    // Checks for a collision between this entity's hitbox and another's
-    colliding(entity) {
-        return hitbox.collision(x, y, entity.x, entity.y, entity.hitbox)
+    // Checks for a collision between this entity's hitbox and another's or a tileset
+    colliding(coll) {
+        if (coll is Entity) {
+            return hitbox.collision(x, y, coll.x, coll.y, coll.hitbox)
+        } else if (coll is Tileset) {
+            return coll.collision(hitbox, x, y)
+        }
+        return false
+    }
+    
+    // Same as above but with a virtual x/y
+    colliding(coll, new_x, new_y) {
+        if (coll is Entity) {
+            return hitbox.collision(new_x, new_y, coll.x, coll.y, coll.hitbox)
+        } else if (coll is Tileset) {
+            return coll.collision(hitbox, new_x, new_y)
+        }
+        return false
     }
 
     // Called by the level when its added to the level list

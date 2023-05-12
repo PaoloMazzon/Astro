@@ -16,7 +16,7 @@ class Player is Entity {
         var gravity = 0.2
         var jump_speed = 3
         var ladder_speed = 1
-        var touching_ladder = level.ladder_tileset.collision(hitbox, x, y)
+        var touching_ladder = colliding(level.ladder_tileset)
 
         // Move the player left and right
         _hspeed = Keyboard.keys_as_axis(Keyboard.KEY_LEFT, Keyboard.KEY_RIGHT) * speed
@@ -41,14 +41,14 @@ class Player is Entity {
         }
 
         // Handle player collisions by moving as close as possible to walls without colliding
-        if (level.tileset.collision(hitbox, x + _hspeed, y)) {
-            while (!level.tileset.collision(hitbox, x + _hspeed.sign, y)) {
+        if (colliding(level.tileset, x + _hspeed, y)) {
+            while (!colliding(level.tileset, x + _hspeed.sign, y)) {
                 x = x + _hspeed.sign
             }
             _hspeed = 0
         }
-        if (level.tileset.collision(hitbox, x, y + _vspeed)) {
-            while (!level.tileset.collision(hitbox, x, y + _vspeed.sign)) {
+        if (colliding(level.tileset, x, y + _vspeed)) {
+            while (!colliding(level.tileset, x, y + _vspeed.sign)) {
                 y = y + _vspeed.sign
             }
             _vspeed = 0
@@ -63,7 +63,7 @@ class Player is Entity {
         level.camera.update()
 
         // Change animation depending on what the player is doing
-        if (!level.tileset.collision(hitbox, x, y + 1)) {
+        if (!colliding(level.tileset, x, y + 1)) {
             sprite = Assets.spr_player_jump
         } else if (_hspeed != 0) {
             sprite = Assets.spr_player_walk
