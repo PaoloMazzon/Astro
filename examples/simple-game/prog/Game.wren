@@ -72,14 +72,22 @@ class Game is Level {
         Renderer.draw_font_ext(Assets.fnt_FutilePro, "[#000000][~2]Alt+Enter", 1, 2)
         Renderer.draw_font_ext(Assets.fnt_FutilePro, "[*][~2]Alt+Enter", 2, 0)
 
-        // Draw the game surface to the middle of the screen
+        // Calculate the game surface's scale
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
         Renderer.target = Renderer.RENDER_TARGET_DEFAULT
         var scale = (Renderer.window_width / game_width).floor
         if ((Renderer.window_height / game_height).floor < scale) {
             scale = (Renderer.window_height / game_height).floor
         }
+
+        // Draw a background, outline around the game, and the game surface
+        Renderer.colour_mod = [0.05, 0.05, 0.05, 1]
+        Renderer.draw_texture(Assets.tex_background, 0, 0, Renderer.window_width / Assets.tex_background.width, Renderer.window_height / Assets.tex_background.height, 0, 0, 0)
+        Renderer.colour_mod = "#000000"
+        Renderer.draw_rectangle((Renderer.window_width - (game_width * scale)) / 2 - 2, (Renderer.window_height - (game_height * scale)) / 2 - 2, (game_width * scale) + 4, (game_height * scale) + 4, 0, 0, 0)
+        Renderer.colour_mod = Renderer.COLOUR_DEFAULT
         Renderer.draw_texture(game_surface, (Renderer.window_width - (game_width * scale)) / 2, (Renderer.window_height - (game_height * scale)) / 2, scale, scale, 0, 0, 0)
+        
 
         // Allow the user to toggle fullscreen with Alt+Enter
         if (Keyboard.key(Keyboard.KEY_LALT) && Keyboard.key_pressed(Keyboard.KEY_RETURN)) {
