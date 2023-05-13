@@ -12,8 +12,8 @@ class Player is Entity {
 
     update(level) {
         super.update(level)
-        var speed = 1
-        var gravity = 0.2
+        var speed = 1.2
+        var gravity = 0.18
         var jump_speed = 3
         var ladder_speed = 1
         var touching_ladder = colliding(level.ladder_tileset)
@@ -40,34 +40,17 @@ class Player is Entity {
             _vspeed = Keyboard.keys_as_axis(Keyboard.KEY_UP, Keyboard.KEY_DOWN) * ladder_speed
         }
 
-        // Handle player collisions by moving as close as possible to walls without colliding
+        // Handle player collisions by snapping to a wall if we're about to collide
         if (colliding(level.tileset, x + _hspeed, y)) {
-            while (!colliding(level.tileset, x + _hspeed.sign, y)) {
-                x = x + _hspeed.sign
-            }
+            x = _hspeed > 0 ? level.tileset.snap_right(hitbox, x, y) : level.tileset.snap_left(hitbox, x, y)
             _hspeed = 0
         }
         x = Math.clamp(x + _hspeed, 0, level.tileset.width - 8)
         if (colliding(level.tileset, x, y + _vspeed)) {
-            while (!colliding(level.tileset, x, y + _vspeed.sign)) {
-                y = y + _vspeed.sign
-            }
+            y = _vspeed > 0 ? level.tileset.snap_down(hitbox, x, y) : level.tileset.snap_up(hitbox, x, y)
             _vspeed = 0
         }
         y = Math.clamp(y + _vspeed, 0, level.tileset.height - 8)
-
-        if (Keyboard.key(Keyboard.KEY_S)) {
-            y = level.tileset.snap_down(hitbox, x, y)
-        }
-        if (Keyboard.key(Keyboard.KEY_W)) {
-            y = level.tileset.snap_up(hitbox, x, y)
-        }
-        if (Keyboard.key(Keyboard.KEY_A)) {
-            x = level.tileset.snap_left(hitbox, x, y)
-        }
-        if (Keyboard.key(Keyboard.KEY_D)) {
-            x = level.tileset.snap_right(hitbox, x, y)
-        }
 
         // Center the camera towards the player slowly
         var cameraSpeed = 0.15
