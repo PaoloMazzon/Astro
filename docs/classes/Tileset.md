@@ -16,6 +16,10 @@ weight regardless of how big the tileset is.
  + [tile_height](#tile_height)
  + [[x, y]](#x-y-getter)
  + [[x, y]=](#x-y-setter)
+ + [snap_left](#snap_left)
+ + [snap_right](#snap_right)
+ + [snap_up](#snap_up)
+ + [snap_down](#snap_down)
  + [collision](#collision)
  + [draw](#draw)
  + [draw_to_surface](#draw_to_surface)
@@ -109,6 +113,51 @@ Parameters
 Sets the cell's value at `(x, y)`.
 
 > 📝 This does nothing if you attempt to set a cell value out of bounds.
+
+### snap_left
+`snap_left(hitbox, x, y)`
+
+Parameters
+ + `hitbox -> Hitbox` Hitbox to use in snapping calculations.
+ + `x -> Num` X position of the hitbox.
+ + `y -> Num` Y position of the hitbox.
+
+Snaps a hitbox's x coordinate to the nearest colliding space on the left. The x
+resulting snapped x-position is returned.
+
+### snap_right
+`snap_right(hitbox, x, y)`
+
+Parameters
+ + `hitbox -> Hitbox` Hitbox to use in snapping calculations.
+ + `x -> Num` X position of the hitbox.
+ + `y -> Num` Y position of the hitbox.
+
+Snaps a hitbox's x coordinate to the nearest colliding space on the right. The x
+resulting snapped x-position is returned.
+
+### snap_up
+`snap_up(hitbox, x, y)`
+
+Parameters
+ + `hitbox -> Hitbox` Hitbox to use in snapping calculations.
+ + `x -> Num` X position of the hitbox.
+ + `y -> Num` Y position of the hitbox.
+
+Snaps a hitbox's y coordinate to the nearest colliding space on the top. The y
+resulting snapped y-position is returned.
+
+### snap_down
+`snap_down(hitbox, x, y)`
+
+Parameters
+ + `hitbox -> Hitbox` Hitbox to use in snapping calculations.
+ + `x -> Num` X position of the hitbox.
+ + `y -> Num` Y position of the hitbox.
+
+Snaps a hitbox's y coordinate to the nearest colliding space on the bottom. The y
+resulting snapped y-position is returned.
+
 
 ### collision
 `collision(hitbox, x, y)`

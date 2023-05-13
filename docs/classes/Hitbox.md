@@ -13,6 +13,10 @@ Allows for checking for collisions between two hitboxes and tilesets.
  + [new_rectangle](#new_rectangle)
  + [collision](#collision)
  + [bounding_box](#bounding_box)
+ + [bb_left](#bb_left)
+ + [bb_right](#bb_right)
+ + [bb_top](#bb_top)
+ + [bb_bottom](#bb_bottom)
  
 The following values are also provided:
 
@@ -108,6 +112,43 @@ Parameters
 Returns a list containing the bounding box coordinates of the hitbox. The list is in the form
 `[x1, y1, x2, y2]` where `(x1, y1)` is the top-left corner of the bounding box and `(x2, y2)`
 is the bottom-right of the bounding box.
+
+### bb_left
+`bb_left(x, y)`
+
+Parameters
+ + `x -> Num` X position of the hitbox.
+ + `y -> Num` Y position of the hitbox.
+
+
+Returns the left x coordinate of this hitbox's bounding box.
+
+### bb_right
+`bb_right(x, y)`
+
+Parameters
+ + `x -> Num` X position of the hitbox.
+ + `y -> Num` Y position of the hitbox.
+ 
+Returns the right x coordinate of this hitbox's bounding box.
+
+### bb_top
+`bb_top(x, y)`
+
+Parameters
+ + `x -> Num` X position of the hitbox.
+ + `y -> Num` Y position of the hitbox.
+
+Returns the top y coordinate of this hitbox's bounding box.
+
+### bb_bottom
+`bb_bottom(x, y)`
+
+Parameters
+ + `x -> Num` X position of the hitbox.
+ + `y -> Num` Y position of the hitbox.
+ 
+Returns the bottom y coordinate of this hitbox's bounding box.
 
 -----------
 

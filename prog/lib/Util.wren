@@ -160,6 +160,54 @@ class Hitbox {
         }
         return [0, 0, 0, 0]
     }
+
+    // Individual bounding box pieces
+    bb_left(x, y) {
+        x = x - offset_x
+        y = y - offset_y
+        if (_type == Hitbox.TYPE_CIRCLE) {
+            return x - _r
+        } else if (_type == Hitbox.TYPE_RECTANGLE) {
+            return x
+        }
+        return 0
+    }
+
+    // Individual bounding box pieces
+    bb_right(x, y) {
+        x = x - offset_x
+        y = y - offset_y
+        if (_type == Hitbox.TYPE_CIRCLE) {
+            return x + _r
+        } else if (_type == Hitbox.TYPE_RECTANGLE) {
+            return x + _w
+        }
+        return 0
+    }
+
+    // Individual bounding box pieces
+    bb_top(x, y) {
+        x = x - offset_x
+        y = y - offset_y
+        if (_type == Hitbox.TYPE_CIRCLE) {
+            return y - _r
+        } else if (_type == Hitbox.TYPE_RECTANGLE) {
+            return y
+        }
+        return 0
+    }
+
+    // Individual bounding box pieces
+    bb_bottom(x, y) {
+        x = x - offset_x
+        y = y - offset_y
+        if (_type == Hitbox.TYPE_CIRCLE) {
+            return y + _r
+        } else if (_type == Hitbox.TYPE_RECTANGLE) {
+            return y + _h
+        }
+        return 0
+    }
 }
 
 // Tileset for drawing and colliding with many things at once
@@ -205,52 +253,66 @@ class Tileset {
     // Height of each tile
     tile_height { _h }
 
-    // Returns an element in the tileset
-    [x, y] {
-        var cell = 0
-        if (y >= 0 && y < _tileset.count) {
-            if (x >= 0 && x < _tileset[y].count) {
-                cell = _tileset[y][x]
-            }
+    // Snaps an x position to the nearest grid spot on the left
+    snap_left(hitbox, x, y) {
+        x = Math.floor_to(x, _w)
+        while (!collision(hitbox, x - 1, y) && hitbox.bb_left(x - 1, y) > 0) {
+            x = x - _w
         }
-        return cell
+        return x
     }
 
-    // Sets an element in the tileset
-    [x, y]=(cell) {
-        if (y >= 0 && y < _tileset.count) {
-            if (x >= 0 && x < _tileset[y].count) {
-                _tileset[y][x] = cell
-            }
+    // Same but right
+    snap_right(hitbox, x, y) {
+        x = Math.ceil_to(x, _w)
+        while (!collision(hitbox, x + 1, y) && hitbox.bb_right(x + 1, y) < width) {
+            x = x + _w
         }
+        return x
+    }
+
+    // Same but up
+    snap_up(hitbox, x, y) {
+        y = Math.floor_to(y, _h)
+        while (!collision(hitbox, x, y - 1) && hitbox.bb_top(x, y - 1) > 0) {
+            y = y - _h
+        }
+        return y
+    }
+
+    // Same but down
+    snap_down(hitbox, x, y) {
+        y = Math.ceil_to(y, _h)
+        while (!collision(hitbox, x, y + 1) && hitbox.bb_bottom(x, y + 1) < height) {
+            y = y + _h
+        }
+        return y
     }
 
     // Returns true if a hitbox's bounding box is colliding with a non-zero space
     // on the grid.
     collision(hitbox, x, y) {
         var bb = hitbox.bounding_box(x, y)
-        var cells_wide = ((bb[2] - bb[0]) / _w).ceil + 1
-        var cells_tall = ((bb[3] - bb[1]) / _h).ceil + 1
-        var hit = false
+        // this is to account for bounding boxes that end on a new spot and shouldn't
+        bb[2] = bb[2] % _w == 0 ? bb[2] - 0.1 : bb[2]
+        bb[3] = bb[3] % _h == 0 ? bb[3] - 0.1 : bb[3]
+        var vertices_wide = 1 + ((bb[2] - bb[0]) / _w).ceil
+        var vertices_tall = 1 + ((bb[3] - bb[1]) / _h).ceil
+        var vertex_x = x
+        var vertex_y = y
 
-        // If the bounding box is larger than the tileset's cells we need to account for that
-        for (i in 0..(cells_tall - 1)) {
-            var temp_y = ((bb[1] + (i * _h)) / _h).floor
-            if (i == cells_tall - 1) {
-                temp_y = ((bb[3]) / _h).floor
-            }
-            for (j in 0..(cells_wide - 1)) {
-                var temp_x = ((bb[0] + (j * _w)) / _w).floor
-                if (j == cells_wide - 1) {
-                    temp_x = ((bb[2]) / _w).floor
+        for (y_index in 0..(vertices_tall - 1)) {
+            vertex_x = x
+            for (x_index in 0..(vertices_wide - 1)) {
+                if (this[(vertex_x / _w).floor, (vertex_y / _h).floor] != 0) {
+                    return true
                 }
-                if (this[temp_x, temp_y] != 0) {
-                    hit = true
-                    break
-                }
+                vertex_x = x_index == vertices_wide - 2 ? bb[2] : vertex_x + _w
             }
+            vertex_y = y_index == vertices_tall - 2 ? bb[3] : vertex_y + _h
         }
-        return hit
+
+        return false
     }
 
     // Internal use
@@ -338,6 +400,27 @@ class Tileset {
         for (y in 0..vertical) {
             for (x in 0..horizontal) {
                 Renderer.draw_texture(texture, tile_start_x + (x * texture.width), tile_start_y + (y * texture.height))
+            }
+        }
+    }
+
+    // These are down here cuz vs code syntax highlighting is not good
+    // Returns an element in the tileset
+    [x, y] {
+        var cell = 0
+        if (y >= 0 && y < _tileset.count) {
+            if (x >= 0 && x < _tileset[y].count) {
+                cell = _tileset[y][x]
+            }
+        }
+        return cell
+    }
+
+    // Sets an element in the tileset
+    [x, y]=(cell) {
+        if (y >= 0 && y < _tileset.count) {
+            if (x >= 0 && x < _tileset[y].count) {
+                _tileset[y][x] = cell
             }
         }
     }

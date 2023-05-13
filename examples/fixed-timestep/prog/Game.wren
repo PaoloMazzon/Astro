@@ -5,8 +5,8 @@ class Player is Entity {
     create(level, tiled_data) {
         sprite = Assets.spr_player_idle
         hitbox = Hitbox.new_rectangle(sprite.width - 4, sprite.height - 1)
-        hitbox.x_offset = -2
-        hitbox.y_offset = -1
+        hitbox.offset_x = -2
+        hitbox.offset_y = -1
         _hspeed = 0
         _vspeed = 0
         _gravity = 0

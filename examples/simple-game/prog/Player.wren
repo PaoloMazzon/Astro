@@ -47,15 +47,28 @@ class Player is Entity {
             }
             _hspeed = 0
         }
+        x = Math.clamp(x + _hspeed, 0, level.tileset.width - 8)
         if (colliding(level.tileset, x, y + _vspeed)) {
             while (!colliding(level.tileset, x, y + _vspeed.sign)) {
                 y = y + _vspeed.sign
             }
             _vspeed = 0
         }
-        x = Math.clamp(x + _hspeed, 0, level.tileset.width - 8)
         y = Math.clamp(y + _vspeed, 0, level.tileset.height - 8)
-    
+
+        if (Keyboard.key(Keyboard.KEY_S)) {
+            y = level.tileset.snap_down(hitbox, x, y)
+        }
+        if (Keyboard.key(Keyboard.KEY_W)) {
+            y = level.tileset.snap_up(hitbox, x, y)
+        }
+        if (Keyboard.key(Keyboard.KEY_A)) {
+            x = level.tileset.snap_left(hitbox, x, y)
+        }
+        if (Keyboard.key(Keyboard.KEY_D)) {
+            x = level.tileset.snap_right(hitbox, x, y)
+        }
+
         // Center the camera towards the player slowly
         var cameraSpeed = 0.15
         level.camera.x = Math.clamp(level.camera.x + (((x - (level.game_width / 2)) - level.camera.x) * cameraSpeed), 0, level.tileset.width - level.game_width)
