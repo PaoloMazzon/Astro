@@ -5,6 +5,7 @@ import "lib/Util" for Hitbox, Tileset, Math
 import "lib/Renderer" for Renderer
 import "lib/Tiled" for TiledMap
 import "Assets" for Assets
+import "meta" for Meta
 
 // Framework control functions
 class Engine {
@@ -49,6 +50,9 @@ class Engine {
 
     // For internal use
     foreign static report_debug(entity_count)
+
+    // For internal use
+    foreign static import_exists(string)
 }
 
 // Entity in the game world, child classes must make their own constructor
@@ -273,8 +277,16 @@ class Level {
                     var internal = Engine.get_class(entity["class"])
                     if (internal != null) {
                         var e = add_entity(internal, entity)
+                    } else if (Engine.import_exists(entity["class"].split("::")[0])) {
+                        Meta.eval("import \"" + entity["class"].split("::")[0] + "\"")
+                        internal = Engine.get_class(entity["class"])
+                        if (internal != null) {
+                            var e = add_entity(internal, entity)
+                        } else {
+                            System.print("Unable to find entity \"" + entity["class"] + "\" in map \"" + filename + "\"")
+                        }
                     } else {
-                        System.print("Unable to find entity \"" + entity["class"] + "\" in map " + filename)
+                        System.print("Unable to find entity \"" + entity["class"] + "\" in map \"" + filename + "\"")
                     }
                 }
             } else if (layer == TiledMap.TILE_LAYER) {

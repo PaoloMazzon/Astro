@@ -100,7 +100,8 @@ Parameters
 Loads a [Tiled](https://www.mapeditor.org/) map as a level. See [Tiled Integration](../TiledIntegration.md)
 for more information. Returns a map of `Tileset`s representing each tile layer by their name, for
 instance if you had two tileset layers in Tiled, 'Foreground' and 'Background', you can access their
-`Tileset` equivalent via `tilesets["Background"]` and `tilesets["Foreground"]` respectively.
+`Tileset` equivalent via `tilesets["Background"]` and `tilesets["Foreground"]` respectively. If `load`
+cannot find the entities in the map, it will attempt to import the module that contains them itself.
 
 ### create
 `create()`

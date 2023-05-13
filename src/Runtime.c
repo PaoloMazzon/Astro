@@ -494,3 +494,13 @@ void vksk_RuntimeArgv(WrenVM *vm) {
 void vksk_RuntimeUsingPak(WrenVM *vm) {
 	wrenSetSlotBool(vm, 0, gGamePak != NULL);
 }
+
+void vksk_RuntimeImportExists(WrenVM *vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	const char *name = wrenGetSlotString(vm, 1);
+	static const char *ext = ".wren";
+	char fname[200] = "prog/";
+	strncat(fname, name, 200 - 1 - 5 - 5);
+	strcat(fname, ext);
+	wrenSetSlotBool(vm, 0, _vk2dFileExists(fname));
+}

@@ -73,3 +73,6 @@ void vksk_RuntimeArgv(WrenVM *vm);
 
 // Returns whether or not Astro is using a game pak right now
 void vksk_RuntimeUsingPak(WrenVM *vm);
+
+// Returns true if the module would be found if an import was attempted
+void vksk_RuntimeImportExists(WrenVM *vm);

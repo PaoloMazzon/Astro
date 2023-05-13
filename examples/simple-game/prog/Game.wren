@@ -1,5 +1,4 @@
 import "Player" for Player
-import "Entities" for ResetPlayer, Water
 
 class Game is Level {
     // Random getters

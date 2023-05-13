@@ -217,6 +217,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Engine", true, "report_debug(_)", vksk_RuntimeReportDebug)
 		BIND_METHOD("Engine", true, "argv", vksk_RuntimeArgv)
 		BIND_METHOD("Engine", true, "using_pak", vksk_RuntimeUsingPak)
+		BIND_METHOD("Engine", true, "import_exists(_)", vksk_RuntimeImportExists)
 	} else if (strcmp(module, "lib/Drawing") == 0) {
 		BIND_METHOD("Texture", false, "width", vksk_RuntimeVK2DTextureWidth)
 		BIND_METHOD("Texture", false, "height", vksk_RuntimeVK2DTextureHeight)
