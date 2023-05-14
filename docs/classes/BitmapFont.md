@@ -59,7 +59,7 @@ Parameters
  + `string -> String` String to check the size of.
 
 Returns a list of `[w, h]` representing the width and height of the string if it were to be
-rendered. Ignores tokens, see [draw_font_ext](Renderer.md#draw_font_ext).
+rendered. Ignores tokens, see [draw_font_ext](Renderer#draw_font_ext).
 
 ### size_ext_wrapped
 `size_ext_wrapped(string, width)`
@@ -69,7 +69,7 @@ Parameters
  + `width -> Num` Width of the string before wrapping.
 
 Returns a list of `[w, h]` representing the width and height of the string if it were to be
-rendered wrapped. Ignores tokens, see [draw_font_ext_wrapped](Renderer.md#draw_font_ext_wrapped).
+rendered wrapped. Ignores tokens, see [draw_font_ext_wrapped](Renderer#draw_font_ext_wrapped).
 
 ### free
 `free()`

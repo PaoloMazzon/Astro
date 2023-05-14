@@ -45,10 +45,9 @@ and program closes. This method is also implicitly called when the user closes
 the game window.
 
 ### fps_limit
-`static fps_limit=(fps)`
+Write Only: `static fps_limit=(fps)`
 
-Parameters
- + `fps -> Num` target framerate
+Variable Type: `Num` - target framerate
 
 Forces the engine to process no more than `fps` frames a second. If `fps` is `0`,
 there will be no limit on framerate.
@@ -59,13 +58,12 @@ capped at the monitor's refresh rate (typically 60) regardless of what you set
 with this function.
 
 ### timestep=
-`timestep=(timestep)`
+Write Only: `timestep=(timestep)`
 
-Parameters
- + `timestep -> Num` How many times `process_frame` should be set to true each second.
+Variable Type: `Num` - How many times `process_frame` should be set to true each second.
  
 For fixed-timestep logic. This controls how many times each second that `process_frame` will be
-set to true to let the user handle their own fixed-timestep code. Level's [update](Level.md#update)
+set to true to let the user handle their own fixed-timestep code. Level's [update](Level#update)
 method will only update entities when `process_frame` is true automatically. Set this to 0 (the default)
 to disable fixed-timestep.
 
@@ -73,34 +71,46 @@ to disable fixed-timestep.
 Do not set this value before the first level is initialized; ie, in `init.wren`.
 
 ### timestep_percent
-`timestep_percent`
+Read Only: `timestep_percent`
 
-Returns how far (hypothetically) we are through this current second for fixed timestep interpolation.
+Variable Type: `Num`
+
+How far (hypothetically) we are through this current second for fixed timestep interpolation.
 
 ### process_frame
-`process_frame`
+Read Only: `process_frame`
+
+Variable Type: `Bool`
 
 Returns true if this frame is meant to be processed for fixed timestep games, always returns true
 if `timestep` is 0.
 
 ### delta
-`static delta`
+Read Only: `static delta`
+
+Variable Type: `Num`
 
 Returns the time in seconds the last frame took to process. This is typically useful
 when making game logic not bound to framerate.
 
 ### time
-`static time`
+Read Only: `static time`
+
+Variable Type: `Num`
 
 Returns the time seconds since the engine initialized.
 
 ### fps
-`static fps`
+Read Only: `static fps`
+
+Variable Type: `Num`
 
 Returns the average framerate over the last second.
 
 ### info
-`static info`
+Read Only: `static info`
+
+Variable Type: `Map`
 
 Returns a map containing information about the engine, the map will contain the
 following keys:
@@ -119,12 +129,12 @@ This method finds a variable in a module and returns it, or returns `null` if th
 does not exist.
 
 ### argv
-`static argv`
+Read Only: `static argv`
 
-Returns a list of command line parameters given to the program on startup.
+Variable Type: `List` - List of command line parameters given to the program on startup.
 
 ### using_pak
-`static using_pak`
+Read Only: `static using_pak`
 
-Returns true if Astro is using a `game.pak` file.
+Variable Type: `Bool` - True if Astro is using a `game.pak` file.
 

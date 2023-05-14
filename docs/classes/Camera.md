@@ -10,41 +10,26 @@ Cameras allow you to display specific portions of the game world onto the screen
 way you like. For example, you may showcase a 300x200 part of the game world at position
 (35, 20) to a window that 1000x700. There are no restrictions on the part of the world
 you wish to view and the portions of the window you wish to render to. Since every camera
-is drawn to unless told otherwise (see: [lock_cameras](Renderer.md#lock_cameras)), you can
+is drawn to unless told otherwise (see: [lock_cameras](Renderer#lock_cameras)), you can
 do things like 4-player split screen, or have the first default camera for the UI and next
 4 for split screen, or minimaps, or whatever.
 
  + [new](#new)
- + [type](#type-getter)
- + [type=](#type-setter)
- + [x](#x-getter)
- + [x=](#x-setter)
- + [y](#y-getter)
- + [y=](#y-setter)
- + [width](#width-getter)
- + [width=](#width-setter)
- + [height](#height-getter)
- + [height=](#height-setter)
- + [zoom](#zoom-getter)
- + [zoom=](#zoom-setter)
- + [rotation](#rotation-getter)
- + [rotation=](#rotation-setter)
- + [x_on_screen](#x_on_screen-getter)
- + [x_on_screen=](#x_on_screen-setter)
- + [y_on_screen](#y_on_screen-getter)
- + [y_on_screen=](#y_on_screen-setter)
- + [w_on_screen](#w_on_screen-getter)
- + [w_on_screen=](#w_on_screen-setter)
- + [h_on_screen](#h_on_screen-getter)
- + [h_on_screen=](#h_on_screen-setter)
- + [eyes](#eyes-getter)
- + [eyes=](#eyes-setter)
- + [centre](#centre-getter)
- + [centre=](#centre-setter)
- + [up](#up-getter)
- + [up=](#up-setter)
- + [fov](#fov-getter)
- + [fov=](#fov-setter)
+ + [type](#type)
+ + [x](#x)
+ + [y](#y)
+ + [width](#width)
+ + [height](#height)
+ + [zoom](#zoom)
+ + [rotation](#rotation)
+ + [x_on_screen](#x_on_screen)
+ + [y_on_screen](#y_on_screen)
+ + [w_on_screen](#w_on_screen)
+ + [h_on_screen](#h_on_screen)
+ + [eyes](#eyes)
+ + [centre](#centre)
+ + [up](#up)
+ + [fov](#fov)
  + [update](#update)
 
 Additionally, cameras are all one of these class-defined types:
@@ -59,200 +44,99 @@ Additionally, cameras are all one of these class-defined types:
 Creates a new camera, the new camera is a 1:1 copy of the default camera, meaning its the size
 of the window.
 
-### type (getter)
-`type`
+### type
+`type=(type)` `type`
 
-Returns the camera's type, will be one of .
-
-### type (setter)
-`type=(type)`
-
-Parameters
- + `type -> Num` Should be one of the `CAMERA_TYPE_*` constants defined above.
-
-Sets the camera's type.
-
-### x (getter)
-`x`
-
-Returns `x`.
+Variable Type: `Num` - Should be one of the `CAMERA_TYPE_*` constants defined above.
 
 ### x (setter)
-`x=(x)`
+`x=(x)` `x`
 
-Parameters
- + `x -> Num` X position in the game world.
- 
-Sets the `x`.
+Variable Type: `Num` - X position in the game world.
 
-### y (getter)
-`y`
+### y
+`y=(y)` `y`
 
-Returns `y`.
+Variable Type: `Num` - Y position in the game world.
 
-### y (setter)
-`y=(y)`
+### width
+`width=(w)` `width`
 
-Parameters
- + `y -> Num` Y position in the game world.
- 
-Sets the `y`.
+Variable Type: `Num` - Width of the camera.
 
-### width (getter)
-`width`
+### height
+`height=(h)` `height`
 
-Returns `width`.
+Variable Type: `Num` - Height of the camera.
 
-### width (setter)
-`width=(w)`
+### zoom
+`zoom=(zoom)` `zoom`
 
-Parameters
- + `width -> Num` Width of the camera.
- 
-Sets the `width`.
+Variable Type: `Num` - Zoom multiplier for the camera (default 1).
 
-### height (getter)
-`height`
+### rotation
+`rotation=(rotation)` `rotation`
 
-Returns `height`.
+Variable Type: `Num` - Camera's rotation in radians.
 
-### height (setter)
-`height=(h)`
+### x_on_screen
+`x_on_screen=(x_on_screen)` `x_on_screen`
 
-Parameters
- + `height -> Num` Height of the camera.
- 
-Sets the `height`.
+Variable Type: `Num` - X position in the window the camera should be displayed.
 
-### zoom (getter)
-`zoom`
+### y_on_screen
+`y_on_screen=(y_on_screen)` `y_on_screen`
 
-Returns `zoom`.
+Variable Type: `Num` - Y position in the window the camera should be displayed.
 
-### zoom (setter)
-`zoom=(zoom)`
+### w_on_screen
+`w_on_screen=(w_on_screen)` `w_on_screen`
 
-Parameters
- + `zoom -> Num` Zoom multiplier for the camera (default 1).
- 
-Sets the `zoom`.
+Variable Type: `Num` - Width on screen for the camera.
 
-### rotation (getter)
-`rotation`
+### h_on_screen
+`h_on_screen=(h_on_screen)` `h_on_screen`
 
-Returns `rotation`.
+Variable Type: `Num` - Height on screen for the camera.
 
-### rotation (setter)
-`rotation=(rotation)`
+### eyes
+`eyes=(eyes)` `eyes`
 
-Parameters
- + `rotation -> Num` Camera's rotation in radians.
- 
-Sets the `rotation`.
+Variable Type: `List` - A list containing three elements specifying the x, y, and z components of the eyes vector.
 
-### x_on_screen (getter)
-`x_on_screen`
+Represents where the camera is in 3D space. Take the following example:
 
-Returns `x_on_screen`.
+```python
+camera.up = [0, 1, 0]
+camera.eyes = [2, 1, 0]
+camera.centre = [0, 0, 0]
+```
 
-### x_on_screen (setter)
-`x_on_screen=(x_on_screen)`
+This would make the 3D camera look towards the origin from two units away and 1 unit
+above.
 
-Parameters
- + `x_on_screen -> Num` X position in the window the camera should be displayed.
- 
-Sets the `x_on_screen`.
+### centre
+`centre=(centre)` `centre`
 
-### y_on_screen (getter)
-`y_on_screen`
+Variable Type: `List` - A list containing three elements specifying the x, y, and z components of the centre vector.
 
-Returns `y_on_screen`.
+Controls what the camera is looking at in 3D space.
 
-### y_on_screen (setter)
-`y_on_screen=(y_on_screen)`
+### up
+`up=(up)` `up`
 
-Parameters
- + `y_on_screen -> Num` Y position in the window the camera should be displayed.
- 
-Sets the `y_on_screen`.
+Variable Type: `List` - A list containing three elements specifying the x, y, and z components of the up vector.
 
-### w_on_screen (getter)
-`w_on_screen`
+Represents which direction is up in your 3D space. For example, Minecraft uses the y
+axis as up, so for coordinates similar to that you might want `camera.up = [0, 1, 0]`.
 
-Returns `w_on_screen`.
+### fov
+`fov=(fov)` `fov`
 
-### w_on_screen (setter)
-`w_on_screen=(w_on_screen)`
+Variable Type: `Num` - Field of view in radians.
 
-Parameters
- + `w_on_screen -> Num` Width on screen for the camera.
- 
-Sets the `w_on_screen`.
-
-### h_on_screen (getter)
-`h_on_screen`
-
-Returns `h_on_screen`.
-
-### h_on_screen (setter)
-`h_on_screen=(h_on_screen)`
-
-Parameters
- + `h_on_screen -> Num` Height on screen for the camera.
- 
-Sets the `h_on_screen`.
-
-### eyes (Getter)
-`eyes`
-
-Returns the eyes vector as a list `[x, y, z]`.
-
-### eyes= (Setter)
-`eyes=(eyes)`
-
-Parameters
- + `eyes -> List` A list containing three elements specifying the x, y, and z components of the eyes vector.
-
-Sets the eyes vector for 3D rendering.
-
-### centre (Getter)
-`centre`
-
-Returns the centre vector as a list `[x, y, z]`.
-
-### centre= (Setter)
-`centre=(centre)`
-
-Parameters
- + `centre -> List` A list containing three elements specifying the x, y, and z components of the centre vector.
-
-Sets the centre vector for 3D rendering.
-
-### up (Getter)
-`up`
-
-Returns the up vector as a list `[x, y, z]`.
-
-### up= (Setter)
-`up=(up)`
-
-Parameters
- + `up -> List` A list containing three elements specifying the x, y, and z components of the up vector.
-
-Sets the up vector for 3D rendering.
-
-### fov (Getter)
-`fov`
-
-Returns this camera's field of view in radians.
-
-### fov= (Setter)
-`fov=(fov)`
-
-Parameters
- + `fov -> List` Field of view in radians.
-
-Sets the fov vector for 3D rendering.
+Controls how much of the 3D space the user can see at once. `Num.pi / 2` is generally
+a decent value to start with.
 
 ### update
 `update()`

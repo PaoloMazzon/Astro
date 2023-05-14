@@ -108,7 +108,8 @@ Returns the height of a tile in the tileset.
 
 Returns the cell value located at `(x, y)`.
 
-> 📝 This returns 0 if you attempt to get a cell value out of bounds.
+{: .note }
+This returns 0 if you attempt to get a cell value out of bounds.
 
 ### [x, y]= (setter)
 `[x, y]=(cell)`
@@ -118,7 +119,8 @@ Parameters
 
 Sets the cell's value at `(x, y)`.
 
-> 📝 This does nothing if you attempt to set a cell value out of bounds.
+{: .note }
+This does nothing if you attempt to set a cell value out of bounds.
 
 ### snap_left
 `snap_left(hitbox, x, y)`

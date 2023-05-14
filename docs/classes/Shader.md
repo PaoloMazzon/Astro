@@ -7,7 +7,7 @@ parent: API Documentation
 ## Shader
 In Astro shaders provide a way to manipulate how textures and sprites are rendered.
 You may load shaders in a vertex/fragment pair and then tell the renderer to use
-your shader instead of its default shader with [shader=](Renderer.md#shader).
+your shader instead of its default shader with [shader=](Renderer#shader).
 The default shader just outputs the texture/sprite with the colour mod applied.
 
  + [load](#load)

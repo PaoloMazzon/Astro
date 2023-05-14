@@ -52,7 +52,7 @@ Stops a sound from continuing to play, the handle is no longer valid after calli
 
 Pauses a sound.
 
-### unpase
+### unpause
 `unpause()`
 
 Unpauses a sound.

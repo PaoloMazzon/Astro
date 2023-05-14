@@ -5,7 +5,7 @@ parent: API Documentation
 ---
 
 ## Level
-All levels in Astro must inherit from this class. See [switch_level](Engine.md#switch_level).
+All levels in Astro must inherit from this class. See [switch_level](Engine#switch_level).
 
  + [add_entity](#add_entity)
  + [remove_entity](#remove_entity)

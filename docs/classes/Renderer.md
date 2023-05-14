@@ -260,8 +260,9 @@ Parameters
 Sets the shader that will be used for all further texture rendering (including
 sprites). Set `shader` to `null` to use the default texture shader.
 
-> 📝 It is an error to bind and use a shader without providing a buffer to the shader
-> if it expects one.
+{: .note }
+It is an error to bind and use a shader without providing a buffer to the shader
+if it expects one.
 
 ## draw_rectangle_outline
 `static draw_rectangle_outline(x, y, w, h, rotation, x_origin, y_origin, outline_thickness)`

@@ -14,15 +14,14 @@ at least x bytes behind the size of the buffer, where x is the size of that data
 (the size of each datatype is documented below). If you attempt more bytes than are
 remaining after the pointer all the read meathods will return `null`.
 
-You may write `Buffer`s to file using [write](File.md#write).
+You may write `Buffer`s to file using [write](File#write).
 
  + [new](#new)
  + [open](#open)
  + [open_from_pak](#open_from_pak)
  + [resize](#resize)
  + [size](#size)
- + [pointer](#pointer-getter)
- + [pointer=](#pointer-setter)
+ + [pointer](#pointer)
  + [read_double](#read_double)
  + [write_double](#write_double)
  + [read_float](#read_float)
@@ -82,22 +81,16 @@ Resizes a buffer, does not move the pointer and retains all original data if the
 new size is larger than the previous one.
 
 ### size
-`size`
+Read only: `size`
 
 Returns the size of the buffer in bytes.
 
-### pointer (Setter)
-`pointer=(val)`
+### pointer
+`pointer=(val)` `pointer`
 
-Parameters
- + `val -> Num` Where the pointer should be.
+Variable Type: `Num` - Where the pointer should be.
 
-Moves the pointer to `val`, `val` must be between 0-`size`.
-
-### pointer (Getter)
-`pointer`
-
-Returns the current pointer position.
+Where data is being read from and written to.
 
 ### read_double
 `read_double()`

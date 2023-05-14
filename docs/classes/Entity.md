@@ -6,7 +6,7 @@ parent: API Documentation
 
 ## Entity
 Entities are a simple way to handle objects in the game world. You write your own classes
-that inherit from this class, and then you may pass the child classes to [add_entity](Level.md#add_entity).
+that inherit from this class, and then you may pass the child classes to [add_entity](Level#add_entity).
 This class on its own does nothing.
 
  + [x](#x-getter)
