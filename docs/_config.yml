@@ -30,3 +30,10 @@ callouts:
   warning:
     title: Warning
     color: red
+
+nav_external_links:
+  - title: Astro on Github
+    url: https://github.com/PaoloMazzon/Astro
+    hide_icon: false
+
+footer_content: "Copyright &copy; 2022-2023 Paolo Mazzon. Distributed by an <a href=\"https://github.com/PaoloMazzon/Astro/blob/master/LICENSE.txt\">MIT license.</a>"
