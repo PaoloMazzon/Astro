@@ -1,4 +1,4 @@
 title: Astro Engine
 description: Game engine utilizing Wren for quick and easy development
-url: "https://paolomazzon.github.io"
-theme: just-the-docs
+baseurl: "/Astro"
+remote_theme: pmarsceill/just-the-docs
