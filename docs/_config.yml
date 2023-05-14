@@ -25,12 +25,12 @@ description: >- # this means to ignore newlines until "baseurl:"
   things you need to easily develop games. It uses the scripting 
   language Wren for game logic, taking full advantage of the features 
   that come with an embedded scripting language.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
-github_username:  pdmazzon
+baseurl: "/" # the subpath of your site, e.g. /blog
+url: "https://paolomazzon.github.io/" # the base hostname & protocol for your site, e.g. http://example.com
+github_username: paolomazzon
 
 # Build settings
-theme: just-the-docs
+remote-theme: just-the-docs
 plugins:
   - jekyll-feed
 
