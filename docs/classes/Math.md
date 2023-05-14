@@ -9,18 +9,18 @@ This is a core class that you are free to use before the engine is initialized.
 
 Random math things that come up in game development. All parameters are simply `Num`s.
 
- + [round_to](#round_to)
- + [floor_to](#floor_to)
- + [ceil_to](#ceil_to)
- + [point_angle](#point_angle)
- + [point_distance](#point_distance)
- + [point_in_rectangle](#point_in_rectangle)
- + [point_in_circle](#point_in_circle)
- + [lerp](#lerp)
- + [serp](#serp)
- + [cast_x](#cast_x)
- + [cast_y](#cast_y)
- + [clamp](#clamp)
+ + [round_to()](#round_to)
+ + [floor_to()](#floor_to)
+ + [ceil_to()](#ceil_to)
+ + [point_angle()](#point_angle)
+ + [point_distance()](#point_distance)
+ + [point_in_rectangle()](#point_in_rectangle)
+ + [point_in_circle()](#point_in_circle)
+ + [lerp()](#lerp)
+ + [serp()](#serp)
+ + [cast_x()](#cast_x)
+ + [cast_y()](#cast_y)
+ + [clamp()](#clamp)
 
 ### round_to
 `static round_to(x, y)`

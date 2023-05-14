@@ -7,7 +7,7 @@ parent: API Documentation
 ## Mouse
 Easy access for the mouse.
 
- + [position](#position)
+ + [position()](#position)
  + [left](#left)
  + [left_pressed](#left_pressed)
  + [left_released](#left_released)
@@ -33,47 +33,47 @@ the game world if you want, but it does not work properly with rotated cameras o
 that use `zoom` instead of `width/height`.
 
 ### left
-`static left`
+Read Only: `static left`
 
-Returns true if the left mouse buttons is currently held down.
+Variable Type: `Bool` - True if the left mouse buttons is currently held down.
 
 ### left_pressed
-`static left_pressed`
+Read Only: `static left_pressed`
 
-Returns true if the left mouse button was just pressed this frame.
+Variable Type: `Bool` - True if the left mouse button was just pressed this frame.
 
 ### left_released
-`static left_released`
+Read Only: `static left_released`
 
-Returns true if the left mouse button was just released this frame.
+Variable Type: `Bool` - True if the left mouse button was just released this frame.
 
 ### right
-`static right`
+Read Only: `static right`
 
-Returns true if the right mouse buttons is currently held down.
+Variable Type: `Bool` - True if the right mouse buttons is currently held down.
 
 ### right_pressed
-`static right_pressed`
+Read Only: `static right_pressed`
 
-Returns true if the right mouse button was just pressed this frame.
+Variable Type: `Bool` - True if the right mouse button was just pressed this frame.
 
 ### right_released
-`static right_released`
+Read Only: `static right_released`
 
-Returns true if the right mouse button was just released this frame.
+Variable Type: `Bool` - True if the right mouse button was just released this frame.
 
 ### middle
-`static middle`
+Read Only: `static middle`
 
-Returns true if the middle mouse buttons is currently held down.
+Variable Type: `Bool` - True if the middle mouse buttons is currently held down.
 
 ### middle_pressed
-`static middle_pressed`
+Read Only: `static middle_pressed`
 
-Returns true if the middle mouse button was just pressed this frame.
+Variable Type: `Bool` - True if the middle mouse button was just pressed this frame.
 
 ### middle_released
-`static middle_released`
+Read Only: `static middle_released`
 
-Returns true if the middle mouse button was just released this frame.
+Variable Type: `Bool` - True if the middle mouse button was just released this frame.
 

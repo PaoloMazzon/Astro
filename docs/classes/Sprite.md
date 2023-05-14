@@ -10,25 +10,18 @@ example, with a texture you need to set the x-scale/y-scale, origin, rotation, e
 time you render it but a sprite saves this information. The majority of things in your game
 world will be drawn with sprites.
 
- + [new](#new)
- + [from](#from)
- + [free](#free)
- + [copy](#copy)
- + [frame](#frame-getter)
- + [frame=](#frame-setter)
+ + [new()](#new)
+ + [from()](#from)
+ + [free()](#free)
+ + [copy()](#copy)
+ + [frame](#frame)
  + [frame_count](#frame_count)
- + [delay](#delay-setter)
- + [delay=](#delay-setter)
- + [origin_x](#origin_x-setter)
- + [origin_x=](#origin_x-setter)
- + [origin_y](#origin_y-setter)
- + [origin_y=](#origin_y-setter)
- + [scale_x](#scale_x-setter)
- + [scale_x=](#scale_x-setter)
- + [scale_y](#scale_y-setter)
- + [scale_y=](#scale_y-setter)
- + [rotation](#rotation-setter)
- + [rotation=](#rotation-setter)
+ + [delay](#delay)
+ + [origin_x](#origin_x)
+ + [origin_y](#origin_y)
+ + [scale_x](#scale_x)
+ + [scale_y](#scale_y)
+ + [rotation](#rotation)
  + [width](#width)
  + [height](#height)
 
@@ -80,109 +73,55 @@ new object that uses a sprite in your game world. If you do not, modifying the o
 that everything uses will result in that transformation being shown every time it is
 drawn.
 
-## frame (Getter)
-`frame`
+## frame
+`frame=(frame)` `frame`
 
-Returns the current frame in the sprite's animations.
+Variable Type: `Num` - Index of the frame to go to.
 
-## frame= (Setter)
-`frame=(frame)`
-
-Parameters
- + `frame -> Num` Index of the frame to go to.
- 
-Sets the current animation frame. If `frame` is out of bounds, the frame is set to 0,
 if `frame` is -1, it is set to the last frame in the animation.
 
 ## frame_count
+Read Only: `frame_count`
 
-Returns the number of frames in the animation.
+Variable Type: `Num` - Returns the number of frames in the animation.
 
-## delay (getter)
-`delay`
+## delay
+`delay=` `delay`
 
-Returns the sprite's delay.
+Variable Type: `Num` - Delay between each frame in seconds.
 
-## delay (setter)
-`delay=`
+## origin_x
+`origin_x=` `origin_x`
 
-Parameters
- + `delay -> Num` Delay between each frame in seconds.
+Variable Type: `Num` - X origin of the sprite for rotation.
 
-Sets the sprite's delay.
+## origin_y
+`origin_y=` `origin_y`
 
-## origin_x (getter)
-`origin_x`
+Variable Type: `Num` - Y origin of the sprite for rotation.
 
-Returns a sprite's x origin.
+## scale_x
+`scale_x=` `scale_x`
 
-## origin_x (setter)
-`origin_x=`
+Variable Type: `Num` - X scale to set for this sprite.
 
-Parameters
- + `origin_x -> Num` X origin of the sprite for rotation.
+## scale_y
+`scale_y=` `scale_y`
 
-Sets a sprite's x origin.
+Variable Type: `Num` - Y scale to set for this sprite.
 
-## origin_y (getter)
-`origin_y`
+## rotation
+`rotation=` `rotation`
 
-Returns a sprite's y origin.
-
-## origin_y (setter)
-`origin_y=`
-
-Parameters
- + `origin_y -> Num` Y origin of the sprite for rotation.
-
-Sets a sprite's y origin.
-
-## scale_x (getter)
-`scale_x`
-
-Returns a sprite's x scale.
-
-## scale_x (setter)
-`scale_x=`
-
-Parameters
- + `scale_x -> Num` X scale to set for this sprite.
- 
-Sets a sprite's x scale.
-
-## scale_y (getter)
-`scale_y`
-
-Returns a sprite's y scale.
-
-## scale_y (setter)
-`scale_y=`
-
-Parameters
- + `scale_y -> Num` Y scale to set for this sprite.
- 
-Sets a sprite's y scale.
-
-## rotation (getter)
-`rotation`
-
-Returns the sprite's rotation.
-
-## rotation (setter)
-`rotation=`
-
-Parameters
- + `rotation -> Num` Rotation for the sprite.
-
-Sets a sprite's rotation.
+Variable Type: `Num` - Rotation for the sprite.
 
 ## width
-`width`
+Read Only: `width`
 
-Returns the sprite's width.
+Variable Type: `Num` - Returns the sprite's width.
 
 ## height
-`height`
+Read Only: `height`
 
-Returns the sprite's height.
+Variable Type: `Num` - Returns the sprite's height.
 

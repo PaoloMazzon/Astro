@@ -9,9 +9,9 @@ Polygons are a way of rendering arbitrary polygons that are highly customizable 
 You may specify polygons of any amount of vertices with any colours and draw them scaled/
 rotated/translated/whatever.
 
- + [create](#create)
- + [free](#free)
- + [vertex](#vertex)
+ + [create()](#create)
+ + [free()](#free)
+ + [vertex()](#vertex)
 
 ## create
 `construct create(vertices)`

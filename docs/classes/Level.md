@@ -7,20 +7,19 @@ parent: API Documentation
 ## Level
 All levels in Astro must inherit from this class. See [switch_level](Engine#switch_level).
 
- + [add_entity](#add_entity)
- + [remove_entity](#remove_entity)
- + [update_enabled](#update_enabled-getter)
- + [update_enabled=](#update_enabled-setter)
- + [remove_all_entities](#remove_all_entities)
+ + [add_entity()](#add_entity)
+ + [remove_entity()](#remove_entity)
+ + [update_enabled](#update_enabled)
+ + [remove_all_entities()](#remove_all_entities)
  + [entity_count](#entity_count)
- + [get_entity](#get_entity)
- + [entity_collision](#entity_collision)
- + [get_entities](#get_entities)
- + [load](#load)
- + [create](#create)
- + [pre_frame](#pre_frame)
- + [update](#update)
- + [destroy](#destroy)
+ + [get_entity()](#get_entity)
+ + [entity_collision()](#entity_collision)
+ + [get_entities()](#get_entities)
+ + [load()](#load)
+ + [create()](#create)
+ + [pre_frame()](#pre_frame)
+ + [update()](#update)
+ + [destroy()](#destroy)
 
 
 ### add_entity
@@ -49,20 +48,14 @@ Finds `entity` in the level, calls the entity's `destroy` method, then remove it
 Removes all entities in the level, calling each `destroy` method.
 
 ### entity_count
-`entity_count`
+Read Only: `entity_count`
 
-Returns the number of entities in the level.
+Variable Type: `Num` - The number of entities in the level.
 
-### update_enabled (getter)
-`update_enabled`
+### update_enabled
+`update_enabled=(enabled)` `update_enabled`
 
-Returns whether or not entities' update methods will be called when you call `super.update(level)`.
-
-### update_enabled= (setter)
-`update_enabled=(enabled)`
-
-Parameters
- + `enabled -> Bool` Whether or not to allow entities to update each frame.
+Variable Type: `Bool` - Whether or not to allow entities to update each frame.
 
 Controls whether or not entities' update methods will be called when you call `super.update(level)`.
 This is often useful when you want something like a pause menu.

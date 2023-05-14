@@ -10,8 +10,8 @@ You may load shaders in a vertex/fragment pair and then tell the renderer to use
 your shader instead of its default shader with [shader=](Renderer#shader).
 The default shader just outputs the texture/sprite with the colour mod applied.
 
- + [load](#load)
- + [data=](#data)
+ + [load()](#load)
+ + [data](#data)
  
 ### load
 `construct load(vertex_file, frag_file, buffer_size)`
@@ -90,10 +90,9 @@ Astro uses [Vulkan2D](https://github.com/PaoloMazzon/Vulkan2D) internally, so if
 and [vertex shader](https://github.com/PaoloMazzon/Vulkan2D/blob/master/shaders/tex.vert).
 
 ### data=
-`data=(data)`
+Write Only: `data=(data)`
 
-Parameters
- + `data -> Buffer` Buffer containing the uniform buffer's data.
+Variable Type: `Buffer` - Buffer containing the uniform buffer's data.
 
 Sets the uniform buffer's data. This must be used at least once if the `buffer_size`
 size set in [load](#load) was non-zero. `data.size` must be at least that specified

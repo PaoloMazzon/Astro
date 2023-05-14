@@ -11,10 +11,10 @@ to a surface. Using surfaces you can do things like draw an entire menu to it an
 scroll through it, or render tile sets to the surface once and just render the surface
 for a performance boost. See [set_target](Renderer#set_target).
 
-+ [new](#new)
++ [new()](#new)
 + [width](#width)
 + [height](#height)
-+ [free](#free)
++ [free()](#free)
 
 ### new
 `construct new(width, height)`
@@ -41,14 +41,14 @@ A good way to get a complete clear surface after creating it is
     Renderer.blend_mode = original_blend_mode
 
 ### width
-`width`
+Read Only: `width`
 
-Returns the width of the surface in pixels.
+Variable Type: `Num` - Width of the surface in pixels.
 
 ### height
-`height`
+Read Only: `height`
 
-Returns the height of the surface in pixels.
+Variable Type: `Num` - Height of the surface in pixels.
 
 ### free
 `free()`

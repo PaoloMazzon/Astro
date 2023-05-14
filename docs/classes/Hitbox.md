@@ -11,18 +11,16 @@ Allows for checking for collisions between two hitboxes and tilesets.
  + [r](#r)
  + [w](#w)
  + [h](#h)
- + [offset_x](#offset_x-getter)
- + [offset_x=](#offset_x-setter)
- + [offset_y](#offset_y-getter)
- + [offset_y=](#offset_y-setter)
- + [new_circle](#new_circle)
- + [new_rectangle](#new_rectangle)
- + [collision](#collision)
- + [bounding_box](#bounding_box)
- + [bb_left](#bb_left)
- + [bb_right](#bb_right)
- + [bb_top](#bb_top)
- + [bb_bottom](#bb_bottom)
+ + [offset_x](#offset_x)
+ + [offset_y](#offset_y)
+ + [new_circle()](#new_circle)
+ + [new_rectangle()](#new_rectangle)
+ + [collision()](#collision)
+ + [bounding_box()](#bounding_box)
+ + [bb_left()](#bb_left)
+ + [bb_right()](#bb_right)
+ + [bb_top()](#bb_top)
+ + [bb_bottom()](#bb_bottom)
  
 The following values are also provided:
 
@@ -31,50 +29,34 @@ The following values are also provided:
  + `NO_HIT` This is a hitbox that is guaranteed to return false with any collision check.
 
 ### type
-`type`
+Read Only: `type`
 
-Returns the hitbox's type.
+Variable Type: `Num` - the hitbox's type.
 
 ### r
-`r`
+Read Only: `r`
 
-Returns the hitbox's radius.
+Variable Type: `Num` - the hitbox's radius.
 
 ### w
-`w`
+Read Only: `w`
 
-Returns the hitbox's width.
+Variable Type: `Num` - the hitbox's width.
 
 ### h
-`h`
+Read Only: `h`
 
-Returns the hitbox's height.
-
-### offset_x (Getter)
-`offset_x`
-
-Returns the horizontal offset of the hitbox.
+Variable Type: `Num` - the hitbox's height.
 
 ### offset_x= (Setter)
-`offset_x=(offset)`
+`offset_x=(offset)` `offset_x`
 
-Parameters
- + `offset -> Num` Horizontal offset.
-
-Sets the horizontal offset of the hitbox.
-
-### offset_y (Getter)
-`offset_y`
-
-Returns the vertical offset of the hitbox.
+Variable Type: `Num` - Horizontal offset.
 
 ### offset_y= (Setter)
-`offset_y=(offset)`
+`offset_y=(offset)` `offset_y`
 
-Parameters
- + `offset -> Num` Vertical offset.
-
-Sets the vertical offset of the hitbox.
+Variable Type: `Num` - Vertical offset.
 
 ### new_circle
 `construct new_circle(r)`

@@ -7,13 +7,13 @@ parent: API Documentation
 ## Keyboard
 Easy access for the keyboard.
 
- + [key](#key)
- + [key_pressed](#key_pressed)
- + [key_released](#key_released)
+ + [key()](#key)
+ + [key_pressed()](#key_pressed)
+ + [key_released()](#key_released)
  + [last_key](#last_key)
  + [last_key_code](#last_key_code)
- + [key_string](#key_string)
- + [keys_as_axis](#keys_as_axis)
+ + [key_string()](#key_string)
+ + [keys_as_axis()](#keys_as_axis)
 
 The following values are also provided:
 
@@ -286,14 +286,14 @@ Parameters:
 Returns true if `key` was released this frame.
 
 ### last_key
-`static last_key`
+Read Only: `static last_key`
 
-Returns a string containing the key most recently pressed.
+Variable Type: `String` - A string containing the key most recently pressed.
 
 ### last_key_code
-`static last_key_code`
+Read Only: `static last_key_code`
 
-Returns a key code for the most recently pressed key (so you may use that
+Variable Type: `Num` - A key code for the most recently pressed key (so you may use that
 code with any other key function).
 
 ### key_string

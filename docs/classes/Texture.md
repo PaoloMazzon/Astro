@@ -8,10 +8,10 @@ parent: API Documentation
 2D images in Astro are represented by `Texture`. They are quite simple but very flexible when it
 comes to rendering them.
 
- + [new](#new)
+ + [new()](#new)
  + [width](#width)
  + [height](#height)
- + [free](#free)
+ + [free()](#free)
 
 ### new
 `construct new(filename)`
@@ -22,14 +22,14 @@ Parameters
 Loads an image as a texture.
 
 ### width
-`width`
+Read Only: `width`
 
-Returns the width of the texture in pixels.
+Variable Type: `Num` - Width of the texture in pixels.
 
 ### height
-`height`
+Read Only: `height`
 
-Returns the height of the texture in pixels.
+Variable Type: `Num` - Height of the texture in pixels.
 
 ### free
 `free()`

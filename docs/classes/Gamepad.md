@@ -10,23 +10,21 @@ behind the scenes and you need only index the four possible gamepads with 0-3. M
 explanatory and they are all safe to use at any time regardless of whether or not the desired controller is currently
 connected.
 
- + [stick_deadzone](#stick_deadzone-getter)
- + [stick_deadzone=](#stick_deadzone-setter)
- + [trigger_deadzone](#trigger_deadzone-getter)
- + [trigger_deadzone=](#trigger_deadzone-setter)
+ + [stick_deadzone](#stick_deadzone)
+ + [trigger_deadzone](#trigger_deadzone)
  + [controllers_connected](#controllers_connected)
- + [button_pressed](#button_pressed)
- + [button_released](#button_released)
- + [button](#button)
- + [left_stick_x](#left_stick_x)
- + [left_stick_y](#left_stick_y)
- + [right_stick_x](#right_stick_x)
- + [right_stick_y](#right_stick_y)
- + [left_trigger](#left_trigger)
- + [right_trigger](#right_trigger)
- + [rumble](#rumble)
- + [is_connected](#is_connected)
- + [name](#name)
+ + [button_pressed()](#button_pressed)
+ + [button_released()](#button_released)
+ + [button()](#button)
+ + [left_stick_x()](#left_stick_x)
+ + [left_stick_y()](#left_stick_y)
+ + [right_stick_x()](#right_stick_x)
+ + [right_stick_y()](#right_stick_y)
+ + [left_trigger()](#left_trigger)
+ + [right_trigger()](#right_trigger)
+ + [rumble()](#rumble)
+ + [is_connected()](#is_connected)
+ + [name()](#name)
 
 The following values are provided to index buttons:
 
@@ -46,36 +44,24 @@ The following values are provided to index buttons:
  + `BUTTON_DPAD_LEFT`
  + `BUTTON_DPAD_RIGHT`
 
-### stick_deadzone (Getter)
-`static stick_deadzone`
+### stick_deadzone
+`static stick_deadzone=(dz)` `stick_deadzone`
 
-Returns the current stick deadzone for all controllers and sticks. It is 0.1 by default.
+Variable Type: `Num` - Deadzone value from 0-1.
 
-### stick_deadzone= (Setter)
-`static stick_deadzone=(dz)`
+The stick deadzone for all controllers and all sticks.
 
-Parameters
- + `dz -> Num` Deadzone value from 0-1.
+### trigger_deadzone
+`static trigger_deadzone=(dz)` `trigger_deadzone`
 
-Sets the stick deadzone for all controllers and all sticks.
+Variable Type: `Num` - Deadzone value from 0-1.
 
-### trigger_deadzone (Getter)
-`static trigger_deadzone`
-
-Returns the current trigger deadzone for all controllers and triggers. It is 0.1 by default.
-
-### trigger_deadzone= (Setter)
-`static trigger_deadzone=(dz)`
-
-Parameters
- + `dz -> Num` Deadzone value from 0-1.
-
-Sets the trigger deadzone for all controllers and all triggers.
+The trigger deadzone for all controllers and all triggers.
 
 ### controllers_connected
-`static controllers_connected`
+Read Only: `static controllers_connected`
 
-Returns the number of controllers currently connected.
+Variable Type: `Num` - Number of controllers currently connected.
 
 ### button_pressed
 `static button_pressed(index, button)`

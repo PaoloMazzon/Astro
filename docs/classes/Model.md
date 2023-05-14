@@ -17,10 +17,10 @@ then use a 3D camera to draw them. To have an effect like that of the save point
 
 You may also attempt to sync up the 2D and 3D cameras, there are no restrictions that way.
 
- + [create](#create)
- + [free](#free)
- + [load](#load)
- + [vertex](#vertex)
+ + [create()](#create)
+ + [free()](#free)
+ + [load()](#load)
+ + [vertex()](#vertex)
 
 ### create
 `construct create(vertices, indices, texture)`

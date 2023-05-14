@@ -12,24 +12,23 @@ somewhat expensive, however, so you will often want to draw the tileset to a [Su
 and just render that to offset the cost. Collisions on the other hand are extremely light
 weight regardless of how big the tileset is.
 
- + [new](#new)
- + [add_tileset](#add_tileset)
+ + [new()](#new)
+ + [add_tileset()](#add_tileset)
  + [width](#width)
  + [height](#height)
  + [tiles_wide](#tiles_wide)
  + [tiles_tall](#tiles_tall)
  + [tile_width](#tile_width)
  + [tile_height](#tile_height)
- + [[x, y]](#x-y-getter)
- + [[x, y]=](#x-y-setter)
- + [snap_left](#snap_left)
- + [snap_right](#snap_right)
- + [snap_up](#snap_up)
- + [snap_down](#snap_down)
- + [collision](#collision)
- + [draw](#draw)
- + [draw_to_surface](#draw_to_surface)
- + [draw_tiling_background](#draw_tiling_background)
+ + [[x, y]](#x-y)
+ + [snap_left()](#snap_left)
+ + [snap_right()](#snap_right)
+ + [snap_up()](#snap_up)
+ + [snap_down()](#snap_down)
+ + [collision()](#collision)
+ + [draw()](#draw)
+ + [draw_to_surface()](#draw_to_surface)
+ + [draw_tiling_background()](#draw_tiling_background)
 
 ### new
 `construct new(tileset, texture, w, h)`
@@ -74,53 +73,43 @@ another tileset at GID 100, anytime you have a cell with value 100 or higher, it
 from the new tileset with frame cell - 100. This is primarily for Tiled map loading.
 
 ### width
-`width`
+Read Only: `width`
 
-Returns the total width of the tileset in pixels.
+Variable Type: `Num` - Total width of the tileset in pixels.
 
 ### height
-`height`
+Read Only: `height`
 
-Returns the total height of the tileset in pixels.
+Variable Type: `Num` - Total height of the tileset in pixels.
 
 ### tiles_wide
-`tiles_wide`
+Read Only: `tiles_wide`
 
-Returns the width of the tileset in tiles.
+Variable Type: `Num` - Width of the tileset in tiles.
 
 ### tiles_tall
-`tiles_tall`
+Read Only: `tiles_tall`
 
-Returns the height of the tileset in tiles.
+Variable Type: `Num` - Height of the tileset in tiles.
 
 ### tile_width
-`tile_width`
+Read Only: `tile_width`
 
-Returns the width of a tile in the tileset.
+Variable Type: `Num` - Width of a tile in the tileset.
 
 ### tile_height
-`tile_height`
+Read Only: `tile_height`
 
-Returns the height of a tile in the tileset.
+Variable Type: `Num` - Height of a tile in the tileset.
 
-### [x, y] (getter)
-`[x, y]`
+### [x, y]
+`[x, y]` `[x, y]=`
 
-Returns the cell value located at `(x, y)`.
-
-{: .note }
-This returns 0 if you attempt to get a cell value out of bounds.
-
-### [x, y]= (setter)
-`[x, y]=(cell)`
-
-Parameters
- + `cell -> Num` Sprite index + 1 to set at this location.
-
-Sets the cell's value at `(x, y)`.
+Variable Type: `Num` - Cell value located at `(x, y)`.
 
 {: .note }
-This does nothing if you attempt to set a cell value out of bounds.
+This returns 0 if you attempt to get a cell value out of bounds, and will
+do nothing if you attempt to set a cell out of bounds.
 
 ### snap_left
 `snap_left(hitbox, x, y)`
