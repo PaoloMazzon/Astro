@@ -1,3 +1,9 @@
+---
+layout: default
+title: Buffer
+parent: API Documentation
+---
+
 ## Buffer
 `Buffer` provides a way to access binary buffers in the filesystem or just in memory
 from Wren. Be aware that internally all number in Wren are doubles meaning that any
@@ -269,6 +275,3 @@ Parameters
 
 Writes a `Bool` to the buffer as a bool, moving the pointer 1 bytes forward.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

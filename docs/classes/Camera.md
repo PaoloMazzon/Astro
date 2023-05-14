@@ -1,3 +1,9 @@
+---
+layout: default
+title: Camera
+parent: API Documentation
+---
+
 ## Camera
 Cameras are a powerful interface for controlling what is rendered on screen and where.
 Cameras allow you to display specific portions of the game world onto the screen any
@@ -254,6 +260,3 @@ Sets the fov vector for 3D rendering.
 Applies whatever changes you made to this camera, you may call this whenever but the effects
 will only be visible on the start of the next frame.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

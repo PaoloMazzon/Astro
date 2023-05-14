@@ -1,3 +1,9 @@
+---
+layout: default
+title: Model
+parent: API Documentation
+---
+
 ## Model
 Astro is a 2D-first engine but there is still very primitive 3D support through models.
 You may load 3D models from `.obj` files or create them from a list of vertices. You may
@@ -58,6 +64,3 @@ Parameters
 
 Returns a new vertex with given components.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

@@ -1,3 +1,9 @@
+---
+layout: default
+title: Polygon
+parent: API Documentation
+---
+
 ## Polygon
 Polygons are a way of rendering arbitrary polygons that are highly customizable as well.
 You may specify polygons of any amount of vertices with any colours and draw them scaled/
@@ -42,6 +48,3 @@ Parameters
 
 Returns a vertex with given components.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

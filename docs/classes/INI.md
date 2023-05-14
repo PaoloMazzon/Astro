@@ -1,3 +1,9 @@
+---
+layout: default
+title: INI
+parent: API Documentation
+---
+
 ## INI 
 You can easily access and save data to INI configuration files with this class.
 If you just need some simple data saved to a file this class will often be easier
@@ -110,6 +116,3 @@ Parameters
  
 Sets a value in the INI.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

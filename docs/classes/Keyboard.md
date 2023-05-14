@@ -1,3 +1,9 @@
+---
+layout: default
+title: Keyboard
+parent: API Documentation
+---
+
 ## Keyboard
 Easy access for the keyboard.
 
@@ -308,6 +314,3 @@ Parameters
 Turns two keys into an axis. Simply, if both or neither key is pressed 0 is returned,
 if negative is pressed but not positive, -1 is returned, and vice versa for positive.  
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

@@ -1,3 +1,10 @@
+---
+layout: default
+title: Game Paks
+nav_order: 6
+has_children: false
+---
+
 ## game.pak
 
 You may choose to compile all of your game assets and code into a single `game.pak`
@@ -20,6 +27,3 @@ in Astro's source, it is merely a way to not expose your entire game to most use
 `.pak` files are read-only, which is why you may load files/buffers from it but you can't
 save them to it after.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

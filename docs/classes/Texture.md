@@ -1,3 +1,9 @@
+---
+layout: default
+title: Texture
+parent: API Documentation
+---
+
 ## Texture
 2D images in Astro are represented by `Texture`. They are quite simple but very flexible when it
 comes to rendering them.
@@ -30,6 +36,3 @@ Returns the height of the texture in pixels.
 
 Forces the texture to be freed without waiting for the garbage collector.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

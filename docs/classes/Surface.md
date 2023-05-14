@@ -1,3 +1,9 @@
+---
+layout: default
+title: Surface
+parent: API Documentation
+---
+
 ## Surface
 Surfaces are textures that you may also render to. This means that you can use all
 the `Renderer.draw_texture` methods on surfaces, as well as set the render target
@@ -49,6 +55,3 @@ Returns the height of the surface in pixels.
 
 Forces the texture to be freed without waiting for the garbage collector.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

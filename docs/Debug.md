@@ -1,3 +1,11 @@
+---
+layout: default
+title: Debugging
+nav_order: 7
+has_children: false
+---
+
+
 ## Debug Utilities
 
 Astro has a few different tools you can enable to make debugging a bit easier. These
@@ -24,6 +32,3 @@ For a brief explanation of them,
  + `gcBetweenLevels` tells the engine to call the garbage collector in between each level
  switch.
 
------------
-
-[Getting Started](GettingStarted.md) | [API Reference](API.md)

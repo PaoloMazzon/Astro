@@ -1,3 +1,9 @@
+---
+layout: default
+title: Font
+parent: API Documentation
+---
+
 ## Font
 You may render text with a call to `Renderer.draw_font`.
 
@@ -31,6 +37,3 @@ rendered.
 
 Forces a font to be freed from memory without waiting for the garbage collector.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

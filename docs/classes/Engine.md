@@ -1,3 +1,9 @@
+---
+layout: default
+title: Engine
+parent: API Documentation
+---
+
 ## Engine
 The Engine class represents top-level static methods that assist in many
 aspects of game development.
@@ -119,6 +125,3 @@ Returns a list of command line parameters given to the program on startup.
 
 Returns true if Astro is using a `game.pak` file.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

@@ -1,3 +1,9 @@
+---
+layout: default
+title: Sprite
+parent: API Documentation
+---
+
 ## Sprite
 Sprites are small animations that also have the convenience of saving render settings. For
 example, with a texture you need to set the x-scale/y-scale, origin, rotation, etc every
@@ -179,6 +185,3 @@ Returns the sprite's width.
 
 Returns the sprite's height.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

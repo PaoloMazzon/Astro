@@ -1,3 +1,9 @@
+---
+layout: default
+title: Mouse
+parent: API Documentation
+---
+
 ## Mouse
 Easy access for the mouse.
 
@@ -70,6 +76,3 @@ Returns true if the middle mouse button was just pressed this frame.
 
 Returns true if the middle mouse button was just released this frame.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

@@ -1,3 +1,11 @@
+---
+layout: default
+title: Tiled Integration
+nav_order: 4
+has_children: false
+---
+
+
 # Tiled Integration
 Astro supports the use of [Tiled](https://www.mapeditor.org/) as a level editor. With the
 use of [load](./classes/Level.md#load) we can load a Tiled map and create all the necessary
@@ -31,6 +39,3 @@ properly.
 
 Feel free to check the demo to see all this in action.
 
------------
-
-[Getting Started](GettingStarted.md) | [API Reference](API.md)

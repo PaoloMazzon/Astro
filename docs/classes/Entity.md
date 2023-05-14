@@ -1,3 +1,9 @@
+---
+layout: default
+title: Entity
+parent: API Documentation
+---
+
 ## Entity
 Entities are a simple way to handle objects in the game world. You write your own classes
 that inherit from this class, and then you may pass the child classes to [add_entity](Level.md#add_entity).
@@ -183,6 +189,3 @@ Parameters
 
 Called by the level at the end of the level or when the entity is destroyed.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

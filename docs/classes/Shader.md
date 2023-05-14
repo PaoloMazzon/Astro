@@ -1,3 +1,9 @@
+---
+layout: default
+title: Shader
+parent: API Documentation
+---
+
 ## Shader
 In Astro shaders provide a way to manipulate how textures and sprites are rendered.
 You may load shaders in a vertex/fragment pair and then tell the renderer to use
@@ -94,6 +100,3 @@ size set in [load](#load) was non-zero. `data.size` must be at least that specif
 amount. Each time the shader is used, this data will be provided to the shader until
 this is updated. You may update shader data as many times as you wish per frame.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

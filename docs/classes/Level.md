@@ -1,3 +1,9 @@
+---
+layout: default
+title: Level
+parent: API Documentation
+---
+
 ## Level
 All levels in Astro must inherit from this class. See [switch_level](Engine.md#switch_level).
 
@@ -131,6 +137,3 @@ Must be overridden in child classes, called when the level is unloaded by Astro.
 to call `super.destroy()` somewhere in the new method.
 
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

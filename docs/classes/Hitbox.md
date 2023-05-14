@@ -1,3 +1,9 @@
+---
+layout: default
+title: Hitbox
+parent: API Documentation
+---
+
 ## Hitbox
 Allows for checking for collisions between two hitboxes and tilesets.
 
@@ -150,6 +156,3 @@ Parameters
  
 Returns the bottom y coordinate of this hitbox's bounding box.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

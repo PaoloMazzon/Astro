@@ -1,3 +1,9 @@
+---
+layout: default
+title: Math
+parent: API Documentation
+---
+
 ## Math
 This is a core class that you are free to use before the engine is initialized.
 
@@ -81,6 +87,3 @@ to implement movement with direction and speed instead of x/y based movement.
 If `x` is greater that `max`, `max` is returned. If `x` is less than `min`, `min` is returned. Otherwise, just
 `x` is returned.
     
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

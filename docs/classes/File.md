@@ -1,3 +1,9 @@
+---
+layout: default
+title: File
+parent: API Documentation
+---
+
 ## File
 `File` provides some basic tools for manipulating text files. This is a core class
 that you are free to use before the engine is initialized.
@@ -90,7 +96,3 @@ Parameters
 Returns a list of files and directories in a directory. The list does not differentiate
 between the two so you will need to use `dir_exists` and `exists` to discern between the
 two.
-
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

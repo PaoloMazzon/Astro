@@ -81,7 +81,8 @@ of things you can expect Astro to be capable of.
 TODO
 ====
 
+ + Documentation website
+ + JSON asset file
+ + Better Tiled loader
  + Networking support
- + Built-in mod support
  + Spatial hash maps
- + More example projects

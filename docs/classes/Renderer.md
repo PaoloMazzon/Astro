@@ -1,3 +1,9 @@
+---
+layout: default
+title: Renderer
+parent: API Documentation
+---
+
 ## Renderer
 The `Renderer` class contains methods that are used in drawing and managing the display.
 
@@ -457,6 +463,3 @@ Parameters
 
 Draws a model. See [Model](Model.md).
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

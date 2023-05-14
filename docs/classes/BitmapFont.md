@@ -1,3 +1,9 @@
+---
+layout: default
+title: BitmapFont
+parent: API Documentation
+---
+
 ## BitmapFont
 Bitmap fonts are a way to render images as text with complete control. With bitmap fonts,
 you load an image as a character set in a specified range - often 33 to 127 or `$` - `~`.
@@ -69,6 +75,3 @@ rendered wrapped. Ignores tokens, see [draw_font_ext_wrapped](Renderer.md#draw_f
 
 Forces a font to be freed from memory without waiting for the garbage collector.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

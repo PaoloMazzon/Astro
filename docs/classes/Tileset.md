@@ -1,3 +1,9 @@
+---
+layout: default
+title: Tileset
+parent: API Documentation
+---
+
 ## Tileset
 Tilesets are a tool for managing large amounts of static objects that all have uniform
 width and height. Typically you would use a tileset (or several because they're so light)
@@ -209,6 +215,3 @@ Draws a background tiling to cover the entire camera and with a parallax value. 
 a `parallax` value other that 0 or 1 you can create effects where it appears that the background
 is far away from the camera. 
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

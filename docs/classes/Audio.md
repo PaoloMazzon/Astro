@@ -1,3 +1,9 @@
+---
+layout: default
+title: Audio
+parent: API Documentation
+---
+
 ## Audio
 Class for playing and managing playing audio. Audio must be loaded with [AudioData](AudioData.md)
 before its able to be played with this class.
@@ -55,6 +61,3 @@ Unpauses a sound.
 
 Stops all currently playing sounds, making all existing Audio handles invalid.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)

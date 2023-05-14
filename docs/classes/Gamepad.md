@@ -1,3 +1,9 @@
+---
+layout: default
+title: Gamepad
+parent: API Documentation
+---
+
 ## Gamepad
 The `Gamepad` class is a simple way to manage gamepad input in Astro. They are automatically tracked
 behind the scenes and you need only index the four possible gamepads with 0-3. Most of the methods are very self
@@ -178,6 +184,3 @@ Parameters
  
 Returns a string name for the specified controller. If there is none connected in that index, it returns `"N/A"`.
 
------------
-
-[Getting Started](../GettingStarted.md) | [API Reference](../API.md)
