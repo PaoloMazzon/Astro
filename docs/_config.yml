@@ -1,4 +1,6 @@
 title: Astro Engine
 description: Game engine utilizing Wren for quick and easy development
-baseurl: "/Astro"
+baseurl: ""
+logo: logo.png
 remote_theme: pmarsceill/just-the-docs
+enable_copy_code_button: true

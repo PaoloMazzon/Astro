@@ -1,4 +1,4 @@
-![Astro Engine](./examples/fixed-timestep/assets/banner.png)
+![Astro Engine](./docs/banner.png)
 
 Astro Engine is a game development framework that provides all the things you need to
 easily develop games. It uses the scripting language [Wren](https://github.com/wren-lang/wren)
@@ -16,13 +16,13 @@ Features
  + Manual and automatic resource management
  + Fast and very flexible cameras
  + Simple level and entity management
- + Complete [API documentation](docs/API.md)
+ + Complete [API documentation](docs/classes/index.md)
  + Load [Tiled](https://www.mapeditor.org/) maps automatically
 
 Getting Started
 ===============
 See [Getting Started](docs/GettingStarted.md) for a detailed breakdown, and check out the
-[API Reference](docs/API.md) for everything else. In short, you need a Wren file the engine
+[API Reference](docs/classes/index.md) for everything else. In short, you need a Wren file the engine
 will use as an entry point and at least one level.
     
     class Game is Level {
