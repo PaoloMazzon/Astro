@@ -156,7 +156,7 @@ Variable Type: `List or String` - A list of `[red, green, blue, alpha]` values f
 The renderer's colour modifier. You may set it with a hex colour, but only a list of
 R, G, B, A normalized values will be returned by `colour_mod`.
 
-```python
+```javascript
 Renderer.colour_mod = "#ff0000"
 System.print(Renderer.colour_mod) // [1, 0, 0, 1]
 ```

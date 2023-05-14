@@ -9,30 +9,30 @@ has_children: false
 # Getting Started
 This documentation only covers Astro, for a guide on how to use Astro's language of
 choice, [Wren](https://github.com/wren-lang/wren), visit the [Wren website](https://wren.io/getting-started.html).
-
-To launch a game in Astro you need 3 things:
-1. The runtime (`Astro.exe` and related files)
-2. Astro standard library
-3. A `prog/init.wren` file
-
-We'll cover these three things first then describe how to use the engine.
+To launch an Astro project, you need the runtime (Astro.exe) and at least one Wren file named
+`prog/init.wren` that tells the engine where and how to start execution.
 
 ## Runtime
-You may either build the C runtime yourself or download a binary if their available. From there
-you only need to run the program and it will take care of the majority of things, bar the next
-two points.
+You may either build the C runtime yourself or download a binary if their available. The runtime
+is responsible for the Wren virtual machine, asset compiling, and error bindings to the engine
+functionality. 
+
+[Downloads](https://github.com/PaoloMazzon/Astro/releases)
 
 ## Astro Standard Library
-The Astro standard library is automatically imported in every file Astro loads. Check the
-[API Reference](./API) for a complete list of all classes and methods in said classes.
+The Astro standard library is automatically imported in every file Astro loads. This means
+that anywhere in your game you don't need to import anything Astro defines, simply use the method.
+For example, you don't need to import the keyboard, just use it via something like
+`Keyboard.key(Keyboard.KEY_LEFT)`. Check the [API Reference](classes/index) for a complete list 
+of all classes and methods in said classes.
 
 ## `prog/init.wren`
-You `init.wren` file is the "entry point" of your game. It must contain the two variables `renderer_config`
+The `init.wren` file is the "entry point" of your game. It must contain the two variables `renderer_config`
 and `start_level`. `start_level` is an instance of `Level` that the engine will use as the
-starting level. `renderer_config` must be a map containing specific keys. Additionally, you may provide
+entry point. `renderer_config` must be a map containing specific keys. Additionally, you may provide
 a third variable, `window_icon`, which will be a path to an image Astro will set as the window's icon.
 
-```python
+```javascript
 import "Game" for Game
 
 var renderer_config = {
@@ -52,20 +52,12 @@ var start_level = Game.new()
 
 As you can see, the `Renderer` class provides values to use for msaa, screen_mode, and filter_type.
 Check [config](classes/Renderer.md#config) for details on each of the map's keys and expected
-values.
+values, but the above example has all required map keys. The level instance you pass will eventually
+have its [create](classes/Level#create) method called once the engine has fully initialized.
 
-> 📝 When the `init.wren` file is loaded into Astro, the rest of the engine is yet to initialize.
-> In practice this means you may **not** call most engine-related methods.  
-  
-After Astro loads this file and extracts the data it wants from it, it will then
-initialize the rest of the engine and call the level's `create()` method. From
-there your game starts. See the [API Reference](classes/index) for help and check the
-[Asset Compiler](AssetCompiler) for info on how to automate asset management.
-Feel free to play around with the demo game.
+{: .note }
+When the `init.wren` file is loaded into Astro most of the engine is not yet initialized - in particular
+anything that handles user input, the window and renderer, and all the user assets. You may use things like
+[INI](classes/INI) or [File](classes/File) to read saved settings, but not much past that.
 
-## Packaging Your Game
-
-Once you wish to ship your game, you may either just ship the code and assets as they
-are, or alternatively you may use `Packer.exe` to package your game into a single file
-and executable. See [Pak](Pak) for more details.
 

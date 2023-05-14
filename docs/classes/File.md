@@ -108,7 +108,7 @@ Assuming you have a directory of
     assets/
     docs/
 
-```python
+```javascript
 var directory = File.get_directory("./")
 for (filename in directory) {
     if (File.exists(filename)) {

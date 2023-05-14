@@ -1,3 +1,11 @@
+---
+layout: default
+title: Asset Compiler
+nav_order: 7
+has_children: false
+---
+
+
 # Asset Compiler
 Astro automatically creates a Wren module when it starts called `Assets` with one class:
 `Assets`. In this class you will find all of the resources your game needs from the folder
@@ -73,7 +81,3 @@ You must also outline `.ttf` files in the `assets.ini` file as well, its quite s
 
 `size` is the height of the font in pixels, and `ustart` to `uend` is the unicode range to
 preload. `aa` is whether or not to apply anti-aliasing to the font.
-
---------
-
-[Getting Started](GettingStarted) | [API Reference](API)

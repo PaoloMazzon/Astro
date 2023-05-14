@@ -106,7 +106,7 @@ Variable Type: `List` - A list containing three elements specifying the x, y, an
 
 Represents where the camera is in 3D space. Take the following example:
 
-```python
+```javascript
 camera.up = [0, 1, 0]
 camera.eyes = [2, 1, 0]
 camera.centre = [0, 0, 0]

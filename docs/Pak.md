@@ -8,14 +8,21 @@ has_children: false
 ## game.pak
 
 You may choose to compile all of your game assets and code into a single `game.pak`
-file by running the tool `Packer.exe` in your root game directory. `Packer.exe` is
-automatically built with the top-level CMake project and when ran will put each
-file from `assets/` and `prog/` into `game.pak`.
+file. `Packer.exe` is automatically built with the top-level CMake project and when
+ran will put each file from `assets/` and `prog/` into `game.pak`.
+
+To build your game.pak file, copy Packer to your projects directory (or call it from
+your project's root directory) and exectute
+
+    $ ./Packer
+
+## Usage
 
 When Astro is launched it checks for `game.pak` and if it finds one it will load
 most assets from there with the exception of some various tools like [File](classes/File)
 and [Buffer](classes/Buffer) which need the user to specify if they wish to load
-from `game.pak`.
+from `game.pak`. [using_pak](classes/Engine#using_pak) can tell your program if
+a `game.pak` is currently in use at runtime.
 
 For most intents and purposes you may just work on your projects as normal and package
 your game up with `Packer.exe` at the end.
