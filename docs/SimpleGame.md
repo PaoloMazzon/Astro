@@ -129,10 +129,159 @@ the game isn't terribly important to the game's functionality so it won't be cov
 here.
 
 ## Player Entity
-TODO: This
+The player is the most complicated piece of code in the demo, and as such we are
+going to look at it more algorithmically. In particular we will look at the animations
+and movement code.
+
+Player animations are all pretty straight-forward but buried in the code,
+so briefly, we animate the player with 3 different sprites: idle, movement, and jumping.
+The jumping sprite is used when the player is not touching the ground, the movement
+sprite when the player is actively moving (horizontal speed is not zero), and idle
+otherwise. We also make the sprite face left by setting the current sprite's x
+scale to -1. This has the unintended effect of mirroring it, so we move the sprite's
+origin by its width to account for that. We also keep track of a `_facing` variable
+to know at all times if the player should be facing right (+1) or left (-1).
+
+```javascript
+if (!colliding(level.tileset, x, y + 1)) {
+    sprite = Assets.spr_player_jump
+} else if (_hspeed != 0) {
+    sprite = Assets.spr_player_walk
+} else {
+    sprite = Assets.spr_player_idle
+}
+if (_facing == 1) {
+    sprite.scale_x = 1
+    sprite.origin_x = 0
+} else {
+    sprite.scale_x = -1
+    sprite.origin_x = 8
+}
+```
+
+The player may move horizontally and vertically, to represent this we use two
+variables: `_hspeed` and `_vspeed`. The player may only control their vertical
+and horizontal speed, and not their coordinates directly. This lets us perform
+pixel-perfect collisions. We do this by
+
+ 1. The player may set their horizontal speed by pressing left/right
+ 2. If the player is not on a ladder (`!colliding(level.ladder)`)
+   1. The player may jump if they are on the ground by pressing up (sets `_vspeed` to -3)
+   2. Gravity is applied by adding some small value to `_vspeed`
+ 3. If the player is on a ladder
+   1. The player may simply control their vertical speed with the up and down keys
+   2. Gravity is not applied
+ 4. Handle collisions and move the player
+
+Parts 1-3 are covered here:
+
+```javascript
+var speed = 1.2
+var gravity = 0.18
+var jump_speed = 3
+var ladder_speed = 1
+var touching_ladder = colliding(level.ladder_tileset)
+
+// Part 1
+_hspeed = Keyboard.keys_as_axis(Keyboard.KEY_LEFT, Keyboard.KEY_RIGHT) * speed
+
+if (!touching_ladder) {
+    // Part 2
+    if (Keyboard.key_pressed(Keyboard.KEY_UP) && level.tileset.collision(hitbox, x, y + 1)) {
+        _vspeed = -jump_speed
+    }
+    _vspeed = _vspeed + gravity
+} else {
+    // Part 3
+    _vspeed = Keyboard.keys_as_axis(Keyboard.KEY_UP, Keyboard.KEY_DOWN) * ladder_speed
+}
+```
+
+Collisions are handled pre-emptively - we want to detect when one is about to happen and
+not just have the player clip into every random block. 
+
+For a brief visualization of our entity and its horizontal speed.
+
+![coll](beforecoll.png)
+
+If we simply added the horizontal speed to our position, we would be inside the block.
+
+![coll](duringcoll.png)
+
+But we want to be right next to the block and not inside it.
+
+![coll](fixcoll.png)
+
+We accomplish this in 3 steps:
+
+ 1. Check if there will be a collision if we add `_hspeed` to our position.
+ 2. If so, snap to the nearest wall in that direction.
+ 3. If not, add `_hspeed` to our x coordinate.
+ 
+And that process is repeated for the y axis and `_vspeed`. In code,
+
+```javascript
+if (colliding(level.tileset, x + _hspeed, y)) {
+    x = _hspeed > 0 ? level.tileset.snap_right(hitbox, x, y) : level.tileset.snap_left(hitbox, x, y)
+    _hspeed = 0
+}
+x = Math.clamp(x + _hspeed, 0, level.tileset.width - 8)
+
+if (colliding(level.tileset, x, y + _vspeed)) {
+    y = _vspeed > 0 ? level.tileset.snap_down(hitbox, x, y) : level.tileset.snap_up(hitbox, x, y)
+    _vspeed = 0
+}
+y = Math.clamp(y + _vspeed, 0, level.tileset.height - 8)
+```
+
+(We also clamp the x/y values so the player stays inside the level)
+
+You may notice we use methods like [snap_*](classes/Tileset#snap_right), as these methods
+will take our entity's hitbox and move that hitbox as close to the nearest wall as possible.
+
+And that is the entirety of what the player class is responsible.
 
 ## Supporting Entities
-TODO: This
+The example game has two other supporting entities, one that detects if the player
+has fallen into water (`ResetPlayer`), and another that animates the water (`Water`). 
+They are both found in `Entities.wren`.
+
+`ResetPlayer` works by using the entity method [colliding()](classes/Entity#colliding)
+to detect if the player has touched it, and if so, sets the player's x/y coordinates to
+where it was at the start. It automatically has a hitbox assigned to it by [load()](./classes/Level#load)
+because we specify a width and height for it in the Tiled map.
+
+```javascript
+update(level) {
+    if (colliding(level.player)) {
+        level.player.x = 160
+        level.player.y = 152
+    }
+}
+```
+
+`Water` is a bit hacky and unimportant, but briefly it increments a counter every 0.5
+seconds and uses that counter to draw different water tiles from the tileset. More importantly
+it directly access the Tiled map data so we can see that in action:
+
+```javascript
+create(level, tiled_data) {
+    super.create(level, tiled_data)
+    _tiles_across = tiled_data["width"] / 8
+    _timer = 0
+    _frame = 0
+}
+``` 
+
+Tiles in our game are 8 pixels wide, so we can calculate how many we need to cover in water
+tiles by taking the width of our `Water` entity and dividing it by 8.
 
 ## Tiled Map
-TODO: This
+To bring this project together we need a nice little level to load from - we'll build
+it in Tiled.
+
+![coll](tiled_map.png)
+
+In the map we can see that there are 3 tile layers: collisions, ladder, and background.
+There is also an entity layer where our entities are located. If you recall from the
+[Game.wren](#gamewren) section, we pull those tilesets by their names in this map.

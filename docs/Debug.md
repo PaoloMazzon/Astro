@@ -39,10 +39,10 @@ In reading order, the debug overlay displays
 
  1. Actual framerate, updated each second.
  2. Entity count in the current level.
- 3. How many frames [process_frame](class/Engine#process_frame) was set to true over the last second.
+ 3. How many frames [process_frame](classes/Engine#process_frame) was set to true over the last second.
  4. How much "leeway" the engine is giving to fixed-timestep process frames to compensate for
  fluctuating framerates.
  5. A graphical display of the processed frames' distributions over the last second (black bar in the middle
  is good).
 
-The last 3 will only be displayed if [timestep](class/Engine#timestep) is not 0.
+The last 3 will only be displayed if [timestep](classes/Engine#timestep) is not 0.
