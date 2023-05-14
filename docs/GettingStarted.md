@@ -32,28 +32,31 @@ and `start_level`. `start_level` is an instance of `Level` that the engine will 
 starting level. `renderer_config` must be a map containing specific keys. Additionally, you may provide
 a third variable, `window_icon`, which will be a path to an image Astro will set as the window's icon.
 
-    import "Game" for Game
-    
-    var renderer_config = {
-        "window_title": "Game",
-        "window_width": 800,
-        "window_height": 600,
-        "fullscreen": false,
-        "msaa": Renderer.MSAA_8X,
-        "screen_mode": Renderer.SCREEN_MODE_TRIPLE_BUFFER,
-        "filter_type": Renderer.FILTER_TYPE_NEAREST
-    }
-    
-    var window_icon = "assets/logo.png"
-    
-    var start_level = Game.new()
+```python
+import "Game" for Game
+
+var renderer_config = {
+    "window_title": "Game",
+    "window_width": 800,
+    "window_height": 600,
+    "fullscreen": false,
+    "msaa": Renderer.MSAA_8X,
+    "screen_mode": Renderer.SCREEN_MODE_TRIPLE_BUFFER,
+    "filter_type": Renderer.FILTER_TYPE_NEAREST
+}
+
+var window_icon = "assets/logo.png"
+
+var start_level = Game.new()
+```
 
 As you can see, the `Renderer` class provides values to use for msaa, screen_mode, and filter_type.
 Check [set_config](classes/Renderer.md#set_config) for details on each of the map's keys and expected
 values.
 
-> 📝 When the `init.wren` file is loaded into Astro, the rest of the engine is yet to initialize.
-> In practice this means you may **not** call most engine-related methods.  
+{: .note }
+When the `init.wren` file is loaded into Astro, the rest of the engine is yet to initialize.
+In practice this means you may **not** call most engine-related methods.  
   
 After Astro loads this file and extracts the data it wants from it, it will then
 initialize the rest of the engine and call the level's `create()` method. From
