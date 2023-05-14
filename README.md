@@ -16,13 +16,13 @@ Features
  + Manual and automatic resource management
  + Fast and very flexible cameras
  + Simple level and entity management
- + Complete [API documentation](docs/classes/index.md)
+ + Complete [API documentation](https://astroengine.ca/classes/)
  + Load [Tiled](https://www.mapeditor.org/) maps automatically
 
 Getting Started
 ===============
-See [Getting Started](docs/GettingStarted.md) for a detailed breakdown, and check out the
-[API Reference](docs/classes/index.md) for everything else. In short, you need a Wren file the engine
+See [Getting Started](https://astroengine.ca/GettingStarted.html) for a detailed breakdown, and check out the
+[API Reference](https://astroengine.ca/classes/) for everything else. In short, you need a Wren file the engine
 will use as an entry point and at least one level.
     
     class Game is Level {
@@ -81,7 +81,6 @@ of things you can expect Astro to be capable of.
 TODO
 ====
 
- + Documentation website
  + JSON asset file
  + Better Tiled loader
  + Networking support
