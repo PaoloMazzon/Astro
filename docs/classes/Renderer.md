@@ -10,19 +10,15 @@ The `Renderer` class contains methods that are used in drawing and managing the 
  + [draw_circle](#draw_circle)
  + [draw_texture](#draw_texture)
  + [draw_texture_part](#draw_texture_part)
- + [config (Setter)](#config-setter)
- + [config (Getter)](#config-getter)
- + [target (Setter)](#target-setter)
- + [blend_mode (Setter)](#blend_mode-setter)
- + [blend_mode (Getter)](#blend_mode-getter)
- + [colour_mod (Setter)](#colour_mod-setter)
- + [colour_mod (Getter)](#colour_mod-getter)
+ + [config](#config)
+ + [target](#target)
+ + [blend_mode](#blend_mode)
+ + [colour_mod](#colour_mod)
  + [shader](#shader)
  + [set_window_size](#set_window_size)
  + [window_width](#window_width)
  + [window_height](#window_height)
- + [fullscreen (Getter)](#fullscreen-getter)
- + [fullscreen (Setter)](#fullscreen-setter)
+ + [fullscreen](#fullscreen)
  + [set_texture_camera](#use_cameras_on_surfaces)
  + [average_frame_time](#average_frame_time)
  + [lock_cameras](#lock_cameras)
@@ -121,33 +117,13 @@ Parameters
 
 Draws a specific portion of a texture.
 
-## config (getter)
-`static config`
+## config
+`static config=(config)` `static config`
 
-Returns a map containing the renderer's current configuration. This map will have the same
-keys as the map you pass in `init.wren`. For convenience, those keys are as follows:
+Variable Type: `Map` - Renderer settings to use.
 
-+ `"window_title"` - A string with the window's current title.
-+ `"window_width"` - Width of the window in pixels .
-+ `"window_height"` - Height of the window in pixels.
-+ `"fullscreen"` - Whether or not the window is fullscreen.
-+ `"msaa"` - Current MSAA setting, will be an `MSAA_*` value.
-+ `"screen_mode"` - Current screen mode setting, will be a `SCREEN_MODE_*` value.
-+ `"filter_type"` - Current filter type, will be a `FILTER_TYPE_*` value.
-
-{: .note }
-This returns what the window is actually using, so for example if you requested
-32x MSAA but the host system only supports up to 8x MSAA, this will return 
-MSAA_8X since that is what is actually being used.
-
-## config (setter)
-`static config=(config)`
-
-Parameters
- + `config -> Map` Renderer settings to use.
-
-This method expects the same keys from the map you pass in `init.wren`. Specifically,
-the map must have the following keys:
+You may set or get a number of different renderer configuration settings through
+this variable. Namely,
 
 + `"window_title"` - A string with the window's new title.
 + `"window_width"` - Width of the window in pixels .
@@ -157,50 +133,38 @@ the map must have the following keys:
 + `"screen_mode"` - Desired screen mode setting, will be a `SCREEN_MODE_*` value.
 + `"filter_type"` - Desired filter type, will be a `FILTER_TYPE_*` value.
 
-## target (setter)
-`static target=(target)`
+## target
+Write only: `static target=(target)`
 
-Parameters
- + `target -> Surface` Surface to set as the new render target.
+Variable Type: `Surface` - Surface to set as the new render target.
 
 Changes the render target to `target`, specify `RENDER_TARGET_DEFAULT` to draw to the
-window instead. This value is write-only.
+window instead.
 
-## blend_mode (setter)
-`static blend_mode=(blend_mode)`
+## blend_mode
+`static blend_mode=(blend_mode)` `static blend_mode` 
 
-Parameters
- + `blend_mode -> Num` A `BLEND_MODE_*` value.
+Variable Type: `Num` - A `BLEND_MODE_*` value.
 
-Changes the blend mode.
+The renderer's current blend mode.
 
-## blend_mode (getter)
-`static blend_mode`
+## colour_mod
+`static colour_mod=(colour)` `static colour_mod`
 
-Returns the current blend mode as a `BLEND_MODE_*` value.
-
-## colour_mod (setter)
-`static colour_mod=(colour)`
-
-Parameters
- + `colour -> List or String` A list of `[red, green, blue, alpha]` values from 0-1, or a string containing a hex colour.
+Variable Type: `List or String` - A list of `[red, green, blue, alpha]` values from 0-1, or a string containing a hex colour.
  
-Sets the colour mod for the renderer, this means all textures will have their colours
-multiplied by this value and all shapes you draw will be this colour. If a hex colour is specified,
-the renderer expects the string to be formatted as `"#54403e"`, the leading '#' is required and
-no whitespace may be present.
+The renderer's colour modifier. You may set it with a hex colour, but only a list of
+R, G, B, A normalized values will be returned by `colour_mod`.
 
-## colour_mod (getter)
-`static colour_mod`
-
-Returns the current colour mod as a 4-element list of `[red, green, blue, alpha]` values
-from 0-1.
+```python
+Renderer.colour_mod = "#ff0000"
+System.print(Renderer.colour_mod) // [1, 0, 0, 1]
+```
 
 ## use_cameras_on_surfaces
-`static use_cameras_on_surfaces=(enable)`
+Write only: `static use_cameras_on_surfaces=(enable)`
 
-Parameters
- + `enable -> Bool` Whether or not to use cameras when rendering to surfaces.
+Variable Type: `Bool` - Whether or not to use cameras when rendering to surfaces.
 
 If enabled, when rendering to surfaces, the current renderer's camera will be used for
 vertex transformations. This is useful when rendering the game world to a surface. By default
@@ -209,7 +173,9 @@ for example, a coordinate of (400, 200) is relative to the top-left of the surfa
 would see in an image editor.
 
 ## average_frame_time
-`static average_frame_time`
+Read only: `static average_frame_time`
+
+Variable Type: `Num`
 
 Returns the average time it takes to render a frame, slightly different from the engine's
 average frame time.
@@ -240,25 +206,23 @@ Parameters
 Sets the size of the window in pixels.
 
 ## window_width
-`static window_width`
+Read only: `static window_width`
+
+Variable Type: `Num`
 
 Returns the window's width in pixels.
 
 ## window_height
-`static window_height`
+Read only: `static window_height`
+
+Variable Type: `Num`
 
 Returns the window's height in pixels.
 
-## fullscreen (Getter)
-`static fullscreen`
+## fullscreen
+`static fullscreen=(fullscreen)` `static fullscreen`
 
-Returns whether or not the window is in fullscreen mode.
-
-## fullscreen= (Setter)
-`static fullscreen=(fullscreen)`
-
-Parameters
- + `fullscreen -> Bool` Whether or not the window should be fullscreen.
+Variable Type: `Bool` - Whether or not the window should be fullscreen.
 
 Controls whether or not the window is fullscreen.
 
@@ -288,7 +252,7 @@ Parameters
 Draws a rectangle to the render target.
 
 ## shader
-`static shader=(shader)`
+Write only: `static shader=(shader)`
 
 Parameters
  + `shader -> Shader` Shader to use for texture rendering.
@@ -296,9 +260,8 @@ Parameters
 Sets the shader that will be used for all further texture rendering (including
 sprites). Set `shader` to `null` to use the default texture shader.
 
-{: .warning }
-It is an error to bind and use a shader without providing a buffer to the shader
-if it expects one.
+> 📝 It is an error to bind and use a shader without providing a buffer to the shader
+> if it expects one.
 
 ## draw_rectangle_outline
 `static draw_rectangle_outline(x, y, w, h, rotation, x_origin, y_origin, outline_thickness)`

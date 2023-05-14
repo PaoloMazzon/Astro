@@ -51,12 +51,11 @@ var start_level = Game.new()
 ```
 
 As you can see, the `Renderer` class provides values to use for msaa, screen_mode, and filter_type.
-Check [set_config](classes/Renderer.md#config-setter) for details on each of the map's keys and expected
+Check [config](classes/Renderer.md#config) for details on each of the map's keys and expected
 values.
 
-{: .note }
-When the `init.wren` file is loaded into Astro, the rest of the engine is yet to initialize.
-In practice this means you may **not** call most engine-related methods.  
+> 📝 When the `init.wren` file is loaded into Astro, the rest of the engine is yet to initialize.
+> In practice this means you may **not** call most engine-related methods.  
   
 After Astro loads this file and extracts the data it wants from it, it will then
 initialize the rest of the engine and call the level's `create()` method. From
