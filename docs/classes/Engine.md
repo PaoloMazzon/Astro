@@ -8,14 +8,14 @@ parent: API Documentation
 The Engine class represents top-level static methods that assist in many
 aspects of game development.
 
- + [switch_level](#switch_level)
- + [quit](#quit)
+ + [switch_level()](#switch_level)
+ + [quit()](#quit)
  + [fps_limit](#fps_limit)
  + [delta](#delta)
  + [time](#time)
  + [fps](#fps)
  + [info](#info)
- + [get_class](#get_class)
+ + [get_class()](#get_class)
  + [timestep=](#timestep)
  + [timestep_percent](#timestep_percent)
  + [process_frame](#process_frame)

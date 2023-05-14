@@ -8,12 +8,12 @@ parent: API Documentation
 Class for playing and managing playing audio. Audio must be loaded with [AudioData](AudioData)
 before its able to be played with this class.
 
- + [play](#play)
- + [update](#update)
- + [stop](#stop)
- + [pause](#pause)
- + [unpause](#unpause)
- + [stop_all](#stop_all)
+ + [play()](#play)
+ + [update()](#update)
+ + [stop()](#stop)
+ + [pause()](#pause)
+ + [unpause()](#unpause)
+ + [stop_all()](#stop_all)
 
 ### play
 `construct play(audio_data, loop, left_volume, right_volume)`

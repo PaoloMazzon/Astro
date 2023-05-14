@@ -8,8 +8,8 @@ parent: API Documentation
 `AudioData` is the actual audio data needed to play audio, see [Audio](Audio) for
 information on playing audio.
 
- + [open](#open)
- + [free](#free)
+ + [open()](#open)
+ + [free()](#free)
 
 ### open
 `construct open(filename)`

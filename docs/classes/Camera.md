@@ -14,7 +14,7 @@ is drawn to unless told otherwise (see: [lock_cameras](Renderer#lock_cameras)), 
 do things like 4-player split screen, or have the first default camera for the UI and next
 4 for split screen, or minimaps, or whatever.
 
- + [new](#new)
+ + [new()](#new)
  + [type](#type)
  + [x](#x)
  + [y](#y)
@@ -30,7 +30,7 @@ do things like 4-player split screen, or have the first default camera for the U
  + [centre](#centre)
  + [up](#up)
  + [fov](#fov)
- + [update](#update)
+ + [update()](#update)
 
 Additionally, cameras are all one of these class-defined types:
 

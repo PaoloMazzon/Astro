@@ -9,12 +9,12 @@ Bitmap fonts are a way to render images as text with complete control. With bitm
 you load an image as a character set in a specified range - often 33 to 127 or `$` - `~`.
 With that character set you may render text with a call to `Renderer.draw_font`.
 
- + [new](#new)
- + [size](#size)
- + [size_wrapped](#size_wrapped)
- + [size_ext](#size_ext)
- + [size_ext_wrapped](#size_ext_wrapped)
- + [free](#free)
+ + [new()](#new)
+ + [size()](#size)
+ + [size_wrapped()](#size_wrapped)
+ + [size_ext()](#size_ext)
+ + [size_ext_wrapped()](#size_ext_wrapped)
+ + [free()](#free)
 
 ### new
 `construct new(filename, unicode_start, unicode_end, w, h)`

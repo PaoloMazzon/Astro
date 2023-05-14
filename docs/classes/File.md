@@ -8,15 +8,15 @@ parent: API Documentation
 `File` provides some basic tools for manipulating text files. This is a core class
 that you are free to use before the engine is initialized.
 
-+ [read](#read)
-+ [read_from_pak](#read_from_pak)
-+ [write](#write)
-+ [exists](#exists)
-+ [dir_exists](#dir_exists)
-+ [exists_in_pak](#exists_in_pak)
-+ [remove](#remove)
-+ [rename](#rename)
-+ [get_directory](#get_directory)
++ [read()](#read)
++ [read_from_pak()](#read_from_pak)
++ [write()](#write)
++ [exists()](#exists)
++ [dir_exists()](#dir_exists)
++ [exists_in_pak()](#exists_in_pak)
++ [remove()](#remove)
++ [rename()](#rename)
++ [get_directory()](#get_directory)
 
 ### read
 `static read(filename)`
@@ -34,6 +34,10 @@ Parameters
  
 Reads an entire file into a string and returns it from `game.pak`. See [pak](../Pak) for
 more information.
+
+{: .note }
+This method expects the file to be in `game.pak` and not the file system, if you want
+to know if the game is running from a pak see [using_pak](Engine#using_pak).
 
 ### write
 `static write(filename, contents)`
@@ -96,3 +100,30 @@ Parameters
 Returns a list of files and directories in a directory. The list does not differentiate
 between the two so you will need to use `dir_exists` and `exists` to discern between the
 two.
+
+Assuming you have a directory of
+
+    file.txt
+    image.png
+    assets/
+    docs/
+
+```python
+var directory = File.get_directory("./")
+for (filename in directory) {
+    if (File.exists(filename)) {
+        System.print(filename + " is a file!")
+    } else {
+        System.print(filename + " is a directory!")
+    }
+}
+```
+
+Would produce
+
+    ./ is a directory!
+    ../ is a directory!
+    file.txt is a file!
+    image.png is a file!
+    assets/ is a directory!
+    docs/ is a directory!

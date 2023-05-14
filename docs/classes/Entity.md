@@ -9,95 +9,61 @@ Entities are a simple way to handle objects in the game world. You write your ow
 that inherit from this class, and then you may pass the child classes to [add_entity](Level#add_entity).
 This class on its own does nothing.
 
- + [x](#x-getter)
- + [y](#y-getter)
- + [x=](#x-setter)
- + [y=](#y-setter)
- + [prev_x](#prev_x-getter)
- + [prev_x=](#prev_x-setter)
- + [prev_y](#prev_y-getter)
- + [prev_y=](#prev_y-setter)
+ + [x](#x)
+ + [y](#y)
+ + [prev_x](#prev_x)
+ + [prev_y](#prev_y)
  + [int_x](#int_x)
  + [int_y](#int_y)
- + [set_pos](#set_pos)
- + [hitbox](#hitbox-getter)
- + [hitbox=](#hitbox-setter)
- + [sprite](#sprite-getter)
- + [sprite=](#sprite-setter)
- + [colliding](#colliding)
- + [create](#create)
- + [update](#update)
- + [draw](#draw)
- + [destroy](#destroy)
+ + [set_pos()](#set_pos)
+ + [hitbox](#hitbox)
+ + [sprite](#sprite)
+ + [colliding()](#colliding)
+ + [create()](#create)
+ + [update()](#update)
+ + [draw()](#draw)
+ + [destroy()](#destroy)
 
-### x (Getter)
-`x`
+### x
+`x=` `x`
 
-Returns the x.
+Variable Type: `Num` - X coordinate in the game world.
 
-### y (Getter)
-`y`
+### y
+`y=` `y`
 
-Returns the y.
+Variable Type: `Num` - Y coordinate in the game world.
 
-### x= (Setter)
-`x=`
+### prev_x
+`prev_x=(new_x)` `prev_x`
 
-Sets the x.
+Variable Type: `Num` - The previous x value. This is mostly for internal use.
 
-### y= (Setter)
-`y=`
+### prev_y
+`prev_y=(new_y)` `prev_y`
 
-Sets the y.
-
-### prev_x (Getter)
-`prev_x`
-
-Returns the previous x value.
-
-### prev_x= (Setter)
-`prev_x=(new_x)`
-
-Parameters
- + `new_ -> Num` New value.
- 
-Sets the previous x value. This is mostly for internal use.
-
-### prev_y (Getter)
-`prev_y`
-
-Returns the previous y value.
-
-### prev_y= (Setter)
-`prev_y=(new_y)`
-
-Parameters
- + `new_ -> Num` New value.
- 
-Sets the previous y value. This is mostly for internal use.
+Variable Type: `Num` - The previous y value. This is mostly for internal use.
 
 ### int_x
-`int_x`
+Read Only: `int_x`
+
+Variable Type: `Num`
 
 Returns the entity's x value interpolated between it current and previous x value by
 `Engine.timstep_percent`.
 
 ### int_y
-`int_y`
+Read Only: `int_y`
+
+Variable Type: `Num`
 
 Returns the entity's y value interpolated between it current and previous y value by
 `Engine.timstep_percent`.
 
-### update_enabled (getter)
-`update_enabled`
+### update_enabled
+Write Only: `update_enabled=(enabled)`
 
-Returns whether or not this entity's `update(level)` method will be called by the level each frame.
-
-### update_enabled= (setter)
-`update_enabled=(enabled)`
-
-Parameters
- + `enabled -> Bool` Whether or not to allow the level to update this entity.
+Variable Type: `Bool` - Whether or not to allow the level to update this entity.
  
 Controls whether or not this entity's `update(level)` method will be called by the level each frame.
 
@@ -110,25 +76,15 @@ Parameters
 
 Sets the position of an entity without allowing for inter-frame interpolation.
 
-### hitbox (Getter)
-`hitbox`
+### hitbox
+`hitbox=` `hitbox`
 
-Returns the hitbox.
+Variable Type: `Hitbox` - Sets the hitbox.
 
-### hitbox= (Setter)
-`hitbox=`
+### sprite
+`sprite=` `sprite`
 
-Sets the hitbox.
-
-### sprite (Getter)
-`sprite`
-
-Returns the sprite.
-
-### sprite= (Setter)
-`sprite=`
-
-Sets the sprite.
+Variable Type: `Sprite` - Sets the sprite.
 
 ### colliding
 `colliding(object)`
@@ -152,8 +108,8 @@ Called by the level when the entity is added to the level.
 
 `tiled_data` is a map with the following keys:
 
- + `x -> Num` X position in the editor.
- + `y -> Num` Y position in the editor.
+ + `x -> Num` X position in the editor - automatically set.
+ + `y -> Num` Y position in the editor - automatically set.
  + `class -> String` Name of this entity.
  + `width -> Num` Width of the entity in the editor.
  + `height -> Num` Height of the entity in the editor.
@@ -163,6 +119,9 @@ Called by the level when the entity is added to the level.
  + `id -> Num` ID in the editor.
  + `visible -> Bool` Whether or not its visible in the editor.
  + `properties -> Map` Map of all user defined properties in the editor.
+
+If `tiled_data` is not null and a width and height were specified, [load()](Level#load)
+will automatically create a hitbox of those dimensions before this method is called.
 
 ### update
 `update(level)`
