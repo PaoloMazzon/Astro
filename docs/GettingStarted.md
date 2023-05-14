@@ -24,7 +24,7 @@ two points.
 
 ## Astro Standard Library
 The Astro standard library is automatically imported in every file Astro loads. Check the
-[API Reference](./API.md) for a complete list of all classes and methods in said classes.
+[API Reference](./API) for a complete list of all classes and methods in said classes.
 
 ## `prog/init.wren`
 You `init.wren` file is the "entry point" of your game. It must contain the two variables `renderer_config`
@@ -60,13 +60,13 @@ In practice this means you may **not** call most engine-related methods.
   
 After Astro loads this file and extracts the data it wants from it, it will then
 initialize the rest of the engine and call the level's `create()` method. From
-there your game starts. See the [API Reference](API.md) for help and check the
-[Asset Compiler](AssetCompiler.md) for info on how to automate asset management.
+there your game starts. See the [API Reference](API) for help and check the
+[Asset Compiler](AssetCompiler) for info on how to automate asset management.
 Feel free to play around with the demo game.
 
 ## Packaging Your Game
 
 Once you wish to ship your game, you may either just ship the code and assets as they
 are, or alternatively you may use `Packer.exe` to package your game into a single file
-and executable. See [Pak](Pak.md) for more details.
+and executable. See [Pak](Pak) for more details.
 

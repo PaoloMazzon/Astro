@@ -5,7 +5,7 @@ parent: API Documentation
 ---
 
 ## AudioData
-`AudioData` is the actual audio data needed to play audio, see [Audio](Audio.md) for
+`AudioData` is the actual audio data needed to play audio, see [Audio](Audio) for
 information on playing audio.
 
  + [open](#open)

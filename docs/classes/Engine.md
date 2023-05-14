@@ -31,9 +31,10 @@ Parameters
 Switches the current level to `level`. `level` must be an instance of a class 
 that inherits from `Level` and implements all its methods.
 
-> 📝 After this method is called the current frame will finish execution, then
-> the current level's destruction method will be called before the new level's
-> creation method.
+{: .note }
+After this method is called the current frame will finish execution, then
+the current level's destruction method will be called before the new level's
+creation method.
 
 ### quit
 `static quit()`
@@ -52,9 +53,10 @@ Parameters
 Forces the engine to process no more than `fps` frames a second. If `fps` is `0`,
 there will be no limit on framerate.
 
-> 📝 If you set the screen mode to `SCREEN_MODE_VSYNC`, the framerate will be
-> capped at the monitor's refresh rate (typically 60) regardless of what you set
-> with this function.
+{: .note }
+If you set the screen mode to `SCREEN_MODE_VSYNC`, the framerate will be
+capped at the monitor's refresh rate (typically 60) regardless of what you set
+with this function.
 
 ### timestep=
 `timestep=(timestep)`
@@ -67,7 +69,8 @@ set to true to let the user handle their own fixed-timestep code. Level's [updat
 method will only update entities when `process_frame` is true automatically. Set this to 0 (the default)
 to disable fixed-timestep.
 
-> 📝 Do not set this value before the first level is initialized; ie, in `init.wren`.
+{: .note }
+Do not set this value before the first level is initialized; ie, in `init.wren`.
 
 ### timestep_percent
 `timestep_percent`

@@ -70,7 +70,7 @@ Loads a buffer from a file.
 Parameters
  + `filename -> String` File to read the buffer from.
  
-Loads a buffer from a file in `game.pak`. See [pak](../Pak.md) for more information.
+Loads a buffer from a file in `game.pak`. See [pak](../Pak) for more information.
 
 ### resize
 `resize(size)`
@@ -247,9 +247,10 @@ Parameters
 
 Returns the next `size` bytes as a string, moving the pointer `size` forward.
 
-> 📝 Internally `Buffer` places a null-terminating character at the end of the string. Any 0 values
-> within the next `size` characters are not accounted for and will result in the string not being
-> of length `size`.
+{: .note }
+Internally `Buffer` places a null-terminating character at the end of the string. Any 0 values
+within the next `size` characters are not accounted for and will result in the string not being
+of length `size`.
 
 ### write_string
 `write_string(string)`

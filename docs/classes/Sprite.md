@@ -74,10 +74,11 @@ Returns a copy of this sprite as a new sprite, although the new sprite just stor
 reference to the internal sprite sheet so you may not free the original sprite while still
 using copies.
 
-> 📝 Because objects are references in Wren, you will generally want to use this for each
-> new object that uses a sprite in your game world. If you do not, modifying the one sprite
-> that everything uses will result in that transformation being shown every time it is
-> drawn.
+{: .note }
+Because objects are references in Wren, you will generally want to use this for each
+new object that uses a sprite in your game world. If you do not, modifying the one sprite
+that everything uses will result in that transformation being shown every time it is
+drawn.
 
 ## frame (Getter)
 `frame`

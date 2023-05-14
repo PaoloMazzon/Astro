@@ -29,8 +29,9 @@ Parameters
 Creates a new bitmap font from a given image filename. The characters do not need to be in a line,
 you may wrap characters to have a more square image.
 
-> 📝 The image provided must be at least w * h * (unicode_end - unicode_start) pixels large or this
-> method will fail.
+{: .note }
+The image provided must be at least w * h * (unicode_end - unicode_start) pixels large or this
+method will fail.
 
 ### size
 `size(string)`

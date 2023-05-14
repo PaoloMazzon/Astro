@@ -5,7 +5,7 @@ parent: API Documentation
 ---
 
 ## Audio
-Class for playing and managing playing audio. Audio must be loaded with [AudioData](AudioData.md)
+Class for playing and managing playing audio. Audio must be loaded with [AudioData](AudioData)
 before its able to be played with this class.
 
  + [play](#play)
@@ -28,8 +28,9 @@ Plays a sound returning a handle for the playing audio. The handle is no longer
 valid after the audio stops playing, meaning you generally shouldn't update `Audio`
 instances that don't repeat.
 
-> 📝 If you are just playing a sound once or just don't care, you don't need
-> to store the `Audio` instance.
+{: .note }
+If you are just playing a sound once or just don't care, you don't need
+to store the `Audio` instance.
 
 ### update
 `update(loop, left_volume, right_volume)`

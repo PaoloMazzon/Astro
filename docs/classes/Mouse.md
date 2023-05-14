@@ -27,9 +27,10 @@ Parameters
 Returns the mouse position relative to a given camera, or `null` for the mouse position
 relative to the window. The mouse position is returned as a list with the values `[x, y]`.
 
-> 📝 This method adjusts the mouse position to the camera to make the position relative to
-> the game world if you want, but it does not work properly with rotated cameras or cameras
-> that use `zoom` instead of `width/height`.
+{: .note }
+This method adjusts the mouse position to the camera to make the position relative to
+the game world if you want, but it does not work properly with rotated cameras or cameras
+that use `zoom` instead of `width/height`.
 
 ### left
 `static left`

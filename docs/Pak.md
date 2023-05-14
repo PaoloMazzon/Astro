@@ -13,8 +13,8 @@ automatically built with the top-level CMake project and when ran will put each
 file from `assets/` and `prog/` into `game.pak`.
 
 When Astro is launched it checks for `game.pak` and if it finds one it will load
-most assets from there with the exception of some various tools like [File](classes/File.md)
-and [Buffer](classes/Buffer.md) which need the user to specify if they wish to load
+most assets from there with the exception of some various tools like [File](classes/File)
+and [Buffer](classes/Buffer) which need the user to specify if they wish to load
 from `game.pak`.
 
 For most intents and purposes you may just work on your projects as normal and package

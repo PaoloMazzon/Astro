@@ -103,7 +103,7 @@ This method returns a list of all entities in the level that are an instance of 
 Parameters
  + `filename -> String` Filename of the Tiled map.
 
-Loads a [Tiled](https://www.mapeditor.org/) map as a level. See [Tiled Integration](../TiledIntegration.md)
+Loads a [Tiled](https://www.mapeditor.org/) map as a level. See [Tiled Integration](../TiledIntegration)
 for more information. Returns a map of `Tileset`s representing each tile layer by their name, for
 instance if you had two tileset layers in Tiled, 'Foreground' and 'Background', you can access their
 `Tileset` equivalent via `tilesets["Background"]` and `tilesets["Foreground"]` respectively. If `load`

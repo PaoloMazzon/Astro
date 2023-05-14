@@ -135,7 +135,7 @@ Sets the sprite.
 `colliding(object, x, y)`
 
 Parameters
- + `object -> Entity or Tileset` Entity or [Tileset](Tileset.md) to check for a collision against.
+ + `object -> Entity or Tileset` Entity or [Tileset](Tileset) to check for a collision against.
  + `x -> Num` If specified, x position to use in place of the entity's actual x position.
  + `y -> Num` If specified, y position to use in place of the entity's actual y position.
 

@@ -8,7 +8,7 @@ parent: API Documentation
 Tilesets are a tool for managing large amounts of static objects that all have uniform
 width and height. Typically you would use a tileset (or several because they're so light)
 to represent the static walls or similar objects in your game. Drawing the tileset is
-somewhat expensive, however, so you will often want to draw the tileset to a [Surface](Surface.md)
+somewhat expensive, however, so you will often want to draw the tileset to a [Surface](Surface)
 and just render that to offset the cost. Collisions on the other hand are extremely light
 weight regardless of how big the tileset is.
 
@@ -108,7 +108,8 @@ Returns the height of a tile in the tileset.
 
 Returns the cell value located at `(x, y)`.
 
-> 📝 This returns 0 if you attempt to get a cell value out of bounds.
+{: .note }
+This returns 0 if you attempt to get a cell value out of bounds.
 
 ### [x, y]= (setter)
 `[x, y]=(cell)`
@@ -118,7 +119,8 @@ Parameters
 
 Sets the cell's value at `(x, y)`.
 
-> 📝 This does nothing if you attempt to set a cell value out of bounds.
+{: .note }
+This does nothing if you attempt to set a cell value out of bounds.
 
 ### snap_left
 `snap_left(hitbox, x, y)`

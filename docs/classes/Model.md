@@ -32,8 +32,9 @@ Parameters
 
 Creates a new model from given vertices and indices. The index list MUST be triangulated.
 
-> 📝 The index buffer is internally indexed using 16-bit unsigned integers, meaning there is a
-> maximum of 65536/FFFF/2^16 indices allowed in any given model.
+{: .note }
+The index buffer is internally indexed using 16-bit unsigned integers, meaning there is a
+maximum of 65536/FFFF/2^16 indices allowed in any given model.
 
 ### free
 `free()`
@@ -49,8 +50,9 @@ Parameters
 
 Loads a model from a `.obj` file, mapping `texture` to it.
 
-> 📝 The index buffer is internally indexed using 16-bit unsigned integers, meaning there is a
-> maximum of 65536/FFFF/2^16 indices allowed in any given model.
+{: .note }
+The index buffer is internally indexed using 16-bit unsigned integers, meaning there is a
+maximum of 65536/FFFF/2^16 indices allowed in any given model.
 
 ### vertex
 `static vertex(x, y, z, u, v)`

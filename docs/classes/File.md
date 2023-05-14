@@ -32,7 +32,7 @@ Reads an entire file into a string and returns it. The file is not kept open.
 Parameters
  + `filename -> String` filename to read from.
  
-Reads an entire file into a string and returns it from `game.pak`. See [pak](../Pak.md) for
+Reads an entire file into a string and returns it from `game.pak`. See [pak](../Pak) for
 more information.
 
 ### write
@@ -43,7 +43,7 @@ Parameters
  + `contents -> String` or `Buffer` contents to write to the file.
 
 Opens a file and writes `contents` to it, overwriting the file if it already exists. If contents
-are a [Buffer](Buffer.md), the whole contents are dumped as binary to the file.
+are a [Buffer](Buffer), the whole contents are dumped as binary to the file.
 
 ### exists
 `static exists(filename)`
@@ -59,7 +59,7 @@ Returns true if the given `filename` exists and false otherwise.
 Parameters
  + `filename -> String` filename to check.
  
-Returns true if the given `filename` exists in `game.pak` and false otherwise. See [pak](../Pak.md) for
+Returns true if the given `filename` exists in `game.pak` and false otherwise. See [pak](../Pak) for
 more information.
 
 ### remove

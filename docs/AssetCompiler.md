@@ -76,4 +76,4 @@ preload. `aa` is whether or not to apply anti-aliasing to the font.
 
 --------
 
-[Getting Started](GettingStarted.md) | [API Reference](API.md)
+[Getting Started](GettingStarted) | [API Reference](API)

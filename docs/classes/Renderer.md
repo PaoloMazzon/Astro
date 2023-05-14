@@ -135,9 +135,10 @@ keys as the map you pass in `init.wren`. For convenience, those keys are as foll
 + `"screen_mode"` - Current screen mode setting, will be a `SCREEN_MODE_*` value.
 + `"filter_type"` - Current filter type, will be a `FILTER_TYPE_*` value.
 
-> 📝 This returns what the window is actually using, so for example if you requested
-> 32x MSAA but the host system only supports up to 8x MSAA, this will return 
-> MSAA_8X since that is what is actually being used.
+{: .note }
+This returns what the window is actually using, so for example if you requested
+32x MSAA but the host system only supports up to 8x MSAA, this will return 
+MSAA_8X since that is what is actually being used.
 
 ## config (setter)
 `static config=(config)`
@@ -164,10 +165,6 @@ Parameters
 
 Changes the render target to `target`, specify `RENDER_TARGET_DEFAULT` to draw to the
 window instead. This value is write-only.
-
-> 📝 Switching targets is a somewhat resource-intensive task that must be done a
-> specific way. Anytime you switch the target to a surface you *MUST* switch the
-> target back to the `RENDER_TARGET_DEFAULT` before switching to a new surface.
 
 ## blend_mode (setter)
 `static blend_mode=(blend_mode)`
@@ -299,8 +296,9 @@ Parameters
 Sets the shader that will be used for all further texture rendering (including
 sprites). Set `shader` to `null` to use the default texture shader.
 
-> 📝 It is an error to bind and use a shader without providing a buffer to the shader
-> if it expects one.
+{: .warning }
+It is an error to bind and use a shader without providing a buffer to the shader
+if it expects one.
 
 ## draw_rectangle_outline
 `static draw_rectangle_outline(x, y, w, h, rotation, x_origin, y_origin, outline_thickness)`
@@ -440,7 +438,7 @@ Parameters
   + `outline -> Bool` Whether or not to draw it only as an outline.
   + `line_width -> Num` If drawn as an outline, how thick should the outline be.
 
-Draws a polygon. See [Polygon](Polygon.md).
+Draws a polygon. See [Polygon](Polygon).
 
 ## draw_model
 `static draw_model(model, x, y, z)`
@@ -461,5 +459,5 @@ Parameters
  + `origin_y -> Num` Y origin for rotation.
  + `origin_z -> Num` Z origin for rotation.
 
-Draws a model. See [Model](Model.md).
+Draws a model. See [Model](Model).
 
