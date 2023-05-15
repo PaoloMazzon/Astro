@@ -7,8 +7,9 @@ has_children: false
 
 
 # Getting Started
-This documentation only covers Astro, for a guide on how to use Astro's language of
-choice, [Wren](https://github.com/wren-lang/wren), visit the [Wren website](https://wren.io/getting-started.html).
+This documentation mainly covers Astro, for a guide on how to use Astro's language of
+choice, [Wren](https://github.com/wren-lang/wren), visit the [Wren website](https://wren.io/getting-started.html)
+and the [Wren section](Wren).
 To launch an Astro project, you need the runtime (Astro.exe) and at least one Wren file named
 `prog/init.wren` that tells the engine where and how to start execution.
 

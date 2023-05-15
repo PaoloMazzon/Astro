@@ -8,7 +8,9 @@ has_children: false
 # Simple Game Example Explained
 You can find the simple-game example on the 
 [Github](https://github.com/PaoloMazzon/Astro/tree/master/examples/simple-game).
-Here is a brief explanation of how the small game works.
+Here is a brief explanation of how the small game works. If you're
+not yet familiar with the Wren language, check [the section on Wren](Wren)
+first.
 
 ![example](https://user-images.githubusercontent.com/17896827/237554076-686ab0a6-b37d-4407-8e26-1b98d0bd00ab.gif)
 
@@ -166,12 +168,12 @@ pixel-perfect collisions. We do this by
 
  1. The player may set their horizontal speed by pressing left/right
  2. If the player is not on a ladder (`!colliding(level.ladder)`)
-   1. The player may jump if they are on the ground by pressing up (sets `_vspeed` to -3)
-   2. Gravity is applied by adding some small value to `_vspeed`
- 3. If the player is on a ladder
-   1. The player may simply control their vertical speed with the up and down keys
-   2. Gravity is not applied
- 4. Handle collisions and move the player
+ 3. The player may jump if they are on the ground by pressing up (sets `_vspeed` to -3)
+ 4. Gravity is applied by adding some small value to `_vspeed`
+ 5. If the player is on a ladder
+ 6. The player may simply control their vertical speed with the up and down keys
+ 7. Gravity is not applied
+ 8. Handle collisions and move the player
 
 Parts 1-3 are covered here:
 
@@ -186,13 +188,13 @@ var touching_ladder = colliding(level.ladder_tileset)
 _hspeed = Keyboard.keys_as_axis(Keyboard.KEY_LEFT, Keyboard.KEY_RIGHT) * speed
 
 if (!touching_ladder) {
-    // Part 2
+    // Part 3
     if (Keyboard.key_pressed(Keyboard.KEY_UP) && level.tileset.collision(hitbox, x, y + 1)) {
         _vspeed = -jump_speed
     }
     _vspeed = _vspeed + gravity
 } else {
-    // Part 3
+    // Part 5
     _vspeed = Keyboard.keys_as_axis(Keyboard.KEY_UP, Keyboard.KEY_DOWN) * ladder_speed
 }
 ```
