@@ -18,6 +18,7 @@ This class on its own does nothing.
  + [set_pos()](#set_pos)
  + [hitbox](#hitbox)
  + [sprite](#sprite)
+ + [update_enabled](#update_enabled)
  + [colliding()](#colliding)
  + [create()](#create)
  + [update()](#update)

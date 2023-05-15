@@ -25,6 +25,7 @@ weight regardless of how big the tileset is.
  + [snap_right()](#snap_right)
  + [snap_up()](#snap_up)
  + [snap_down()](#snap_down)
+ + [copy()](#copy)
  + [collision()](#collision)
  + [draw()](#draw)
  + [draw_to_surface()](#draw_to_surface)
@@ -155,6 +156,29 @@ Parameters
 Snaps a hitbox's y coordinate to the nearest colliding space on the bottom. The y
 resulting snapped y-position is returned.
 
+### copy
+`copy(source, sx, sy, sw, sh, dx, dy)`
+
+Parameters
+ + `source -> Tileset` Tileset to copy from
+ + `sx -> Num` X position in the source tileset to copy from.
+ + `sy -> Num` Y position in the source tileset to copy from.
+ + `sw -> Num` Number of cells to copy from the source tileset horizontally.
+ + `sh -> Num` Number of cells to copy from the source tileset vertically.
+ + `dx -> Num` X position in this tileset to copy to.
+ + `dy -> Num` Y position in this tileset to copy to.
+
+`copy(source, x, y)`
+
+Parameters
+ + `source -> Tileset` Tileset to copy from
+ + `x -> Num` X position in this tileset to copy to.
+ + `y -> Num` Y position in this tileset to copy to.
+
+Copies a source tileset into this tileset at a specified location. `copy(source, sx, sy, sw, sh, dx, dy)`
+allows you to choose which specific rectangle of the source tileset you wish
+to copy from, and the shorter version will simply copy the whole source tileset
+into a specific spot on this tileset.
 
 ### collision
 `collision(hitbox, x, y)`

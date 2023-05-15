@@ -36,7 +36,7 @@ var my_map = {"key": 5, 1: "the"} // maps of key/val pairs
 var nothing = null // null value, Astro will often return this on failure
 var my_class = Surface.new(100, 100) // an instance of the class "Surface"
 var added = my_number.toString + my_string // many built-in types have a .toString method
-System.print("thing") // print to stdout
+System.print(my_list[1] + my_map["key"].toString) // print to stdout
 
 // ---------------------- Control Flow ---------------------- //
 if (condition) {

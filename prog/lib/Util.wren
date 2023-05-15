@@ -289,9 +289,31 @@ class Tileset {
         return y
     }
 
+    // Copies from source tileset at [sx,sy] to [sx+sw,sy+sh] into this
+    // one at [dx,dy]
+    copy(source, sx, sy, sw, sh, dx, dy) {
+        var x_counter = dx
+        var y_counter = dy
+        for (y in sy..(sh - 1)) {
+            x_counter = dx
+            for (x in sx..(sw - 1)) {
+                this[x_counter, y_counter] = source[x, y]
+            }
+            y_counter = y_counter + 1
+        }
+    }
+
+    // Copies all of source tileset into this one at x/y
+    copy(source, x, y) {
+        copy(source, 0, 0, source.tiles_wide, source.tiles_tall, x, y)
+    }
+
     // Returns true if a hitbox's bounding box is colliding with a non-zero space
     // on the grid.
     collision(hitbox, x, y) {
+        if (hitbox.type == Hitbox.TYPE_VOID) {
+            return false
+        }
         var bb = hitbox.bounding_box(x, y)
         // this is to account for bounding boxes that end on a new spot and shouldn't
         bb[2] = bb[2] % _w == 0 ? bb[2] - 0.1 : bb[2]
