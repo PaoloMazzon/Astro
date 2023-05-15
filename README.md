@@ -77,11 +77,21 @@ of things you can expect Astro to be capable of.
  + Use [tilesets](./docs/classes/Tileset.md) for fast and simplified tileset rendering and collisions
  + Basic filesystem support through [buffers](./docs/classes/Buffer.md), [file](./docs/classes/File.md), and [inis](./docs/classes/INI.md)
  
+Platforms
+=========
+Astro is currently tested exclusively on Windows. Previous versions have been
+tested successfully on Ubuntu with virtually no issue, but OSX support is untested.
+Astro is built on top of Vulkan2D and Wren, Wren should be fine on basically
+any platform including game consoles because its bytecode-interpreted and not
+JIT, but Vulkan2D is not as permissive. It requires a platform that supports
+Vulkan 1.2, meaning on OSX it has to be built with MoltenVK and other platforms
+are more complicated. If anybody wishes to contribute on these fronts, please
+create a pull request.
 
 TODO
 ====
 
- + JSON asset file
+ + Named assets
  + Better Tiled loader
  + Networking support
  + Spatial hash maps
