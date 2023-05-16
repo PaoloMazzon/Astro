@@ -24,9 +24,9 @@
 // |    | sprites/
 // |    |        | player.png
 // |    |        | player_run.png
+// |    |        | assets.json
 // |    | jump.ogg
 // | banner.jpg
-// | assets.json
 //
 //
 //     import "lib/Drawing" for Texture, Sprite, BitmapFont, Font
@@ -81,6 +81,8 @@
 //     }
 //
 //     var Assets = AssetsImpl.new().
+//
+// ------------------------------- Constants ------------------------------- //
 
 const char *OUTPUT_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont, Font\nimport \"lib/Audio\" for AudioData\n"
 							"\n"
@@ -95,6 +97,14 @@ const char *LOAD_HEADER = "    static load_assets() {\n"
 						  "        __asset_map = {}\n";
 const char *LOAD_FOOTER = "    }\n\n";
 
+const char *ASSET_FILE_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont, Font\nimport \"lib/Audio\" for AudioData\n\n";
+const char *ASSET_FILE_FOOTER = "\nvar Assets = AssetsImpl.new()\n";
+const char *ASSET_ASSET_CLASS_HEADER = "class AssetsImpl {\n\tconstruct new() {}\n\n";
+const char *ASSET_ASSET_CLASS_FOOTER = "\t[asset] {\n\t\treturn _asset_map[asset]\n\t}\n}\n";
+const char *ASSET_DIR_CLASS_HEADER = "\n";
+const char *ASSET_DIR_CLASS_FOOTER = "}\n\n";
+
+// ------------------------------- Strings ------------------------------- //
 typedef struct String {
 	char *str;
 	int len;
@@ -125,6 +135,69 @@ static void freeString(String s) {
 	free(s);
 }
 
+// ------------------------------- JSON Parsers ------------------------------- //
+typedef struct SpriteData {
+	double x;
+	double y;
+	double origin_x;
+	double origin_y;
+	double w;
+	double h;
+	double frames;
+	double delay;
+} SpriteData;
+
+typedef struct BitmapFontData {
+	int ustart;
+	int uend;
+	double w;
+	double h;
+} BitmapFontData;
+
+typedef struct TrueTypeFontData {
+	int ustart;
+	int uend;
+	double size;
+	bool aa;
+} TrueTypeFontData;
+
+typedef struct DirectoryJSON {
+	// TODO: This
+} *DirectoryJSON;
+
+// Will attempt to locate a corresponding .json sprite data file exported from Aseprite and
+// if it does will fill out sprite with its data. Returns true if it found one and false otherwise.
+static bool jsonFindSpriteData(const char *tex_filename, SpriteData *sprite) {
+	// TODO: This
+	return false;
+}
+
+// Will attempt to open the assets.json file for a directory, if it doesn't find one it will return
+// null. Other directory json functions won't crash on the null either.
+static DirectoryJSON openDirectoryJSON(const char *directory) {
+	return NULL;
+}
+
+// Attempts to find the next sprite in a directory json, returns true if it found one and filled out
+// the sprite data pointer.
+static bool directoryJSONGetNextSprite(DirectoryJSON json, SpriteData *sprite) {
+	return false;
+}
+
+// Attempts to find the next bitmap font in a directory json, returns true if it found one and filled out
+// the bitmap font data pointer.
+static bool directoryJSONGetNextBitmapFont(DirectoryJSON json, BitmapFontData *sprite) {
+	return false;
+}
+
+// Attempts to find the next true type font in a directory json, returns true if it found one and filled out
+// the true type font data pointer.
+static bool directoryJSONGetNextTrueTypeFont(DirectoryJSON json, TrueTypeFontData *sprite) {
+	return false;
+}
+
+// ------------------------------- Helpers ------------------------------- //
+
 static bool filenameIsValid(const char *s) {
 	if (*s >= '0' && *s <= '9')
 		return false;
@@ -135,6 +208,8 @@ static bool filenameIsValid(const char *s) {
 	}
 	return true;
 }
+
+// ------------------------------- Asset compiler ------------------------------- //
 
 static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFunction, String spriteLoader, String getterFunctions) {
 	char tmpCode[1024]; // Code will be generated in here
