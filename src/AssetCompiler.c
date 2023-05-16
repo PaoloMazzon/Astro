@@ -10,6 +10,78 @@
 #include "src/Validation.h"
 #include "src/ConfigFile.h"
 
+// -------------------- NEW ASSET COMPILER -------------------- //
+//
+// 1. Recursive for sub-directories
+// 2. Pulls asset details from a .json file
+// 3. Can pull sprite details from Aseprite sprite json data
+// 4. Sub-directories available in Wren through other classes, for example
+//    "dir/sprites/file.png" would be `Assets.dir.sprites.spr_file`
+//
+// Example Assets.wren given the directory structure of assets/
+//
+// | dir/
+// |    | sprites/
+// |    |        | player.png
+// |    |        | player_run.png
+// |    | jump.ogg
+// | banner.jpg
+// | assets.json
+//
+//
+//     import "lib/Drawing" for Texture, Sprite, BitmapFont, Font
+//     import "lib/Audio" for AudioData
+//
+//     class dirspritesImpl {
+//         tex_player { _tex_player }
+//         spr_player { _spr_player }
+//         tex_player_run { _tex_player_run }
+//         spr_player_run { _spr_player_run }
+//
+//         construct new(asset_map) {
+//             _tex_player = Texture.new("assets/dir/sprites/player.png")
+//             asset_map["dir.sprites.tex_player"] = _tex_player
+//             _spr_player = Sprite.from(_tex_player, ...)
+//             asset_map["dir.sprites.spr_player"] = _spr_player
+//             _tex_player_run = Texture.new("assets/dir/sprites/player_run.png")
+//             asset_map["dir.sprites.tex_player_run"] = _tex_player_run
+//             _spr_player_run = Sprite.from(_tex_player_run, ...)
+//             asset_map["dir.sprites.spr_player_run"] = _spr_player_run
+//         }
+//     }
+//
+//     class dirImpl {
+//         sprites { _sprites }
+//         aud_jump { _aud_jump }
+//
+//         construct new(asset_map) {
+//             _sprites = dirspritesImpl.new(asset_map)
+//             _aud_jump = AudioData.open("assets/dir/jump.ogg")
+//             asset_map["dir.aud_jump"] = _aud_jump
+//         }
+//     }
+//
+//     class AssetsImpl {
+//         dir { _dir }
+//         tex_banner { _tex_banner }
+//
+//         construct new() {}
+//
+//         load_assets() {
+//             _asset_map = {}
+//             var asset_map = _asset_map
+//             _dir = dirImpl.new(asset_map)
+//             _tex_banner = Texture.new("assets/banner.jpg")
+//             asset_map["tex_banner"] = _tex_banner
+//         }
+//
+//         [asset] {
+//             return _asset_map[asset]
+//         }
+//     }
+//
+//     var Assets = AssetsImpl.new().
+
 const char *OUTPUT_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont, Font\nimport \"lib/Audio\" for AudioData\n"
 							"\n"
 							"class Assets {\n";
