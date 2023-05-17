@@ -89,6 +89,10 @@
 // ------------------------------- Constants ------------------------------- //
 
 #define STRING_BUFFER_SIZE (200)
+#define HAS_REQUIRED_DATA(file, name) (cJSON_IsString(file) && cJSON_IsString(name))
+#define GET_JSON_DOUBLE(item, def) (cJSON_IsNumber(item) ? cJSON_GetNumberValue(item) : def)
+#define GET_JSON_STRING(item, def) (cJSON_IsString(item) ? cJSON_GetStringValue(item) : def)
+#define GET_JSON_BOOL(item, def) (cJSON_IsBool(item) ? cJSON_IsTrue(item) : def)
 
 const char *OUTPUT_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont, Font\nimport \"lib/Audio\" for AudioData\n"
 							"\n"
@@ -243,7 +247,6 @@ static bool jsonFindSpriteData(const char *tex_filename, SpriteData *sprite) {
 		strncpy(jsonFilename, tex_filename, ext - tex_filename);
 		strcpy(jsonFilename + (ext - tex_filename), ".json");
 		jsonFilename[(ext - tex_filename) + 5] = 0;
-		printf("%s: %s\n", tex_filename, jsonFilename);
 		const char *file = loadFile(jsonFilename);
 		cJSON *json = cJSON_Parse(file);
 		free((void*)file);
@@ -267,8 +270,24 @@ static bool jsonFindSpriteData(const char *tex_filename, SpriteData *sprite) {
 				sprite->filename = tex_filename;
 				sprite->name = NULL;
 
-				// Extract other data
-				// TODO: This
+				// Extract basic data
+				cJSON *duration = cJSON_GetObjectItem(frame, "duration");
+				cJSON *wh = cJSON_GetObjectItem(frame, "sourceSize");
+				sprite->delay = GET_JSON_DOUBLE(duration, 0) / 1000;
+				sprite->x = 0;
+				sprite->y = 0;
+				sprite->w = 0;
+				sprite->h = 0;
+				sprite->originY = 0;
+				sprite->originY = 0;
+
+				// Extract width/height from "sourceSize"
+				if (wh != NULL) {
+					cJSON *w = cJSON_GetObjectItem(wh, "w");
+					cJSON *h = cJSON_GetObjectItem(wh, "h");
+					sprite->w = GET_JSON_DOUBLE(w, 0);
+					sprite->h = GET_JSON_DOUBLE(h, 0);
+				}
 
 				cJSON_Delete(json);
 				return true;
@@ -317,11 +336,6 @@ static void closeDirectoryJSON(DirectoryJSON json) {
 	cJSON_Delete(json->root);
 	free(json);
 }
-
-#define HAS_REQUIRED_DATA(file, name) (cJSON_IsString(file) && cJSON_IsString(name))
-#define GET_JSON_DOUBLE(item, def) (cJSON_IsNumber(item) ? cJSON_GetNumberValue(item) : def)
-#define GET_JSON_STRING(item, def) (cJSON_IsString(item) ? cJSON_GetStringValue(item) : def)
-#define GET_JSON_BOOL(item, def) (cJSON_IsBool(item) ? cJSON_IsTrue(item) : def)
 
 // Attempts to find the next sprite in a directory json, returns true if it found one and filled out
 // the sprite data pointer.
