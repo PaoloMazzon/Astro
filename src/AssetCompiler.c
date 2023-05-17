@@ -20,6 +20,7 @@
 // 4. Directories/files checked against an exclude list from directory's json file
 // 5. Sub-directories available in Wren through other classes, for example
 //    "dir/sprites/file.png" would be `Assets.dir.sprites.spr_file`
+// 6. Can specify arbitrary files to load a buffers as well
 //
 // Example Assets.wren given the directory structure of assets/
 //
@@ -145,10 +146,11 @@ static void freeString(String s) {
 // ------------------------------- JSON Parsers ------------------------------- //
 typedef struct SpriteData {
 	const char *filename;
+	const char *name;
 	double x;
 	double y;
-	double origin_x;
-	double origin_y;
+	double originX;
+	double originY;
 	double w;
 	double h;
 	double frames;
@@ -157,6 +159,7 @@ typedef struct SpriteData {
 
 typedef struct BitmapFontData {
 	const char *filename;
+	const char *name;
 	int ustart;
 	int uend;
 	double w;
@@ -165,15 +168,46 @@ typedef struct BitmapFontData {
 
 typedef struct TrueTypeFontData {
 	const char *filename;
+	const char *name;
 	int ustart;
 	int uend;
 	double size;
 	bool aa;
 } TrueTypeFontData;
 
+typedef struct BufferData {
+	const char *filename;
+	const char *name;
+} BufferData;
+
 typedef struct DirectoryJSON {
-	// TODO: This
+	cJSON *root; // json file for the directory's asset.json
+	cJSON *excludeList; // json array of exclusions
+	cJSON *spritesPointer; // json for the sprite list
+	cJSON *fontsPointer; // json for the fonts list
+	cJSON *bitmapFontsPointer; // json for the bitmap fonts list
+	cJSON *buffersPointer; // json for the buffers list
 } *DirectoryJSON;
+
+// Returns true if it finds the same string in a cjson list
+static bool jsonItemInExcludeList(DirectoryJSON json, const char *string) {
+	if (json == NULL)
+		return false;
+	cJSON *list = json->excludeList;
+
+	// Start from the first child
+	if (list == NULL || !cJSON_IsArray(list))
+		return false;
+	list = list->child;
+
+	// Loop through each child
+	while (list != NULL) {
+		if (cJSON_IsString(list) && strcmp(cJSON_GetStringValue(list), string) == 0)
+			return true;
+		list = list->next;
+	}
+	return false;
+}
 
 // Will attempt to locate a corresponding .json sprite data file exported from Aseprite and
 // if it does will fill out sprite with its data. Returns true if it found one and false otherwise.
@@ -186,29 +220,142 @@ static bool jsonFindSpriteData(const char *tex_filename, SpriteData *sprite) {
 // null. Other directory json functions won't crash on the null either.
 static DirectoryJSON openDirectoryJSON(const char *directory) {
 	char assetFile[STRING_BUFFER_SIZE];
-	snprintf(assetFile, STRING_BUFFER_SIZE, "%s/assets.json", directory);
-	const char *file = loadFile(assetFile);
-	cJSON *json = cJSON_Parse(file);
+	snprintf(assetFile, STRING_BUFFER_SIZE, "%sassets.json", directory);
+	DirectoryJSON dir = NULL;
 
-	cJSON_Delete(json);
-	return NULL;
+	if (_vk2dFileExists(assetFile)) {
+		dir = malloc(sizeof(struct DirectoryJSON));
+		const char *file = loadFile(assetFile);
+		cJSON *json = cJSON_Parse(file);
+
+		if (json != NULL && dir != NULL) {
+			dir->root = json;
+			dir->excludeList = cJSON_GetObjectItem(json, "exclude");
+			dir->spritesPointer = cJSON_GetObjectItem(json, "sprites");
+			dir->fontsPointer = cJSON_GetObjectItem(json, "fonts");
+			dir->bitmapFontsPointer = cJSON_GetObjectItem(json, "bitmap_fonts");
+			dir->buffersPointer = cJSON_GetObjectItem(json, "buffers");
+			dir->spritesPointer = dir->spritesPointer != NULL && cJSON_IsArray(dir->spritesPointer) ? dir->spritesPointer->child : NULL;
+			dir->fontsPointer = dir->fontsPointer != NULL && cJSON_IsArray(dir->fontsPointer) ? dir->fontsPointer->child : NULL;
+			dir->bitmapFontsPointer = dir->bitmapFontsPointer != NULL && cJSON_IsArray(dir->bitmapFontsPointer) ? dir->bitmapFontsPointer->child : NULL;
+			dir->buffersPointer = dir->buffersPointer != NULL && cJSON_IsArray(dir->buffersPointer) ? dir->buffersPointer->child : NULL;
+		} else {
+			free(dir);
+			dir = NULL;
+		}
+		free((void*)file);
+	}
+
+	return dir;
 }
+
+static void closeDirectoryJSON(DirectoryJSON json) {
+	cJSON_Delete(json->root);
+	free(json);
+}
+
+#define HAS_REQUIRED_DATA(file, name) (cJSON_IsString(file) && cJSON_IsString(name))
+#define GET_JSON_DOUBLE(item, def) (cJSON_IsNumber(item) ? cJSON_GetNumberValue(item) : def)
+#define GET_JSON_STRING(item, def) (cJSON_IsString(item) ? cJSON_GetStringValue(item) : def)
+#define GET_JSON_BOOL(item, def) (cJSON_IsBool(item) ? cJSON_IsTrue(item) : def)
 
 // Attempts to find the next sprite in a directory json, returns true if it found one and filled out
 // the sprite data pointer.
 static bool directoryJSONGetNextSprite(DirectoryJSON json, SpriteData *sprite) {
+	if (json != NULL && json->spritesPointer != NULL) {
+		cJSON *file = cJSON_GetObjectItem(json->spritesPointer, "file");
+		cJSON *name = cJSON_GetObjectItem(json->spritesPointer, "name");
+		cJSON *jsonX = cJSON_GetObjectItem(json->spritesPointer, "x");
+		cJSON *jsonY = cJSON_GetObjectItem(json->spritesPointer, "y");
+		cJSON *jsonOriginX = cJSON_GetObjectItem(json->spritesPointer, "origin_x");
+		cJSON *jsonOriginY = cJSON_GetObjectItem(json->spritesPointer, "origin_y");
+		cJSON *jsonW = cJSON_GetObjectItem(json->spritesPointer, "w");
+		cJSON *jsonH = cJSON_GetObjectItem(json->spritesPointer, "h");
+		cJSON *jsonFrames = cJSON_GetObjectItem(json->spritesPointer, "frames");
+		cJSON *jsonDelay = cJSON_GetObjectItem(json->spritesPointer, "delay");
+		if (HAS_REQUIRED_DATA(file, name)) {
+			sprite->filename = GET_JSON_STRING(file, "");
+			sprite->name = GET_JSON_STRING(name, "");
+			sprite->x = GET_JSON_DOUBLE(jsonX, 0);
+			sprite->y = GET_JSON_DOUBLE(jsonY, 0);
+			sprite->originX = GET_JSON_DOUBLE(jsonOriginX, 0);
+			sprite->originY = GET_JSON_DOUBLE(jsonOriginY, 0);
+			sprite->w = GET_JSON_DOUBLE(jsonW, 0);
+			sprite->h = GET_JSON_DOUBLE(jsonH, 0);
+			sprite->frames = GET_JSON_DOUBLE(jsonFrames, 1);
+			sprite->delay = GET_JSON_DOUBLE(jsonDelay, 0);
+			json->spritesPointer = json->spritesPointer->next;
+			return true;
+		}
+		json->spritesPointer = json->spritesPointer->next;
+	}
 	return false;
 }
 
 // Attempts to find the next bitmap font in a directory json, returns true if it found one and filled out
 // the bitmap font data pointer.
-static bool directoryJSONGetNextBitmapFont(DirectoryJSON json, BitmapFontData *sprite) {
+static bool directoryJSONGetNextBitmapFont(DirectoryJSON json, BitmapFontData *bmpfont) {
+	if (json != NULL && json->bitmapFontsPointer != NULL) {
+		cJSON *file = cJSON_GetObjectItem(json->bitmapFontsPointer, "file");
+		cJSON *name = cJSON_GetObjectItem(json->bitmapFontsPointer, "name");
+		cJSON *ustart = cJSON_GetObjectItem(json->bitmapFontsPointer, "ustart");
+		cJSON *uend = cJSON_GetObjectItem(json->bitmapFontsPointer, "uend");
+		cJSON *w = cJSON_GetObjectItem(json->bitmapFontsPointer, "w");
+		cJSON *h = cJSON_GetObjectItem(json->bitmapFontsPointer, "h");
+		if (HAS_REQUIRED_DATA(file, name)) {
+			bmpfont->filename = GET_JSON_STRING(file, "");
+			bmpfont->name = GET_JSON_STRING(name, "");
+			bmpfont->ustart = GET_JSON_DOUBLE(ustart, 32);
+			bmpfont->uend = GET_JSON_DOUBLE(uend, 128);
+			bmpfont->w = GET_JSON_DOUBLE(w, 0);
+			bmpfont->h = GET_JSON_DOUBLE(h, 0);
+			json->bitmapFontsPointer = json->bitmapFontsPointer->next;
+			return true;
+		}
+		json->bitmapFontsPointer = json->bitmapFontsPointer->next;
+	}
 	return false;
 }
 
 // Attempts to find the next true type font in a directory json, returns true if it found one and filled out
 // the true type font data pointer.
-static bool directoryJSONGetNextTrueTypeFont(DirectoryJSON json, TrueTypeFontData *sprite) {
+static bool directoryJSONGetNextTrueTypeFont(DirectoryJSON json, TrueTypeFontData *ttf) {
+	if (json != NULL && json->fontsPointer != NULL) {
+		cJSON *file = cJSON_GetObjectItem(json->fontsPointer, "file");
+		cJSON *name = cJSON_GetObjectItem(json->fontsPointer, "name");
+		cJSON *ustart = cJSON_GetObjectItem(json->fontsPointer, "ustart");
+		cJSON *uend = cJSON_GetObjectItem(json->fontsPointer, "uend");
+		cJSON *size = cJSON_GetObjectItem(json->fontsPointer, "size");
+		cJSON *aa = cJSON_GetObjectItem(json->fontsPointer, "aa");
+		if (HAS_REQUIRED_DATA(file, name)) {
+			ttf->filename = GET_JSON_STRING(file, "");
+			ttf->name = GET_JSON_STRING(name, "");
+			ttf->ustart = GET_JSON_DOUBLE(ustart, 32);
+			ttf->uend = GET_JSON_DOUBLE(uend, 128);
+			ttf->size = GET_JSON_DOUBLE(size, 16);
+			ttf->aa = GET_JSON_BOOL(aa, true);
+			json->fontsPointer = json->fontsPointer->next;
+			return true;
+		}
+		json->fontsPointer = json->fontsPointer->next;
+	}
+	return false;
+}
+
+// Attempts to find the next buffer in a directory json, returns true if it found one and filled out
+// the buffer data pointer.
+static bool directoryJSONGetNextBuffer(DirectoryJSON json, BufferData *buffer) {
+	if (json != NULL && json->buffersPointer != NULL) {
+		cJSON *file = cJSON_GetObjectItem(json->buffersPointer, "file");
+		cJSON *name = cJSON_GetObjectItem(json->buffersPointer, "name");
+		if (HAS_REQUIRED_DATA(file, name)) {
+			buffer->filename = GET_JSON_STRING(file, "");
+			buffer->name = GET_JSON_STRING(name, "");
+			json->buffersPointer = json->buffersPointer->next;
+			return true;
+		}
+		json->buffersPointer = json->buffersPointer->next;
+	}
 	return false;
 }
 
@@ -373,7 +520,9 @@ const char *vksk_CompileAssetFile() {
 	String getterFunctions = newString();
 	String spriteLoadFunction = newString();
 
-	openDirectoryJSON("assets/");
+	DirectoryJSON dir = openDirectoryJSON("assets/");
+	fflush(stdout);
+	closeDirectoryJSON(dir);
 
 	if (gGamePak != NULL) {
 		if (!_vksk_CompileAssetsFromPak(loadFunction, getterFunctions, spriteLoadFunction)) {
