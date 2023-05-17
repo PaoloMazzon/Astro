@@ -143,6 +143,13 @@ static void freeString(String s) {
 	free(s);
 }
 
+// Only frees the surrounding stuff returning the internal string (which will need to be freed later)
+static const char *popString(String s) {
+	const char *ss = s->str;
+	free(s);
+	return ss;
+}
+
 // ------------------------------- JSON Parsers ------------------------------- //
 typedef struct SpriteData {
 	const char *filename;
@@ -196,8 +203,9 @@ static const char *jsonGetSpriteName(SpriteData *sprite, char *buffer, int buffe
 		strncpy(buffer, sprite->name, bufferSize);
 		buffer[strlen(sprite->name) >= bufferSize ? bufferSize - 1 : strlen(sprite->name)] = 0;
 	} else {
-		// TODO: Cut out the path
-		strncpy(buffer, sprite->filename, bufferSize);
+		const char *baseName = strrchr(sprite->filename, '/');
+		baseName = baseName == NULL ? sprite->filename : baseName + 1;
+		strncpy(buffer, baseName, bufferSize);
 		char *ext = strrchr(buffer, '.');
 		*ext = 0;
 	}
@@ -258,6 +266,9 @@ static bool jsonFindSpriteData(const char *tex_filename, SpriteData *sprite) {
 				sprite->frames = frameCount;
 				sprite->filename = tex_filename;
 				sprite->name = NULL;
+
+				// Extract other data
+				// TODO: This
 
 				cJSON_Delete(json);
 				return true;
@@ -574,11 +585,6 @@ const char *vksk_CompileAssetFile() {
 	String spriteLoadFunction = newString();
 
 	DirectoryJSON dir = openDirectoryJSON("assets/");
-	SpriteData sprite = {0};
-	char thing[200];
-	sprite.filename = "sprite.png";
-	jsonGetSpriteName(&sprite, thing, 200);
-	printf("%s\n", thing);
 	fflush(stdout);
 	closeDirectoryJSON(dir);
 
