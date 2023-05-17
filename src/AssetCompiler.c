@@ -5,7 +5,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <string.h>
+#include <VK2D/Util.h>
 
+#include "src/cJSON.h"
 #include "src/Runtime.h"
 #include "src/Validation.h"
 #include "src/ConfigFile.h"
@@ -13,9 +15,10 @@
 // -------------------- NEW ASSET COMPILER -------------------- //
 //
 // 1. Recursive for sub-directories
-// 2. Pulls asset details from a .json file
+// 2. Pulls asset details from a .json file per directory
 // 3. Can pull sprite details from Aseprite sprite json data
-// 4. Sub-directories available in Wren through other classes, for example
+// 4. Directories/files checked against an exclude list from directory's json file
+// 5. Sub-directories available in Wren through other classes, for example
 //    "dir/sprites/file.png" would be `Assets.dir.sprites.spr_file`
 //
 // Example Assets.wren given the directory structure of assets/
@@ -84,6 +87,8 @@
 //
 // ------------------------------- Constants ------------------------------- //
 
+#define STRING_BUFFER_SIZE (200)
+
 const char *OUTPUT_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont, Font\nimport \"lib/Audio\" for AudioData\n"
 							"\n"
 							"class Assets {\n";
@@ -103,6 +108,8 @@ const char *ASSET_ASSET_CLASS_HEADER = "class AssetsImpl {\n\tconstruct new() {}
 const char *ASSET_ASSET_CLASS_FOOTER = "\t[asset] {\n\t\treturn _asset_map[asset]\n\t}\n}\n";
 const char *ASSET_DIR_CLASS_HEADER = "\n";
 const char *ASSET_DIR_CLASS_FOOTER = "}\n\n";
+
+const char* loadFile(const char *filename);
 
 // ------------------------------- Strings ------------------------------- //
 typedef struct String {
@@ -137,6 +144,7 @@ static void freeString(String s) {
 
 // ------------------------------- JSON Parsers ------------------------------- //
 typedef struct SpriteData {
+	const char *filename;
 	double x;
 	double y;
 	double origin_x;
@@ -148,6 +156,7 @@ typedef struct SpriteData {
 } SpriteData;
 
 typedef struct BitmapFontData {
+	const char *filename;
 	int ustart;
 	int uend;
 	double w;
@@ -155,6 +164,7 @@ typedef struct BitmapFontData {
 } BitmapFontData;
 
 typedef struct TrueTypeFontData {
+	const char *filename;
 	int ustart;
 	int uend;
 	double size;
@@ -175,6 +185,12 @@ static bool jsonFindSpriteData(const char *tex_filename, SpriteData *sprite) {
 // Will attempt to open the assets.json file for a directory, if it doesn't find one it will return
 // null. Other directory json functions won't crash on the null either.
 static DirectoryJSON openDirectoryJSON(const char *directory) {
+	char assetFile[STRING_BUFFER_SIZE];
+	snprintf(assetFile, STRING_BUFFER_SIZE, "%s/assets.json", directory);
+	const char *file = loadFile(assetFile);
+	cJSON *json = cJSON_Parse(file);
+
+	cJSON_Delete(json);
 	return NULL;
 }
 
@@ -356,6 +372,8 @@ const char *vksk_CompileAssetFile() {
 	String loadFunction = appendString(newString(), LOAD_HEADER);
 	String getterFunctions = newString();
 	String spriteLoadFunction = newString();
+
+	openDirectoryJSON("assets/");
 
 	if (gGamePak != NULL) {
 		if (!_vksk_CompileAssetsFromPak(loadFunction, getterFunctions, spriteLoadFunction)) {

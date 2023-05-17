@@ -1,0 +1,29 @@
+{
+	"sprites": [
+		{
+			"file": "player_jump.png",
+			"name": "player_jump",
+			"w": 8,
+			"h": 8,
+			"frames": 8,
+			"delay": 0.8
+		},
+	  {
+		  "file": "player_walk.png",
+		  "name": "player_walk",
+		  "w": 8,
+		  "h": 8,
+		  "frames": 4,
+		  "delay": 0.2
+	  }
+	],
+  	"fonts": [
+		{
+		  	"file": "FutilePro.ttf",
+		  	"name": "font",
+		  	"ustart": 32,
+		  	"uend": 128,
+		  	"aa": false
+		}
+	]
+}
