@@ -189,6 +189,22 @@ typedef struct DirectoryJSON {
 	cJSON *buffersPointer; // json for the buffers list
 } *DirectoryJSON;
 
+// Either copies the sprite's name into the buffer or forms a name from the filename using
+// the filename without an extension or path
+static const char *jsonGetSpriteName(SpriteData *sprite, char *buffer, int bufferSize) {
+	if (sprite->name != NULL) {
+		strncpy(buffer, sprite->name, bufferSize);
+		buffer[strlen(sprite->name) >= bufferSize ? bufferSize - 1 : strlen(sprite->name)] = 0;
+	} else {
+		// TODO: Cut out the path
+		strncpy(buffer, sprite->filename, bufferSize);
+		char *ext = strrchr(buffer, '.');
+		*ext = 0;
+	}
+
+	return buffer;
+}
+
 // Returns true if it finds the same string in a cjson list
 static bool jsonItemInExcludeList(DirectoryJSON json, const char *string) {
 	if (json == NULL)
@@ -212,7 +228,44 @@ static bool jsonItemInExcludeList(DirectoryJSON json, const char *string) {
 // Will attempt to locate a corresponding .json sprite data file exported from Aseprite and
 // if it does will fill out sprite with its data. Returns true if it found one and false otherwise.
 static bool jsonFindSpriteData(const char *tex_filename, SpriteData *sprite) {
-	// TODO: This
+	char jsonFilename[STRING_BUFFER_SIZE];
+	if (strlen(tex_filename) < STRING_BUFFER_SIZE - 5) {
+		// Create the .json extension version of the filename
+		char *ext = strrchr(tex_filename, '.');
+		strncpy(jsonFilename, tex_filename, ext - tex_filename);
+		strcpy(jsonFilename + (ext - tex_filename), ".json");
+		jsonFilename[(ext - tex_filename) + 5] = 0;
+		printf("%s: %s\n", tex_filename, jsonFilename);
+		const char *file = loadFile(jsonFilename);
+		cJSON *json = cJSON_Parse(file);
+		free((void*)file);
+
+		// We have a json to work with
+		if (json != NULL) {
+			int frameCount = 0;
+			cJSON *frames = cJSON_GetObjectItem(json, "frames");
+
+			if (frames != NULL && frames->child != NULL) {
+				cJSON *frame;
+				frames = frames->child;
+				while (frames != NULL) {
+					frameCount += 1;
+					frame = frames;
+					frames = frames->next;
+				}
+
+				// We now have a frame and frame count
+				sprite->frames = frameCount;
+				sprite->filename = tex_filename;
+				sprite->name = NULL;
+
+				cJSON_Delete(json);
+				return true;
+			}
+
+			cJSON_Delete(json);
+		}
+	}
 	return false;
 }
 
@@ -521,6 +574,11 @@ const char *vksk_CompileAssetFile() {
 	String spriteLoadFunction = newString();
 
 	DirectoryJSON dir = openDirectoryJSON("assets/");
+	SpriteData sprite = {0};
+	char thing[200];
+	sprite.filename = "sprite.png";
+	jsonGetSpriteName(&sprite, thing, 200);
+	printf("%s\n", thing);
 	fflush(stdout);
 	closeDirectoryJSON(dir);
 
