@@ -27,8 +27,6 @@
 	}
   ],
   "exclude": [
-	"test/",
-	"file.txt",
-	5
+	"file.txt"
   ]
 }

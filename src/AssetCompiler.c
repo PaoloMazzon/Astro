@@ -84,7 +84,7 @@
 //         }
 //     }
 //
-//     var Assets = AssetsImpl.new().
+//     var Assets = AssetsImpl.new()
 //
 // ------------------------------- Constants ------------------------------- //
 
@@ -137,6 +137,19 @@ static String appendString(String s, const char *new) {
 		s->str[s->len] = 0;
 		strcat(s->str, new);
 		s->len += len;
+	}
+	return s;
+}
+
+// Returns the same string just for convenience, frees the passed string
+static String appendStringAndFree(String s, const char *new) {
+	if (new != NULL) {
+		int len = strlen(new);
+		s->str = realloc(s->str, s->len + len + 1);
+		s->str[s->len] = 0;
+		strcat(s->str, new);
+		s->len += len;
+		free((void*)new);
 	}
 	return s;
 }
@@ -464,7 +477,8 @@ static bool directoryJSONGetNextString(DirectoryJSON json, StringData *string) {
 
 // ------------------------------- Helpers ------------------------------- //
 
-static bool filenameIsValid(const char *s) {
+// Returns true if the string is a valid Wren variable name
+static bool variableNameIsValid(const char *s) {
 	if (*s >= '0' && *s <= '9')
 		return false;
 	while (*s != 0) {
@@ -475,181 +489,81 @@ static bool filenameIsValid(const char *s) {
 	return true;
 }
 
-// ------------------------------- Asset compiler ------------------------------- //
-
-static void addFileToAssets(VKSK_Config conf, const char *file, String loaderFunction, String spriteLoader, String getterFunctions) {
-	char tmpCode[1024]; // Code will be generated in here
-	char tmpName[1024]; // Name will be manipulated here
-	memcpy(tmpName, file, strlen(file) + 1);
-	const char *ext = strrchr(tmpName, '.') + 1;
-	tmpName[ext - 1 - tmpName] = 0; // grr memory tomfoolery
-
-	// Make sure the filename is valid
-	if (!filenameIsValid(tmpName)) {
-		vksk_Log("Asset filename \"%s\" is invalid, file is being ignored.", file);
-		return;
-	}
-
-	// Sprites textures and bitmap fonts
-	if (strcmp(ext, "png") == 0 || strcmp(ext, "jpg") == 0 || strcmp(ext, "jpeg") == 0 ||
-		strcmp(ext, "bmp") == 0) {
-		// Check if its in the assets ini
-		bool exists = vksk_ConfigHeaderExists(conf, file);
-
-		if (exists && strcmp(vksk_ConfigGetString(conf, file, "type", ""), "sprite") == 0) {
-			// Generate loader function bit first
-			snprintf(tmpCode, 1024, "        __tex%s = Texture.new(\"assets/%s\")\n        __asset_map[\"tex_%s\"] = __tex%s\n", tmpName, file, tmpName, tmpName);
-			appendString(loaderFunction, tmpCode);
-
-			// Getter
-			snprintf(tmpCode, 1024, "    static tex_%s { __tex%s }\n", tmpName, tmpName);
-			appendString(getterFunctions, tmpCode);
-
-			double x, y, w, h, delay, frames, origin_x, origin_y;
-			x = vksk_ConfigGetDouble(conf, file, "x", 0);
-			y = vksk_ConfigGetDouble(conf, file, "y", 0);
-			origin_x = vksk_ConfigGetDouble(conf, file, "origin_x", 0);
-			origin_y = vksk_ConfigGetDouble(conf, file, "origin_y", 0);
-			w = vksk_ConfigGetDouble(conf, file, "w", 0);
-			h = vksk_ConfigGetDouble(conf, file, "h", 0);
-			delay = vksk_ConfigGetDouble(conf, file, "delay", 0);
-			frames = vksk_ConfigGetDouble(conf, file, "frames", 1);
-			// Generate loader function bit first
-			snprintf(tmpCode, 1024, "        __spr%s = Sprite.from(__tex%s, %f, %f, %f, %f, %f, %i)\n        __asset_map[\"spr_%s\"] = __spr%s\n        __spr%s.origin_x = %f\n        __spr%s.origin_y = %f\n", tmpName, tmpName, x, y, w, h, delay, (int)frames, tmpName, tmpName, tmpName, origin_x, tmpName, origin_y);
-			appendString(spriteLoader, tmpCode);
-
-			// Getter
-			snprintf(tmpCode, 1024, "    static spr_%s { __spr%s }\n", tmpName, tmpName);
-			appendString(getterFunctions, tmpCode);
-		} else if (exists && strcmp(vksk_ConfigGetString(conf, file, "type", ""), "font") == 0) {
-			double ustart, uend, w, h;
-			ustart = vksk_ConfigGetDouble(conf, file, "ustart", 0);
-			uend = vksk_ConfigGetDouble(conf, file, "uend", 0);
-			w = vksk_ConfigGetDouble(conf, file, "w", 0);
-			h = vksk_ConfigGetDouble(conf, file, "h", 0);
-			// Generate loader function bit first
-			snprintf(tmpCode, 1024, "        __fnt%s = BitmapFont.new(\"assets/%s\", %i, %i, %f, %f)\n        __asset_map[\"fnt_%s\"] = __fnt%s\n", tmpName, file, (int)ustart, (int)uend, w, h, tmpName, tmpName);
-			appendString(loaderFunction, tmpCode);
-
-			// Getter
-			snprintf(tmpCode, 1024, "    static fnt_%s { __fnt%s }\n", tmpName, tmpName);
-			appendString(getterFunctions, tmpCode);
-		} else {
-			// Generate loader function bit first
-			snprintf(tmpCode, 1024, "        __tex%s = Texture.new(\"assets/%s\")\n        __asset_map[\"tex_%s\"] = __tex%s\n", tmpName, file, tmpName, tmpName);
-			appendString(loaderFunction, tmpCode);
-
-			// Getter
-			snprintf(tmpCode, 1024, "    static tex_%s { __tex%s }\n", tmpName, tmpName);
-			appendString(getterFunctions, tmpCode);
+// Returns the directory or filename, eg "assets/thing/" would return "thing/" and "assets/thing/text.txt"
+// would return "text.txt". Does not allocate memory, just returns a pointer to the string given.
+// Excludes the root directory and will return "" if its the root directory
+static const char *getDirOrFile(const char *fullname) {
+	int len = strlen(fullname);
+	if (fullname[len - 1] == '/') {
+		const char *p = NULL;
+		for (int i = len - 2; i > 0; i--) {
+			if (fullname[i] == '/')
+				p = &fullname[i + 1];
 		}
-	} else if (strcmp(ext, "wav") == 0 || strcmp(ext, "ogg") == 0) {
-		// Generate loader function bit first
-		snprintf(tmpCode, 1024, "        __aud%s = AudioData.open(\"assets/%s\")\n        __asset_map[\"aud_%s\"] = __aud%s\n", tmpName, file, tmpName, tmpName);
-		appendString(loaderFunction, tmpCode);
-
-		// Getter
-		snprintf(tmpCode, 1024, "    static aud_%s { __aud%s }\n", tmpName, tmpName);
-		appendString(getterFunctions, tmpCode);
-	} else if (strcmp(ext, "ttf") == 0 && vksk_ConfigHeaderExists(conf, file)) {
-		double ustart, uend, size;
-		bool aa;
-		ustart = vksk_ConfigGetDouble(conf, file, "ustart", 0);
-		uend = vksk_ConfigGetDouble(conf, file, "uend", 0);
-		size = vksk_ConfigGetDouble(conf, file, "size", 0);
-		aa = vksk_ConfigGetBool(conf, file, "aa", 0);
-		// Generate loader function bit first
-		snprintf(tmpCode, 1024, "        __fnt%s = Font.open(\"assets/%s\", %f, %s, %f, %f)\n        __asset_map[\"fnt_%s\"] = __fnt%s\n", tmpName, file, size, aa ? "true" : "false", ustart, uend, tmpName, tmpName);
-		appendString(spriteLoader, tmpCode);
-
-		// Getter
-		snprintf(tmpCode, 1024, "    static fnt_%s { __fnt%s }\n", tmpName, tmpName);
-		appendString(getterFunctions, tmpCode);
+		return p == NULL ? "" : p;
+	} else {
+		return strrchr(fullname, '/') + 1;
 	}
 }
 
-static bool _vksk_CompileAssetsFromDir(String loadFunction, String getterFunctions, String spriteLoadFunction) {
+// ------------------------------- Asset compiler ------------------------------- //
+
+// Compiles a directory, returning the code for that directory's class
+static String _vksk_CompileAssetDirectory(const char *directory) {
+	return NULL; // TODO: This
+}
+
+// Compiles the root directory, returning the code for that directory's class
+static String _vksk_CompileAssetsFromRootDirectory(const char *directory) {
 	struct dirent *dp;
 	DIR *dfd;
-	VKSK_Config conf = vksk_ConfigLoad("assets/assets.ini");
+	DirectoryJSON json = openDirectoryJSON(directory);
 
-	char *dir = "assets/";
-
-	if ((dfd = opendir(dir)) == NULL) {
+	if ((dfd = opendir(directory)) == NULL) {
 		vksk_Log("Can't access assets directory");
-		return false;
+		return NULL;
 	}
 
-	char filename_qfd[100] ;
+	char filedir[STRING_BUFFER_SIZE] ;
 
 	dp = readdir(dfd);
 	while (dp != NULL) {
 		struct stat stbuf ;
-		sprintf( filename_qfd , "%s/%s",dir,dp->d_name) ;
-		if( stat(filename_qfd,&stbuf ) == -1 ) {
-			vksk_Log("Unable to stat file: %s\n",filename_qfd) ;
+		snprintf(filedir, STRING_BUFFER_SIZE, "%s%s", directory, dp->d_name) ;
+		if(stat(filedir, &stbuf) == -1)
 			continue;
-		}
 
-		if ( ( stbuf.st_mode & S_IFMT ) != S_IFDIR ) {
-			addFileToAssets(conf, dp->d_name, loadFunction, spriteLoadFunction, getterFunctions);
+		// Put an / at the end of a directory
+		if ((stbuf.st_mode & S_IFMT) == S_IFDIR) {
+			int len = strlen(filedir);
+			if (len < STRING_BUFFER_SIZE - 2) {
+				filedir[len] = '/';
+				filedir[len + 1] = 0;
+			}
+		}
+		const char *filedirnolead = getDirOrFile(filedir);
+
+		if (!jsonItemInExcludeList(json, filedirnolead)) {
+			if ((stbuf.st_mode & S_IFMT) != S_IFDIR) {
+				// TODO: This
+			} else if (strcmp(filedirnolead, "./") != 0 && strcmp(filedirnolead, "../") != 0) {
+				// TODO: This
+			}
 		}
 		dp = readdir(dfd);
 	}
+
 	closedir(dfd);
-	vksk_ConfigFree(conf);
-	return true;
+	closeDirectoryJSON(json);
+	return NULL;
 }
 
 static bool _vksk_CompileAssetsFromPak(String loadFunction, String getterFunctions, String spriteLoadFunction) {
-	const char *confString = vksk_PakGetFileString(gGamePak, "assets/assets.ini");
-	VKSK_Config conf = vksk_ConfigLoadFromString(confString);
-	free((void*)confString);
-
-	const char *fname = vksk_PakBeginLoop(gGamePak, "assets");
-	while (fname != NULL) {
-		const char *temp = fname + 7;
-		addFileToAssets(conf, temp, loadFunction, spriteLoadFunction, getterFunctions);
-		fname = vksk_PakNext(gGamePak);
-	}
-
-	vksk_ConfigFree(conf);
-
-	return true;
+	return false; // TODO: This
 }
 
-const char *vksk_CompileAssetFile() {
-	String loadFunction = appendString(newString(), LOAD_HEADER);
-	String getterFunctions = newString();
-	String spriteLoadFunction = newString();
-
-	DirectoryJSON dir = openDirectoryJSON("assets/");
+const char *vksk_CompileAssetFile(const char *rootDir) {
+	_vksk_CompileAssetsFromRootDirectory(rootDir);
 	fflush(stdout);
-	closeDirectoryJSON(dir);
-
-	if (gGamePak != NULL) {
-		if (!_vksk_CompileAssetsFromPak(loadFunction, getterFunctions, spriteLoadFunction)) {
-			vksk_Log("Failed to compile asset file.");
-		}
-	} else {
-		if (!_vksk_CompileAssetsFromDir(loadFunction, getterFunctions, spriteLoadFunction)) {
-			vksk_Log("Failed to compile asset file.");
-		}
-	}
-
-	// Build output string
-	appendString(loadFunction, spriteLoadFunction->str);
-	appendString(loadFunction, LOAD_FOOTER);
-	String compiledAssets = appendString(newString(), OUTPUT_HEADER);
-	appendString(compiledAssets, loadFunction->str);
-	appendString(compiledAssets, getterFunctions->str);
-	freeString(loadFunction);
-	freeString(spriteLoadFunction);
-	freeString(getterFunctions);
-	appendString(compiledAssets, OUTPUT_FOOTER);
-
-	const char *out = compiledAssets->str;
-	free(compiledAssets);
-
-	return out;
+	return NULL;
 }

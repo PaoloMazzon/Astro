@@ -166,7 +166,7 @@ void vksk_Start() {
 
 	// Compile the assets code
 	vksk_Log("Compiling assets file...");
-	gAssetsFile = vksk_CompileAssetFile();
+	gAssetsFile = vksk_CompileAssetFile("assets/");
 	if (gEngineConfig.enableAssetsPrint)
 		vksk_Log("---------------------Compiled assets file---------------------\n%s\n---------------------Compiled assets file---------------------", gAssetsFile);
 

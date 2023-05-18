@@ -27,7 +27,7 @@ extern VKSK_Pak gGamePak;
 void vksk_Start();
 
 // Searches through the assets folder and makes a wren source file loading it all
-const char *vksk_CompileAssetFile();
+const char *vksk_CompileAssetFile(const char *rootDir);
 
 // Returns teh wren vm
 WrenVM *vksk_GetVM();
