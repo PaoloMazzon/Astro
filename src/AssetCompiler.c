@@ -510,28 +510,100 @@ static const char *getDirOrFile(const char *fullname) {
 // ------------------------------- Asset compiler ------------------------------- //
 
 // TODO: A function that adds a sprite from spritedata to the getter and class strings, same for other types
-static void _vksk_CompileAssetFromSpriteData(String getter, String method, SpriteData *sprite) {
+static void _vksk_CompileAssetFromSpriteData(const char *basePath, String getter, String method, SpriteData *sprite) {
+	char nameBuffer[STRING_BUFFER_SIZE];
+	char output[STRING_BUFFER_SIZE];
+
+	jsonGetAssetName(sprite->filename, sprite->name, nameBuffer, STRING_BUFFER_SIZE);
+	snprintf(
+			output,
+			STRING_BUFFER_SIZE,
+			"\t\t_spr_%s = Sprite.from(_tex_%s, %.2f, %.2f, %.2f, %.2f, %.2f, %i)\n",
+			nameBuffer,
+			nameBuffer,
+			sprite->x,
+			sprite->y,
+			sprite->w,
+			sprite->h,
+			sprite->delay,
+			(int)sprite->frames
+	);
+	appendString(method, output);
+
+	snprintf(
+			output,
+			STRING_BUFFER_SIZE,
+			"\tspr_%s { _spr_%s }\n",
+			nameBuffer,
+			nameBuffer
+	);
+	appendString(getter, output);
+}
+
+static void _vksk_CompileAssetFromBitmapFontData(const char *basePath, String getter, String method, BitmapFontData *bmp) {
+	char output[STRING_BUFFER_SIZE];
+
+	snprintf(
+			output,
+			STRING_BUFFER_SIZE,
+			"\t\t_fnt_%s = BitmapFont.new(\"%s%s\", %i, %i, %.2f, %.2f)\n",
+			bmp->name,
+			basePath,
+			bmp->filename,
+			(int)bmp->ustart,
+			(int)bmp->uend,
+			bmp->w,
+			bmp->h
+	);
+	appendString(method, output);
+
+	snprintf(
+			output,
+			STRING_BUFFER_SIZE,
+			"\tfnt_%s { _fnt_%s }\n",
+			bmp->name,
+			bmp->name
+	);
+	appendString(getter, output);
+}
+
+static void _vksk_CompileAssetFromTrueTypeData(const char *basePath, String getter, String method, TrueTypeFontData *ttf) {
+	char output[STRING_BUFFER_SIZE];
+
+	snprintf(
+			output,
+			STRING_BUFFER_SIZE,
+			"\t\t_fnt_%s = Font.open(\"%s%s\", %.2f, %s, %i, %i)\n",
+			ttf->name,
+			basePath,
+			ttf->filename,
+			ttf->size,
+			ttf->aa ? "true" : "false",
+			ttf->ustart,
+			ttf->uend
+	);
+	appendString(method, output);
+
+	snprintf(
+			output,
+			STRING_BUFFER_SIZE,
+			"\tfnt_%s { _fnt_%s }\n",
+			ttf->name,
+			ttf->name
+	);
+	appendString(getter, output);
+}
+
+static void _vksk_CompileAssetFromBufferData(const char *basePath, String getter, String method, BufferData *buffer) {
 	// TODO: This
 }
 
-static void _vksk_CompileAssetFromBitmapFontData(String getter, String method, BitmapFontData *sprite) {
-	// TODO: This
-}
-
-static void _vksk_CompileAssetFromTrueTypeData(String getter, String method, TrueTypeFontData *sprite) {
-	// TODO: This
-}
-
-static void _vksk_CompileAssetFromBufferData(String getter, String method, BufferData *sprite) {
-	// TODO: This
-}
-
-static void _vksk_CompileAssetFromStringData(String getter, String method, StringData *sprite) {
+static void _vksk_CompileAssetFromStringData(const char *basePath, String getter, String method, StringData *text) {
 	// TODO: This
 }
 
 
-static void _vksk_CompileAssetFromFilename(String getter, String method, const char *path, const char *filename) {
+static void _vksk_CompileAssetFromFilename(String getter, String method, const char *directory, const char *path, const char *filename) {
 	const char *extension = strrchr(filename, '.');
 	char nameBuffer[STRING_BUFFER_SIZE];
 	char output[STRING_BUFFER_SIZE];
@@ -547,7 +619,7 @@ static void _vksk_CompileAssetFromFilename(String getter, String method, const c
 			snprintf(
 					output,
 					STRING_BUFFER_SIZE,
-					"\t\t_%s = Texture.new(\"%s\")\n\t\tasset_map[\"%s\"] = _%s\n",
+					"\t\t_tex_%s = Texture.new(\"%s\")\n\t\tasset_map[\"%s\"] = _tex_%s\n",
 					nameBuffer,
 					path,
 					pathNoRoot,
@@ -558,15 +630,15 @@ static void _vksk_CompileAssetFromFilename(String getter, String method, const c
 			// Check for a sprite json
 			SpriteData sprite;
 			if (jsonFindAsepriteData(path, &sprite)) {
-				_vksk_CompileAssetFromSpriteData(getter, method, &sprite);
+				_vksk_CompileAssetFromSpriteData(directory, getter, method, &sprite);
 			}
-			getterPrefix = "spr_";
+			getterPrefix = "tex_";
 		} else if (strcmp(extension, ".ogg") == 0 || strcmp(extension, ".wav") == 0) {
 			jsonGetAssetName(filename, NULL, nameBuffer, STRING_BUFFER_SIZE);
 			snprintf(
 					output,
 					STRING_BUFFER_SIZE,
-					"\t\t_%s = AudioData.open(\"%s\")\n\t\tasset_map[\"%s\"] = _%s\n",
+					"\t\t_aud_%s = AudioData.open(\"%s\")\n\t\tasset_map[\"%s\"] = _aud_%s\n",
 					nameBuffer,
 					path,
 					pathNoRoot,
@@ -640,7 +712,7 @@ static String _vksk_CompileAssetsFromDirectory(const char *directory, const char
 
 		if (!jsonItemInExcludeList(json, filedirnolead)) {
 			if ((stbuf.st_mode & S_IFMT) != S_IFDIR) {
-				_vksk_CompileAssetFromFilename(topOfClass, loadMethod, filedir, filedirnolead);
+				_vksk_CompileAssetFromFilename(topOfClass, loadMethod, directory, filedir, filedirnolead);
 			} else {
 				// Add the class bit to the loader
 				filedirnolead[strlen(filedirnolead) - 1] = 0;
@@ -662,7 +734,26 @@ static String _vksk_CompileAssetsFromDirectory(const char *directory, const char
 		dp = readdir(dfd);
 	}
 
-	// TODO: Load assets from json
+	SpriteData sprite;
+	while (directoryJSONGetNextSprite(json, &sprite)) {
+		_vksk_CompileAssetFromSpriteData(directory, topOfClass, loadMethod, &sprite);
+	}
+	TrueTypeFontData ttf;
+	while (directoryJSONGetNextTrueTypeFont(json, &ttf)) {
+		_vksk_CompileAssetFromTrueTypeData(directory, topOfClass, loadMethod, &ttf);
+	}
+	BitmapFontData bmf;
+	while (directoryJSONGetNextBitmapFont(json, &bmf)) {
+		_vksk_CompileAssetFromBitmapFontData(directory, topOfClass, loadMethod, &bmf);
+	}
+	BufferData buffer;
+	while (directoryJSONGetNextBuffer(json, &buffer)) {
+		_vksk_CompileAssetFromBufferData(directory, topOfClass, loadMethod, &buffer);
+	}
+	StringData text;
+	while (directoryJSONGetNextString(json, &text)) {
+		_vksk_CompileAssetFromStringData(directory, topOfClass, loadMethod, &text);
+	}
 
 	closedir(dfd);
 	closeDirectoryJSON(json);
