@@ -110,7 +110,7 @@ const char *LOAD_FOOTER = "    }\n\n";
 const char *ASSET_FILE_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont, Font\nimport \"lib/Audio\" for AudioData\n\n";
 const char *ASSET_FILE_FOOTER = "\nvar Assets = AssetsImpl.new()\n";
 const char *ASSET_ASSET_CLASS_HEADER = "class AssetsImpl {\n\tconstruct new() {}\n\n";
-const char *ASSET_ASSET_CLASS_FOOTER = "\t[asset] {\n\t\treturn _asset_map[asset]\n\t}\n}\n";
+const char *ASSET_ASSET_CLASS_FOOTER = "\n\t[asset] {\n\t\treturn _asset_map[asset]\n\t}\n}\n";
 const char *ASSET_DIR_CLASS_HEADER = "\n";
 const char *ASSET_DIR_CLASS_FOOTER = "}\n\n";
 
@@ -354,7 +354,8 @@ static DirectoryJSON openDirectoryJSON(const char *directory) {
 }
 
 static void closeDirectoryJSON(DirectoryJSON json) {
-	cJSON_Delete(json->root);
+	if (json != NULL)
+		cJSON_Delete(json->root);
 	free(json);
 }
 
@@ -506,18 +507,20 @@ static const char *getDirOrFile(const char *fullname) {
 	}
 }
 
+// TODO: A function that converts file paths into python-style . paths without the root directory for the asset map
+
 // ------------------------------- Asset compiler ------------------------------- //
 
-// Compiles a directory, returning the code for that directory's class
-static String _vksk_CompileAssetDirectory(const char *directory) {
-	return NULL; // TODO: This
-}
+// TODO: A function that adds a sprite from spritedata to the getter and class strings, same for other types
+// TODO: A generic function that adds a file to the getter and class strings, accounting for aseprite jsons
 
 // Compiles the root directory, returning the code for that directory's class
-static String _vksk_CompileAssetsFromRootDirectory(const char *directory) {
+static String _vksk_CompileAssetsFromDirectory(const char *directory, const char *topOfClassString, const char *loadMethodString, const char *footerString) {
 	struct dirent *dp;
 	DIR *dfd;
 	DirectoryJSON json = openDirectoryJSON(directory);
+	String topOfClass = appendString(newString(), topOfClassString); // for getters
+	String loadMethod = appendString(newString(), loadMethodString); // for the actual load method
 
 	if ((dfd = opendir(directory)) == NULL) {
 		vksk_Log("Can't access assets directory");
@@ -529,9 +532,11 @@ static String _vksk_CompileAssetsFromRootDirectory(const char *directory) {
 	dp = readdir(dfd);
 	while (dp != NULL) {
 		struct stat stbuf ;
-		snprintf(filedir, STRING_BUFFER_SIZE, "%s%s", directory, dp->d_name) ;
-		if(stat(filedir, &stbuf) == -1)
+		snprintf(filedir, STRING_BUFFER_SIZE, "%s%s", directory, dp->d_name);
+		if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0 || stat(filedir, &stbuf) == -1) {
+			dp = readdir(dfd);
 			continue;
+		}
 
 		// Put an / at the end of a directory
 		if ((stbuf.st_mode & S_IFMT) == S_IFDIR) {
@@ -541,21 +546,40 @@ static String _vksk_CompileAssetsFromRootDirectory(const char *directory) {
 				filedir[len + 1] = 0;
 			}
 		}
-		const char *filedirnolead = getDirOrFile(filedir);
+		char *filedirnolead = (void*)getDirOrFile(filedir);
 
 		if (!jsonItemInExcludeList(json, filedirnolead)) {
 			if ((stbuf.st_mode & S_IFMT) != S_IFDIR) {
-				// TODO: This
-			} else if (strcmp(filedirnolead, "./") != 0 && strcmp(filedirnolead, "../") != 0) {
-				// TODO: This
+				// TODO: Implement the general purpose file loader
+			} else {
+				// Add the class bit to the loader
+				filedirnolead[strlen(filedirnolead) - 1] = 0;
+				char directoryAssetName[STRING_BUFFER_SIZE];
+				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "\t\t_%s = %sImpl.new(asset_map)\n", filedirnolead, filedirnolead);
+				appendString(loadMethod, directoryAssetName);
+
+				// Append this class to the new class
+				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "class %sImpl {\n", filedirnolead);
+				filedirnolead[strlen(filedirnolead)] = '/';
+				topOfClass = appendStringAndFree(_vksk_CompileAssetsFromDirectory(filedir, directoryAssetName, "\n\tconstruct new(asset_map) {\n", ASSET_DIR_CLASS_FOOTER), popString(topOfClass));
+
+				// Now the getter
+				filedirnolead[strlen(filedirnolead) - 1] = 0;
+				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "\t%s { _%s }\n", filedirnolead, filedirnolead);
+				appendString(topOfClass, directoryAssetName);
 			}
 		}
 		dp = readdir(dfd);
 	}
 
+	// TODO: Load assets from json
+
 	closedir(dfd);
 	closeDirectoryJSON(json);
-	return NULL;
+
+	// Build output string
+	appendStringAndFree(topOfClass, popString(appendString(loadMethod, "\t}\n")));
+	return appendString(topOfClass, footerString);
 }
 
 static bool _vksk_CompileAssetsFromPak(String loadFunction, String getterFunctions, String spriteLoadFunction) {
@@ -563,7 +587,10 @@ static bool _vksk_CompileAssetsFromPak(String loadFunction, String getterFunctio
 }
 
 const char *vksk_CompileAssetFile(const char *rootDir) {
-	_vksk_CompileAssetsFromRootDirectory(rootDir);
+	String string = appendString(newString(), ASSET_FILE_HEADER);
+	appendString(string, popString(_vksk_CompileAssetsFromDirectory(rootDir, ASSET_ASSET_CLASS_HEADER, "\n\tload_assets() {\n\t\t_asset_map = {}\n\t\tvar asset_map = _asset_map\n", ASSET_ASSET_CLASS_FOOTER)));
+	appendString(string, ASSET_FILE_FOOTER);
+	printf("%s", string->str);
 	fflush(stdout);
-	return NULL;
+	return popString(string);
 }
