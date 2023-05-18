@@ -94,7 +94,7 @@
 #define GET_JSON_STRING(item, def) (cJSON_IsString(item) ? cJSON_GetStringValue(item) : def)
 #define GET_JSON_BOOL(item, def) (cJSON_IsBool(item) ? cJSON_IsTrue(item) : def)
 
-const char *OUTPUT_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont, Font\nimport \"lib/Audio\" for AudioData\n"
+const char *OUTPUT_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont, Font\nimport \"lib/Audio\" for AudioData"
 							"\n"
 							"class Assets {\n";
 
@@ -107,7 +107,7 @@ const char *LOAD_HEADER = "    static load_assets() {\n"
 						  "        __asset_map = {}\n";
 const char *LOAD_FOOTER = "    }\n\n";
 
-const char *ASSET_FILE_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont, Font\nimport \"lib/Audio\" for AudioData\n\n";
+const char *ASSET_FILE_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont, Font\nimport \"lib/Audio\" for AudioData\nimport \"File\" for File\n\n";
 const char *ASSET_FILE_FOOTER = "\nvar Assets = AssetsImpl.new()\n";
 const char *ASSET_ASSET_CLASS_HEADER = "class AssetsImpl {\n\tconstruct new() {}\n\n";
 const char *ASSET_ASSET_CLASS_FOOTER = "\n\t[asset] {\n\t\treturn _asset_map[asset]\n\t}\n}\n";
@@ -219,15 +219,15 @@ typedef struct DirectoryJSON {
 	cJSON *stringsPointer; // json for the strings list
 } *DirectoryJSON;
 
-// Either copies the sprite's name into the buffer or forms a name from the filename using
+// Either copies the asset's name into the buffer or forms a name from the filename using
 // the filename without an extension or path
-static const char *jsonGetSpriteName(SpriteData *sprite, char *buffer, int bufferSize) {
-	if (sprite->name != NULL) {
-		strncpy(buffer, sprite->name, bufferSize);
-		buffer[strlen(sprite->name) >= bufferSize ? bufferSize - 1 : strlen(sprite->name)] = 0;
+static const char *jsonGetAssetName(const char *filename, const char *name, char *buffer, int bufferSize) {
+	if (name != NULL) {
+		strncpy(buffer, name, bufferSize);
+		buffer[strlen(name) >= bufferSize ? bufferSize - 1 : strlen(name)] = 0;
 	} else {
-		const char *baseName = strrchr(sprite->filename, '/');
-		baseName = baseName == NULL ? sprite->filename : baseName + 1;
+		const char *baseName = strrchr(filename, '/');
+		baseName = baseName == NULL ? filename : baseName + 1;
 		strncpy(buffer, baseName, bufferSize);
 		char *ext = strrchr(buffer, '.');
 		*ext = 0;
@@ -507,12 +507,102 @@ static const char *getDirOrFile(const char *fullname) {
 	}
 }
 
-// TODO: A function that converts file paths into python-style . paths without the root directory for the asset map
-
 // ------------------------------- Asset compiler ------------------------------- //
 
 // TODO: A function that adds a sprite from spritedata to the getter and class strings, same for other types
-// TODO: A generic function that adds a file to the getter and class strings, accounting for aseprite jsons
+static void _vksk_CompileAssetFromSpriteData(String getter, String method, SpriteData *sprite) {
+	// TODO: This
+}
+
+static void _vksk_CompileAssetFromBitmapFontData(String getter, String method, BitmapFontData *sprite) {
+	// TODO: This
+}
+
+static void _vksk_CompileAssetFromTrueTypeData(String getter, String method, TrueTypeFontData *sprite) {
+	// TODO: This
+}
+
+static void _vksk_CompileAssetFromBufferData(String getter, String method, BufferData *sprite) {
+	// TODO: This
+}
+
+static void _vksk_CompileAssetFromStringData(String getter, String method, StringData *sprite) {
+	// TODO: This
+}
+
+
+static void _vksk_CompileAssetFromFilename(String getter, String method, const char *path, const char *filename) {
+	const char *extension = strrchr(filename, '.');
+	char nameBuffer[STRING_BUFFER_SIZE];
+	char output[STRING_BUFFER_SIZE];
+	const char *pathNoRoot;
+	const char *getterPrefix = NULL;
+
+	if (extension != NULL) {
+		pathNoRoot = strchr(path, '/') + 1;
+
+		if (strcmp(extension, ".bmp") == 0 || strcmp(extension, ".png") == 0 ||
+			strcmp(extension, ".jpg") == 0 || strcmp(extension, ".jpeg") == 0) {
+			jsonGetAssetName(filename, NULL, nameBuffer, STRING_BUFFER_SIZE);
+			snprintf(
+					output,
+					STRING_BUFFER_SIZE,
+					"\t\t_%s = Texture.new(\"%s\")\n\t\tasset_map[\"%s\"] = _%s\n",
+					nameBuffer,
+					path,
+					pathNoRoot,
+					nameBuffer
+			);
+			appendString(method, output);
+
+			// Check for a sprite json
+			SpriteData sprite;
+			if (jsonFindAsepriteData(path, &sprite)) {
+				_vksk_CompileAssetFromSpriteData(getter, method, &sprite);
+			}
+			getterPrefix = "spr_";
+		} else if (strcmp(extension, ".ogg") == 0 || strcmp(extension, ".wav") == 0) {
+			jsonGetAssetName(filename, NULL, nameBuffer, STRING_BUFFER_SIZE);
+			snprintf(
+					output,
+					STRING_BUFFER_SIZE,
+					"\t\t_%s = AudioData.open(\"%s\")\n\t\tasset_map[\"%s\"] = _%s\n",
+					nameBuffer,
+					path,
+					pathNoRoot,
+					nameBuffer
+			);
+			appendString(method, output);
+			getterPrefix = "aud_";
+		} else if (strcmp(extension, ".txt") == 0) {
+			jsonGetAssetName(filename, NULL, nameBuffer, STRING_BUFFER_SIZE);
+			snprintf(
+					output,
+					STRING_BUFFER_SIZE,
+					"\t\t_str_%s = File.read(\"%s\")\n\t\tasset_map[\"%s\"] = _str_%s\n",
+					nameBuffer,
+					path,
+					pathNoRoot,
+					nameBuffer
+			);
+			appendString(method, output);
+			getterPrefix = "str_";
+		}
+
+		if (getterPrefix != NULL) {
+			snprintf(
+					output,
+					STRING_BUFFER_SIZE,
+					"\t%s%s { _%s%s }\n",
+					getterPrefix,
+					nameBuffer,
+					getterPrefix,
+					nameBuffer
+			);
+			appendString(getter, output);
+		}
+	}
+}
 
 // Compiles the root directory, returning the code for that directory's class
 static String _vksk_CompileAssetsFromDirectory(const char *directory, const char *topOfClassString, const char *loadMethodString, const char *footerString) {
@@ -550,7 +640,7 @@ static String _vksk_CompileAssetsFromDirectory(const char *directory, const char
 
 		if (!jsonItemInExcludeList(json, filedirnolead)) {
 			if ((stbuf.st_mode & S_IFMT) != S_IFDIR) {
-				// TODO: Implement the general purpose file loader
+				_vksk_CompileAssetFromFilename(topOfClass, loadMethod, filedir, filedirnolead);
 			} else {
 				// Add the class bit to the loader
 				filedirnolead[strlen(filedirnolead) - 1] = 0;
