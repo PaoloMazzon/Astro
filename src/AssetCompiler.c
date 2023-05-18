@@ -107,7 +107,7 @@ const char *LOAD_HEADER = "    static load_assets() {\n"
 						  "        __asset_map = {}\n";
 const char *LOAD_FOOTER = "    }\n\n";
 
-const char *ASSET_FILE_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont, Font\nimport \"lib/Audio\" for AudioData\nimport \"File\" for File\n\n";
+const char *ASSET_FILE_HEADER = "import \"lib/Drawing\" for Texture, Sprite, BitmapFont, Font\nimport \"lib/Audio\" for AudioData\nimport \"lib/File\" for File\nimport \"lib/Util\" for Buffer\n\n";
 const char *ASSET_FILE_FOOTER = "\nvar Assets = AssetsImpl.new()\n";
 const char *ASSET_ASSET_CLASS_HEADER = "class AssetsImpl {\n\tconstruct new() {}\n\n";
 const char *ASSET_ASSET_CLASS_FOOTER = "\n\t[asset] {\n\t\treturn _asset_map[asset]\n\t}\n}\n";
@@ -342,7 +342,7 @@ static DirectoryJSON openDirectoryJSON(const char *directory) {
 			dir->fontsPointer = dir->fontsPointer != NULL && cJSON_IsArray(dir->fontsPointer) ? dir->fontsPointer->child : NULL;
 			dir->bitmapFontsPointer = dir->bitmapFontsPointer != NULL && cJSON_IsArray(dir->bitmapFontsPointer) ? dir->bitmapFontsPointer->child : NULL;
 			dir->buffersPointer = dir->buffersPointer != NULL && cJSON_IsArray(dir->buffersPointer) ? dir->buffersPointer->child : NULL;
-			dir->spritesPointer = dir->spritesPointer != NULL && cJSON_IsArray(dir->spritesPointer) ? dir->spritesPointer->child : NULL;
+			dir->stringsPointer = dir->stringsPointer != NULL && cJSON_IsArray(dir->stringsPointer) ? dir->stringsPointer->child : NULL;
 		} else {
 			free(dir);
 			dir = NULL;
@@ -573,14 +573,17 @@ static void _vksk_CompileAssetFromTrueTypeData(const char *basePath, String gett
 	snprintf(
 			output,
 			STRING_BUFFER_SIZE,
-			"\t\t_fnt_%s = Font.open(\"%s%s\", %.2f, %s, %i, %i)\n",
+			"\t\t_fnt_%s = Font.open(\"%s%s\", %.2f, %s, %i, %i)\n\t\tasset_map[\"%s%s\"] = _fnt_%s\n",
 			ttf->name,
 			basePath,
 			ttf->filename,
 			ttf->size,
 			ttf->aa ? "true" : "false",
 			ttf->ustart,
-			ttf->uend
+			ttf->uend,
+			basePath,
+			ttf->filename,
+			ttf->name
 	);
 	appendString(method, output);
 
@@ -595,11 +598,55 @@ static void _vksk_CompileAssetFromTrueTypeData(const char *basePath, String gett
 }
 
 static void _vksk_CompileAssetFromBufferData(const char *basePath, String getter, String method, BufferData *buffer) {
-	// TODO: This
+	char output[STRING_BUFFER_SIZE];
+
+	snprintf(
+			output,
+			STRING_BUFFER_SIZE,
+			"\t\t_buf_%s = Buffer.open(\"%s%s\")\n\t\tasset_map[\"%s%s\"] = _buf_%s\n",
+			buffer->name,
+			basePath,
+			buffer->filename,
+			basePath,
+			buffer->filename,
+			buffer->name
+	);
+	appendString(method, output);
+
+	snprintf(
+			output,
+			STRING_BUFFER_SIZE,
+			"\tbuf_%s { _buf_%s }\n",
+			buffer->name,
+			buffer->name
+	);
+	appendString(getter, output);
 }
 
 static void _vksk_CompileAssetFromStringData(const char *basePath, String getter, String method, StringData *text) {
-	// TODO: This
+	char output[STRING_BUFFER_SIZE];
+
+	snprintf(
+			output,
+			STRING_BUFFER_SIZE,
+			"\t\t_txt_%s = Buffer.open(\"%s%s\")\n\t\tasset_map[\"%s%s\"] = _txt_%s\n",
+			text->name,
+			basePath,
+			text->filename,
+			basePath,
+			text->filename,
+			text->name
+	);
+	appendString(method, output);
+
+	snprintf(
+			output,
+			STRING_BUFFER_SIZE,
+			"\ttxt_%s { _txt_%s }\n",
+			text->name,
+			text->name
+	);
+	appendString(getter, output);
 }
 
 
@@ -651,14 +698,14 @@ static void _vksk_CompileAssetFromFilename(String getter, String method, const c
 			snprintf(
 					output,
 					STRING_BUFFER_SIZE,
-					"\t\t_str_%s = File.read(\"%s\")\n\t\tasset_map[\"%s\"] = _str_%s\n",
+					"\t\t_txt_%s = File.read(\"%s\")\n\t\tasset_map[\"%s\"] = _txt_%s\n",
 					nameBuffer,
 					path,
 					pathNoRoot,
 					nameBuffer
 			);
 			appendString(method, output);
-			getterPrefix = "str_";
+			getterPrefix = "txt_";
 		}
 
 		if (getterPrefix != NULL) {
