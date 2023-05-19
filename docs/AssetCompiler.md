@@ -5,20 +5,26 @@ nav_order: 7
 has_children: false
 ---
 
-
 # Asset Compiler
+
+ 1. [Intro](#intro)
+ 2. [Recognized File Types](#recognized-file-types)
+ 3. [Loading Complex Assets](#loading-complex-assets)
+ 4. [Excluding Files and Directories](#excluding-files-and-directories)
+
+## Intro
 Astro automatically creates a Wren module when it starts called `Assets` with one class:
 `Assets`. In this class you will find all of the resources your game needs from the folder
-`assets/` already loaded. The asset compiler will search through said folder and any
-files with extensions it recognizes will be loaded at startup. The `Assets` class will
-name the getter function the same thing as the files it pulled from without the extension and
-with a prefix based on the asset type.
+`assets/` already loaded. Each loaded asset is accessible via their path relative to `assets/`,
+but with their extension removed and a small prefix depending on what they were loaded as.
+For example, `assets/player.png` would be accessed via `Assets.tex_player`, and 
+`assets/sounds/music.wav` would be `Assets.sounds.aud_music`.
 
 For example, if your `assets/` folder looks like
 
-    player.png
-    grass.jpg
-    music.wav
+    | player.png
+    | grass.jpg
+    | music.wav
 
 You would be able to access the files with
 
@@ -30,54 +36,53 @@ The `Assets` class is automatically imported in every file.
 
 Based on the extension, the asset compiler will automatically load it as the proper class.
 The `Assets` class also provides a way to access assets via a string name of the asset by the
-`Assets[]` operator. Simply, `Assets.fnt_font` is equal to `Assets["fnt_font"]`.
+`Assets[]` operator. With the `Assets[]` operator you may put in a path to your loaded file
+relative to `assets/` once again. So `Assets.tex_player` is the same as `Assets["player.png"]`.
 
 Prefixes
 
- + Sprites - `spr_*` and additionally a texture of the same name (`tex_*`)
+ + Sprites - `spr_*`
  + Textures - `tex_*`
  + Audio - `aud_*`
  + Bitmap fonts - `fnt_*`
  + TrueType fonts - `fnt_*`
+ + Buffers - `buf_*`
+ + Strings - `txt_*`
+ 
+The asset compiler is recursive for sub-directories and all sub-directories are accessible
+from the `Assets` class by replacing any `/`'s in the name with `.`'s instead. For example,
+given the following as the structure of the `assets/` folder:
 
-## Loading Sprites and Bitmap Fonts
-Because bitmap fonts and sprites both just come from images, you have to tell the asset compiler
-if you want it to load an image as a sprite or bitmap font with a file called `assets/assets.ini`.
-Any images not named in `assets/assets.ini` (or if the file doesn't exist) will be loaded as a
-`Texture`.
+    | dir/
+    |    | sprites/
+    |    |        | player.png
+    |    |        | player_run.png
+    |    | jump.ogg
+    | banner.jpg
 
-An example of an `assets/asset.ini` file
+You could access all of them in order through
 
-    [sprite.png]
-    type=sprite
-    x=0
-    y=0
-    w=16
-    h=16
-    delay=0.2
-    origin_x=0
-    origin_y=0
-    frames=4
-    
-    [font.png]
-    type=font
-    ustart=32
-    uend=128
-    w=40
-    h=70
+    Assets.dir.sprites.tex_player
+    Assets.dir.sprites.tex_player_run
+    Assets.dir.aud_jump
+    Assets.tex_banner
 
-For each file you want to load as something other than a texture, you need a corresponding
-header in the INI file with the filename as the header, and a few other variables you can
-see in the example above.
+## Recognized File Types
+In brief,
 
-## TrueType Fonts
-You must also outline `.ttf` files in the `assets.ini` file as well, its quite simple.
+ + `.png`, `.bmp`, `.jpg`, and `.jpeg` are all recognized as textures.
+ + `.wav` and `.ogg` are audio.
+ + `.txt` is a string.
 
-    [my_font.ttf]
-    size=50
-    ustart=32
-    uend=128
-    aa=true
+To load sprites, bitmap fonts, truetype fonts, buffers, or non-.txt strings automatically
+you have to make the asset compiler aware of them through a `assets.json` file. It is outlined
+in more detail [here](#loading-complex-assets). Sprites may also be loaded through a corresponding
+*texture-file*.json file in the same directory as *texture-file*.
 
-`size` is the height of the font in pixels, and `ustart` to `uend` is the unicode range to
-preload. `aa` is whether or not to apply anti-aliasing to the font.
+## Loading Complex Assets
+Using an `assets.json` file in any folder in the `assets/` folder you may specify sprites/fonts/buffers/strings
+inside that folder (sub-directories of `assets/` need their own `assets.json` file too).
+TODO: This
+
+## Excluding Files and Directories
+TODO: This
