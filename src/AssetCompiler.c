@@ -764,11 +764,11 @@ static String _vksk_CompileAssetsFromDirectory(const char *directory, const char
 				// Add the class bit to the loader
 				filedirnolead[strlen(filedirnolead) - 1] = 0;
 				char directoryAssetName[STRING_BUFFER_SIZE];
-				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "\t\t_%s = %sImpl.new(asset_map)\n", filedirnolead, filedirnolead);
+				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "\t\t_%s = C%sImpl.new(asset_map)\n", filedirnolead, filedirnolead);
 				appendString(loadMethod, directoryAssetName);
 
 				// Append this class to the new class
-				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "class %sImpl {\n", filedirnolead);
+				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "class C%sImpl {\n", filedirnolead);
 				filedirnolead[strlen(filedirnolead)] = '/';
 				topOfClass = appendStringAndFree(_vksk_CompileAssetsFromDirectory(filedir, directoryAssetName, "\n\tconstruct new(asset_map) {\n", ASSET_DIR_CLASS_FOOTER), popString(topOfClass));
 

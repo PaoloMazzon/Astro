@@ -1,0 +1,130 @@
+{
+  "sprites": [
+	{
+	  "file": "cherries.png",
+	  "name": "cherries",
+	  "x": 0,
+	  "y": 0,
+	  "w": 32,
+	  "h": 32,
+	  "delay": 0.07,
+	  "frames": 17
+	},
+	{
+	  "file": "kiwi.png",
+	  "name": "kiwi",
+	  "x": 0,
+	  "y": 0,
+	  "w": 32,
+	  "h": 32,
+	  "delay": 0.07,
+	  "frames": 17
+	},
+	{
+	  "file": "bananas.png",
+	  "name": "bananas",
+	  "x": 0,
+	  "y": 0,
+	  "w": 32,
+	  "h": 32,
+	  "delay": 0.07,
+	  "frames": 17
+	},
+	{
+	  "file": "apple.png",
+	  "name": "apple",
+	  "x": 0,
+	  "y": 0,
+	  "w": 32,
+	  "h": 32,
+	  "delay": 0.07,
+	  "frames": 17
+	},
+
+	{
+	  "file": "player_double_jump.png",
+	  "name": "player_double_jump",
+	  "x": 0,
+	  "y": 0,
+	  "w": 32,
+	  "h": 32,
+	  "delay": 0.07,
+	  "frames": 6
+	},
+
+	{
+	  "file": "player_idle.png",
+	  "name": "player_idle",
+	  "x": 0,
+	  "y": 0,
+	  "w": 32,
+	  "h": 32,
+	  "delay": 0.07,
+	  "frames": 11
+	},
+
+	{
+	  "file": "player_run.png",
+	  "name": "player_run",
+	  "x": 0,
+	  "y": 0,
+	  "w": 32,
+	  "h": 32,
+	  "delay": 0.07,
+	  "frames": 12
+	},
+
+	{
+	  "file": "player_fall.png",
+	  "name": "player_fall",
+	  "x": 0,
+	  "y": 0,
+	  "w": 32,
+	  "h": 32,
+	  "delay": 0.07,
+	  "frames": 1
+	},
+
+	{
+	  "file": "player_jump.png",
+	  "name": "player_jump",
+	  "x": 0,
+	  "y": 0,
+	  "w": 32,
+	  "h": 32,
+	  "delay": 0.07,
+	  "frames": 1
+	},
+
+	{
+	  "file": "collected.png",
+	  "name": "collected",
+	  "x": 0,
+	  "y": 0,
+	  "w": 32,
+	  "h": 32,
+	  "delay": 0.07,
+	  "frames": 6
+	}
+  ],
+  "fonts":[
+	{
+	  "file": "Ubuntu.ttf",
+	  "name": "Ubuntu",
+	  "size": 50,
+	  "ustart": 32,
+	  "uend": 128,
+	  "aa": true
+	}
+  ],
+  "bitmap_fonts":[
+	{
+	  "file": "font.png",
+	  "name": "font",
+	  "ustart": 32,
+	  "uend": 128,
+	  "w": 16,
+	  "h": 32
+	}
+  ]
+}

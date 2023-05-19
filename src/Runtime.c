@@ -235,6 +235,11 @@ void vksk_Start() {
 	vksk_Log("Loading assets...");
 	wrenInterpret(vm, "__top__", "import \"Assets\" for Assets\nAssets.load_assets()\n");
 
+	// Stop the garbage collector from deleting the assets
+	wrenEnsureSlots(vm, 1);
+	wrenGetVariable(vm, "Assets", "Assets", 0);
+	WrenHandle *assetsHandle = wrenGetSlotHandle(vm, 0);
+
 	// Setup camera
 	VK2DCameraSpec spec = vk2dCameraGetSpec(VK2D_DEFAULT_CAMERA);
 	spec.zoom = 1;
@@ -373,6 +378,7 @@ void vksk_Start() {
 	vksk_Log("Cleanup...");
 	vk2dRendererWait();
 	_vksk_FinalizeDebug();
+	wrenReleaseHandle(vm, assetsHandle);
 	wrenCollectGarbage(vm);
 	wrenFreeVM(vm);
 	juQuit();

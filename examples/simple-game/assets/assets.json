@@ -5,7 +5,7 @@
 	  "name": "player_jump",
 	  "w": 8,
 	  "h": 8,
-	  "frames": 8,
+	  "frames": 4,
 	  "delay": 0.8
 	},
 	{

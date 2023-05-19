@@ -68,8 +68,8 @@ class Game is Level {
 
         // Draw UI
         Renderer.lock_cameras(ui_camera)
-        Renderer.draw_font_ext(Assets.fnt_FutilePro, "[#000000][~2]Alt+Enter", 1, 2)
-        Renderer.draw_font_ext(Assets.fnt_FutilePro, "[*][~2]Alt+Enter", 2, 0)
+        Renderer.draw_font_ext(Assets.fnt_font, "[#000000][~2]Alt+Enter", 1, 2)
+        Renderer.draw_font_ext(Assets.fnt_font, "[*][~2]Alt+Enter", 2, 0)
 
         // Calculate the game surface's scale
         Renderer.lock_cameras(Renderer.DEFAULT_CAMERA)
