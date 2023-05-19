@@ -50,6 +50,7 @@ struct VKSK_Pak {
 struct VKSK_PakDir {
 	VKSK_Pak root;
 	int fileIndex;
+	int dirsDeep;
 	char currentDir[1024];
 };
 
@@ -66,6 +67,28 @@ static const char *_vksk_CopyString(const char *string) {
 	memcpy(s, string, size);
 	s[size] = 0;
 	return s;
+}
+
+// Returns true if string starts with the entire contents of root
+static bool _vksk_StartsWith(const char *root, const char *string) {
+	int rl = strlen(root);
+	int sl = strlen(string);
+	if (rl > sl)
+		return false;
+	for (int i = 0; i < rl; i++)
+		if (root[i] != string[i])
+			return false;
+	return true;
+}
+
+// Returns how many /'s are in a path
+static int _vksk_DirectoriesDeep(const char *path) {
+	int deep = 0;
+	while (*path != 0) {
+		if (*path == '/')
+			deep += 1;
+		path++;
+	}
 }
 
 static unsigned char* _vksk_LoadFileRaw(const char *filename, int *size) {
@@ -265,7 +288,22 @@ void vksk_PakPrintContents(VKSK_Pak pak) {
 }
 
 const char *vksk_PakBeginLoop(VKSK_Pak pak, VKSK_PakDir *pakdir, const char *dir) {
-	return NULL; // TODO: This
+	// Make sure the directory is either blank or ends with a slash if not blank
+	if (strcmp("./", dir) != 0 && strcmp("../", dir) != 0 && strcmp(".", dir) != 0 && strcmp("..", dir) != 0) {
+		if (dir[strlen(dir) - 1] == '/')
+			strncpy(pakdir->currentDir, dir, 1024);
+		else
+			snprintf(pakdir->currentDir, 1024, "%s/", dir);
+
+		// Count how many dirs deep
+		pakdir->dirsDeep = _vksk_DirectoriesDeep(pakdir->currentDir);
+	} else {
+		pakdir->currentDir[0] = 0;
+		pakdir->dirsDeep = 0;
+	}
+	pakdir->root = pak;
+	pakdir->fileIndex = 0;
+	return vksk_PakNext(pakdir);
 }
 
 const char *vksk_PakNext(VKSK_PakDir *pakdir) {
