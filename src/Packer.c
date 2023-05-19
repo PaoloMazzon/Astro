@@ -47,13 +47,6 @@ struct VKSK_Pak {
 	const char *filename;
 };
 
-struct VKSK_PakDir {
-	VKSK_Pak root;
-	int fileIndex;
-	int dirsDeep;
-	char currentDir[1024];
-};
-
 static VKSK_Pak _vksk_PakMakeEmpty(VKSK_PakType type) {
 	VKSK_Pak pak = calloc(1, sizeof(struct VKSK_Pak));
 	pak->header.endian = SDL_BYTEORDER;
@@ -69,18 +62,6 @@ static const char *_vksk_CopyString(const char *string) {
 	return s;
 }
 
-// Returns true if string starts with the entire contents of root
-static bool _vksk_StartsWith(const char *root, const char *string) {
-	int rl = strlen(root);
-	int sl = strlen(string);
-	if (rl > sl)
-		return false;
-	for (int i = 0; i < rl; i++)
-		if (root[i] != string[i])
-			return false;
-	return true;
-}
-
 // Returns how many /'s are in a path
 static int _vksk_DirectoriesDeep(const char *path) {
 	int deep = 0;
@@ -89,6 +70,24 @@ static int _vksk_DirectoriesDeep(const char *path) {
 			deep += 1;
 		path++;
 	}
+	return deep;
+}
+
+// Copies a directory name given how many deep in the path to copy, so "assets/test/thing" with a dirsDeep of 2 would
+// give "assets/test/". Copies into buffer and returns it.
+static const char *_vksk_CopyDirectoryXDeep(const char *path, int dirsDeep, char *buffer, int bufferSize) {
+	if (dirsDeep == 0) {
+		buffer[0] = 0;
+	} else {
+		int i;
+		for (i = 0; i < bufferSize - 1 && path[i] != 0 && dirsDeep > 0; i++) {
+			buffer[i] = path[i];
+			if (path[i] == '/')
+				dirsDeep -= 1;
+		}
+		buffer[i] = 0;
+	}
+	return buffer;
 }
 
 static unsigned char* _vksk_LoadFileRaw(const char *filename, int *size) {
@@ -303,11 +302,38 @@ const char *vksk_PakBeginLoop(VKSK_Pak pak, VKSK_PakDir *pakdir, const char *dir
 	}
 	pakdir->root = pak;
 	pakdir->fileIndex = 0;
+	pakdir->returnDir[0] = 0;
 	return vksk_PakNext(pakdir);
 }
 
 const char *vksk_PakNext(VKSK_PakDir *pakdir) {
-	return NULL; // TODO: This
+	// We want to check that whatever index is next is the same levels deep and same start path.
+	// If that path is not the same depth we copy that next path down into
+	// the returnDir, then go down the list until we find the next entry that doesn't
+	// start with the same path as returnDir to get this function ready for the next
+	// call.
+	for (; pakdir->fileIndex < pakdir->root->header.fileCount; pakdir->fileIndex++) {
+		const char *file = pakdir->root->header.files[pakdir->fileIndex].filename;
+		if (_vksk_IsFromDirectory(file, pakdir->currentDir) && _vksk_DirectoriesDeep(file) == pakdir->dirsDeep) {
+			// This is a file inside the current directory
+			pakdir->fileIndex++;
+			return file;
+		} else if (_vksk_IsFromDirectory(file, pakdir->currentDir) && _vksk_DirectoriesDeep(file) > pakdir->dirsDeep) {
+			// This is a sub-directory of our current dir
+			_vksk_CopyDirectoryXDeep(file, pakdir->dirsDeep + 1, pakdir->returnDir, 1024);
+
+			// Find the next entry that isnt from there
+			for (; pakdir->fileIndex < pakdir->root->header.fileCount; pakdir->fileIndex++) {
+				const char *searchFile = pakdir->root->header.files[pakdir->fileIndex].filename;
+				if (!_vksk_IsFromDirectory(searchFile, pakdir->returnDir))
+					break;
+			}
+
+			return pakdir->returnDir;
+		}
+	}
+
+	return NULL;
 }
 
 VKSK_Pak vksk_PakCreate() {

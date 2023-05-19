@@ -359,6 +359,8 @@ static void closeDirectoryJSON(DirectoryJSON json) {
 	free(json);
 }
 
+static bool variableNameIsValid(const char *);
+// TODO: Searching for assets in the json lists shouldn't stop if one of the assets is wrong
 // Attempts to find the next sprite in a directory json, returns true if it found one and filled out
 // the sprite data pointer.
 static bool directoryJSONGetNextSprite(DirectoryJSON json, SpriteData *sprite) {
@@ -376,6 +378,8 @@ static bool directoryJSONGetNextSprite(DirectoryJSON json, SpriteData *sprite) {
 		if (HAS_REQUIRED_DATA(file, name)) {
 			sprite->filename = GET_JSON_STRING(file, "");
 			sprite->name = GET_JSON_STRING(name, "");
+			if (!variableNameIsValid(sprite->name))
+				return false;
 			sprite->x = GET_JSON_DOUBLE(jsonX, 0);
 			sprite->y = GET_JSON_DOUBLE(jsonY, 0);
 			sprite->originX = GET_JSON_DOUBLE(jsonOriginX, 0);
@@ -405,6 +409,8 @@ static bool directoryJSONGetNextBitmapFont(DirectoryJSON json, BitmapFontData *b
 		if (HAS_REQUIRED_DATA(file, name)) {
 			bmpfont->filename = GET_JSON_STRING(file, "");
 			bmpfont->name = GET_JSON_STRING(name, "");
+			if (!variableNameIsValid(bmpfont->name))
+				return false;
 			bmpfont->ustart = GET_JSON_DOUBLE(ustart, 32);
 			bmpfont->uend = GET_JSON_DOUBLE(uend, 128);
 			bmpfont->w = GET_JSON_DOUBLE(w, 0);
@@ -430,6 +436,8 @@ static bool directoryJSONGetNextTrueTypeFont(DirectoryJSON json, TrueTypeFontDat
 		if (HAS_REQUIRED_DATA(file, name)) {
 			ttf->filename = GET_JSON_STRING(file, "");
 			ttf->name = GET_JSON_STRING(name, "");
+			if (!variableNameIsValid(ttf->name))
+				return false;
 			ttf->ustart = GET_JSON_DOUBLE(ustart, 32);
 			ttf->uend = GET_JSON_DOUBLE(uend, 128);
 			ttf->size = GET_JSON_DOUBLE(size, 16);
@@ -451,6 +459,8 @@ static bool directoryJSONGetNextBuffer(DirectoryJSON json, BufferData *buffer) {
 		if (HAS_REQUIRED_DATA(file, name)) {
 			buffer->filename = GET_JSON_STRING(file, "");
 			buffer->name = GET_JSON_STRING(name, "");
+			if (!variableNameIsValid(buffer->name))
+				return false;
 			json->buffersPointer = json->buffersPointer->next;
 			return true;
 		}
@@ -468,6 +478,8 @@ static bool directoryJSONGetNextString(DirectoryJSON json, StringData *string) {
 		if (HAS_REQUIRED_DATA(file, name)) {
 			string->filename = GET_JSON_STRING(file, "");
 			string->name = GET_JSON_STRING(name, "");
+			if (!variableNameIsValid(string->name))
+				return false;
 			json->stringsPointer = json->stringsPointer->next;
 			return true;
 		}
@@ -505,6 +517,19 @@ static const char *getDirOrFile(const char *fullname) {
 	} else {
 		return strrchr(fullname, '/') + 1;
 	}
+}
+
+// Converts a folder into a class name by replacing / with _ into a buffer, returning it
+static const char *folderToClass(const char *folder, char *buffer, int bufferSize) {
+	int i;
+	for (i = 0; i < bufferSize - 1 && i < strlen(folder) - 1; i++) {
+		if (folder[i] == '/')
+			buffer[i] = '_';
+		else
+			buffer[i] = folder[i];
+	}
+	buffer[i] = 0;
+	return buffer;
 }
 
 // ------------------------------- Asset compiler ------------------------------- //
@@ -663,6 +688,8 @@ static void _vksk_CompileAssetFromFilename(String getter, String method, const c
 		if (strcmp(extension, ".bmp") == 0 || strcmp(extension, ".png") == 0 ||
 			strcmp(extension, ".jpg") == 0 || strcmp(extension, ".jpeg") == 0) {
 			jsonGetAssetName(filename, NULL, nameBuffer, STRING_BUFFER_SIZE);
+			if (!variableNameIsValid(nameBuffer))
+				return;
 			snprintf(
 					output,
 					STRING_BUFFER_SIZE,
@@ -682,6 +709,8 @@ static void _vksk_CompileAssetFromFilename(String getter, String method, const c
 			getterPrefix = "tex_";
 		} else if (strcmp(extension, ".ogg") == 0 || strcmp(extension, ".wav") == 0) {
 			jsonGetAssetName(filename, NULL, nameBuffer, STRING_BUFFER_SIZE);
+			if (!variableNameIsValid(nameBuffer))
+				return;
 			snprintf(
 					output,
 					STRING_BUFFER_SIZE,
@@ -695,6 +724,8 @@ static void _vksk_CompileAssetFromFilename(String getter, String method, const c
 			getterPrefix = "aud_";
 		} else if (strcmp(extension, ".txt") == 0) {
 			jsonGetAssetName(filename, NULL, nameBuffer, STRING_BUFFER_SIZE);
+			if (!variableNameIsValid(nameBuffer))
+				return;
 			snprintf(
 					output,
 					STRING_BUFFER_SIZE,
@@ -761,20 +792,24 @@ static String _vksk_CompileAssetsFromDirectory(const char *directory, const char
 			if ((stbuf.st_mode & S_IFMT) != S_IFDIR) {
 				_vksk_CompileAssetFromFilename(topOfClass, loadMethod, directory, filedir, filedirnolead);
 			} else {
+				char classname[STRING_BUFFER_SIZE];
+				folderToClass(filedirnolead, classname, STRING_BUFFER_SIZE);
+				if (!variableNameIsValid(classname)) {
+					dp = readdir(dfd);
+					continue;
+				}
+
 				// Add the class bit to the loader
-				filedirnolead[strlen(filedirnolead) - 1] = 0;
 				char directoryAssetName[STRING_BUFFER_SIZE];
-				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "\t\t_%s = C%sImpl.new(asset_map)\n", filedirnolead, filedirnolead);
+				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "\t\t_%s = C%sImpl.new(asset_map)\n", classname, classname);
 				appendString(loadMethod, directoryAssetName);
 
 				// Append this class to the new class
-				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "class C%sImpl {\n", filedirnolead);
-				filedirnolead[strlen(filedirnolead)] = '/';
+				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "class C%sImpl {\n", classname);
 				topOfClass = appendStringAndFree(_vksk_CompileAssetsFromDirectory(filedir, directoryAssetName, "\n\tconstruct new(asset_map) {\n", ASSET_DIR_CLASS_FOOTER), popString(topOfClass));
 
 				// Now the getter
-				filedirnolead[strlen(filedirnolead) - 1] = 0;
-				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "\t%s { _%s }\n", filedirnolead, filedirnolead);
+				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "\t%s { _%s }\n", classname, classname);
 				appendString(topOfClass, directoryAssetName);
 			}
 		}
@@ -810,8 +845,80 @@ static String _vksk_CompileAssetsFromDirectory(const char *directory, const char
 	return appendString(topOfClass, footerString);
 }
 
+// Basically the same as above but uses pak methods instead of dirent
 static String _vksk_CompileAssetsFromPak(const char *directory, const char *topOfClassString, const char *loadMethodString, const char *footerString) {
-	return NULL; // TODO: This
+	DirectoryJSON json = openDirectoryJSON(directory);
+	String topOfClass = appendString(newString(), topOfClassString); // for getters
+	String loadMethod = appendString(newString(), loadMethodString); // for the actual load method
+	VKSK_PakDir dir;
+
+	const char *f = vksk_PakBeginLoop(gGamePak, &dir, directory);
+	if (f == NULL) {
+		vksk_Log("Can't access assets directory");
+		return NULL;
+	}
+
+	char filedir[STRING_BUFFER_SIZE] ;
+
+	while (f != NULL) {
+		snprintf(filedir, STRING_BUFFER_SIZE, "%s", f);
+
+		char *filedirnolead = (void*)getDirOrFile(filedir);
+
+		if (!jsonItemInExcludeList(json, filedirnolead)) {
+			if (f[strlen(f) - 1] != '/') {
+				_vksk_CompileAssetFromFilename(topOfClass, loadMethod, directory, filedir, filedirnolead);
+			} else {
+				char classname[STRING_BUFFER_SIZE];
+				folderToClass(filedirnolead, classname, STRING_BUFFER_SIZE);
+				if (!variableNameIsValid(classname)) {
+					f = vksk_PakNext(&dir);
+					continue;
+				}
+
+				// Add the class bit to the loader
+				char directoryAssetName[STRING_BUFFER_SIZE];
+				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "\t\t_%s = C%sImpl.new(asset_map)\n", classname, classname);
+				appendString(loadMethod, directoryAssetName);
+
+				// Append this class to the new class
+				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "class C%sImpl {\n", classname);
+				topOfClass = appendStringAndFree(_vksk_CompileAssetsFromPak(filedir, directoryAssetName, "\n\tconstruct new(asset_map) {\n", ASSET_DIR_CLASS_FOOTER), popString(topOfClass));
+
+				// Now the getter
+				snprintf(directoryAssetName, STRING_BUFFER_SIZE, "\t%s { _%s }\n", classname, classname);
+				appendString(topOfClass, directoryAssetName);
+			}
+		}
+		f = vksk_PakNext(&dir);
+	}
+
+	SpriteData sprite;
+	while (directoryJSONGetNextSprite(json, &sprite)) {
+		_vksk_CompileAssetFromSpriteData(directory, topOfClass, loadMethod, &sprite);
+	}
+	TrueTypeFontData ttf;
+	while (directoryJSONGetNextTrueTypeFont(json, &ttf)) {
+		_vksk_CompileAssetFromTrueTypeData(directory, topOfClass, loadMethod, &ttf);
+	}
+	BitmapFontData bmf;
+	while (directoryJSONGetNextBitmapFont(json, &bmf)) {
+		_vksk_CompileAssetFromBitmapFontData(directory, topOfClass, loadMethod, &bmf);
+	}
+	BufferData buffer;
+	while (directoryJSONGetNextBuffer(json, &buffer)) {
+		_vksk_CompileAssetFromBufferData(directory, topOfClass, loadMethod, &buffer);
+	}
+	StringData text;
+	while (directoryJSONGetNextString(json, &text)) {
+		_vksk_CompileAssetFromStringData(directory, topOfClass, loadMethod, &text);
+	}
+
+	closeDirectoryJSON(json);
+
+	// Build output string
+	appendStringAndFree(topOfClass, popString(appendString(loadMethod, "\t}\n")));
+	return appendString(topOfClass, footerString);
 }
 
 const char *vksk_CompileAssetFile(const char *rootDir) {
@@ -820,12 +927,13 @@ const char *vksk_CompileAssetFile(const char *rootDir) {
 	if (gGamePak != NULL)
 		assets = _vksk_CompileAssetsFromPak(rootDir, ASSET_ASSET_CLASS_HEADER, "\n\tload_assets() {\n\t\t_asset_map = {}\n\t\tvar asset_map = _asset_map\n", ASSET_ASSET_CLASS_FOOTER);
 	else
-		_vksk_CompileAssetsFromDirectory(rootDir, ASSET_ASSET_CLASS_HEADER, "\n\tload_assets() {\n\t\t_asset_map = {}\n\t\tvar asset_map = _asset_map\n", ASSET_ASSET_CLASS_FOOTER);
+		assets = _vksk_CompileAssetsFromDirectory(rootDir, ASSET_ASSET_CLASS_HEADER, "\n\tload_assets() {\n\t\t_asset_map = {}\n\t\tvar asset_map = _asset_map\n", ASSET_ASSET_CLASS_FOOTER);
 
 	if (assets != NULL) {
 		String string = appendString(newString(), ASSET_FILE_HEADER);
 		appendString(string, popString(assets));
 		appendString(string, ASSET_FILE_FOOTER);
+		printf("%s\n\n", string->str);
 		return popString(string);
 	}
 	return NULL;

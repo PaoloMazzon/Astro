@@ -9,6 +9,14 @@
 typedef struct VKSK_Pak *VKSK_Pak;
 typedef struct VKSK_PakDir VKSK_PakDir;
 
+struct VKSK_PakDir {
+	VKSK_Pak root;
+	int fileIndex;
+	int dirsDeep;
+	char currentDir[1024];
+	char returnDir[1024];
+};
+
 // Loads a packs header into memory but not the contents -- you cannot modify these paks
 VKSK_Pak vksk_PakLoad(const char *filename);
 
