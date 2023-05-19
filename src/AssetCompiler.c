@@ -933,7 +933,6 @@ const char *vksk_CompileAssetFile(const char *rootDir) {
 		String string = appendString(newString(), ASSET_FILE_HEADER);
 		appendString(string, popString(assets));
 		appendString(string, ASSET_FILE_FOOTER);
-		printf("%s\n\n", string->str);
 		return popString(string);
 	}
 	return NULL;
