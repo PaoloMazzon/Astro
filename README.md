@@ -1,4 +1,4 @@
-![Astro Engine](./docs/banner.png)
+![Astro Engine](https://astroengine.ca/banner.png)
 
 Astro Engine is a game development framework that provides all the things you need to
 easily develop games. It uses the scripting language [Wren](https://github.com/wren-lang/wren)
@@ -55,27 +55,28 @@ of things you can expect Astro to be capable of.
  + Scripting is done in the [Wren](https://github.com/wren-lang/wren) language
  + All Astro library files/classes are automatically imported in every file
  + Detailed error logs are printed to file and `stdout`
- + Automatic resource loading through the [Asset Compiler](./docs/AssetCompiler.md)
+ + Automatic resource loading through the [Asset Compiler](https://astroengine.ca/AssetCompiler.html)
+ + Automatically load sprite data from Aseprite
  + Optionally store game files in a `game.pak` file so you don't have to distribute multiple files/folders
- + Detailed 2D rendering including [textures](./docs/classes/Texture.md), [sprites](./docs/classes/Sprite.md), [fonts](./docs/classes/Font.md), basic shapes, and [polygon](./docs/classes/Polygon.md) loading
- + [Create 2D textures](./docs/classes/Surface.md) and draw to them
- + Load and use [SPIR-V shaders](./docs/classes/Shader.md) on 2D textures
- + [Simple 3D rendering](./docs/classes/Model.md), can load and render 3D models
- + Powerful [camera support](./docs/classes/Camera.md) for 2D and 3D cameras, supports up to 10 cameras at once
- + Detailed [renderer and window](./docs/classes/Renderer.md) support, allows control over
+ + Detailed 2D rendering including [textures](https://astroengine.ca/classes/Texture.html), [sprites](https://astroengine.ca/classes/Sprite.html), [fonts](https://astroengine.ca/classes/Font.html), basic shapes, and [polygon](https://astroengine.ca/classes/Polygon.html) loading
+ + [Create 2D textures](https://astroengine.ca/classes/Surface.html) and draw to them
+ + Load and use [SPIR-V shaders](https://astroengine.ca/classes/Shader.html) on 2D textures
+ + [Simple 3D rendering](https://astroengine.ca/classes/Model.html), can load and render 3D models
+ + Powerful [camera support](https://astroengine.ca/classes/Camera.html) for 2D and 3D cameras, supports up to 10 cameras at once
+ + Detailed [renderer and window](https://astroengine.ca/classes/Renderer.html) support, allows control over
    - Blend mode
    - Render colour modifier
    - Window size/fullscreen
    - Rendering features like MSAA/filtering
    - Camera control
- + [Detailed text rendering](./docs/classes/Renderer.md#draw_font_ext) allowing the user to change colour/size/shakiness/etc of text in strings
- + Easily control engine-level things like framerate/delta/timestep through the [engine interface](./docs/classes/Engine.md)
- + [Load](./docs/classes/AudioData.md)/[play](./docs/classes/Audio.md) audio
- + Simple and very powerful [keyboard](./docs/classes/Keyboard.md), [mouse](./docs/classes/Mouse.md), and [gamepad](./docs/classes/Gamepad.md) support
- + [Entity](./docs/classes/Entity.md)/[level](./docs/classes/Level.md) management
- + Automatically [load Tiled maps](./docs/TiledIntegration.md) into levels
- + Use [tilesets](./docs/classes/Tileset.md) for fast and simplified tileset rendering and collisions
- + Basic filesystem support through [buffers](./docs/classes/Buffer.md), [file](./docs/classes/File.md), and [inis](./docs/classes/INI.md)
+ + [Detailed text rendering](https://astroengine.ca/classes/Renderer.md#draw_font_ext) allowing the user to change colour/size/shakiness/etc of text in strings
+ + Easily control engine-level things like framerate/delta/timestep through the [engine interface](https://astroengine.ca/classes/Engine.html)
+ + [Load](https://astroengine.ca/classes/AudioData.html)/[play](https://astroengine.ca/classes/Audio.html) audio
+ + Simple and very powerful [keyboard](https://astroengine.ca/classes/Keyboard.html), [mouse](https://astroengine.ca/classes/Mouse.html), and [gamepad](https://astroengine.ca/classes/Gamepad.html) support
+ + [Entity](https://astroengine.ca/classes/Entity.html)/[level](https://astroengine.ca/classes/Level.html) management
+ + Automatically [load Tiled maps](https://astroengine.ca/TiledIntegration.html) into levels
+ + Use [tilesets](https://astroengine.ca/classes/Tileset.html) for fast and simplified tileset rendering and collisions
+ + Basic filesystem support through [buffers](https://astroengine.ca/classes/Buffer.html), [file](https://astroengine.ca/classes/File.html), and [inis](https://astroengine.ca/classes/INI.html)
  
 Platforms
 =========

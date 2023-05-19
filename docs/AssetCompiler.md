@@ -122,14 +122,14 @@ For sprites:
     {
       "file": "spritesheet.png",
       "name": "...",
-      "x": x in the spritesheet to pull from,
-      "y": y in the spritesheet to pull from,
-      "origin_x": origin of the sprite,
-      "origin_y": origin of the sprite,
-      "w": width of each cell,
-      "h": height of each cell,
-      "frames": frame count,
-      "delay": delay in seconds
+      "x": "x in the spritesheet to pull from",
+      "y": "y in the spritesheet to pull from",
+      "origin_x": "origin of the sprite",
+      "origin_y": "origin of the sprite",
+      "w": "width of each cell",
+      "h": "height of each cell",
+      "frames": "frame count",
+      "delay": "delay in seconds"
     }
   ]
 }
@@ -144,10 +144,10 @@ Bitmap fonts:
     {
       "file": "font.png",
       "name": "...",
-      "w": width of each character,
-      "h": height of each character,
-      "ustart": unicode start in the font,
-      "uend": unicode end in the font
+      "w": "width of each character",
+      "h": "height of each character",
+      "ustart": "unicode start in the font",
+      "uend": "unicode end in the font"
     }
   ]
 }
@@ -162,10 +162,10 @@ TrueType fonts:
     {
       "file": "font.ttf",
       "name": "...",
-      "size": size of the font to load,
-      "aa": boolean to enable anti-aliasing,
-      "ustart": beginning of unicode range to load,
-      "uend": end of unicode range to load
+      "size": "size of the font to load",
+      "aa": "boolean to enable anti-aliasing",
+      "ustart": "beginning of unicode range to load",
+      "uend": "end of unicode range to load"
     }
   ]
 }
