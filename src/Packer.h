@@ -7,6 +7,7 @@
 
 // Abstraction for packs
 typedef struct VKSK_Pak *VKSK_Pak;
+typedef struct VKSK_PakDir VKSK_PakDir;
 
 // Loads a packs header into memory but not the contents -- you cannot modify these paks
 VKSK_Pak vksk_PakLoad(const char *filename);
@@ -24,10 +25,14 @@ const char *vksk_PakGetFileString(VKSK_Pak, const char *filename);
 void vksk_PakPrintContents(VKSK_Pak);
 
 // Begins iterating through the contents of a pak starting at a given root directory, returns NULL if there are none
-const char *vksk_PakBeginLoop(VKSK_Pak pak, const char *dir);
+// This will return either a file or a folder (folders will always end in '/'). If its a folder you will need to
+// perform another vksk_PakBeginLoop on another VKSK_PakDir to access that directory's contents.
+const char *vksk_PakBeginLoop(VKSK_Pak pak, VKSK_PakDir *pakdir, const char *dir);
 
 // Gets the next filename from vksk_PakBeginLoop, returns NULL if there are no more
-const char *vksk_PakNext(VKSK_Pak pak);
+// This will return either a file or a folder (folders will always end in '/'). If its a folder you will need to
+// perform another vksk_PakBeginLoop on another VKSK_PakDir to access that directory's contents.
+const char *vksk_PakNext(VKSK_PakDir *pakdir);
 
 // Creates an empty pak
 VKSK_Pak vksk_PakCreate();

@@ -9,9 +9,6 @@
 
 #include "src/Packer.h"
 
-static int gFileIndex = -1;
-static char gCurrentDir[1024];
-
 /*
  * .pak file specification
  *
@@ -48,6 +45,12 @@ struct VKSK_Pak {
 	VKSK_PakType type;
 	VKSK_PakHeader header;
 	const char *filename;
+};
+
+struct VKSK_PakDir {
+	VKSK_Pak root;
+	int fileIndex;
+	char currentDir[1024];
 };
 
 static VKSK_Pak _vksk_PakMakeEmpty(VKSK_PakType type) {
@@ -261,50 +264,12 @@ void vksk_PakPrintContents(VKSK_Pak pak) {
 	}
 }
 
-const char *vksk_PakBeginLoop(VKSK_Pak pak, const char *dir) {
-	// Setup the directory properly
-	if (strcmp(dir, "./") == 0 || strcmp(dir, ".") == 0) {
-		gCurrentDir[0] = 0;
-	} else {
-		int len = strlen(dir);
-		if (dir[len - 1] == '/') {
-			memcpy(gCurrentDir, dir, len - 1);
-			gCurrentDir[len] = 0;
-		} else {
-			memcpy(gCurrentDir, dir, len);
-			gCurrentDir[len + 1] = 0;
-		}
-	}
-
-	// Locate the first file in the dir
-	const char *out = NULL;
-	gFileIndex = -1;
-	for (int i = 0; i < pak->header.fileCount && out == NULL; i++) {
-		if (_vksk_IsFromDirectory(pak->header.files[i].filename, gCurrentDir)) {
-			gFileIndex = i + 1;
-			out = pak->header.files[i].filename;
-		}
-	}
-
-	return out;
+const char *vksk_PakBeginLoop(VKSK_Pak pak, VKSK_PakDir *pakdir, const char *dir) {
+	return NULL; // TODO: This
 }
 
-const char *vksk_PakNext(VKSK_Pak pak) {
-	if (gFileIndex != -1) {
-		const char *out = NULL;
-		for (int i = gFileIndex; i < pak->header.fileCount && out == NULL; i++) {
-			if (_vksk_IsFromDirectory(pak->header.files[i].filename, gCurrentDir)) {
-				gFileIndex = i + 1;
-				out = pak->header.files[i].filename;
-			}
-		}
-
-		if (out == NULL) {
-			gFileIndex = -1;
-		}
-		return out;
-	}
-	return NULL;
+const char *vksk_PakNext(VKSK_PakDir *pakdir) {
+	return NULL; // TODO: This
 }
 
 VKSK_Pak vksk_PakCreate() {

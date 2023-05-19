@@ -810,15 +810,23 @@ static String _vksk_CompileAssetsFromDirectory(const char *directory, const char
 	return appendString(topOfClass, footerString);
 }
 
-static bool _vksk_CompileAssetsFromPak(String loadFunction, String getterFunctions, String spriteLoadFunction) {
-	return false; // TODO: This
+static String _vksk_CompileAssetsFromPak(const char *directory, const char *topOfClassString, const char *loadMethodString, const char *footerString) {
+	return NULL; // TODO: This
 }
 
 const char *vksk_CompileAssetFile(const char *rootDir) {
-	String string = appendString(newString(), ASSET_FILE_HEADER);
-	appendString(string, popString(_vksk_CompileAssetsFromDirectory(rootDir, ASSET_ASSET_CLASS_HEADER, "\n\tload_assets() {\n\t\t_asset_map = {}\n\t\tvar asset_map = _asset_map\n", ASSET_ASSET_CLASS_FOOTER)));
-	appendString(string, ASSET_FILE_FOOTER);
-	printf("%s", string->str);
-	fflush(stdout);
-	return popString(string);
+	String assets = NULL;
+
+	if (gGamePak != NULL)
+		assets = _vksk_CompileAssetsFromPak(rootDir, ASSET_ASSET_CLASS_HEADER, "\n\tload_assets() {\n\t\t_asset_map = {}\n\t\tvar asset_map = _asset_map\n", ASSET_ASSET_CLASS_FOOTER);
+	else
+		_vksk_CompileAssetsFromDirectory(rootDir, ASSET_ASSET_CLASS_HEADER, "\n\tload_assets() {\n\t\t_asset_map = {}\n\t\tvar asset_map = _asset_map\n", ASSET_ASSET_CLASS_FOOTER);
+
+	if (assets != NULL) {
+		String string = appendString(newString(), ASSET_FILE_HEADER);
+		appendString(string, popString(assets));
+		appendString(string, ASSET_FILE_FOOTER);
+		return popString(string);
+	}
+	return NULL;
 }
