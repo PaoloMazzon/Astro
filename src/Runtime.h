@@ -6,8 +6,8 @@
 #include "src/Packer.h"
 
 #define ASTRO_VERSION_MAJOR 0
-#define ASTRO_VERSION_MINOR 6
-#define ASTRO_VERSION_PATCH 11
+#define ASTRO_VERSION_MINOR 7
+#define ASTRO_VERSION_PATCH 1
 
 // Engine configuration
 typedef struct VKSK_EngineConfig {

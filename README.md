@@ -92,7 +92,6 @@ create a pull request.
 TODO
 ====
 
- + Named assets
  + Better Tiled loader
  + Networking support
  + Spatial hash maps
