@@ -109,7 +109,7 @@ class Game is Level {
         Engine.timestep = 30
 
         // Load the level and tilesets
-        _tilesets = load("assets/level0.tmj")
+        _tilesets = load("data/level0.tmj")
         _tileset = _tilesets["collisions"]
 
         // Pre-load the image of the foreground tileset
@@ -150,7 +150,7 @@ class Game is Level {
 
         // Setup 3D rendering
         _surface3D = Surface.new(200, 200)
-        _model = Model.load("assets/testmodel.obj", Assets.tex_testuv)
+        _model = Model.load("data/testmodel.obj", Assets.tex_testuv)
         _camera3D = Camera.new()
         _camera3D.type = Camera.CAMERA_TYPE_PERSPECTIVE
         _camera3D.eyes = [4, 1, 0]

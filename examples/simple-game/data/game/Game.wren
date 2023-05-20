@@ -17,7 +17,7 @@ class Game is Level {
         super.create()
         
         // Load the level from tiled
-        var tilesets = load("assets/level0.tmj")
+        var tilesets = load("data/level0.tmj")
         _collision_tileset = tilesets["collisions"] // for player collisions
         _ladder_tileset = tilesets["ladder"] // so the player can climb ladders
         _tilset_surfaces = [ // for drawing the whole level more efficiently

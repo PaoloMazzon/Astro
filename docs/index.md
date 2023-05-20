@@ -14,7 +14,7 @@ scripting language.
 
 ![example](https://user-images.githubusercontent.com/17896827/237554076-686ab0a6-b37d-4407-8e26-1b98d0bd00ab.gif)
 
-![example](https://github.com/PaoloMazzon/Astro/raw/master/examples/fixed-timestep/assets/example.gif)
+![example](https://github.com/PaoloMazzon/Astro/raw/master/examples/fixed-timestep/data/example.gif)
 
 Features
 ========

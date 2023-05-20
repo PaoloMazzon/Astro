@@ -9,7 +9,7 @@ has_children: false
 
 You may choose to compile all of your game assets and code into a single `game.pak`
 file. `Packer.exe` is automatically built with the top-level CMake project and when
-ran will put each file from `assets/` and `prog/` into `game.pak`.
+ran will put each file from `data/` and `data/game/` into `game.pak`.
 
 To build your game.pak file, copy Packer to your projects directory (or call it from
 your project's root directory) and exectute

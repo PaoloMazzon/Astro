@@ -22,14 +22,15 @@ void vksk_WrenWriteFn(WrenVM* vm, const char* text) {
 
 void vksk_WrenErrorFn(WrenVM* vm, WrenErrorType errorType, const char* module, const int line, const char* msg) {
 	FILE *f = fopen("astroerror.txt", "a");
+	int subtract = line < 10 ? 0 : 9; // - 9 because of preprocessor
 	switch (errorType) {
 		case WREN_ERROR_COMPILE: {
-			printf("[%s line %d] [Error] %s\n", module, line - 9, msg); // - 9 because of preprocessor
-			fprintf(f, "[%s line %d] [Error] %s\n", module, line - 9, msg);
+			printf("[%s line %d] [Error] %s\n", module, line - subtract, msg);
+			fprintf(f, "[%s line %d] [Error] %s\n", module, line - subtract, msg);
 		} break;
 		case WREN_ERROR_STACK_TRACE: {
-			printf("[%s line %d] in %s\n", module, line - 9, msg);
-			fprintf(f, "[%s line %d] in %s\n", module, line - 9, msg);
+			printf("[%s line %d] in %s\n", module, line - subtract, msg);
+			fprintf(f, "[%s line %d] in %s\n", module, line - subtract, msg);
 		} break;
 		case WREN_ERROR_RUNTIME: {
 			printf("[Runtime Error] %s\n", msg);
@@ -46,11 +47,10 @@ void vksk_WrenLoadModuleComplete(WrenVM* vm, const char* module, WrenLoadModuleR
 		free((void*)result.source);
 	}
 }
-
 WrenLoadModuleResult vksk_WrenLoadModule(WrenVM* vm, const char* name) {
 	static const char *ext = ".wren";
-	char fname[200] = "prog/";
-	strncat(fname, name, 200 - 1 - 5 - 5);
+	char fname[200] = "data/game/";
+	strncat(fname, name, 200 - 1 - 10 - 5);
 	strcat(fname, ext);
 	WrenLoadModuleResult result = {0};
 	result.onComplete = vksk_WrenLoadModuleComplete;

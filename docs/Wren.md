@@ -77,7 +77,7 @@ and if it finds it will attempt to provide a reference to the variable `MenuLeve
 
 {: .note }
 Although the import says `"Levels/Menu"`, the actual file Astro will look for will be
-`prog/Levels/Menu.wren`. Astro will automatically start searching for Wren modules
+`data/game/Levels/Menu.wren`. Astro will automatically start searching for Wren modules
 in the `prog` directory and append the .wren extension to locate the proper module.
 
 Astro automatically imports all relevant engine files into each file in your project so you
@@ -176,6 +176,6 @@ var start_level = Game.new()
 ```
 
 For a really simple intro to Astro, [download](https://github.com/PaoloMazzon/Astro/releases)
-the latest Astro release and copy the above code to a file named `prog/init.wren`.
+the latest Astro release and copy the above code to a file named `data/game/init.wren`.
 
 ![demo](demogame.png) 

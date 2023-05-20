@@ -166,7 +166,7 @@ void vksk_Start() {
 
 	// Compile the assets code
 	vksk_Log("Compiling assets file...");
-	gAssetsFile = vksk_CompileAssetFile("assets/");
+	gAssetsFile = vksk_CompileAssetFile("data/");
 	if (gEngineConfig.enableAssetsPrint)
 		vksk_Log("---------------------Compiled assets file---------------------\n%s\n---------------------Compiled assets file---------------------", gAssetsFile);
 
@@ -505,7 +505,7 @@ void vksk_RuntimeImportExists(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
 	const char *name = wrenGetSlotString(vm, 1);
 	static const char *ext = ".wren";
-	char fname[200] = "prog/";
+	char fname[200] = "data/game/";
 	strncat(fname, name, 200 - 1 - 5 - 5);
 	strcat(fname, ext);
 	wrenSetSlotBool(vm, 0, _vk2dFileExists(fname));

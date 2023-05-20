@@ -16,12 +16,12 @@ has_children: false
 ## Intro
 Astro automatically creates a Wren module when it starts called `Assets` with one class:
 `Assets`. In this class you will find all of the resources your game needs from the folder
-`assets/` already loaded. Each loaded asset is accessible via their path relative to `assets/`,
+`data/` already loaded. Each loaded asset is accessible via their path relative to `data/`,
 but with their extension removed and a small prefix depending on what they were loaded as.
-For example, `assets/player.png` would be accessed via `Assets.tex_player`, and 
-`assets/sounds/music.wav` would be `Assets.sounds.aud_music`.
+For example, `data/player.png` would be accessed via `Assets.tex_player`, and 
+`data/sounds/music.wav` would be `Assets.sounds.aud_music`.
 
-For example, if your `assets/` folder looks like
+For example, if your `data/` folder looks like
 
     | player.png
     | grass.jpg
@@ -40,7 +40,7 @@ The `Assets` class is automatically imported in every file.
 Based on the extension, the asset compiler will automatically load it as the proper class.
 The `Assets` class also provides a way to access assets via a string name of the asset by the
 `Assets[]` operator. With the `Assets[]` operator you may put in a path to your loaded file
-relative to `assets/` once again. So `Assets.tex_player` is the same as `Assets["player.png"]`.
+relative to `data/` once again. So `Assets.tex_player` is the same as `Assets["player.png"]`.
 
 Prefixes
 
@@ -54,7 +54,7 @@ Prefixes
  
 The asset compiler is recursive for sub-directories and all sub-directories are accessible
 from the `Assets` class by replacing any `/`'s in the name with `.`'s instead. For example,
-given the following as the structure of the `assets/` folder:
+given the following as the structure of the `data/` folder:
 
     | dir/
     |    | sprites/
@@ -88,8 +88,8 @@ in more detail [here](#loading-complex-assets). Sprites may also be loaded throu
 *texture-file*.json file in the same directory as *texture-file*.
 
 ## Loading Complex Assets
-Using an `assets.json` file in any folder in the `assets/` folder you may specify sprites/fonts/buffers/strings
-inside that folder (sub-directories of `assets/` need their own `assets.json` file too).
+Using an `assets.json` file in any folder in the `data/` folder you may specify sprites/fonts/buffers/strings
+inside that folder (sub-directories of `data/` need their own `assets.json` file too).
 Inside each `assets.json` there are several recognized top-level objects:
 
  + `"sprites"` - A json array of json objects containing information on each sprite.
@@ -107,7 +107,7 @@ Each of the asset types we load expect at least these two keys:
 
 `"name"` might be confusing, but its simply the name you want to give this asset in the 
 `Assets` class. For example, if we load a sprite with the name "player_blah" in the directory
-`assets/sprites/`, we would access it via `Assets.sprites.spr_player_blah`.
+`data/sprites/`, we would access it via `Assets.sprites.spr_player_blah`.
 
 Buffers and strings only require those two to load, but the other 3 types need more
 parameters to tell them how to load. You may also choose to not provide values for

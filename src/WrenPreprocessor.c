@@ -45,9 +45,9 @@ const char* loadFile(const char *filename) {
 }
 
 const char *vksk_PreprocessSource(const char *filename) {
-	if (strcmp(filename, "prog/lib/Renderer.wren") != 0 && strcmp(filename, "prog/lib/Engine.wren") != 0 && strcmp(filename, "prog/lib/Util.wren") != 0 &&
-			strcmp(filename, "prog/lib/Input.wren") != 0 && strcmp(filename, "prog/lib/File.wren") != 0 && strcmp(filename, "prog/lib/Drawing.wren") != 0 &&
-			strcmp(filename, "prog/lib/Audio.wren") != 0 && strcmp(filename, "prog/lib/Tiled.wren") != 0 && strcmp(filename, "Assets.wren") != 0) {
+	if (strcmp(filename, "data/game/lib/Renderer.wren") != 0 && strcmp(filename, "data/game/lib/Engine.wren") != 0 && strcmp(filename, "data/game/lib/Util.wren") != 0 &&
+			strcmp(filename, "data/game/lib/Input.wren") != 0 && strcmp(filename, "data/game/lib/File.wren") != 0 && strcmp(filename, "data/game/lib/Drawing.wren") != 0 &&
+			strcmp(filename, "data/game/lib/Audio.wren") != 0 && strcmp(filename, "data/game/lib/Tiled.wren") != 0 && strcmp(filename, "Assets.wren") != 0) {
 		const char *temp;
 
 		if (vksk_PakFileExists(gGamePak, filename)) {
@@ -69,28 +69,28 @@ const char *vksk_PreprocessSource(const char *filename) {
 	} else {
 		const char *bytes = NULL;
 		int size = 0;
-		if (strcmp(filename, "prog/lib/Renderer.wren") == 0) {
+		if (strcmp(filename, "data/game/lib/Renderer.wren") == 0) {
 			bytes = RENDERER_WREN_SOURCE;
 			size = sizeof(RENDERER_WREN_SOURCE);
-		} else if (strcmp(filename, "prog/lib/Engine.wren") == 0) {
+		} else if (strcmp(filename, "data/game/lib/Engine.wren") == 0) {
 			bytes = ENGINE_WREN_SOURCE;
 			size = sizeof(ENGINE_WREN_SOURCE);
-		} else if (strcmp(filename, "prog/lib/Util.wren") == 0) {
+		} else if (strcmp(filename, "data/game/lib/Util.wren") == 0) {
 			bytes = UTIL_WREN_SOURCE;
 			size = sizeof(UTIL_WREN_SOURCE);
-		} else if (strcmp(filename, "prog/lib/Input.wren") == 0) {
+		} else if (strcmp(filename, "data/game/lib/Input.wren") == 0) {
 			bytes = INPUT_WREN_SOURCE;
 			size = sizeof(INPUT_WREN_SOURCE);
-		} else if (strcmp(filename, "prog/lib/File.wren") == 0) {
+		} else if (strcmp(filename, "data/game/lib/File.wren") == 0) {
 			bytes = FILE_WREN_SOURCE;
 			size = sizeof(FILE_WREN_SOURCE);
-		} else if (strcmp(filename, "prog/lib/Drawing.wren") == 0) {
+		} else if (strcmp(filename, "data/game/lib/Drawing.wren") == 0) {
 			bytes = DRAWING_WREN_SOURCE;
 			size = sizeof(DRAWING_WREN_SOURCE);
-		} else if (strcmp(filename, "prog/lib/Audio.wren") == 0) {
+		} else if (strcmp(filename, "data/game/lib/Audio.wren") == 0) {
 			bytes = AUDIO_WREN_SOURCE;
 			size = sizeof(AUDIO_WREN_SOURCE);
-		} else if (strcmp(filename, "prog/lib/Tiled.wren") == 0) {
+		} else if (strcmp(filename, "data/game/lib/Tiled.wren") == 0) {
 			bytes = TILED_WREN_SOURCE;
 			size = sizeof(TILED_WREN_SOURCE);
 		}

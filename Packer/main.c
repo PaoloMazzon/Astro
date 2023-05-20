@@ -7,10 +7,8 @@ int main(int argc, const char *argv[]) {
 
 	// Creates a pak from prog and assets
 	VKSK_Pak pak = vksk_PakCreate();
-	printf("Packing assets...");
-	vksk_PakAddDirectory(pak, "assets");
-	printf("Packing source...");
-	vksk_PakAddDirectory(pak, "prog");
+	printf("Packing data...");
+	vksk_PakAddDirectory(pak, "data");
 	printf("Saving...");
 	vksk_PakSave(pak, "game.pak");
 	printf("Done.");

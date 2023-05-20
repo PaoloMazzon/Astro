@@ -5,7 +5,7 @@ easily develop games. It uses the scripting language [Wren](https://github.com/w
 for game logic, taking full advantage of the features that come with an embedded
 scripting language.
 
-![Example gif](./examples/fixed-timestep/assets/example.gif)
+![Example gif](examples/fixed-timestep/data/example.gif)
 
 ![example](https://github.com/PaoloMazzon/Astro/assets/17896827/686ab0a6-b37d-4407-8e26-1b98d0bd00ab)
 

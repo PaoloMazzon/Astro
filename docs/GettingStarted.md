@@ -11,7 +11,13 @@ This documentation mainly covers Astro, for a guide on how to use Astro's langua
 choice, [Wren](https://github.com/wren-lang/wren), visit the [Wren website](https://wren.io/getting-started.html)
 and the [Wren section](Wren).
 To launch an Astro project, you need the runtime (Astro.exe) and at least one Wren file named
-`prog/init.wren` that tells the engine where and how to start execution.
+`data/game/init.wren` that tells the engine where and how to start execution.
+
+In brief, you want
+
+ + All of your resources inside `data/`.
+ + All of your .wren source files in `data/game`.
+ + A file named `data/game/init.wren` that tells Astro how to start.
 
 ## Runtime
 You may either build the C runtime yourself or download a binary if their available. The runtime
@@ -27,7 +33,7 @@ For example, you don't need to import the keyboard, just use it via something li
 `Keyboard.key(Keyboard.KEY_LEFT)`. Check the [API Reference](classes/index) for a complete list 
 of all classes and methods in said classes.
 
-## `prog/init.wren`
+## `data/game/init.wren`
 The `init.wren` file is the "entry point" of your game. It must contain the two variables `renderer_config`
 and `start_level`. `start_level` is an instance of `Level` that the engine will use as the
 entry point. `renderer_config` must be a map containing specific keys. Additionally, you may provide
@@ -46,7 +52,7 @@ var renderer_config = {
     "filter_type": Renderer.FILTER_TYPE_NEAREST
 }
 
-var window_icon = "assets/logo.png"
+var window_icon = "data/logo.png"
 
 var start_level = Game.new()
 ```

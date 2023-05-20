@@ -35,7 +35,7 @@ var renderer_config = {
 	"filter_type": Renderer.FILTER_TYPE_NEAREST
 }
 
-var window_icon = "assets/logo.png"
+var window_icon = "data/logo.png"
 
 System.print(Engine.info)
 Engine.fps_limit = 60
@@ -46,7 +46,7 @@ var start_level = Game.new()
 This file is small enough that we can just look at it in whole. There are 3 notable
 things we do in this file. First we set the screen width/height `16 * 8 * 6 x 15 * 8 * 6`,
 which seems like an odd number, but we'll get there in a second. Second, we set the
-window icon to logo found in `assets/logo.png`, and third we create the level instance
+window icon to logo found in `data/logo.png`, and third we create the level instance
 the game takes place in for the engine.
 
 The game consists of really small 8x8 tiles like the NES, and our screen resolution
@@ -77,7 +77,7 @@ tilesets. Those won't be covered here.
 For the first bit, loading the tiled map, the code in question is
 
 ```javascript
-var tilesets = load("assets/level0.tmj")
+var tilesets = load("data/level0.tmj")
 _collision_tileset = tilesets["collisions"] // for player collisions
 _ladder_tileset = tilesets["ladder"] // so the player can climb ladders
 tilset_surfaces = [ // for drawing the whole level more efficiently

@@ -105,7 +105,7 @@ Assuming you have a directory of
 
     file.txt
     image.png
-    assets/
+    data/
     docs/
 
 ```javascript
@@ -125,5 +125,5 @@ Would produce
     ../ is a directory!
     file.txt is a file!
     image.png is a file!
-    assets/ is a directory!
+    data/ is a directory!
     docs/ is a directory!
