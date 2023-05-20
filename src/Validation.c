@@ -33,6 +33,124 @@ const uint64_t FOREIGN_POLYGON = 1<<19;
 
 extern VKSK_EngineConfig gEngineConfig;
 
+static inline const char *getTypeString(uint64_t type, char *buf) {
+	if (type & FOREIGN_STRING) {
+		strcat(buf, "String");
+	}
+	if (type & FOREIGN_BOOL) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Bool");
+	}
+	if (type & FOREIGN_NUM) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Num");
+	}
+	if (type & FOREIGN_LIST) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "List");
+	}
+	if (type & FOREIGN_MAP) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Map");
+	}
+	if (type & FOREIGN_NULL) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Null");
+	}
+	if (type & FOREIGN_FOREIGN) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Foreign");
+	}
+	if (type & FOREIGN_INI) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "INI");
+	}
+	if (type & FOREIGN_BITMAP_FONT) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Bitmap Font");
+	}
+	if (type & FOREIGN_TEXTURE) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Texture");
+	}
+	if (type & FOREIGN_SPRITE) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Sprite");
+	}
+	if (type & FOREIGN_SURFACE) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Surface");
+	}
+	if (type & FOREIGN_CAMERA) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Camera");
+	}
+	if (type & FOREIGN_AUDIO_DATA) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Audio Data");
+	}
+	if (type & FOREIGN_AUDIO) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Audio");
+	}
+	if (type & FOREIGN_TILED_MAP) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Tiled Map");
+	}
+	if (type & FOREIGN_BUFFER) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Buffer");
+	}
+	if (type & FOREIGN_SHADER) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Shader");
+	}
+	if (type & FOREIGN_MODEL) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Model");
+	}
+	if (type & FOREIGN_POLYGON) {
+		if (strlen(buf) > 0)
+			strcat(buf, " or ");
+		strcat(buf, "Polygon");
+	}
+	return buf;
+}
+
+static inline uint64_t getSlotType(WrenVM *vm, int slot) {
+	const WrenType wrenType = wrenGetSlotType(vm, slot);
+	if (wrenType == WREN_TYPE_FOREIGN) {
+		VKSK_RuntimeForeign *f = wrenGetSlotForeign(vm, slot);
+		return f->type;
+	} else {
+		if (wrenType == WREN_TYPE_STRING) return FOREIGN_STRING;
+		if (wrenType == WREN_TYPE_BOOL) return FOREIGN_BOOL;
+		if (wrenType == WREN_TYPE_NUM) return FOREIGN_NUM;
+		if (wrenType == WREN_TYPE_LIST) return FOREIGN_LIST;
+		if (wrenType == WREN_TYPE_MAP) return FOREIGN_MAP;
+		if (wrenType == WREN_TYPE_NULL) return FOREIGN_NULL;
+	}
+	return UINT64_MAX;
+}
+
 static inline bool checkType(WrenVM *vm, int slot, uint64_t type) {
 	WrenType wrenType = wrenGetSlotType(vm, slot);
 	if (wrenType != WREN_TYPE_FOREIGN) { // wren types
@@ -58,7 +176,12 @@ void _vksk_ValidateForeignArgs(WrenVM *vm, const char *function, ...) {
 		int slot = 1;
 		while (type != FOREIGN_END) {
 			if (!checkType(vm, slot, type)) {
-				vksk_Error(true, "Argument %i in foreign function \"%s\" is of incorrect type %#010x", slot, function, type);
+				// Get expected type
+				uint64_t expectedType = getSlotType(vm, slot);
+				char buf1[200] = {0};
+				char buf2[200] = {0};
+				
+				vksk_Error(true, "Argument %i in foreign method is of type %s, but expected %s", slot, getTypeString(expectedType, buf2), getTypeString(type, buf1));
 			}
 			slot += 1;
 
