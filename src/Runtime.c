@@ -154,7 +154,31 @@ void _vksk_RuntimeControllersUpdate(); // From InternalBindings.c
 
 bool _vk2dFileExists(const char *filename);
 
+extern const unsigned char LOADING_SCREEN_PNG[172483];
 void vksk_Start() {
+	// Start by loading SDL to draw a surface as a loading screen
+	SDL_Init(SDL_INIT_EVERYTHING);
+	SDL_Window *loadWindow = SDL_CreateWindow(
+			"",
+			SDL_WINDOWPOS_CENTERED,
+			SDL_WINDOWPOS_CENTERED,
+			800,
+			450,
+			SDL_WINDOW_BORDERLESS
+	);
+	SDL_Surface *windowSurface = SDL_GetWindowSurface(loadWindow);
+	int x, y, channels;
+	uint8_t *pixels = stbi_load("data/_loading.png", &x, &y, &channels, 4);
+	if (pixels == NULL)
+		pixels = stbi_load_from_memory(LOADING_SCREEN_PNG, sizeof(LOADING_SCREEN_PNG), &x, &y, &channels, 4);
+	SDL_Surface *loadSurface = SDL_CreateRGBSurfaceFrom(pixels, x, y, 32, 4 * x, rmask, gmask, bmask, amask);
+	SDL_BlitSurface(loadSurface, NULL, windowSurface, NULL);
+	stbi_image_free(pixels);
+	SDL_FreeSurface(loadSurface);
+	SDL_UpdateWindowSurface(loadWindow);
+	uint64_t windowLoadScreenStartTime = SDL_GetPerformanceCounter();
+
+	// Load game pak
 	vksk_Log("Locating game pak...");
 	// Load pak file
 	if (gEngineConfig.disableGamePak || !_vk2dFileExists("game.pak")) {
@@ -206,9 +230,20 @@ void vksk_Start() {
 	wrenGetVariable(vm, "init", "renderer_config", 0);
 	vksk_LoadVK2DConfigFromMap(vm, 0, &windowTitle, &windowWidth, &windowHeight, &fullscreen, &rendererConfig);
 
+	// Wait for the load screen
+	wrenEnsureSlots(vm, 1);
+	double minimumLoadTime = 3;
+	if (wrenHasVariable(vm, "init", "minimum_load_time")) {
+		wrenGetVariable(vm, "init", "minimum_load_time", 0);
+		minimumLoadTime = wrenGetSlotDouble(vm, 0);
+	}
+	while (SDL_GetPerformanceCounter() - windowLoadScreenStartTime < minimumLoadTime * SDL_GetPerformanceFrequency()) {
+		volatile int i = 0;
+	}
+
 	// Create VK2D and all that
 	vksk_Log("Starting Vulkan2D...");
-	SDL_Init(SDL_INIT_EVERYTHING);
+	SDL_DestroyWindow(loadWindow);
 	gWindow = SDL_CreateWindow(
 			windowTitle,
 			SDL_WINDOWPOS_CENTERED,
@@ -216,7 +251,7 @@ void vksk_Start() {
 			windowWidth,
 			windowHeight,
 			SDL_WINDOW_VULKAN | (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0)
-			);
+	);
 	VK2DStartupOptions options = {0};
 	options.enableDebug = false;
 	options.loadCustomShaders = false;

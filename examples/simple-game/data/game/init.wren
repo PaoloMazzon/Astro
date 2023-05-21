@@ -11,6 +11,7 @@ var renderer_config = {
 }
 
 var window_icon = "assets/logo.png"
+var minimum_load_time = 3
 
 System.print(Engine.info)
 Engine.fps_limit = 60

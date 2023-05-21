@@ -5,20 +5,20 @@ def bin_to_4hex(binary):
 	else:
 		return out
 
-def add_file_string(fname):
+def add_file_string(fname, var_type, var_suffix):
     string = ""
-    with open(fname, "r") as f:
+    with open(fname, "rb") as f:
         var_name = fname.split(".")[0].split("/")[-1].upper()
         code = ""
         count = 0
         for i in f.read():
-            code += bin_to_4hex(ord(i)) + ", "
+            code += bin_to_4hex(i) + ", "
             count += 1
             if (count == 13):
                   count = 0
                   code += "\n    "
         code = code[:-2]
-        string = "\nconst char " + var_name + "_WREN_SOURCE[] = {\n    " + code + "\n};\n"
+        string = "\n" + var_type + " " + var_name + var_suffix + "[] = {\n    " + code + "\n};\n"
     return string
 
 if (__name__ == "__main__"):
@@ -27,14 +27,15 @@ if (__name__ == "__main__"):
 /// \\brief Automatically generated file from generate_wren_blobs.py
 #pragma once
 """
-    string += add_file_string("prog/lib/Audio.wren")
-    string += add_file_string("prog/lib/Drawing.wren")
-    string += add_file_string("prog/lib/Engine.wren")
-    string += add_file_string("prog/lib/File.wren")
-    string += add_file_string("prog/lib/Input.wren")
-    string += add_file_string("prog/lib/Renderer.wren")
-    string += add_file_string("prog/lib/Util.wren")
-    string += add_file_string("prog/lib/Tiled.wren")
-    with open("src/WrenHeaders.h", "w") as f:
+    string += add_file_string("prog/lib/Audio.wren", "const char", "_WREN_SOURCE")
+    string += add_file_string("prog/lib/Drawing.wren", "const char", "_WREN_SOURCE")
+    string += add_file_string("prog/lib/Engine.wren", "const char", "_WREN_SOURCE")
+    string += add_file_string("prog/lib/File.wren", "const char", "_WREN_SOURCE")
+    string += add_file_string("prog/lib/Input.wren", "const char", "_WREN_SOURCE")
+    string += add_file_string("prog/lib/Renderer.wren", "const char", "_WREN_SOURCE")
+    string += add_file_string("prog/lib/Util.wren", "const char", "_WREN_SOURCE")
+    string += add_file_string("prog/lib/Tiled.wren", "const char", "_WREN_SOURCE")
+    string += add_file_string("loading.png", "const unsigned char", "_SCREEN_PNG")
+    with open("src/BinaryBlobs.h", "w") as f:
         f.write(string)
     

@@ -36,8 +36,7 @@ of all classes and methods in said classes.
 ## `data/game/init.wren`
 The `init.wren` file is the "entry point" of your game. It must contain the two variables `renderer_config`
 and `start_level`. `start_level` is an instance of `Level` that the engine will use as the
-entry point. `renderer_config` must be a map containing specific keys. Additionally, you may provide
-a third variable, `window_icon`, which will be a path to an image Astro will set as the window's icon.
+entry point. `renderer_config` must be a map containing specific keys. 
 
 ```javascript
 import "Game" for Game
@@ -53,9 +52,15 @@ var renderer_config = {
 }
 
 var window_icon = "data/logo.png"
+var minimum_load_time = 3
 
 var start_level = Game.new()
 ```
+
+There are two other (optional) variables you may set in this file: `window_icon` and `minimum_load_time`.
+`window_icon` should specify an image file which Astro will set as the window icon, and 
+`minimum_load_time` will be the minimum amount of time the loading screen (see: [Loading Screen](#loading-screen))
+will be displayed.
 
 As you can see, the `Renderer` class provides values to use for msaa, screen_mode, and filter_type.
 Check [config](classes/Renderer.md#config) for details on each of the map's keys and expected
@@ -67,4 +72,8 @@ When the `init.wren` file is loaded into Astro most of the engine is not yet ini
 anything that handles user input, the window and renderer, and all the user assets. You may use things like
 [INI](classes/INI) or [File](classes/File) to read saved settings, but not much past that.
 
-
+## Loading Screen
+Astro will display a small (800x450) image while the game compiles and loads the asset file/initializes
+the renderer. By default this will show an Astro Engine banner, but you may specify your own loading
+screen image by placing an image at `data/_loading.png`. By default that image is displayed for at least
+3 seconds (adjustable in the `init.wren` file as seen above) so this is a good place to put promo materials.
