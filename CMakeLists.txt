@@ -14,9 +14,14 @@ file(GLOB H_FILES Vulkan2D/VK2D/*.h)
 set(VMA_FILES Vulkan2D/VulkanMemoryAllocator/src/vk_mem_alloc.h Vulkan2D/VulkanMemoryAllocator/src/VmaUsage.cpp)
 
 include_directories(./ Vulkan2D/ src/ ${SDL2_INCLUDE_DIR} ${Vulkan_INCLUDE_DIRS} wren/src/include/ wren/src/vm/ wren/src/optional/)
-add_executable(Astro main.c ${VMA_FILES} ${C_FILES} ${H_FILES})
+if (WIN32)
+	add_executable(Astro main.c icon.rc ${VMA_FILES} ${C_FILES} ${H_FILES})
+else()
+	add_executable(Astro main.c ${VMA_FILES} ${C_FILES} ${H_FILES})
+endif()
+
 # this is here cuz sometimes mingw64 just doesnt like me
 if (NOT DEFINED ${SDL2_LIBRARIES})
 	set(SDL2_LIBRARIES SDL2)
 endif()
-target_link_libraries(${PROJECT_NAME} m dsound ${SDL2_LIBRARIES} ${Vulkan_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} m ${SDL2_LIBRARIES} ${Vulkan_LIBRARIES})
