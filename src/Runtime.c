@@ -209,6 +209,10 @@ void vksk_Start() {
 
 	// Import the initialization module
 	vksk_Log("Loading init file...");
+	if (!_vk2dFileExists("data/game/init.wren")) {
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Failed to locate an init.wren file.", gWindow);
+		abort();
+	}
 	wrenInterpret(vm, "__top__", "import \"init\"");
 
 	// Create handles for the 3 primary functions of a level
