@@ -255,7 +255,7 @@ void vksk_Start() {
 	VK2DStartupOptions options = {0};
 	options.enableDebug = false;
 	options.loadCustomShaders = false;
-	options.stdoutLogging = false;
+	options.stdoutLogging = true;
 	options.quitOnError = true;
 	options.errorFile = "astroerror.txt";
 	vk2dRendererInit(gWindow, rendererConfig, &options);
