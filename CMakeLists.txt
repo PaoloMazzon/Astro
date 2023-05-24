@@ -20,8 +20,9 @@ else()
 	add_executable(Astro main.c ${VMA_FILES} ${C_FILES} ${H_FILES})
 endif()
 
-# this is here cuz sometimes mingw64 just doesnt like me
-if (NOT DEFINED ${SDL2_LIBRARIES})
-	set(SDL2_LIBRARIES SDL2)
+# Accounts for msys2/mingw64 compilers
+if (${CMAKE_C_COMPILER_ID} STREQUAL "GNU" AND WIN32)
+	set(SDL2_LIBRARIES mingw32 SDL2main SDL2)
 endif()
+
 target_link_libraries(${PROJECT_NAME} m ${SDL2_LIBRARIES} ${Vulkan_LIBRARIES})
