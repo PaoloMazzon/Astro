@@ -534,7 +534,6 @@ static const char *folderToClass(const char *folder, char *buffer, int bufferSiz
 
 // ------------------------------- Asset compiler ------------------------------- //
 
-// TODO: A function that adds a sprite from spritedata to the getter and class strings, same for other types
 static void _vksk_CompileAssetFromSpriteData(const char *basePath, String getter, String method, SpriteData *sprite) {
 	char nameBuffer[STRING_BUFFER_SIZE];
 	char output[STRING_BUFFER_SIZE];
@@ -553,7 +552,7 @@ static void _vksk_CompileAssetFromSpriteData(const char *basePath, String getter
 	snprintf(
 			output,
 			STRING_BUFFER_SIZE,
-			"\t\t_spr_%s = Sprite.from(_tex_%s, %.2f, %.2f, %.2f, %.2f, %.2f, %i)\n",
+			"\t\t_spr_%s = Sprite.from(_tex_%s, %.2f, %.2f, %.2f, %.2f, %.2f, %i)\n\t\t_spr_%s.origin_x = %.2f\n\t\t_spr_%s.origin_y = %.2f\n",
 			nameBuffer,
 			fileBuffer,
 			sprite->x,
@@ -561,7 +560,11 @@ static void _vksk_CompileAssetFromSpriteData(const char *basePath, String getter
 			sprite->w,
 			sprite->h,
 			sprite->delay,
-			(int)sprite->frames
+			(int)sprite->frames,
+			nameBuffer,
+			sprite->originX,
+			nameBuffer,
+			sprite->originY
 	);
 	appendString(method, output);
 
