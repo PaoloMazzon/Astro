@@ -538,6 +538,16 @@ static const char *folderToClass(const char *folder, char *buffer, int bufferSiz
 static void _vksk_CompileAssetFromSpriteData(const char *basePath, String getter, String method, SpriteData *sprite) {
 	char nameBuffer[STRING_BUFFER_SIZE];
 	char output[STRING_BUFFER_SIZE];
+	char fileBuffer[STRING_BUFFER_SIZE];
+	char *finalPath = strrchr(sprite->filename, '/');
+	if (finalPath != NULL)
+		strncpy(fileBuffer, finalPath + 1, STRING_BUFFER_SIZE);
+	else
+		strncpy(fileBuffer, sprite->filename, STRING_BUFFER_SIZE);
+	char *ext = strrchr(fileBuffer, '.');
+	if (ext != NULL) {
+		*ext = 0;
+	}
 
 	jsonGetAssetName(sprite->filename, sprite->name, nameBuffer, STRING_BUFFER_SIZE);
 	snprintf(
@@ -545,7 +555,7 @@ static void _vksk_CompileAssetFromSpriteData(const char *basePath, String getter
 			STRING_BUFFER_SIZE,
 			"\t\t_spr_%s = Sprite.from(_tex_%s, %.2f, %.2f, %.2f, %.2f, %.2f, %i)\n",
 			nameBuffer,
-			nameBuffer,
+			fileBuffer,
 			sprite->x,
 			sprite->y,
 			sprite->w,
