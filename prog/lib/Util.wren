@@ -259,7 +259,7 @@ class Tileset {
         while (!collision(hitbox, x - 1, y) && hitbox.bb_left(x - 1, y) > 0) {
             x = x - _w
         }
-        return x
+        return x + hitbox.offset_x
     }
 
     // Same but right
@@ -268,7 +268,7 @@ class Tileset {
         while (!collision(hitbox, x + 1, y) && hitbox.bb_right(x + 1, y) < width) {
             x = x + _w
         }
-        return x
+        return x - hitbox.offset_x
     }
 
     // Same but up
@@ -277,7 +277,7 @@ class Tileset {
         while (!collision(hitbox, x, y - 1) && hitbox.bb_top(x, y - 1) > 0) {
             y = y - _h
         }
-        return y
+        return y + hitbox.offset_y
     }
 
     // Same but down
@@ -286,7 +286,7 @@ class Tileset {
         while (!collision(hitbox, x, y + 1) && hitbox.bb_bottom(x, y + 1) < height) {
             y = y + _h
         }
-        return y
+        return y - hitbox.offset_y
     }
 
     // Copies from source tileset at [sx,sy] to [sx+sw,sy+sh] into this
@@ -315,6 +315,8 @@ class Tileset {
             return false
         }
         var bb = hitbox.bounding_box(x, y)
+        x = x - hitbox.offset_x
+        y = y - hitbox.offset_y
         // this is to account for bounding boxes that end on a new spot and shouldn't
         bb[2] = bb[2] % _w == 0 ? bb[2] - 0.1 : bb[2]
         bb[3] = bb[3] % _h == 0 ? bb[3] - 0.1 : bb[3]
