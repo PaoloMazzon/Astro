@@ -227,7 +227,7 @@ class Level {
     entity_collision(entity, base_class) {
         var out = null
         for (ent in _entity_list) {
-            if (ent is base_class) {
+            if (ent is base_class && ent != entity) {
                 if (entity.hitbox.collision(entity.x, entity.y, ent.x, ent.y, ent.hitbox)) {
                     out = ent
                     break
@@ -241,7 +241,7 @@ class Level {
     entity_collision(entity, x, y, base_class) {
         var out = null
         for (ent in _entity_list) {
-            if (ent is base_class) {
+            if (ent is base_class && ent != entity) {
                 if (entity.hitbox.collision(x, y, ent.x, ent.y, ent.hitbox)) {
                     out = ent
                     break
