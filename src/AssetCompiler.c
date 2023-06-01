@@ -297,7 +297,7 @@ static bool jsonFindAsepriteData(const char *tex_filename, SpriteData *sprite) {
 				sprite->y = 0;
 				sprite->w = 0;
 				sprite->h = 0;
-				sprite->originY = 0;
+				sprite->originX = 0;
 				sprite->originY = 0;
 
 				// Extract width/height from "sourceSize"
