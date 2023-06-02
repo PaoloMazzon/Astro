@@ -532,8 +532,8 @@ void vksk_RuntimeRendererDrawSpriteFrame(WrenVM *vm) {
 		_vksk_DrawTexture(
 				vm,
 				spr->sprite.spr->Internal.tex,
-				wrenGetSlotDouble(vm, 3) - spr->sprite.spr->originX,
-				wrenGetSlotDouble(vm, 4) - spr->sprite.spr->originY,
+				wrenGetSlotDouble(vm, 3) - (spr->sprite.spr->originX * spr->sprite.spr->scaleX),
+				wrenGetSlotDouble(vm, 4) - (spr->sprite.spr->originY * spr->sprite.spr->scaleY),
 				spr->sprite.spr->scaleX,
 				spr->sprite.spr->scaleY,
 				spr->sprite.spr->rotation,
