@@ -209,7 +209,7 @@ void vksk_Start() {
 
 	// Import the initialization module
 	vksk_Log("Loading init file...");
-	if (!_vk2dFileExists("data/game/init.wren")) {
+	if (!_vk2dFileExists("data/game/init.wren") && !vksk_PakFileExists(gGamePak, "data/game/init.wren")) {
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Failed to locate an init.wren file.", gWindow);
 		abort();
 	}
