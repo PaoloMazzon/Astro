@@ -8,7 +8,7 @@ find_package(SDL2 REQUIRED)
 include_directories("../")
 add_executable(Packer main.c ../src/Packer.c)
 # this is here cuz sometimes mingw64 just doesnt like me
-if (NOT DEFINED ${SDL2_LIBRARIES})
+if (NOT DEFINED SDL2_LIBRARIES)
 	set(SDL2_LIBRARIES SDL2)
 endif()
 target_link_libraries(${PROJECT_NAME} m ${SDL2_LIBRARIES})

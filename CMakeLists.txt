@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(Astro)
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O3 -ffast-math -funroll-loops")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -ffast-math -funroll-loops")
 
 find_package(Vulkan)
 find_package(SDL2 REQUIRED)
@@ -11,7 +11,7 @@ add_subdirectory("Packer")
 # All source files are located in the VK2D folder
 file(GLOB C_FILES Vulkan2D/VK2D/*.c src/*.c wren/src/optional/*.c wren/src/vm/*.c)
 file(GLOB H_FILES Vulkan2D/VK2D/*.h)
-set(VMA_FILES Vulkan2D/VulkanMemoryAllocator/src/vk_mem_alloc.h Vulkan2D/VulkanMemoryAllocator/src/VmaUsage.cpp)
+set(VMA_FILES Vulkan2D/VulkanMemoryAllocator/src/VmaUsage.cpp)
 
 include_directories(./ Vulkan2D/ src/ ${SDL2_INCLUDE_DIR} ${Vulkan_INCLUDE_DIRS} wren/src/include/ wren/src/vm/ wren/src/optional/)
 if (WIN32)
