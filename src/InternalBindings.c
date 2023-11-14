@@ -32,6 +32,7 @@ static _VKSK_GamepadInputs gInputPrevious[4] = {0};
 static _VKSK_GamepadInputs gInput[4] = {0};
 static double gAxisDeadzone = 0.1;
 static double gTriggerDeadzone = 0.1;
+static vec2 gPolygonSquare[4]; // For the sat-to-rectangle collisions
 
 void vksk_RuntimeINIAllocate(WrenVM *vm) {
 	VKSK_RuntimeForeign *conf = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
@@ -1239,6 +1240,12 @@ void vksk_RuntimePolygonHitboxPolyPolyCollision(WrenVM *vm) {
     wrenSetSlotBool(vm, 0, result);
 }
 
+static bool satCircle(double px, double py, double cx, double cy, _vksk_RuntimePolygonHitbox *poly, double radius) {
+    // TODO: Check first if the circle's center is within the polygon, otherwise check that each line on the
+    //  polygon is at least radius distance away from the circle's center.
+    return false;
+}
+
 void vksk_RuntimePolygonHitboxPolyRectCollision(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_POLY_HITBOX, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
     // TODO: This
@@ -1247,6 +1254,23 @@ void vksk_RuntimePolygonHitboxPolyRectCollision(WrenVM *vm) {
 
 void vksk_RuntimePolygonHitboxPolyCircCollision(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_POLY_HITBOX, FOREIGN_NUM, FOREIGN_END)
-    // TODO: This
-    wrenSetSlotBool(vm, 0, false);
+    double x1 = wrenGetSlotDouble(vm, 1);
+    double y1 = wrenGetSlotDouble(vm, 2);
+    double x2 = wrenGetSlotDouble(vm, 3);
+    double y2 = wrenGetSlotDouble(vm, 4);
+    _vksk_RuntimePolygonHitbox *hitbox1 = &((VKSK_RuntimeForeign*)wrenGetSlotForeign(vm, 5))->polygonHitbox;
+    double w = wrenGetSlotDouble(vm, 6);
+    double h = wrenGetSlotDouble(vm, 7);
+    _vksk_RuntimePolygonHitbox hitbox2;
+    hitbox2.count = 4;
+    hitbox2.vertices = gPolygonSquare;
+    gPolygonSquare[0][0] = 0;
+    gPolygonSquare[0][1] = 0;
+    gPolygonSquare[1][0] = w;
+    gPolygonSquare[1][1] = 0;
+    gPolygonSquare[2][0] = w;
+    gPolygonSquare[2][1] = h;
+    gPolygonSquare[3][0] = 0;
+    gPolygonSquare[3][1] = h;
+    wrenSetSlotBool(vm, 0, satCollision(x1, y1, x2, y2, hitbox1, &hitbox2));
 }
