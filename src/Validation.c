@@ -30,6 +30,7 @@ const uint64_t FOREIGN_BUFFER = 1<<16;
 const uint64_t FOREIGN_SHADER = 1<<17;
 const uint64_t FOREIGN_MODEL = 1<<18;
 const uint64_t FOREIGN_POLYGON = 1<<19;
+const uint64_t FOREIGN_POLY_HITBOX = 1<<20;
 
 extern VKSK_EngineConfig gEngineConfig;
 
@@ -127,11 +128,16 @@ static inline const char *getTypeString(uint64_t type, char *buf) {
 			strcat(buf, " or ");
 		strcat(buf, "Model");
 	}
-	if (type & FOREIGN_POLYGON) {
-		if (strlen(buf) > 0)
-			strcat(buf, " or ");
-		strcat(buf, "Polygon");
-	}
+    if (type & FOREIGN_POLYGON) {
+        if (strlen(buf) > 0)
+            strcat(buf, " or ");
+        strcat(buf, "Polygon");
+    }
+    if (type & FOREIGN_POLY_HITBOX) {
+        if (strlen(buf) > 0)
+            strcat(buf, " or ");
+        strcat(buf, "Polygon Hitbox");
+    }
 	return buf;
 }
 

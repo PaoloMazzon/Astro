@@ -115,9 +115,9 @@ WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module
 			methods.finalize = vksk_RuntimeTiledFinalize;
 		}
 	} else if (strcmp(module, "lib/Util") == 0) {
-		if (strcmp(className, "Buffer") == 0) {
-			methods.allocate = vksk_RuntimeBufferAllocate;
-			methods.finalize = vksk_RuntimeBufferFinalize;
+		if (strcmp(className, "PolygonHitbox") == 0) {
+			methods.allocate = vksk_RuntimePolygonHitboxAllocate;
+			methods.finalize = vksk_RuntimePolygonHitboxFinalize;
 		}
 	}
 
@@ -238,6 +238,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Model", false, "free()", vksk_RuntimeVK2DModelFree)
 		BIND_METHOD("Model", true, "load(_,_)", vksk_RuntimeVK2DModelLoad)
 		BIND_METHOD("Polygon", false, "free()", vksk_RuntimeVK2DPolygonFree)
+        BIND_METHOD("Polygon", true, "create(_)", vksk_RuntimeVK2DPolygonCreate)
 		BIND_METHOD("Sprite", true, "from(_,_,_,_,_,_,_)", vksk_RuntimeJUSpriteFrom)
 		BIND_METHOD("Sprite", false, "frame", vksk_RuntimeJUSpriteGetFrame)
 		BIND_METHOD("Sprite", false, "frame=(_)", vksk_RuntimeJUSpriteSetFrame)
@@ -358,6 +359,10 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Buffer", false, "write_string(_)", vksk_RuntimeBufferWriteString)
 		BIND_METHOD("Buffer", false, "read_bool()", vksk_RuntimeBufferReadBool)
 		BIND_METHOD("Buffer", false, "write_bool(_)", vksk_RuntimeBufferWriteBool)
-	}
+        BIND_METHOD("PolygonHitbox", true, "create(_)", vksk_RuntimePolygonHitboxCreate)
+        BIND_METHOD("PolygonHitbox", true, "check_collision_polypoly(_,_,_,_,_,_)", vksk_RuntimePolygonHitboxPolyPolyCollision)
+        BIND_METHOD("PolygonHitbox", true, "check_collision_polyrect(_,_,_,_,_,_,_)", vksk_RuntimePolygonHitboxPolyRectCollision)
+        BIND_METHOD("PolygonHitbox", true, "check_collision_polycirc(_,_,_,_,_,_)", vksk_RuntimePolygonHitboxPolyCircCollision)
+    }
 	return NULL;
 }

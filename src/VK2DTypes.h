@@ -58,6 +58,7 @@ void vksk_RuntimeVK2DShaderFinalize(void *data);
 void vksk_RuntimeVK2DShaderSetData(WrenVM *vm);
 
 void vksk_RuntimeVK2DPolygonAllocate(WrenVM *vm);
+void vksk_RuntimeVK2DPolygonCreate(WrenVM *vm);
 void vksk_RuntimeVK2DPolygonFinalize(void *data);
 void vksk_RuntimeVK2DPolygonFree(WrenVM *vm);
 

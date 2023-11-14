@@ -70,10 +70,28 @@ class Math {
     }
 }
 
+// For internal use on SAT collisions (convex polygon collisions)
+foreign class PolygonHitbox {
+    // Creates a new polygon hitbox from a vertex list as [[x1, y1], [x2, y2], ...]
+    foreign static create(vertex_list)
+
+    construct new() {}
+
+    // Checks for a collision between two polygon hitboxes
+    foreign static check_collision_polypoly(x1, y1, x2, y2, poly1, poly2)
+
+    // Checks for a collision between a polygon and rectangle
+    foreign static check_collision_polyrect(x1, y1, x2, y2, poly1, w, h)
+
+    // Checks for a collision between a polygon and circle
+    foreign static check_collision_polycirc(x1, y1, x2, y2, poly1, r)
+}
+
 // Collision utilities
 class Hitbox {
     static TYPE_CIRCLE { 0 }
     static TYPE_RECTANGLE { 1 }
+    static TYPE_POLYGON { 2 }
     static TYPE_VOID { -1 }
     static NO_HIT { Hitbox.new_void() }
 
@@ -81,6 +99,7 @@ class Hitbox {
     r { _r }
     w { _w }
     h { _h }
+    vertices { _vertices }
     offset_x=(offset) { _x_offset = offset }
     offset_y=(offset) { _y_offset = offset }
     offset_x { _x_offset }
@@ -99,6 +118,15 @@ class Hitbox {
         _type = Hitbox.TYPE_RECTANGLE
         _w = w
         _h = h
+        _x_offset = 0
+        _y_offset = 0
+    }
+
+    // Creates a new polygon hitbox
+    construct new_polygon(vertices) {
+        _type = Hitbox.TYPE_POLYGON
+        _polygon = PolygonHitbox.new(vertices)
+        _vertices = vertices
         _x_offset = 0
         _y_offset = 0
     }

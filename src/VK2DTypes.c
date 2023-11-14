@@ -373,40 +373,37 @@ void vksk_RuntimeVK2DShaderSetData(WrenVM *vm) {
 	}
 }
 
-
 void vksk_RuntimeVK2DPolygonAllocate(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    VKSK_RuntimeForeign *polygon = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
+    polygon->type = FOREIGN_POLYGON;
+}
+
+void vksk_RuntimeVK2DPolygonCreate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST, FOREIGN_END)
+    wrenEnsureSlots(vm, 4);
+    wrenGetVariable(vm, "lib/Drawing", "Polygon", 0);
 	VKSK_RuntimeForeign *polygon = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
 	polygon->type = FOREIGN_POLYGON;
 	const int vertexListSize = wrenGetListCount(vm, 1);
-	VK2DVertexColour *vertices = malloc(sizeof(VK2DVertexColour) * vertexListSize);
-	wrenEnsureSlots(vm, 4);
+	vec2 *vertices = malloc(sizeof(vec2) * vertexListSize);
 	const int vertexSlot = 2;
 	const int valueSlot = 3;
 
 	for (int i = 0; i < vertexListSize; i++) {
 		wrenGetListElement(vm, 1, i, vertexSlot);
 		wrenGetListElement(vm, vertexSlot, 0, valueSlot);
-		vertices[i].pos[0] = wrenGetSlotDouble(vm, valueSlot);
+		vertices[i][0] = wrenGetSlotDouble(vm, valueSlot);
 		wrenGetListElement(vm, vertexSlot, 1, valueSlot);
-		vertices[i].pos[1] = wrenGetSlotDouble(vm, valueSlot);
-		wrenGetListElement(vm, vertexSlot, 2, valueSlot);
-		vertices[i].pos[2] = wrenGetSlotDouble(vm, valueSlot);
-		wrenGetListElement(vm, vertexSlot, 0, valueSlot);
-		vertices[i].colour[0] = wrenGetSlotDouble(vm, valueSlot);
-		wrenGetListElement(vm, vertexSlot, 1, valueSlot);
-		vertices[i].colour[1] = wrenGetSlotDouble(vm, valueSlot);
-		wrenGetListElement(vm, vertexSlot, 2, valueSlot);
-		vertices[i].colour[2] = wrenGetSlotDouble(vm, valueSlot);
-		wrenGetListElement(vm, vertexSlot, 3, valueSlot);
-		vertices[i].colour[3] = wrenGetSlotDouble(vm, valueSlot);
+		vertices[i][1] = wrenGetSlotDouble(vm, valueSlot);
 	}
 
-	polygon->polygon = vk2dPolygonShapeCreateRaw(vertices, vertexListSize);
+	polygon->polygon = vk2dPolygonCreate(vertices, vertexListSize);
 	if (polygon->polygon == NULL) {
 		wrenSetSlotNull(vm, 0);
 		vksk_Error(false, "Failed to create polygon");
 	}
+	free(vertices);
 }
 
 void vksk_RuntimeVK2DPolygonFinalize(void *data) {

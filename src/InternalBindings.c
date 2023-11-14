@@ -1142,3 +1142,50 @@ void vksk_RuntimeFontFree(WrenVM *vm) {
 	juFontFree(font->bitmapFont);
 	font->bitmapFont = NULL;
 }
+
+/********************** Polygon hitboxes **********************/
+
+void vksk_RuntimePolygonHitboxAllocate(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST, FOREIGN_END)
+    VKSK_RuntimeForeign *polyhitbox = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
+    polyhitbox->type = FOREIGN_POLY_HITBOX;
+}
+
+void vksk_RuntimePolygonHitboxCreate(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST, FOREIGN_END)
+    VKSK_RuntimeForeign *polyhitbox = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
+    polyhitbox->polygonHitbox.count = wrenGetListCount(vm, 1);
+    polyhitbox->polygonHitbox.vertices = malloc(polyhitbox->polygonHitbox.count * sizeof(vec2));
+    if (polyhitbox->polygonHitbox.vertices == NULL) {
+        vksk_Log("Could not allocate buffer of size %f\n", polyhitbox->polygonHitbox.count * sizeof(vec2));
+    } else {
+        wrenEnsureSlots(vm, 4);
+        const int vertexListSlot = 2;
+        const int elementSlot = 3;
+        for (int i = 0; i < polyhitbox->polygonHitbox.count; i++) {
+            wrenGetListElement(vm, 1, i, vertexListSlot);
+            wrenGetListElement(vm, vertexListSlot, 0, elementSlot);
+            polyhitbox->polygonHitbox.vertices[i][0] = wrenGetSlotDouble(vm, elementSlot);
+            wrenGetListElement(vm, vertexListSlot, 1, elementSlot);
+            polyhitbox->polygonHitbox.vertices[i][1] = wrenGetSlotDouble(vm, elementSlot);
+        }
+    }
+    polyhitbox->type = FOREIGN_POLY_HITBOX;
+}
+
+void vksk_RuntimePolygonHitboxFinalize(void *data) {
+    VKSK_RuntimeForeign *f = data;
+    free(f->polygonHitbox.vertices);
+}
+
+void vksk_RuntimePolygonHitboxPolyPolyCollision(WrenVM *vm) {
+
+}
+
+void vksk_RuntimePolygonHitboxPolyRectCollision(WrenVM *vm) {
+
+}
+
+void vksk_RuntimePolygonHitboxPolyCircCollision(WrenVM *vm) {
+
+}

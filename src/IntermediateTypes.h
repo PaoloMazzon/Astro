@@ -31,6 +31,7 @@ extern const uint64_t FOREIGN_BUFFER;
 extern const uint64_t FOREIGN_SHADER;
 extern const uint64_t FOREIGN_POLYGON;
 extern const uint64_t FOREIGN_MODEL;
+extern const uint64_t FOREIGN_POLY_HITBOX;
 
 // To protect Textures from garbage collection kinda
 typedef struct _vksk_RuntimeTexture {
@@ -67,6 +68,11 @@ typedef struct _vksk_RuntimeShader {
 	int size;
 } _vksk_RuntimeShader;
 
+typedef struct _vksk_RuntimePolygonHitbox {
+    vec2 *vertices;
+    int count;
+} _vksk_RuntimePolygonHitbox;
+
 // All foreign types come from this for type checking purposes
 typedef struct VKSK_RuntimeForeign {
 	uint64_t type;
@@ -84,5 +90,6 @@ typedef struct VKSK_RuntimeForeign {
 		_vksk_RuntimeShader shader;
 		VK2DPolygon polygon;
 		VK2DModel model;
+		_vksk_RuntimePolygonHitbox polygonHitbox;
 	};
 } VKSK_RuntimeForeign;

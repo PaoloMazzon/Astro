@@ -162,12 +162,10 @@ foreign class Model {
 
 // A 2D polygon
 foreign class Polygon {
-    static vertex(x, y, r, g, b, a) {
-        return [x, y, r, g, b, a]
-    }
+    construct new() {}
 
     // Creates a polygon from a list of vertices - triangulates automatically
-    construct create(vertices) {}
+    foreign static create(vertices)
 
     // Forces the engine to free a polygon
     foreign free()
