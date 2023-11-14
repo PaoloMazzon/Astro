@@ -1178,14 +1178,75 @@ void vksk_RuntimePolygonHitboxFinalize(void *data) {
     free(f->polygonHitbox.vertices);
 }
 
-void vksk_RuntimePolygonHitboxPolyPolyCollision(WrenVM *vm) {
+// Casts a 2D point onto a 1D line given by the slope m
+static double cast1dShadow(double x, double y, double m) {
+    return y - (m * x);
+}
 
+// Returns true if two ranges on a number line overlap
+static bool segmentOverlap(double min1, double max1, double min2, double max2) {
+    return min1 < max2 && max1 > min2;
+}
+
+// Finds the min/max value of a vertex from a polygon hitbox cast to a 1D line given by m
+static void satGetPolyMinMax(double x, double y, double m, double *min, double *max, _vksk_RuntimePolygonHitbox *hitbox) {
+    *min = cast1dShadow(x + hitbox->vertices[0][0], y + hitbox->vertices[0][1], m);
+    *max = cast1dShadow(x + hitbox->vertices[0][0], y + hitbox->vertices[0][1], m);
+    for (int i = 1; i < hitbox->count; i++) {
+        const double cast = cast1dShadow(x + hitbox->vertices[i][0], y + hitbox->vertices[i][1], m);
+        if (cast < *min)
+            *min = cast;
+        if (cast > *max)
+            *max = cast;
+    }
+}
+
+// Checks for a sat collision only looking at the lines from the first hitbox
+static bool satCollision1Way(double x1, double y1, double x2, double y2, _vksk_RuntimePolygonHitbox *hitbox1, _vksk_RuntimePolygonHitbox *hitbox2) {
+    // Iterate through each line segment
+    for (int i = 0; i < hitbox1->count; i++) {
+        double m; // perpendicular line to the current line segment
+        if (i == 0)
+            m = (hitbox1->vertices[0][1] - hitbox1->vertices[hitbox1->count - 1][1]) / (hitbox1->vertices[0][0] - hitbox1->vertices[hitbox1->count - 1][0]);
+        else
+            m = (hitbox1->vertices[i][1] - hitbox1->vertices[i - 1][1]) / (hitbox1->vertices[i][0] - hitbox1->vertices[i - 1][0]);
+
+        // Find maxes
+        double min1, min2, max1, max2;
+        satGetPolyMinMax(x1, y1, m, &min1, &max1, hitbox1);
+        satGetPolyMinMax(x2, y2, m, &min2, &max2, hitbox2);
+
+        if (!segmentOverlap(min1, max1, min2, max2))
+            return false;
+    }
+    return true;
+}
+
+static bool satCollision(double x1, double y1, double x2, double y2, _vksk_RuntimePolygonHitbox *hitbox1, _vksk_RuntimePolygonHitbox *hitbox2) {
+    return satCollision1Way(x1, y1, x2, y2, hitbox1, hitbox2) && satCollision1Way(x2, y2, x1, y1, hitbox2, hitbox1);
+}
+
+void vksk_RuntimePolygonHitboxPolyPolyCollision(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_POLY_HITBOX, FOREIGN_POLY_HITBOX, FOREIGN_END)
+    bool result = satCollision(
+            wrenGetSlotDouble(vm, 1),
+            wrenGetSlotDouble(vm, 2),
+            wrenGetSlotDouble(vm, 3),
+            wrenGetSlotDouble(vm, 4),
+            &((VKSK_RuntimeForeign*)wrenGetSlotForeign(vm, 5))->polygonHitbox,
+            &((VKSK_RuntimeForeign*)wrenGetSlotForeign(vm, 6))->polygonHitbox
+    );
+    wrenSetSlotBool(vm, 0, result);
 }
 
 void vksk_RuntimePolygonHitboxPolyRectCollision(WrenVM *vm) {
-
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_POLY_HITBOX, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+    // TODO: This
+    wrenSetSlotBool(vm, 0, false);
 }
 
 void vksk_RuntimePolygonHitboxPolyCircCollision(WrenVM *vm) {
-
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_POLY_HITBOX, FOREIGN_NUM, FOREIGN_END)
+    // TODO: This
+    wrenSetSlotBool(vm, 0, false);
 }

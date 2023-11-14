@@ -100,6 +100,7 @@ class Hitbox {
     w { _w }
     h { _h }
     vertices { _vertices }
+    polygon { _polygon }
     offset_x=(offset) { _x_offset = offset }
     offset_y=(offset) { _y_offset = offset }
     offset_x { _x_offset }
@@ -125,10 +126,31 @@ class Hitbox {
     // Creates a new polygon hitbox
     construct new_polygon(vertices) {
         _type = Hitbox.TYPE_POLYGON
-        _polygon = PolygonHitbox.new(vertices)
+        _polygon = PolygonHitbox.create(vertices)
         _vertices = vertices
         _x_offset = 0
         _y_offset = 0
+
+        // Because calculating bb is a bit of a process
+        var minx = _vertices[0][0]
+        var miny = _vertices[0][1]
+        var maxx = _vertices[0][0]
+        var maxy = _vertices[0][1]
+        for (point in _vertices) {
+            if (point[0] > maxx) {
+                maxx = point[0]
+            }
+            if (point[1] > maxy) {
+                maxy = point[1]
+            }
+            if (point[0] < minx) {
+                minx = point[0]
+            }
+            if (point[1] < miny) {
+                miny = point[1]
+            }
+        }
+        _bb = [minx, miny, maxx, maxy]
     }
 
     construct new_void() {
@@ -173,6 +195,11 @@ class Hitbox {
             return Hitbox.circle_rect_collision(x2, y2, hitbox2.w, hitbox2.h, x1, y1, _r)
         } else if (hitbox2.type == Hitbox.TYPE_CIRCLE && _type == Hitbox.TYPE_CIRCLE) {
             return Math.point_distance(x1, y1, x2, y2) < _r + hitbox2.r
+        } else if (_type == Hitbox.TYPE_POLYGON || hitbox2.type == Hitbox.TYPE_POLYGON) {
+            // TODO: Circle/poly and rect/poly
+            if (_type == Hitbox.TYPE_POLYGON && hitbox2.type == Hitbox.TYPE_POLYGON) {
+                return PolygonHitbox.check_collision_polypoly(x1, y1, x2, y2, _polygon, hitbox2.polygon)
+            }
         }
         return false
     }
@@ -185,6 +212,8 @@ class Hitbox {
             return [x - _r, y - _r, x + _r, y + _r]
         } else if (_type == Hitbox.TYPE_RECTANGLE) {
             return [x, y, x + _w, y + _h]
+        } else if (_type == Hitbox.TYPE_POLYGON) {
+            return [_bb[0] + x, _bb[1] + y, _bb[2] + x, _bb[3] + y]
         }
         return [0, 0, 0, 0]
     }
@@ -197,6 +226,8 @@ class Hitbox {
             return x - _r
         } else if (_type == Hitbox.TYPE_RECTANGLE) {
             return x
+        } else if (_type == Hitbox.TYPE_POLYGON) {
+            return _bb[0] + x
         }
         return 0
     }
@@ -209,6 +240,8 @@ class Hitbox {
             return x + _r
         } else if (_type == Hitbox.TYPE_RECTANGLE) {
             return x + _w
+        } else if (_type == Hitbox.TYPE_POLYGON) {
+            return _bb[2] + x
         }
         return 0
     }
@@ -221,6 +254,8 @@ class Hitbox {
             return y - _r
         } else if (_type == Hitbox.TYPE_RECTANGLE) {
             return y
+        } else if (_type == Hitbox.TYPE_POLYGON) {
+            return _bb[1] + y
         }
         return 0
     }
@@ -233,6 +268,8 @@ class Hitbox {
             return y + _r
         } else if (_type == Hitbox.TYPE_RECTANGLE) {
             return y + _h
+        } else if (_type == Hitbox.TYPE_POLYGON) {
+            return _bb[3] + y
         }
         return 0
     }
