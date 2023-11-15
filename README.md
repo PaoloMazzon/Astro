@@ -77,6 +77,7 @@ of things you can expect Astro to be capable of.
  + Automatically [load Tiled maps](https://astroengine.ca/TiledIntegration.html) into levels
  + Use [tilesets](https://astroengine.ca/classes/Tileset.html) for fast and simplified tileset rendering and collisions
  + Basic filesystem support through [buffers](https://astroengine.ca/classes/Buffer.html), [file](https://astroengine.ca/classes/File.html), and [inis](https://astroengine.ca/classes/INI.html)
+ + Hitboxes may be rectangles, circles, or convex polygons and you may check for collisions between any combination of them
  
 Platforms
 =========

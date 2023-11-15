@@ -196,9 +196,16 @@ class Hitbox {
         } else if (hitbox2.type == Hitbox.TYPE_CIRCLE && _type == Hitbox.TYPE_CIRCLE) {
             return Math.point_distance(x1, y1, x2, y2) < _r + hitbox2.r
         } else if (_type == Hitbox.TYPE_POLYGON || hitbox2.type == Hitbox.TYPE_POLYGON) {
-            // TODO: Circle/poly and rect/poly
             if (_type == Hitbox.TYPE_POLYGON && hitbox2.type == Hitbox.TYPE_POLYGON) {
                 return PolygonHitbox.check_collision_polypoly(x1, y1, x2, y2, _polygon, hitbox2.polygon)
+            } else if (_type == Hitbox.TYPE_POLYGON && hitbox2.type == Hitbox.TYPE_RECTANGLE) {
+                return PolygonHitbox.check_collision_polyrect(x1, y1, x2, y2, _polygon, hitbox2.w, hitbox2.h)
+            } else if (_type == Hitbox.TYPE_RECTANGLE && hitbox2.type == Hitbox.TYPE_POLYGON) {
+                return PolygonHitbox.check_collision_polyrect(x2, y2, x1, y1, hitbox2.polygon, _w, _h)
+            } else if (_type == Hitbox.TYPE_POLYGON && hitbox2.type == Hitbox.TYPE_CIRCLE) {
+                return PolygonHitbox.check_collision_polycirc(x1, y1, x2, y2, _polygon, hitbox2.r)
+            } else if (_type == Hitbox.TYPE_CIRCLE && hitbox2.type == Hitbox.TYPE_POLYGON) {
+                return PolygonHitbox.check_collision_polycirc(x2, y2, x1, y1, hitbox2.polygon, _r)
             }
         }
         return false
