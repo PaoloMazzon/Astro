@@ -1298,7 +1298,7 @@ static bool lineIntersectsCircle(double cx, double cy, double r, double x1, doub
 
 // Checks if a point is between a line given endpoints
 static bool pointBetweenLine(double px, double py, double x1, double y1, double x2, double y2) {
-    double m = -(x2 - x1) / (y2 - y1);
+    double m = -(x2 - x1) / nodivzero(y2 - y1);
     double a = cast1dShadow(x1, y1, m);
     double b = cast1dShadow(x2, y2, m);
     double c = cast1dShadow(px, py, m);
