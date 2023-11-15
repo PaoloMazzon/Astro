@@ -92,7 +92,10 @@ create a pull request.
 
 TODO
 ====
+In no particular order,
 
  + Better Tiled loader
  + Networking support
- + Spatial hash maps
+ + Quadtree-based collisions
+ + Load hitboxes from json
+ + External asset managing program to make jsons automatically
