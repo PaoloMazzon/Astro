@@ -36,6 +36,17 @@ if (__name__ == "__main__"):
     string += add_file_string("prog/lib/Util.wren", "const char", "_WREN_SOURCE")
     string += add_file_string("prog/lib/Tiled.wren", "const char", "_WREN_SOURCE")
     string += add_file_string("loading.png", "const unsigned char", "_SCREEN_PNG")
-    with open("src/BinaryBlobs.h", "w") as f:
+    with open("src/WrenHeaders.h", "w") as f:
+        f.write(string)
+
+    string = """/// \\file Blobs.h
+/// \\author Paolo Mazzon
+/// \\brief Automatically generated file from generate_wren_blobs.py
+#pragma once
+#include <stdint.h>
+"""
+    string += add_file_string("distro.png", "const uint8_t", "_PNG")
+    string += add_file_string("font.png", "const uint8_t", "_PNG")
+    with open("src/Blobs.h", "w") as f:
         f.write(string)
     

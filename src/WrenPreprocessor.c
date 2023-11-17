@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #include "src/WrenPreprocessor.h"
-#include "src/BinaryBlobs.h"
+#include "src/WrenHeaders.h"
 #include "src/Packer.h"
 #include "src/Runtime.h"
 

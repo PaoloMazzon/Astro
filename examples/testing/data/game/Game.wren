@@ -57,7 +57,7 @@ class Game is Level {
     update() {
         super.update()
         
-        Renderer.draw_font(null, Engine.fps.toString, 0, 0)
+        //Renderer.draw_font(null, Engine.fps.toString, 0, 0)
     }
 
     destroy() {

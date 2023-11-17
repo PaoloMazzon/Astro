@@ -75,11 +75,11 @@ static void _vksk_SetWindowIcon(WrenVM *vm) {
 
 static void _vksk_InitializeDebug() {
 	int x, y, channels;
-	uint8_t *pixels = stbi_load_from_memory(DEBUG_FONT_PNG, sizeof(DEBUG_FONT_PNG), &x, &y, &channels, 4);
+	uint8_t *pixels = stbi_load_from_memory(FONT_PNG, sizeof(FONT_PNG), &x, &y, &channels, 4);
 	gDebugFontImage = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y, true);
 	gDebugFont = vk2dTextureLoadFromImage(gDebugFontImage);
 	stbi_image_free(pixels);
-	pixels = stbi_load_from_memory(DEBUG_DISTRITUBTION_GRAPH_PNG, sizeof(DEBUG_DISTRITUBTION_GRAPH_PNG), &x, &y, &channels, 4);
+	pixels = stbi_load_from_memory(DISTRO_PNG, sizeof(DISTRO_PNG), &x, &y, &channels, 4);
 	gDebugGraphImage = vk2dImageFromPixels(vk2dRendererGetDevice(), pixels, x, y, true);
 	gDebugGraph = vk2dTextureLoadFromImage(gDebugGraphImage);
 	stbi_image_free(pixels);
@@ -96,10 +96,10 @@ static void _vksk_DebugPrint(float x, float y, const char *fmt, ...) {
 			int index = buffer[i] - 32;
 
 			if (index >= 0 && index < 96) {
-				float drawX = roundf((index * 16) % 256);
-				float drawY = roundf(32 * floorf((index * 16) / (256)));
-				vk2dDrawTexturePart(gDebugFont, x, y, drawX, drawY, 16, 32);
-				x += 16;
+				float drawX = roundf((index * 21) % 336);
+				float drawY = roundf(24 * floorf((index * 21) / (336)));
+				vk2dDrawTexturePart(gDebugFont, x, y, drawX, drawY, 21, 24);
+				x += 21;
 			}
 		}
 	}
@@ -107,15 +107,15 @@ static void _vksk_DebugPrint(float x, float y, const char *fmt, ...) {
 
 static void _vksk_DrawDebugOverlay() {
 	vk2dRendererLockCameras(VK2D_DEFAULT_CAMERA);
-	_vksk_DebugPrint(2, 0, "FPS: %0.2f", gFPS);
-	_vksk_DebugPrint(2, 34, "Entities: %i", gEntityCount);
+	_vksk_DebugPrint(0, 0, "FPS: %0.2f", gFPS);
+	_vksk_DebugPrint(0, 26, "Entities: %i", gEntityCount);
 	if (gTimeStep != 0) {
-		_vksk_DebugPrint(2, 34 + 34, "Time Step: %0.2ffps | TS%: %0.2f% | ", gAverageTimeStep, gTimeStepPercentProc);
-		float x = 35 * 16;
+		_vksk_DebugPrint(0, 26 + 26, "TS:%0.2ffps TS%:%0.2f%", gAverageTimeStep, gTimeStepPercentProc);
+		float x = 21 * 21;
 		float lx = x + (128 * gAverageTimeStepDistribution);
-		vk2dDrawTexture(gDebugGraph, x, 34 + 34);
+		vk2dDrawTexture(gDebugGraph, x, 26 + 26);
 		vk2dRendererSetColourMod(VK2D_BLACK);
-		vk2dDrawRectangle(lx - 1, 34 + 34, 2, 32);
+		vk2dDrawRectangle(lx - 1, 26 + 26, 2, 32);
 		vk2dRendererSetColourMod(VK2D_DEFAULT_COLOUR_MOD);
 	}
 	vk2dRendererUnlockCameras();
@@ -266,7 +266,7 @@ void vksk_Start() {
 	juInit(gWindow, 0, 0);
 
 	// Internal stuff
-    _vksk_RendererBindingsInit((void*)DEBUG_FONT_PNG, sizeof(DEBUG_FONT_PNG)); // basically just to create the default font
+    _vksk_RendererBindingsInit((void*)FONT_PNG, sizeof(FONT_PNG)); // basically just to create the default font
 	_vksk_SetWindowIcon(vm);
 	_vksk_InitializeDebug();
 	_vksk_RuntimeControllerRefresh();

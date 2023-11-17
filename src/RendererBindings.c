@@ -147,7 +147,7 @@ static void _vksk_DrawTexture(WrenVM *vm, VK2DTexture tex, float x, float y, flo
 
 void _vksk_RendererBindingsInit(void *textureData, int size) {
     gDefaultFontTexture = vk2dTextureFrom(textureData, size);
-    gDefaultFont = juFontLoadFromTexture(gDefaultFontTexture, 32, 128, 16, 32);
+    gDefaultFont = juFontLoadFromTexture(gDefaultFontTexture, 32, 128, 7 * 3, 8 * 3);
 }
 
 void _vksk_RendererBindingsQuit() {
