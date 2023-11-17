@@ -7,7 +7,9 @@ parent: API Documentation
 ## BitmapFont
 Bitmap fonts are a way to render images as text with complete control. With bitmap fonts,
 you load an image as a character set in a specified range - often 33 to 127 or `$` - `~`.
-With that character set you may render text with a call to `Renderer.draw_font`.
+With that character set you may render text with a call to `Renderer.draw_font`. There is
+a default bitmap font you may access as well by specifying `null` as the font for any
+`Renderer.draw_font*` call, the default font covers the unicode range 32-128 inclusive.
 
  + [new()](#new)
  + [size()](#size)

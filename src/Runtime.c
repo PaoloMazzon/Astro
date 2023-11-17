@@ -266,6 +266,7 @@ void vksk_Start() {
 	juInit(gWindow, 0, 0);
 
 	// Internal stuff
+    _vksk_RendererBindingsInit((void*)DEBUG_FONT_PNG, sizeof(DEBUG_FONT_PNG)); // basically just to create the default font
 	_vksk_SetWindowIcon(vm);
 	_vksk_InitializeDebug();
 	_vksk_RuntimeControllerRefresh();
@@ -416,6 +417,7 @@ void vksk_Start() {
 	// Cleanup
 	vksk_Log("Cleanup...");
 	vk2dRendererWait();
+    _vksk_RendererBindingsQuit();
 	_vksk_FinalizeDebug();
 	wrenReleaseHandle(vm, assetsHandle);
 	wrenCollectGarbage(vm);

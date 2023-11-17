@@ -4,6 +4,8 @@
 #pragma once
 #include "wren.h"
 
+void _vksk_RendererBindingsInit(void *textureData, int size);
+void _vksk_RendererBindingsQuit();
 void vksk_RuntimeRendererGetWindowWidth(WrenVM *vm);
 void vksk_RuntimeRendererGetWindowHeight(WrenVM *vm);
 void vksk_RuntimeRendererSetWindowSize(WrenVM *vm);

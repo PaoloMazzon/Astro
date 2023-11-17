@@ -303,7 +303,7 @@ Parameters
 `static draw_font(font, text, x, y)`
 
 Parameters
- + `font -> BitmapFont` Font to draw.
+ + `font -> BitmapFont or Font or Null` Font to draw, or `null` for the default font.
  + `text -> String` Text to render with the font.
  + `x -> Num` X position to draw to.
  + `y -> Num` Y position to draw to.
@@ -314,7 +314,7 @@ Draws a font.
 `static draw_font_wrapped(font, text, x, y, w)`
 
 Parameters
- + `font -> BitmapFont` Font to draw.
+ + `font -> BitmapFont or Font or Null` Font to draw, or `null` for the default font.
  + `text -> String` Text to render with the font.
  + `x -> Num` X position to draw to.
  + `y -> Num` Y position to draw to.
@@ -328,7 +328,7 @@ pixels would be rendered horizontally before automatically moving to the next li
 `static draw_font_ext(font, text, x, y)`
 
 Parameters
- + `font -> BitmapFont` Font to draw.
+ + `font -> BitmapFont or Font or Null` Font to draw, or `null` for the default font.
  + `text -> String` Text to render with the font.
  + `x -> Num` X position to draw to.
  + `y -> Num` Y position to draw to.
@@ -350,7 +350,7 @@ This allows for more fine-tuned text rendering on-the-fly. Supported tokens are 
 `static draw_font_ext_wrapped(font, text, x, y, w)`
 
 Parameters
- + `font -> BitmapFont` Font to draw.
+ + `font -> BitmapFont or Font or Null` Font to draw, or `null` for the default font.
  + `text -> String` Text to render with the font.
  + `x -> Num` X position to draw to.
  + `y -> Num` Y position to draw to.

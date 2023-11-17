@@ -1,3 +1,5 @@
+//class 
+
 class Game is Level {
     construct new() { }
 
@@ -50,6 +52,7 @@ class Game is Level {
         Renderer.draw_rectangle_outline(bb[0], bb[1], bb[2] - bb[0], bb[3] - bb[1], 0, 0, 0, 1)
         bb = _hit2.bounding_box(_x2, _y2)
         Renderer.draw_rectangle_outline(bb[0], bb[1], bb[2] - bb[0], bb[3] - bb[1], 0, 0, 0, 1)
+        Renderer.draw_font(null, "testing", 0, 0)
     }
 
     destroy() {
