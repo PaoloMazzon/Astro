@@ -71,6 +71,7 @@ typedef struct _vksk_RuntimeShader {
 typedef struct _vksk_RuntimePolygonHitbox {
     vec2 *vertices;
     int count;
+    double bb_left, bb_right, bb_top, bb_bottom;
 } _vksk_RuntimePolygonHitbox;
 
 // All foreign types come from this for type checking purposes

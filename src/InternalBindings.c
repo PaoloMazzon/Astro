@@ -1174,6 +1174,21 @@ void vksk_RuntimePolygonHitboxCreate(WrenVM *vm) {
     polyhitbox->type = FOREIGN_POLY_HITBOX;
     if (polyhitbox->polygonHitbox.count < 3) {
         vksk_Error(true, "Polygon hitboxes must have at least 3 vertices.");
+    } else {
+        // Find the bounding box
+        _vksk_RuntimePolygonHitbox *phb = &polyhitbox->polygonHitbox;
+        phb->bb_right = phb->bb_left = phb->vertices[0][0];
+        phb->bb_bottom = phb->bb_top = phb->vertices[0][1];
+        for (int i = 1; i < phb->count; i++) {
+            if (phb->vertices[i][0] > phb->bb_right)
+                phb->bb_right = phb->vertices[i][0];
+            if (phb->vertices[i][0] < phb->bb_left)
+                phb->bb_left = phb->vertices[i][0];
+            if (phb->vertices[i][1] > phb->bb_bottom)
+                phb->bb_bottom = phb->vertices[i][1];
+            if (phb->vertices[i][1] < phb->bb_top)
+                phb->bb_top = phb->vertices[i][1];
+        }
     }
 }
 
@@ -1234,7 +1249,9 @@ static bool satCollision1Way(double x1, double y1, double x2, double y2, _vksk_R
 }
 
 static bool satCollision(double x1, double y1, double x2, double y2, _vksk_RuntimePolygonHitbox *hitbox1, _vksk_RuntimePolygonHitbox *hitbox2) {
-    return satCollision1Way(x1, y1, x2, y2, hitbox1, hitbox2) && satCollision1Way(x2, y2, x1, y1, hitbox2, hitbox1);
+    bool aabb = (x1 + hitbox1->bb_right) > (x2 + hitbox2->bb_left) && (x1 + hitbox1->bb_left) < (x2 + hitbox2->bb_right) &&
+                (y1 + hitbox1->bb_bottom) > (y2 + hitbox2->bb_top) && (y1 + hitbox1->bb_top) < (y2 + hitbox2->bb_bottom);
+    return aabb && satCollision1Way(x1, y1, x2, y2, hitbox1, hitbox2) && satCollision1Way(x2, y2, x1, y1, hitbox2, hitbox1);
 }
 
 void vksk_RuntimePolygonHitboxPolyPolyCollision(WrenVM *vm) {

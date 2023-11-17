@@ -1,33 +1,53 @@
-//class 
+import "random" for Random
+
+class Collider is Entity {
+    construct new() { super() }
+
+    create(level, tiled_data) {
+        super.create(level, tiled_data)
+        hitbox = Hitbox.new_polygon([[10, 4], [4, 18], [3, 34], [17, 43], [42, 45], [47, 25], [41, 10]])
+        _polygon = Polygon.create([[10, 4], [4, 18], [3, 34], [17, 43], [42, 45], [47, 25], [41, 10]])
+        x = level.rng.int(1280 - hitbox.bb_right(0, 0))
+        y = level.rng.int(720 - hitbox.bb_bottom(0, 0))
+        var factor = level.rng.sample([-2, -1, 1, 2])
+        _x_speed = 100 * factor
+        _y_speed = 50 * factor
+    }
+
+    update(level) {
+        super.update(level)
+        if (hitbox.bb_right(x, y) + (_x_speed * Engine.delta) > 1280 || hitbox.bb_left(x, y) + (_x_speed * Engine.delta) < 0) {
+            _x_speed = -_x_speed
+        }
+        if (hitbox.bb_bottom(x, y) + (_y_speed * Engine.delta) > 720 || hitbox.bb_top(x, y) + (_y_speed * Engine.delta) < 0) {
+            _y_speed = -_y_speed
+        }
+        
+        x = x + (_x_speed * Engine.delta)
+        y = y + (_y_speed * Engine.delta)
+    }
+
+    draw(level) {
+        super.draw(level)
+        if (level.entity_collision(this, Collider)) {
+            Renderer.colour_mod = [0.8, 0.1, 0.1, 1]
+        }
+        Renderer.draw_polygon(_polygon, x, y)
+        Renderer.colour_mod = [1, 1, 1, 1]
+    }
+}
 
 class Game is Level {
     construct new() { }
+    rng { _rng }
 
     create() {
         super.create()
-        _x1 = 300
-        _y1 = 250
-        _hit1 = Hitbox.new_circle(200)
-        /*Hitbox.new_polygon([[10, 17], [125, 29], [135, 135], [83, 139], [37, 96]])
-        _vertices1 = Polygon.create([
-            [10, 17],
-            [125, 29],
-            [135, 135],
-            [83, 139],
-            [37, 96],
-            [10, 17]
-        ])*/
-        _x2 = 0
-        _y2 = 0
-        _hit2 = Hitbox.new_polygon([[6, 117], [36, 19], [106, 11], [143, 58], [121, 136], [41, 142]])
-        _vertices2 = Polygon.create([
-            [6, 117],
-            [36, 19],
-            [106, 11],
-            [143, 58],
-            [121, 136],
-            [41, 142]
-        ])
+        _rng = Random.new()
+        
+        for (i in 0..100) {
+            add_entity(Collider)
+        }
     }
 
     pre_frame() {
@@ -37,22 +57,7 @@ class Game is Level {
     update() {
         super.update()
         
-        var pos = Mouse.position(null)
-        _x2 = pos[0]
-        _y2 = pos[1]
-        if (_hit1.collision(_x1, _y1, _x2, _y2, _hit2)) {
-            Renderer.colour_mod = [0.9, 0.1, 0.1, 1]
-        }
-        Renderer.draw_circle_outline(_x1, _y1, 200, 1)
-        Renderer.draw_circle(_x1, _y1, 2)
-        //Renderer.draw_polygon(_vertices1, _x1, _y1)
-        Renderer.draw_polygon(_vertices2, _x2, _y2)
-        Renderer.colour_mod = [1, 1, 1, 1]
-        var bb = _hit1.bounding_box(_x1, _y1)
-        Renderer.draw_rectangle_outline(bb[0], bb[1], bb[2] - bb[0], bb[3] - bb[1], 0, 0, 0, 1)
-        bb = _hit2.bounding_box(_x2, _y2)
-        Renderer.draw_rectangle_outline(bb[0], bb[1], bb[2] - bb[0], bb[3] - bb[1], 0, 0, 0, 1)
-        Renderer.draw_font(null, "testing", 0, 0)
+        Renderer.draw_font(null, Engine.fps.toString, 0, 0)
     }
 
     destroy() {
