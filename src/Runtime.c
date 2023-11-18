@@ -270,6 +270,9 @@ void vksk_Start() {
 	_vksk_SetWindowIcon(vm);
 	_vksk_InitializeDebug();
 	_vksk_RuntimeControllerRefresh();
+	double maxFPS = 0;
+	double minFPS = 10000;
+	double totalFrameCount = 0;
 
 	// Load assets
 	vksk_Log("Loading assets...");
@@ -381,8 +384,11 @@ void vksk_Start() {
 
 		// Calculate FPS/timestep
 		gFrames += 1;
+        totalFrameCount += 1;
 		if (juTime() - gLastTime >= 1) {
 			gFPS = gFrames / (juTime() - gLastTime);
+			maxFPS = gFPS > maxFPS ? gFPS : maxFPS;
+			minFPS = gFPS < minFPS ? gFPS : minFPS;
 			gFrames = 0;
 
 			// Adjust timestep
@@ -415,6 +421,7 @@ void vksk_Start() {
 	}
 
 	// Cleanup
+    double finalTime = juTime();
 	vksk_Log("Cleanup...");
 	vk2dRendererWait();
     _vksk_RendererBindingsQuit();
@@ -425,8 +432,18 @@ void vksk_Start() {
 	juQuit();
 	vk2dRendererQuit();
 	SDL_DestroyWindow(gWindow);
+    SDL_Quit();
 	vksk_PakFree(gGamePak);
+	vksk_Log("Cleanup complete.\n---------------FPS---------------\n   Average | Minimum | Maximum\n   %7.2f | %7.2f | %7.2f\n---------------------------------", totalFrameCount / finalTime, minFPS, maxFPS);
 }
+/*
+ * Cleanup complete.
+ * ---------------FPS---------------
+ *    Average | Minimum | Maximum
+ *      00.00 |   00.00 |   00.00
+ * ---------------------------------
+ *
+ * */
 
 WrenVM *vksk_GetVM() {
 	return vm;
