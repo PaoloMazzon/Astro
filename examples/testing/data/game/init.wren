@@ -5,7 +5,7 @@ var renderer_config = {
 	"window_width": 1280,
 	"window_height": 720,
 	"fullscreen": false,
-	"msaa": Renderer.MSAA_1X,
+	"msaa": Renderer.MSAA_32X,
 	"screen_mode": Renderer.SCREEN_MODE_TRIPLE_BUFFER,
 	"filter_type": Renderer.FILTER_TYPE_NEAREST
 }

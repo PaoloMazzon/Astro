@@ -5,69 +5,42 @@ import "lib/Renderer" for Renderer
 import "lib/Drawing" for Surface
 
 // Various math related methods
-class Math {
+foreign class Math {
     // Rounds a number to another number
-    static round_to(x, y) {
-        return (x / y).round * y
-    }
+    foreign static round_to(x, y)
 
     // Floors a number to another number
-    static floor_to(x, y) {
-        return (x / y).floor * y
-    }
+    foreign static floor_to(x, y)
 
     // Ceils a number to another number
-    static ceil_to(x, y) {
-        return (x / y).ceil * y
-    }
+    foreign static ceil_to(x, y)
 
     // Calculates the angle between two points
-    static point_angle(x1, y1, x2, y2) {
-        return -(((x2 - x1).atan(y2 - y1)) - (Num.pi / 2))
-    }
+    foreign static point_angle(x1, y1, x2, y2)
 
     // Calculates the distance between two points
-    static point_distance(x1, y1, x2, y2) {
-        return ((x2 - x1).pow(2) + (y2 - y1).pow(2)).sqrt
-    }
+    foreign static point_distance(x1, y1, x2, y2)
 
     // Returns true if px/py is in the rectangle
-    static point_in_rectangle(x, y, w, h, px, py) {
-        return (px >= (x) && px <= (x + w) && py >= y  && py <= (y + h))
-    }
+    foreign static point_in_rectangle(x, y, w, h, px, py)
 
     // Checks if a point is in a circle
-    static point_in_circle(x, y, r, px, py) {
-        return (point_distance(x, y, px, py) <= r)
-    }
+    foreign static point_in_circle(x, y, r, px, py)
 
     // Linearly interpolates a value from start to stop inclusive
-    static lerp(percent, start, stop) {
-        return start + (percent * (stop - start))
-    }
+    foreign static lerp(percent, start, stop)
 
     // Same as lerp but uses a sin graph to smooth it out instead of being linear
-    static serp(percent, start, stop) {
-        return lerp((((Num.pi * percent) - (Num.pi / 2)).sin / 2) + 0.5, start, stop)
-    }
+    foreign static serp(percent, start, stop)
 
     // Casts a coordinate by an angle
-    static cast_x(length, angle) {
-        return length * (angle).cos
-    }
+    foreign static cast_x(length, angle)
 
     // Casts a coordinate by an angle
-    static cast_y(length, angle) {
-        return length * (angle).sin
-    }
+    foreign static cast_y(length, angle)
 
     // Keeps a number between two numbers and returns it
-    static clamp(x, min, max) {
-        var val = x
-        if (x > max) val = max
-        if (x < min) val = min
-        return val
-    }
+    foreign static clamp(x, min, max)
 }
 
 // For internal use on SAT collisions (convex polygon collisions)

@@ -10,6 +10,7 @@
 #include "src/Input.h"
 #include "src/JUTypes.h"
 #include "src/InternalBindings.h"
+#include "src/UtilBindings.h"
 #include "src/WrenPreprocessor.h"
 
 // Globals
@@ -363,6 +364,18 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
         BIND_METHOD("PolygonHitbox", true, "check_collision_polypoly(_,_,_,_,_,_)", vksk_RuntimePolygonHitboxPolyPolyCollision)
         BIND_METHOD("PolygonHitbox", true, "check_collision_polyrect(_,_,_,_,_,_,_)", vksk_RuntimePolygonHitboxPolyRectCollision)
         BIND_METHOD("PolygonHitbox", true, "check_collision_polycirc(_,_,_,_,_,_)", vksk_RuntimePolygonHitboxPolyCircCollision)
+        BIND_METHOD("Math", true, "round_to(_,_)", vksk_RuntimeUtilMathRoundTo)
+        BIND_METHOD("Math", true, "floor_to(_,_)", vksk_RuntimeUtilMathFloorTo)
+        BIND_METHOD("Math", true, "ceil_to(_,_)", vksk_RuntimeUtilMathCeilTo)
+        BIND_METHOD("Math", true, "point_angle(_,_,_,_)", vksk_RuntimeUtilMathPointAngle)
+        BIND_METHOD("Math", true, "point_distance(_,_,_,_)", vksk_RuntimeUtilMathPointDistance)
+        BIND_METHOD("Math", true, "point_in_rectangle(_,_,_,_,_,_)", vksk_RuntimeUtilMathPointInRectangle)
+        BIND_METHOD("Math", true, "point_in_circle(_,_,_,_,_)", vksk_RuntimeUtilMathPointInCircle)
+        BIND_METHOD("Math", true, "lerp(_,_,_)", vksk_RuntimeUtilMathLerp)
+        BIND_METHOD("Math", true, "serp(_,_,_)", vksk_RuntimeUtilMathSerp)
+        BIND_METHOD("Math", true, "cast_x(_,_)", vksk_RuntimeUtilMathCastX)
+        BIND_METHOD("Math", true, "cast_y(_,_)", vksk_RuntimeUtilMathCastY)
+        BIND_METHOD("Math", true, "clamp(_,_,_)", vksk_RuntimeUtilMathClamp)
     }
 	return NULL;
 }
