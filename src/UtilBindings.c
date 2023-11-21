@@ -5,6 +5,11 @@
 #include "src/IntermediateTypes.h"
 #include <math.h>
 
+/********************* Globals *********************/
+static vec2 gRectangleVertices[4];
+static _vksk_RuntimeHitbox gRectanglePolygon = {HITBOX_TYPE_POLYGON};
+/***************************************************/
+
 void vksk_RuntimeUtilMathRoundTo(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
     double x = wrenGetSlotDouble(vm, 1);
@@ -430,8 +435,43 @@ static bool satCircle(double px, double py, double cx, double cy, _vksk_RuntimeH
     return false;
 }
 
-static bool aabb(r1x1, r1y1, r1x2, r1y2, r2x1, r2y1, r2x2, r2y2) {
+static bool aabb(double r1x1, double r1y1, double r1x2, double r1y2, double r2x1, double r2y1, double r2x2, double r2y2) {
     return r1x2 > r2x1 && r1x1 < r2x2 && r1y2 > r2y1 && r1y1 < r2y2;
+}
+
+static bool rectCircle(double rx, double ry, double w, double h, double cx, double cy, double r) {
+    bool left = cx < rx;
+    bool right = cx > rx + w;
+    bool above = cy < ry;
+    bool below = cy > ry + h;
+
+    // The centre of the circle is in the rectangle
+    if (!left && !right && !below && !above)
+        return true;
+
+    // The circle may be colliding with of of the edges
+    return ((left && above && juPointDistance(rx, ry, cx, cy) < r) ||
+            (left && below && juPointDistance(rx, ry + h, cx, cy) < r) ||
+            (right && above && juPointDistance(rx + w, ry, cx, cy) < r) ||
+            (right && below && juPointDistance(rx + w, ry + h, cx, cy) < r) ||
+            (left && !below && !above && fabs(cx - rx) < r) ||
+            (right && !below && !above && fabs(cx - (rx + w)) < r) ||
+            (above && !left && !right && fabs(cy - ry) < r) ||
+            (below && !left && !right && fabs(cy - (ry + h)) < r));
+}
+
+static bool satRectangle(double rx, double ry, double w, double h, double px, double py, _vksk_RuntimeHitbox *polygon) {
+    gRectanglePolygon.polygon.vertices = gRectangleVertices;
+    gRectanglePolygon.polygon.count = 4;
+    gRectangleVertices[0][0] = 0;
+    gRectangleVertices[0][1] = 0;
+    gRectangleVertices[1][0] = w;
+    gRectangleVertices[1][1] = 0;
+    gRectangleVertices[2][0] = w;
+    gRectangleVertices[2][1] = h;
+    gRectangleVertices[3][0] = 0;
+    gRectangleVertices[3][1] = h;
+    return satCollision(rx, ry, px, py, &gRectanglePolygon, polygon);
 }
 
 void vksk_RuntimeUtilHitboxCollision(WrenVM *vm) {
@@ -446,5 +486,23 @@ void vksk_RuntimeUtilHitboxCollision(WrenVM *vm) {
         wrenSetSlotBool(vm, 0, false);
     } else if (hitbox1->hitbox.type == HITBOX_TYPE_RECTANGLE && hitbox2->hitbox.type == HITBOX_TYPE_RECTANGLE) {
         wrenSetSlotBool(vm, 0, aabb(x1, y1, x1 + hitbox1->hitbox.rectangle.w, y1 + hitbox1->hitbox.rectangle.h, x2, y2, x2 + hitbox2->hitbox.rectangle.w, y2 + hitbox2->hitbox.rectangle.h));
-    } // TODO: This
+    } else if (hitbox1->hitbox.type == HITBOX_TYPE_CIRCLE && hitbox2->hitbox.type == HITBOX_TYPE_CIRCLE) {
+        wrenSetSlotBool(vm, 0, juPointDistance(x1, y1, x2, y2) < hitbox1->hitbox.circle.r + hitbox2->hitbox.circle.r);
+    } else if (hitbox1->hitbox.type == HITBOX_TYPE_CIRCLE && hitbox2->hitbox.type == HITBOX_TYPE_RECTANGLE) {
+        wrenSetSlotBool(vm, 0, rectCircle(x2, y2, hitbox2->hitbox.rectangle.w, hitbox2->hitbox.rectangle.h, x1, y1, hitbox1->hitbox.circle.r));
+    } else if (hitbox1->hitbox.type == HITBOX_TYPE_RECTANGLE && hitbox2->hitbox.type == HITBOX_TYPE_CIRCLE) {
+        wrenSetSlotBool(vm, 0, rectCircle(x1, y1, hitbox1->hitbox.rectangle.w, hitbox1->hitbox.rectangle.h, x2, y2, hitbox2->hitbox.circle.r));
+    } else if (hitbox1->hitbox.type == HITBOX_TYPE_POLYGON && hitbox2->hitbox.type == HITBOX_TYPE_POLYGON) {
+        wrenSetSlotBool(vm, 0, satCollision(x1, y1, x2, y2, &hitbox1->hitbox, &hitbox2->hitbox));
+    } else if (hitbox1->hitbox.type == HITBOX_TYPE_POLYGON && hitbox2->hitbox.type == HITBOX_TYPE_RECTANGLE) {
+        wrenSetSlotBool(vm, 0, satRectangle(x2, y2, hitbox2->hitbox.rectangle.w, hitbox2->hitbox.rectangle.h, x1, y1, &hitbox1->hitbox));
+    } else if (hitbox1->hitbox.type == HITBOX_TYPE_RECTANGLE && hitbox2->hitbox.type == HITBOX_TYPE_POLYGON) {
+        wrenSetSlotBool(vm, 0, satRectangle(x1, y1, hitbox1->hitbox.rectangle.w, hitbox1->hitbox.rectangle.h, x2, y2, &hitbox2->hitbox));
+    } else if (hitbox1->hitbox.type == HITBOX_TYPE_CIRCLE && hitbox2->hitbox.type == HITBOX_TYPE_POLYGON) {
+        wrenSetSlotBool(vm, 0, satCircle(x2, y2, x1, y1, &hitbox2->hitbox, hitbox1->hitbox.circle.r));
+    } else if (hitbox1->hitbox.type == HITBOX_TYPE_POLYGON && hitbox2->hitbox.type == HITBOX_TYPE_CIRCLE) {
+        wrenSetSlotBool(vm, 0, satCircle(x2, y2, x1, y1, &hitbox2->hitbox, hitbox1->hitbox.circle.r));
+    } else {
+        wrenSetSlotBool(vm, 0, false);
+    }
 }
