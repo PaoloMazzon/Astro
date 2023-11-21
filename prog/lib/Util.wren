@@ -66,7 +66,7 @@ foreign class CHitbox {
     foreign static new_circle(radius)
     foreign static new_rectangle(w, h)
     foreign static new_polygon(vertices)
-    static NO_HIT {null}
+    foreign static NO_HIT
     foreign r
     foreign w
     foreign h

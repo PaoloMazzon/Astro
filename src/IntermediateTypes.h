@@ -76,10 +76,11 @@ typedef struct _vksk_RuntimePolygonHitbox {
 } _vksk_RuntimePolygonHitbox;
 
 typedef enum {
-    HITBOX_TYPE_RECTANGLE = 0,
+    HITBOX_TYPE_VOID = 0,
+    HITBOX_TYPE_RECTANGLE = 1,
     HITBOX_TYPE_CIRCLE = 1,
     HITBOX_TYPE_POLYGON = 2,
-    HITBOX_TYPE_MAX = 3,
+    HITBOX_TYPE_MAX = 4,
 } _vksk_RuntimeHitboxType;
 
 typedef struct _vksk_RuntimeHitbox {

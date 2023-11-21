@@ -126,6 +126,20 @@ void vksk_RuntimeUtilHitboxNewCircle(WrenVM *vm) {
     hitbox->hitbox.yOffset = 0;
 }
 
+void vksk_RuntimeUtilHitboxNewVoid(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    wrenGetVariable(vm, "lib/Util", "CHitbox", 0);
+    VKSK_RuntimeForeign *hitbox = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
+    hitbox->type = FOREIGN_HITBOX;
+    hitbox->hitbox.type = HITBOX_TYPE_VOID;
+    hitbox->hitbox.bb_left = 0;
+    hitbox->hitbox.bb_top = 0;
+    hitbox->hitbox.bb_right = 0;
+    hitbox->hitbox.bb_bottom = 0;
+    hitbox->hitbox.xOffset = 0;
+    hitbox->hitbox.yOffset = 0;
+}
+
 void vksk_RuntimeUtilHitboxNewRectangle(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
     wrenGetVariable(vm, "lib/Util", "CHitbox", 0);
@@ -243,12 +257,6 @@ void vksk_RuntimeUtilHitboxYOffsetGetter(WrenVM *vm) {
     wrenSetSlotDouble(vm, 0, hitbox->hitbox.yOffset);
 }
 
-void vksk_RuntimeUtilHitboxCollision(WrenVM *vm) {
-    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    VKSK_RuntimeForeign *hitbox = wrenGetSlotForeign(vm, 0);
-    // TODO: This
-}
-
 void vksk_RuntimeUtilHitboxBoundingBox(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
     VKSK_RuntimeForeign *hitbox = wrenGetSlotForeign(vm, 0);
@@ -294,4 +302,149 @@ void vksk_RuntimeUtilHitboxBbBottom(WrenVM *vm) {
     VKSK_RuntimeForeign *hitbox = wrenGetSlotForeign(vm, 0);
     const double y = wrenGetSlotDouble(vm, 2) - hitbox->hitbox.yOffset;
     wrenSetSlotDouble(vm, 0, hitbox->hitbox.bb_bottom + y);
+}
+
+// Casts a 2D point onto a 1D line given by the slope m
+static double cast1dShadow(double x, double y, double m) {
+    return y - (m * x);
+}
+
+// Returns true if two ranges on a number line overlap
+static bool segmentOverlap(double min1, double max1, double min2, double max2) {
+    return min1 < max2 && max1 > min2;
+}
+
+// Finds the min/max value of a vertex from a polygon hitbox cast to a 1D line given by m
+static void satGetPolyMinMax(double x, double y, double m, double *min, double *max, _vksk_RuntimeHitbox *hitbox) {
+    *min = cast1dShadow(x + hitbox->polygon.vertices[0][0], y + hitbox->polygon.vertices[0][1], m);
+    *max = cast1dShadow(x + hitbox->polygon.vertices[0][0], y + hitbox->polygon.vertices[0][1], m);
+    for (int i = 1; i < hitbox->polygon.count; i++) {
+        const double cast = cast1dShadow(x + hitbox->polygon.vertices[i][0], y + hitbox->polygon.vertices[i][1], m);
+        if (cast < *min)
+            *min = cast;
+        if (cast > *max)
+            *max = cast;
+    }
+}
+
+// workaround for dividing by 0
+static inline double nodivzero(double x) {
+    if (x == 0)
+        return 0.1;
+    return x;
+}
+
+// Checks for a sat collision only looking at the lines from the first hitbox
+static bool satCollision1Way(double x1, double y1, double x2, double y2, _vksk_RuntimeHitbox *hitbox1, _vksk_RuntimeHitbox *hitbox2) {
+    // Iterate through each line segment
+    for (int i = 0; i < hitbox1->polygon.count; i++) {
+        double m;
+        if (i == 0)
+            m = (hitbox1->polygon.vertices[0][1] - hitbox1->polygon.vertices[hitbox1->polygon.count - 1][1]) / nodivzero(hitbox1->polygon.vertices[0][0] - hitbox1->polygon.vertices[hitbox1->polygon.count - 1][0]);
+        else
+            m = (hitbox1->polygon.vertices[i][1] - hitbox1->polygon.vertices[i - 1][1]) / nodivzero(hitbox1->polygon.vertices[i][0] - hitbox1->polygon.vertices[i - 1][0]);
+
+        // Find maxes
+        double min1, min2, max1, max2;
+        satGetPolyMinMax(x1, y1, m, &min1, &max1, hitbox1);
+        satGetPolyMinMax(x2, y2, m, &min2, &max2, hitbox2);
+
+        if (!segmentOverlap(min1, max1, min2, max2))
+            return false;
+    }
+    return true;
+}
+
+static bool satCollision(double x1, double y1, double x2, double y2, _vksk_RuntimeHitbox *hitbox1, _vksk_RuntimeHitbox *hitbox2) {
+    bool aabb = (x1 + hitbox1->bb_right) > (x2 + hitbox2->bb_left) && (x1 + hitbox1->bb_left) < (x2 + hitbox2->bb_right) &&
+                (y1 + hitbox1->bb_bottom) > (y2 + hitbox2->bb_top) && (y1 + hitbox1->bb_top) < (y2 + hitbox2->bb_bottom);
+    return aabb && satCollision1Way(x1, y1, x2, y2, hitbox1, hitbox2) && satCollision1Way(x2, y2, x1, y1, hitbox2, hitbox1);
+}
+
+// Checks if a point is inside a convex polygon
+static bool pointInConvexPolygon(double x, double y, double polyX, double polyY, _vksk_RuntimeHitbox *poly) {
+    x -= polyX; // converts x/y into polygon space
+    y -= polyY;
+    int i, j;
+    bool c = false;
+    for (i = 0, j = poly->polygon.count - 1; i < poly->polygon.count; j = i++) {
+        if ( ((poly->polygon.vertices[i][1] > y) != (poly->polygon.vertices[j][1] > y)) &&
+             (x < (poly->polygon.vertices[j][0] - poly->polygon.vertices[i][0]) * (y - poly->polygon.vertices[i][1]) / (poly->polygon.vertices[j][1] - poly->polygon.vertices[i][1]) + poly->polygon.vertices[i][0]) )
+            c = !c;
+    }
+    return c;
+}
+
+// Checks if a line intersects a circle given the circles center and radius and two points on the line
+static bool lineIntersectsCircle(double cx, double cy, double r, double x1, double y1, double x2, double y2) {
+    double a = y1 - y2;
+    double b = x2 - x1;
+    double c = ((x1 - x2) * y1) + ((y2 - y1) * x1);
+    double d = fabs((a * cx) + (b * cy) + c) / sqrt(pow(a, 2) + pow(b, 2));
+    return d < r;
+}
+
+// Checks if a point is between a line given endpoints
+static bool pointBetweenLine(double px, double py, double x1, double y1, double x2, double y2) {
+    double m = -(x2 - x1) / nodivzero(y2 - y1);
+    double a = cast1dShadow(x1, y1, m);
+    double b = cast1dShadow(x2, y2, m);
+    double c = cast1dShadow(px, py, m);
+    if (b > a)
+        return c > a && c < b;
+    else
+        return c > b && c < a;
+}
+
+static bool satCircle(double px, double py, double cx, double cy, _vksk_RuntimeHitbox *poly, double radius) {
+    if (pointInConvexPolygon(cx, cy, px, py, poly))
+        return true;
+
+    // Check each vertex to see if its touching the circle
+    for (int i = 0; i < poly->polygon.count; i++)
+        if (juPointDistance(px + poly->polygon.vertices[i][0], py + poly->polygon.vertices[i][1], cx, cy) < radius)
+            return true;
+
+    // Check every line segment for an intersection with the circle
+    for (int i = 0; i < poly->polygon.count; i++) {
+        double x1, y1, x2, y2;
+        if (i == 0) {
+            x1 = px + poly->polygon.vertices[0][0];
+            y1 = py + poly->polygon.vertices[0][1];
+            x2 = px + poly->polygon.vertices[poly->polygon.count - 1][0];
+            y2 = py + poly->polygon.vertices[poly->polygon.count - 1][1];
+        } else {
+            x1 = px + poly->polygon.vertices[i][0];
+            y1 = py + poly->polygon.vertices[i][1];
+            x2 = px + poly->polygon.vertices[i - 1][0];
+            y2 = py + poly->polygon.vertices[i - 1][1];
+        }
+
+        if (pointBetweenLine(cx, cy, x1, y1, x2, y2)) {
+            // Circle is between this line segment
+            if (lineIntersectsCircle(cx, cy, radius, x1, y1, x2, y2))
+                return true;
+        }
+    }
+
+    return false;
+}
+
+static bool aabb(r1x1, r1y1, r1x2, r1y2, r2x1, r2y1, r2x2, r2y2) {
+    return r1x2 > r2x1 && r1x1 < r2x2 && r1y2 > r2y1 && r1y1 < r2y2;
+}
+
+void vksk_RuntimeUtilHitboxCollision(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_HITBOX, FOREIGN_END)
+    VKSK_RuntimeForeign *hitbox1 = wrenGetSlotForeign(vm, 0);
+    VKSK_RuntimeForeign *hitbox2 = wrenGetSlotForeign(vm, 5);
+    double x1 = wrenGetSlotDouble(vm, 1) - hitbox1->hitbox.xOffset;
+    double y1 = wrenGetSlotDouble(vm, 2) - hitbox1->hitbox.yOffset;
+    double x2 = wrenGetSlotDouble(vm, 3) - hitbox2->hitbox.xOffset;
+    double y2 = wrenGetSlotDouble(vm, 4) - hitbox2->hitbox.yOffset;
+    if (hitbox1->hitbox.type == HITBOX_TYPE_VOID || hitbox2->hitbox.type == HITBOX_TYPE_VOID) {
+        wrenSetSlotBool(vm, 0, false);
+    } else if (hitbox1->hitbox.type == HITBOX_TYPE_RECTANGLE && hitbox2->hitbox.type == HITBOX_TYPE_RECTANGLE) {
+        wrenSetSlotBool(vm, 0, aabb(x1, y1, x1 + hitbox1->hitbox.rectangle.w, y1 + hitbox1->hitbox.rectangle.h, x2, y2, x2 + hitbox2->hitbox.rectangle.w, y2 + hitbox2->hitbox.rectangle.h));
+    } // TODO: This
 }

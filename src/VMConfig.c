@@ -377,6 +377,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
         BIND_METHOD("Math", true, "cast_y(_,_)", vksk_RuntimeUtilMathCastY)
         BIND_METHOD("Math", true, "clamp(_,_,_)", vksk_RuntimeUtilMathClamp)
         BIND_METHOD("CHitbox", true, "new_circle(_)", vksk_RuntimeUtilHitboxNewCircle)
+        BIND_METHOD("CHitbox", true, "NO_HIT", vksk_RuntimeUtilHitboxNewVoid)
         BIND_METHOD("CHitbox", true, "new_rectangle(_,_)", vksk_RuntimeUtilHitboxNewRectangle)
         BIND_METHOD("CHitbox", true, "new_polygon(_)", vksk_RuntimeUtilHitboxNewPolygon)
         BIND_METHOD("CHitbox", false, "r", vksk_RuntimeUtilHitboxR)

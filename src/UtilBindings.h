@@ -19,6 +19,7 @@ void vksk_RuntimeUtilMathClamp(WrenVM *vm);
 
 void vksk_RuntimeUtilHitboxAllocate(WrenVM *vm);
 void vksk_RuntimeUtilHitboxFinalize(void *data);
+void vksk_RuntimeUtilHitboxNewVoid(WrenVM *vm);
 void vksk_RuntimeUtilHitboxNewCircle(WrenVM *vm);
 void vksk_RuntimeUtilHitboxNewRectangle(WrenVM *vm);
 void vksk_RuntimeUtilHitboxNewPolygon(WrenVM *vm);
