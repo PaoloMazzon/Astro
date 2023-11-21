@@ -60,6 +60,28 @@ foreign class PolygonHitbox {
     foreign static check_collision_polycirc(x1, y1, x2, y2, poly1, r)
 }
 
+
+foreign class CHitbox {
+    construct new() {}
+    foreign static new_circle(radius)
+    foreign static new_rectangle(w, h)
+    foreign static new_polygon(vertices)
+    static NO_HIT {null}
+    foreign r
+    foreign w
+    foreign h
+    foreign x_offset=(offset)
+    foreign y_offset=(offset)
+    foreign x_offset
+    foreign y_offset
+    foreign collision(x1, y1, x2, y2, hitbox)
+    foreign bounding_box(x, y)
+    foreign bb_left(x, y)
+    foreign bb_right(x, y)
+    foreign bb_top(x, y)
+    foreign bb_bottom(x, y)
+}
+
 // Collision utilities
 class Hitbox {
     static TYPE_CIRCLE { 0 }

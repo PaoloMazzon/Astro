@@ -102,3 +102,91 @@ void vksk_RuntimeUtilMathClamp(WrenVM *vm) {
     double stop = wrenGetSlotDouble(vm, 3);
     wrenSetSlotDouble(vm, 0, x < start ? start : (x > stop ? stop : x));
 }
+
+void vksk_RuntimeUtilHitboxAllocate(WrenVM *vm) {
+    wrenSetSlotNull(vm, 0);
+}
+
+void vksk_RuntimeUtilHitboxFinalize(void *data) {
+
+}
+
+void vksk_RuntimeUtilHitboxNewCircle(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeUtilHitboxNewRectangle(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeUtilHitboxNewPolygon(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeUtilHitboxR(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeUtilHitboxW(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeUtilHitboxH(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeUtilHitboxXOffsetSetter(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeUtilHitboxYOffsetSetter(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeUtilHitboxXOffsetGetter(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeUtilHitboxYOffsetGetter(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeUtilHitboxCollision(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeUtilHitboxBoundingBox(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeUtilHitboxBbLeft(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeUtilHitboxBbRight(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeUtilHitboxBbTop(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeUtilHitboxBbBottom(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}

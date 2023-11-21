@@ -376,6 +376,22 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
         BIND_METHOD("Math", true, "cast_x(_,_)", vksk_RuntimeUtilMathCastX)
         BIND_METHOD("Math", true, "cast_y(_,_)", vksk_RuntimeUtilMathCastY)
         BIND_METHOD("Math", true, "clamp(_,_,_)", vksk_RuntimeUtilMathClamp)
+        BIND_METHOD("CHitbox", true, "new_circle(_)", vksk_RuntimeUtilHitboxNewCircle)
+        BIND_METHOD("CHitbox", true, "new_rectangle(_,_)", vksk_RuntimeUtilHitboxNewRectangle)
+        BIND_METHOD("CHitbox", true, "new_polygon(_)", vksk_RuntimeUtilHitboxNewPolygon)
+        BIND_METHOD("CHitbox", false, "r", vksk_RuntimeUtilHitboxR)
+        BIND_METHOD("CHitbox", false, "w", vksk_RuntimeUtilHitboxW)
+        BIND_METHOD("CHitbox", false, "h", vksk_RuntimeUtilHitboxH)
+        BIND_METHOD("CHitbox", false, "x_offset=(_)", vksk_RuntimeUtilHitboxXOffsetSetter)
+        BIND_METHOD("CHitbox", false, "y_offset=(_)", vksk_RuntimeUtilHitboxYOffsetSetter)
+        BIND_METHOD("CHitbox", false, "x_offset", vksk_RuntimeUtilHitboxXOffsetGetter)
+        BIND_METHOD("CHitbox", false, "y_offset", vksk_RuntimeUtilHitboxYOffsetGetter)
+        BIND_METHOD("CHitbox", false, "collision(_,_,_,_,_)", vksk_RuntimeUtilHitboxCollision)
+        BIND_METHOD("CHitbox", false, "bounding_box(_,_)", vksk_RuntimeUtilHitboxBoundingBox)
+        BIND_METHOD("CHitbox", false, "bb_left(_,_)", vksk_RuntimeUtilHitboxBbLeft)
+        BIND_METHOD("CHitbox", false, "bb_right(_,_)", vksk_RuntimeUtilHitboxBbRight)
+        BIND_METHOD("CHitbox", false, "bb_top(_,_)", vksk_RuntimeUtilHitboxBbTop)
+        BIND_METHOD("CHitbox", false, "bb_bottom(_,_)", vksk_RuntimeUtilHitboxBbBottom)
     }
 	return NULL;
 }
