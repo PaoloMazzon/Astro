@@ -31,6 +31,7 @@ const uint64_t FOREIGN_SHADER = 1<<17;
 const uint64_t FOREIGN_MODEL = 1<<18;
 const uint64_t FOREIGN_POLYGON = 1<<19;
 const uint64_t FOREIGN_POLY_HITBOX = 1<<20;
+const uint64_t FOREIGN_HITBOX = 1<<21;
 
 extern VKSK_EngineConfig gEngineConfig;
 

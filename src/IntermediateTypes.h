@@ -32,6 +32,7 @@ extern const uint64_t FOREIGN_SHADER;
 extern const uint64_t FOREIGN_POLYGON;
 extern const uint64_t FOREIGN_MODEL;
 extern const uint64_t FOREIGN_POLY_HITBOX;
+extern const uint64_t FOREIGN_HITBOX;
 
 // To protect Textures from garbage collection kinda
 typedef struct _vksk_RuntimeTexture {
@@ -74,6 +75,31 @@ typedef struct _vksk_RuntimePolygonHitbox {
     double bb_left, bb_right, bb_top, bb_bottom;
 } _vksk_RuntimePolygonHitbox;
 
+typedef enum {
+    HITBOX_TYPE_RECTANGLE = 0,
+    HITBOX_TYPE_CIRCLE = 1,
+    HITBOX_TYPE_POLYGON = 2,
+    HITBOX_TYPE_MAX = 3,
+} _vksk_RuntimeHitboxType;
+
+typedef struct _vksk_RuntimeHitbox {
+    _vksk_RuntimeHitboxType type;
+    double bb_left, bb_right, bb_top, bb_bottom;
+    double xOffset, yOffset;
+    union {
+        struct {
+            vec2 *vertices;
+            int count;
+        } polygon;
+        struct {
+            double w, h;
+        } rectangle;
+        struct {
+            double r;
+        } circle;
+    };
+} _vksk_RuntimeHitbox;
+
 // All foreign types come from this for type checking purposes
 typedef struct VKSK_RuntimeForeign {
 	uint64_t type;
@@ -92,5 +118,6 @@ typedef struct VKSK_RuntimeForeign {
 		VK2DPolygon polygon;
 		VK2DModel model;
 		_vksk_RuntimePolygonHitbox polygonHitbox;
+		_vksk_RuntimeHitbox hitbox;
 	};
 } VKSK_RuntimeForeign;
