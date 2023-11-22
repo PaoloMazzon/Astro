@@ -116,10 +116,13 @@ WrenForeignClassMethods vksk_WrenBindForeignClass(WrenVM* vm, const char* module
 			methods.finalize = vksk_RuntimeTiledFinalize;
 		}
 	} else if (strcmp(module, "lib/Util") == 0) {
-		if (strcmp(className, "PolygonHitbox") == 0) {
-			methods.allocate = vksk_RuntimePolygonHitboxAllocate;
-			methods.finalize = vksk_RuntimePolygonHitboxFinalize;
-		}
+        if (strcmp(className, "Buffer") == 0) {
+            methods.allocate = vksk_RuntimeBufferAllocate;
+            methods.finalize = vksk_RuntimeBufferFinalize;
+        } else if (strcmp(className, "Hitbox") == 0) {
+            methods.allocate = vksk_RuntimeUtilHitboxAllocate;
+            methods.finalize = vksk_RuntimeUtilHitboxFinalize;
+        }
 	}
 
 	return methods;
@@ -360,10 +363,6 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Buffer", false, "write_string(_)", vksk_RuntimeBufferWriteString)
 		BIND_METHOD("Buffer", false, "read_bool()", vksk_RuntimeBufferReadBool)
 		BIND_METHOD("Buffer", false, "write_bool(_)", vksk_RuntimeBufferWriteBool)
-        BIND_METHOD("PolygonHitbox", true, "create(_)", vksk_RuntimePolygonHitboxCreate)
-        BIND_METHOD("PolygonHitbox", true, "check_collision_polypoly(_,_,_,_,_,_)", vksk_RuntimePolygonHitboxPolyPolyCollision)
-        BIND_METHOD("PolygonHitbox", true, "check_collision_polyrect(_,_,_,_,_,_,_)", vksk_RuntimePolygonHitboxPolyRectCollision)
-        BIND_METHOD("PolygonHitbox", true, "check_collision_polycirc(_,_,_,_,_,_)", vksk_RuntimePolygonHitboxPolyCircCollision)
         BIND_METHOD("Math", true, "round_to(_,_)", vksk_RuntimeUtilMathRoundTo)
         BIND_METHOD("Math", true, "floor_to(_,_)", vksk_RuntimeUtilMathFloorTo)
         BIND_METHOD("Math", true, "ceil_to(_,_)", vksk_RuntimeUtilMathCeilTo)
@@ -376,23 +375,24 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
         BIND_METHOD("Math", true, "cast_x(_,_)", vksk_RuntimeUtilMathCastX)
         BIND_METHOD("Math", true, "cast_y(_,_)", vksk_RuntimeUtilMathCastY)
         BIND_METHOD("Math", true, "clamp(_,_,_)", vksk_RuntimeUtilMathClamp)
-        BIND_METHOD("CHitbox", true, "new_circle(_)", vksk_RuntimeUtilHitboxNewCircle)
-        BIND_METHOD("CHitbox", true, "NO_HIT", vksk_RuntimeUtilHitboxNewVoid)
-        BIND_METHOD("CHitbox", true, "new_rectangle(_,_)", vksk_RuntimeUtilHitboxNewRectangle)
-        BIND_METHOD("CHitbox", true, "new_polygon(_)", vksk_RuntimeUtilHitboxNewPolygon)
-        BIND_METHOD("CHitbox", false, "r", vksk_RuntimeUtilHitboxR)
-        BIND_METHOD("CHitbox", false, "w", vksk_RuntimeUtilHitboxW)
-        BIND_METHOD("CHitbox", false, "h", vksk_RuntimeUtilHitboxH)
-        BIND_METHOD("CHitbox", false, "x_offset=(_)", vksk_RuntimeUtilHitboxXOffsetSetter)
-        BIND_METHOD("CHitbox", false, "y_offset=(_)", vksk_RuntimeUtilHitboxYOffsetSetter)
-        BIND_METHOD("CHitbox", false, "x_offset", vksk_RuntimeUtilHitboxXOffsetGetter)
-        BIND_METHOD("CHitbox", false, "y_offset", vksk_RuntimeUtilHitboxYOffsetGetter)
-        BIND_METHOD("CHitbox", false, "collision(_,_,_,_,_)", vksk_RuntimeUtilHitboxCollision)
-        BIND_METHOD("CHitbox", false, "bounding_box(_,_)", vksk_RuntimeUtilHitboxBoundingBox)
-        BIND_METHOD("CHitbox", false, "bb_left(_,_)", vksk_RuntimeUtilHitboxBbLeft)
-        BIND_METHOD("CHitbox", false, "bb_right(_,_)", vksk_RuntimeUtilHitboxBbRight)
-        BIND_METHOD("CHitbox", false, "bb_top(_,_)", vksk_RuntimeUtilHitboxBbTop)
-        BIND_METHOD("CHitbox", false, "bb_bottom(_,_)", vksk_RuntimeUtilHitboxBbBottom)
+        BIND_METHOD("Hitbox", true, "new_circle(_)", vksk_RuntimeUtilHitboxNewCircle)
+        BIND_METHOD("Hitbox", true, "NO_HIT", vksk_RuntimeUtilHitboxNewVoid)
+        BIND_METHOD("Hitbox", true, "new_rectangle(_,_)", vksk_RuntimeUtilHitboxNewRectangle)
+        BIND_METHOD("Hitbox", true, "new_polygon(_)", vksk_RuntimeUtilHitboxNewPolygon)
+        BIND_METHOD("Hitbox", false, "r", vksk_RuntimeUtilHitboxR)
+        BIND_METHOD("Hitbox", false, "w", vksk_RuntimeUtilHitboxW)
+        BIND_METHOD("Hitbox", false, "h", vksk_RuntimeUtilHitboxH)
+        BIND_METHOD("Hitbox", false, "no_hit", vksk_RuntimeUtilHitboxNoHit)
+        BIND_METHOD("Hitbox", false, "x_offset=(_)", vksk_RuntimeUtilHitboxXOffsetSetter)
+        BIND_METHOD("Hitbox", false, "y_offset=(_)", vksk_RuntimeUtilHitboxYOffsetSetter)
+        BIND_METHOD("Hitbox", false, "x_offset", vksk_RuntimeUtilHitboxXOffsetGetter)
+        BIND_METHOD("Hitbox", false, "y_offset", vksk_RuntimeUtilHitboxYOffsetGetter)
+        BIND_METHOD("Hitbox", false, "collision(_,_,_,_,_)", vksk_RuntimeUtilHitboxCollision)
+        BIND_METHOD("Hitbox", false, "bounding_box(_,_)", vksk_RuntimeUtilHitboxBoundingBox)
+        BIND_METHOD("Hitbox", false, "bb_left(_,_)", vksk_RuntimeUtilHitboxBbLeft)
+        BIND_METHOD("Hitbox", false, "bb_right(_,_)", vksk_RuntimeUtilHitboxBbRight)
+        BIND_METHOD("Hitbox", false, "bb_top(_,_)", vksk_RuntimeUtilHitboxBbTop)
+        BIND_METHOD("Hitbox", false, "bb_bottom(_,_)", vksk_RuntimeUtilHitboxBbBottom)
     }
 	return NULL;
 }

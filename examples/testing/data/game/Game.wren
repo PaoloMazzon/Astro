@@ -1,5 +1,4 @@
 import "random" for Random
-import "lib/Util" for CHitbox
 
 class Collider is Entity {
     construct new() { super() }
@@ -11,12 +10,12 @@ class Collider is Entity {
         super.create(level, tiled_data)
         _type = level.rng.int(3)
         if (_type == Collider.TYPE_POLYGON) {
-            hitbox = CHitbox.new_polygon([[10, 4], [4, 18], [3, 34], [17, 43], [42, 45], [47, 25], [41, 10]])
+            hitbox = Hitbox.new_polygon([[10, 4], [4, 18], [3, 34], [17, 43], [42, 45], [47, 25], [41, 10]])
             _polygon = Polygon.create([[10, 4], [4, 18], [3, 34], [17, 43], [42, 45], [47, 25], [41, 10]])
         } else if (_type == Collider.TYPE_CIRCLE) {
-            hitbox = CHitbox.new_circle(level.rng.int(15, 30))
+            hitbox = Hitbox.new_circle(level.rng.int(15, 30))
         } else if (_type == Collider.TYPE_RECTANGLE) {
-            hitbox = CHitbox.new_rectangle(level.rng.int(20, 40), level.rng.int(20, 40))
+            hitbox = Hitbox.new_rectangle(level.rng.int(20, 40), level.rng.int(20, 40))
         }
         x = level.rng.int(1280 - hitbox.bb_right(0, 0))
         y = level.rng.int(720 - hitbox.bb_bottom(0, 0))
@@ -89,21 +88,6 @@ class Game is Level {
         for (i in 0..100) {
             add_entity(Collider)
         }
-        
-        _hit1 = CHitbox.new_polygon([[10, 4], [4, 18], [3, 34], [17, 43], [42, 45], [47, 25], [41, 10]])
-        _polygon = Polygon.create([[10, 4], [4, 18], [3, 34], [17, 43], [42, 45], [47, 25], [41, 10]])
-        //_hit2 = CHitbox.new_circle(30)
-        _hit2 = CHitbox.new_polygon([[0, 0], [30, 0], [30, 30], [0, 30]])
-        _polygon2 = Polygon.create([[0, 0], [30, 0], [30, 30], [0, 30]])
-        //_hit2 = CHitbox.new_rectangle(30, 30)
-        /*if (_type == Collider.TYPE_POLYGON) {
-            hitbox = CHitbox.new_polygon([[10, 4], [4, 18], [3, 34], [17, 43], [42, 45], [47, 25], [41, 10]])
-            _polygon = Polygon.create([[10, 4], [4, 18], [3, 34], [17, 43], [42, 45], [47, 25], [41, 10]])
-        } else if (_type == Collider.TYPE_CIRCLE) {
-            hitbox = CHitbox.new_circle(level.rng.int(15, 30))
-        } else if (_type == Collider.TYPE_RECTANGLE) {
-            hitbox = CHitbox.new_rectangle(level.rng.int(20, 40), level.rng.int(20, 40))
-        }*/
     }
 
     pre_frame() {
@@ -111,7 +95,7 @@ class Game is Level {
     }
 
     update() {
-        //super.update()
+        super.update()
         
         Renderer.draw_font(null, Engine.fps.toString, 0, 0)
 
@@ -123,15 +107,6 @@ class Game is Level {
         Renderer.draw_circle_outline(mouse_pos[0], mouse_pos[1], 5, 1)
         Renderer.draw_rectangle_outline(250 - 50, 250 - 50, 100, 100, dir, 50, 50, 1)
         Renderer.draw_circle_outline(250 + Math.cast_x(dist * Math.serp(Engine.time / 2, 0, 1), dir), 250 + Math.cast_y(dist * Math.serp(Engine.time / 2, 0, 1), dir), 5, 1)
-
-        if (_hit1.collision(800, 400, mouse_pos[0], mouse_pos[1], _hit2)) {
-            Renderer.colour_mod = [0.8, 0.1, 0.1, 1]
-        }
-        Renderer.draw_polygon(_polygon, 800, 400)
-        Renderer.draw_polygon(_polygon2, mouse_pos[0], mouse_pos[1])
-        //Renderer.draw_circle(mouse_pos[0], mouse_pos[1], _hit2.r)
-        //Renderer.draw_rectangle(mouse_pos[0], mouse_pos[1], _hit2.w, _hit2.h, 0, 0, 0)
-        Renderer.colour_mod = [1, 1, 1, 1]
     }
 
     destroy() {

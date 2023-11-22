@@ -43,25 +43,7 @@ foreign class Math {
     foreign static clamp(x, min, max)
 }
 
-// For internal use on SAT collisions (convex polygon collisions)
-foreign class PolygonHitbox {
-    // Creates a new polygon hitbox from a vertex list as [[x1, y1], [x2, y2], ...]
-    foreign static create(vertex_list)
-
-    construct new() {}
-
-    // Checks for a collision between two polygon hitboxes
-    foreign static check_collision_polypoly(x1, y1, x2, y2, poly1, poly2)
-
-    // Checks for a collision between a polygon and rectangle
-    foreign static check_collision_polyrect(x1, y1, x2, y2, poly1, w, h)
-
-    // Checks for a collision between a polygon and circle
-    foreign static check_collision_polycirc(x1, y1, x2, y2, poly1, r)
-}
-
-
-foreign class CHitbox {
+foreign class Hitbox {
     construct new() {}
     foreign static new_circle(radius)
     foreign static new_rectangle(w, h)
@@ -70,6 +52,7 @@ foreign class CHitbox {
     foreign r
     foreign w
     foreign h
+    foreign no_hit
     foreign x_offset=(offset)
     foreign y_offset=(offset)
     foreign x_offset
@@ -80,201 +63,6 @@ foreign class CHitbox {
     foreign bb_right(x, y)
     foreign bb_top(x, y)
     foreign bb_bottom(x, y)
-}
-
-// Collision utilities
-class Hitbox {
-    static TYPE_CIRCLE { 0 }
-    static TYPE_RECTANGLE { 1 }
-    static TYPE_POLYGON { 2 }
-    static TYPE_VOID { -1 }
-    static NO_HIT { Hitbox.new_void() }
-
-    type { _type }
-    r { _r }
-    w { _w }
-    h { _h }
-    vertices { _vertices }
-    polygon { _polygon }
-    offset_x=(offset) { _x_offset = offset }
-    offset_y=(offset) { _y_offset = offset }
-    offset_x { _x_offset }
-    offset_y { _y_offset }
-
-    // Creates a new circle hitbox
-    construct new_circle(r) {
-        _type = Hitbox.TYPE_CIRCLE
-        _r = r
-        _x_offset = 0
-        _y_offset = 0
-    }
-
-    // Creates a new rectangle hitbox
-    construct new_rectangle(w, h) {
-        _type = Hitbox.TYPE_RECTANGLE
-        _w = w
-        _h = h
-        _x_offset = 0
-        _y_offset = 0
-    }
-
-    // Creates a new polygon hitbox
-    construct new_polygon(vertices) {
-        _type = Hitbox.TYPE_POLYGON
-        _polygon = PolygonHitbox.create(vertices)
-        _vertices = vertices
-        _x_offset = 0
-        _y_offset = 0
-
-        // Because calculating bb is a bit of a process
-        var minx = _vertices[0][0]
-        var miny = _vertices[0][1]
-        var maxx = _vertices[0][0]
-        var maxy = _vertices[0][1]
-        for (point in _vertices) {
-            if (point[0] > maxx) {
-                maxx = point[0]
-            }
-            if (point[1] > maxy) {
-                maxy = point[1]
-            }
-            if (point[0] < minx) {
-                minx = point[0]
-            }
-            if (point[1] < miny) {
-                miny = point[1]
-            }
-        }
-        _bb = [minx, miny, maxx, maxy]
-    }
-
-    construct new_void() {
-        _type = Hitbox.TYPE_VOID
-    }
-
-    // Returns true if there is a collision between a given circle and rectangle
-    static circle_rect_collision(rx, ry, w, h, cx, cy, r) {
-        if (Math.point_in_rectangle(rx, ry, w, h, cx, cy)) {
-            return true
-        }
-        // this is a mess but it just werks:tm:
-        // but like should be fixed, its not super efficient
-        var left = cx < rx
-        var right = cx > (rx + w)
-        var above = cy < ry
-        var below = cy > (ry + h)
-        if ((left && above && Math.point_distance(rx, ry, cx, cy) < r) ||
-            (left && below && Math.point_distance(rx, ry + h, cx, cy) < r) ||
-            (right && above && Math.point_distance(rx + w, ry, cx, cy) < r) ||
-            (right && below && Math.point_distance(rx + w, ry + h, cx, cy) < r) ||
-            (left && !below && !above && (cx - rx).abs < r) ||
-            (right && !below && !above && (cx - (rx + w)).abs < r) ||
-            (above && !left && !right && (cy - ry).abs < r) ||
-            (below && !left && !right && (cy - (ry + h)).abs < r)) {
-                return true
-        }
-        return false
-    }
-
-    // Returns true if there is a collision between this and another hitbox
-    collision(x1, y1, x2, y2, hitbox2) {
-        x1 = x1 - offset_x
-        y1 = y1 - offset_y
-        x2 = x2 - hitbox2.offset_x
-        y2 = y2 - hitbox2.offset_y
-        if (hitbox2.type == Hitbox.TYPE_RECTANGLE && _type == Hitbox.TYPE_RECTANGLE) {
-            return (y1 + _h > y2 && y1 < y2 + hitbox2.h && x1 + _w > x2 && x1 < x2 + hitbox2.w)
-        } else if (hitbox2.type == Hitbox.TYPE_CIRCLE && _type == Hitbox.TYPE_RECTANGLE) {
-            return Hitbox.circle_rect_collision(x1, y1, _w, _h, x2, y2, hitbox2.r)
-        } else if (hitbox2.type == Hitbox.TYPE_RECTANGLE && _type == Hitbox.TYPE_CIRCLE) {
-            return Hitbox.circle_rect_collision(x2, y2, hitbox2.w, hitbox2.h, x1, y1, _r)
-        } else if (hitbox2.type == Hitbox.TYPE_CIRCLE && _type == Hitbox.TYPE_CIRCLE) {
-            return Math.point_distance(x1, y1, x2, y2) < _r + hitbox2.r
-        } else if (_type == Hitbox.TYPE_POLYGON || hitbox2.type == Hitbox.TYPE_POLYGON) {
-            if (_type == Hitbox.TYPE_POLYGON && hitbox2.type == Hitbox.TYPE_POLYGON) {
-                return PolygonHitbox.check_collision_polypoly(x1, y1, x2, y2, _polygon, hitbox2.polygon)
-            } else if (_type == Hitbox.TYPE_POLYGON && hitbox2.type == Hitbox.TYPE_RECTANGLE) {
-                return PolygonHitbox.check_collision_polyrect(x1, y1, x2, y2, _polygon, hitbox2.w, hitbox2.h)
-            } else if (_type == Hitbox.TYPE_RECTANGLE && hitbox2.type == Hitbox.TYPE_POLYGON) {
-                return PolygonHitbox.check_collision_polyrect(x2, y2, x1, y1, hitbox2.polygon, _w, _h)
-            } else if (_type == Hitbox.TYPE_POLYGON && hitbox2.type == Hitbox.TYPE_CIRCLE) {
-                return PolygonHitbox.check_collision_polycirc(x1, y1, x2, y2, _polygon, hitbox2.r)
-            } else if (_type == Hitbox.TYPE_CIRCLE && hitbox2.type == Hitbox.TYPE_POLYGON) {
-                return PolygonHitbox.check_collision_polycirc(x2, y2, x1, y1, hitbox2.polygon, _r)
-            }
-        }
-        return false
-    }
-
-    // Returns this hitbox's bounding box as a list of [x1, y1, x2, y2]
-    bounding_box(x, y) {
-        x = x - offset_x
-        y = y - offset_y
-        if (_type == Hitbox.TYPE_CIRCLE) {
-            return [x - _r, y - _r, x + _r, y + _r]
-        } else if (_type == Hitbox.TYPE_RECTANGLE) {
-            return [x, y, x + _w, y + _h]
-        } else if (_type == Hitbox.TYPE_POLYGON) {
-            return [_bb[0] + x, _bb[1] + y, _bb[2] + x, _bb[3] + y]
-        }
-        return [0, 0, 0, 0]
-    }
-
-    // Individual bounding box pieces
-    bb_left(x, y) {
-        x = x - offset_x
-        y = y - offset_y
-        if (_type == Hitbox.TYPE_CIRCLE) {
-            return x - _r
-        } else if (_type == Hitbox.TYPE_RECTANGLE) {
-            return x
-        } else if (_type == Hitbox.TYPE_POLYGON) {
-            return _bb[0] + x
-        }
-        return 0
-    }
-
-    // Individual bounding box pieces
-    bb_right(x, y) {
-        x = x - offset_x
-        y = y - offset_y
-        if (_type == Hitbox.TYPE_CIRCLE) {
-            return x + _r
-        } else if (_type == Hitbox.TYPE_RECTANGLE) {
-            return x + _w
-        } else if (_type == Hitbox.TYPE_POLYGON) {
-            return _bb[2] + x
-        }
-        return 0
-    }
-
-    // Individual bounding box pieces
-    bb_top(x, y) {
-        x = x - offset_x
-        y = y - offset_y
-        if (_type == Hitbox.TYPE_CIRCLE) {
-            return y - _r
-        } else if (_type == Hitbox.TYPE_RECTANGLE) {
-            return y
-        } else if (_type == Hitbox.TYPE_POLYGON) {
-            return _bb[1] + y
-        }
-        return 0
-    }
-
-    // Individual bounding box pieces
-    bb_bottom(x, y) {
-        x = x - offset_x
-        y = y - offset_y
-        if (_type == Hitbox.TYPE_CIRCLE) {
-            return y + _r
-        } else if (_type == Hitbox.TYPE_RECTANGLE) {
-            return y + _h
-        } else if (_type == Hitbox.TYPE_POLYGON) {
-            return _bb[3] + y
-        }
-        return 0
-    }
 }
 
 // Tileset for drawing and colliding with many things at once
@@ -326,7 +114,7 @@ class Tileset {
         while (!collision(hitbox, x - 1, y) && hitbox.bb_left(x - 1, y) > 0) {
             x = x - _w
         }
-        return x + hitbox.offset_x
+        return x + hitbox.x_offset
     }
 
     // Same but right
@@ -335,7 +123,7 @@ class Tileset {
         while (!collision(hitbox, x + 1, y) && hitbox.bb_right(x + 1, y) < width) {
             x = x + _w
         }
-        return x - hitbox.offset_x
+        return x - hitbox.y_offset
     }
 
     // Same but up
@@ -344,7 +132,7 @@ class Tileset {
         while (!collision(hitbox, x, y - 1) && hitbox.bb_top(x, y - 1) > 0) {
             y = y - _h
         }
-        return y + hitbox.offset_y
+        return y + hitbox.y_offset
     }
 
     // Same but down
@@ -353,7 +141,7 @@ class Tileset {
         while (!collision(hitbox, x, y + 1) && hitbox.bb_bottom(x, y + 1) < height) {
             y = y + _h
         }
-        return y - hitbox.offset_y
+        return y - hitbox.y_offset
     }
 
     // Copies from source tileset at [sx,sy] to [sx+sw,sy+sh] into this
@@ -378,12 +166,12 @@ class Tileset {
     // Returns true if a hitbox's bounding box is colliding with a non-zero space
     // on the grid.
     collision(hitbox, x, y) {
-        if (hitbox.type == Hitbox.TYPE_VOID) {
+        if (hitbox.no_hit) {
             return false
         }
         var bb = hitbox.bounding_box(x, y)
-        x = x - hitbox.offset_x
-        y = y - hitbox.offset_y
+        x = x - hitbox.x_offset
+        y = y - hitbox.y_offset
         // this is to account for bounding boxes that end on a new spot and shouldn't
         bb[2] = bb[2] % _w == 0 ? bb[2] - 0.1 : bb[2]
         bb[3] = bb[3] % _h == 0 ? bb[3] - 0.1 : bb[3]

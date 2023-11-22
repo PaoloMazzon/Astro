@@ -94,10 +94,3 @@ void vksk_RuntimeFontAllocate(WrenVM *vm);
 void vksk_RuntimeFontFinalize(void *data);
 void vksk_RuntimeFontSize(WrenVM *vm);
 void vksk_RuntimeFontFree(WrenVM *vm);
-
-void vksk_RuntimePolygonHitboxAllocate(WrenVM *vm);
-void vksk_RuntimePolygonHitboxFinalize(void *data);
-void vksk_RuntimePolygonHitboxCreate(WrenVM *vm);
-void vksk_RuntimePolygonHitboxPolyPolyCollision(WrenVM *vm);
-void vksk_RuntimePolygonHitboxPolyRectCollision(WrenVM *vm);
-void vksk_RuntimePolygonHitboxPolyCircCollision(WrenVM *vm);

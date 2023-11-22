@@ -26,6 +26,7 @@ void vksk_RuntimeUtilHitboxNewPolygon(WrenVM *vm);
 void vksk_RuntimeUtilHitboxR(WrenVM *vm);
 void vksk_RuntimeUtilHitboxW(WrenVM *vm);
 void vksk_RuntimeUtilHitboxH(WrenVM *vm);
+void vksk_RuntimeUtilHitboxNoHit(WrenVM *vm);
 void vksk_RuntimeUtilHitboxXOffsetSetter(WrenVM *vm);
 void vksk_RuntimeUtilHitboxYOffsetSetter(WrenVM *vm);
 void vksk_RuntimeUtilHitboxXOffsetGetter(WrenVM *vm);

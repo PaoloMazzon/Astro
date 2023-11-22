@@ -113,12 +113,14 @@ void vksk_RuntimeUtilHitboxAllocate(WrenVM *vm) {
 }
 
 void vksk_RuntimeUtilHitboxFinalize(void *data) {
-
+    VKSK_RuntimeForeign *hitbox = data;
+    if (hitbox->hitbox.type == HITBOX_TYPE_POLYGON)
+        free(hitbox->hitbox.polygon.vertices);
 }
 
 void vksk_RuntimeUtilHitboxNewCircle(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
-    wrenGetVariable(vm, "lib/Util", "CHitbox", 0);
+    wrenGetVariable(vm, "lib/Util", "Hitbox", 0);
     VKSK_RuntimeForeign *hitbox = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
     hitbox->type = FOREIGN_HITBOX;
     hitbox->hitbox.type = HITBOX_TYPE_CIRCLE;
@@ -133,7 +135,7 @@ void vksk_RuntimeUtilHitboxNewCircle(WrenVM *vm) {
 
 void vksk_RuntimeUtilHitboxNewVoid(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    wrenGetVariable(vm, "lib/Util", "CHitbox", 0);
+    wrenGetVariable(vm, "lib/Util", "Hitbox", 0);
     VKSK_RuntimeForeign *hitbox = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
     hitbox->type = FOREIGN_HITBOX;
     hitbox->hitbox.type = HITBOX_TYPE_VOID;
@@ -147,7 +149,7 @@ void vksk_RuntimeUtilHitboxNewVoid(WrenVM *vm) {
 
 void vksk_RuntimeUtilHitboxNewRectangle(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
-    wrenGetVariable(vm, "lib/Util", "CHitbox", 0);
+    wrenGetVariable(vm, "lib/Util", "Hitbox", 0);
     VKSK_RuntimeForeign *hitbox = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
     hitbox->type = FOREIGN_HITBOX;
     hitbox->hitbox.type = HITBOX_TYPE_RECTANGLE;
@@ -163,7 +165,7 @@ void vksk_RuntimeUtilHitboxNewRectangle(WrenVM *vm) {
 
 void vksk_RuntimeUtilHitboxNewPolygon(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST, FOREIGN_END)
-    wrenGetVariable(vm, "lib/Util", "CHitbox", 0);
+    wrenGetVariable(vm, "lib/Util", "Hitbox", 0);
     VKSK_RuntimeForeign *hitbox = wrenSetSlotNewForeign(vm, 0, 0, sizeof(struct VKSK_RuntimeForeign));
     hitbox->type = FOREIGN_HITBOX;
     hitbox->hitbox.type = HITBOX_TYPE_POLYGON;
@@ -173,10 +175,8 @@ void vksk_RuntimeUtilHitboxNewPolygon(WrenVM *vm) {
         wrenEnsureSlots(vm, 4);
         const int vertexPosSlot = 2;
         const int vertexPosElementSlot = 3;
-        double minX = 100000000;
-        double minY = 100000000;
-        double maxX = -100000000;
-        double maxY = -100000000;
+        double minX, minY, maxX, maxY;
+        bool set = false;
         for (int i = 0; i < hitbox->hitbox.polygon.count; i++) {
             wrenGetListElement(vm, 1, i, vertexPosSlot);
             wrenGetListElement(vm, vertexPosSlot, 0, vertexPosElementSlot);
@@ -184,14 +184,15 @@ void vksk_RuntimeUtilHitboxNewPolygon(WrenVM *vm) {
             wrenGetListElement(vm, vertexPosSlot, 1, vertexPosElementSlot);
             hitbox->hitbox.polygon.vertices[i][1] = wrenGetSlotDouble(vm, vertexPosElementSlot);
 
-            if (hitbox->hitbox.polygon.vertices[i][0] < minX)
+            if (hitbox->hitbox.polygon.vertices[i][0] < minX || !set)
                 minX = hitbox->hitbox.polygon.vertices[i][0];
-            if (hitbox->hitbox.polygon.vertices[i][1] < minY)
+            if (hitbox->hitbox.polygon.vertices[i][1] < minY || !set)
                 minY = hitbox->hitbox.polygon.vertices[i][1];
-            if (hitbox->hitbox.polygon.vertices[i][0] > maxX)
+            if (hitbox->hitbox.polygon.vertices[i][0] > maxX || !set)
                 maxX = hitbox->hitbox.polygon.vertices[i][0];
-            if (hitbox->hitbox.polygon.vertices[i][1] > maxX)
+            if (hitbox->hitbox.polygon.vertices[i][1] > maxY || !set)
                 maxY = hitbox->hitbox.polygon.vertices[i][1];
+            set = true;
         }
 
         hitbox->hitbox.bb_left = minX;
@@ -238,6 +239,12 @@ void vksk_RuntimeUtilHitboxH(WrenVM *vm) {
     }
 }
 
+void vksk_RuntimeUtilHitboxNoHit(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    VKSK_RuntimeForeign *hitbox = wrenGetSlotForeign(vm, 0);
+    wrenSetSlotBool(vm, 0, hitbox->hitbox.type == HITBOX_TYPE_VOID);
+}
+
 void vksk_RuntimeUtilHitboxXOffsetSetter(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
     VKSK_RuntimeForeign *hitbox = wrenGetSlotForeign(vm, 0);
@@ -265,25 +272,44 @@ void vksk_RuntimeUtilHitboxYOffsetGetter(WrenVM *vm) {
 void vksk_RuntimeUtilHitboxBoundingBox(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
     VKSK_RuntimeForeign *hitbox = wrenGetSlotForeign(vm, 0);
+    if (hitbox->hitbox.type == HITBOX_TYPE_VOID) {
+        wrenEnsureSlots(vm, 2);
+        const int listSlot = 0;
+        const int elementSlot = 1;
+        wrenSetSlotNewList(vm, 0);
+        wrenSetSlotDouble(vm, elementSlot, 0);
+        wrenInsertInList(vm, listSlot, -1, elementSlot);
+        wrenSetSlotDouble(vm, elementSlot, 0);
+        wrenInsertInList(vm, listSlot, -1, elementSlot);
+        wrenSetSlotDouble(vm, elementSlot, 0);
+        wrenInsertInList(vm, listSlot, -1, elementSlot);
+        wrenSetSlotDouble(vm, elementSlot, 0);
+        wrenInsertInList(vm, listSlot, -1, elementSlot);
+        return;
+    }
     const double x = wrenGetSlotDouble(vm, 1) - hitbox->hitbox.xOffset;
     const double y = wrenGetSlotDouble(vm, 2) - hitbox->hitbox.yOffset;
     wrenEnsureSlots(vm, 2);
     const int listSlot = 0;
-    const int elementSlot = 0;
+    const int elementSlot = 1;
     wrenSetSlotNewList(vm, 0);
     wrenSetSlotDouble(vm, elementSlot, hitbox->hitbox.bb_left + x);
-    wrenSetListElement(vm, listSlot, -1, elementSlot);
+    wrenInsertInList(vm, listSlot, -1, elementSlot);
     wrenSetSlotDouble(vm, elementSlot, hitbox->hitbox.bb_top + y);
-    wrenSetListElement(vm, listSlot, -1, elementSlot);
+    wrenInsertInList(vm, listSlot, -1, elementSlot);
     wrenSetSlotDouble(vm, elementSlot, hitbox->hitbox.bb_right + x);
-    wrenSetListElement(vm, listSlot, -1, elementSlot);
+    wrenInsertInList(vm, listSlot, -1, elementSlot);
     wrenSetSlotDouble(vm, elementSlot, hitbox->hitbox.bb_bottom + y);
-    wrenSetListElement(vm, listSlot, -1, elementSlot);
+    wrenInsertInList(vm, listSlot, -1, elementSlot);
 }
 
 void vksk_RuntimeUtilHitboxBbLeft(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
     VKSK_RuntimeForeign *hitbox = wrenGetSlotForeign(vm, 0);
+    if (hitbox->hitbox.type == HITBOX_TYPE_VOID) {
+        wrenSetSlotDouble(vm, 0, 0);
+        return;
+    }
     const double x = wrenGetSlotDouble(vm, 1) - hitbox->hitbox.xOffset;
     wrenSetSlotDouble(vm, 0, hitbox->hitbox.bb_left + x);
 }
@@ -291,6 +317,10 @@ void vksk_RuntimeUtilHitboxBbLeft(WrenVM *vm) {
 void vksk_RuntimeUtilHitboxBbRight(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
     VKSK_RuntimeForeign *hitbox = wrenGetSlotForeign(vm, 0);
+    if (hitbox->hitbox.type == HITBOX_TYPE_VOID) {
+        wrenSetSlotDouble(vm, 0, 0);
+        return;
+    }
     const double x = wrenGetSlotDouble(vm, 1) - hitbox->hitbox.xOffset;
     wrenSetSlotDouble(vm, 0, hitbox->hitbox.bb_right + x);
 }
@@ -298,6 +328,10 @@ void vksk_RuntimeUtilHitboxBbRight(WrenVM *vm) {
 void vksk_RuntimeUtilHitboxBbTop(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
     VKSK_RuntimeForeign *hitbox = wrenGetSlotForeign(vm, 0);
+    if (hitbox->hitbox.type == HITBOX_TYPE_VOID) {
+        wrenSetSlotDouble(vm, 0, 0);
+        return;
+    }
     const double y = wrenGetSlotDouble(vm, 2) - hitbox->hitbox.yOffset;
     wrenSetSlotDouble(vm, 0, hitbox->hitbox.bb_top + y);
 }
@@ -305,6 +339,10 @@ void vksk_RuntimeUtilHitboxBbTop(WrenVM *vm) {
 void vksk_RuntimeUtilHitboxBbBottom(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
     VKSK_RuntimeForeign *hitbox = wrenGetSlotForeign(vm, 0);
+    if (hitbox->hitbox.type == HITBOX_TYPE_VOID) {
+        wrenSetSlotDouble(vm, 0, 0);
+        return;
+    }
     const double y = wrenGetSlotDouble(vm, 2) - hitbox->hitbox.yOffset;
     wrenSetSlotDouble(vm, 0, hitbox->hitbox.bb_bottom + y);
 }
@@ -471,6 +509,8 @@ static bool satRectangle(double rx, double ry, double w, double h, double px, do
     gRectangleVertices[2][1] = h;
     gRectangleVertices[3][0] = 0;
     gRectangleVertices[3][1] = h;
+    gRectanglePolygon.bb_right = w;
+    gRectanglePolygon.bb_bottom = h;
     return satCollision(rx, ry, px, py, &gRectanglePolygon, polygon);
 }
 
@@ -501,7 +541,7 @@ void vksk_RuntimeUtilHitboxCollision(WrenVM *vm) {
     } else if (hitbox1->hitbox.type == HITBOX_TYPE_CIRCLE && hitbox2->hitbox.type == HITBOX_TYPE_POLYGON) {
         wrenSetSlotBool(vm, 0, satCircle(x2, y2, x1, y1, &hitbox2->hitbox, hitbox1->hitbox.circle.r));
     } else if (hitbox1->hitbox.type == HITBOX_TYPE_POLYGON && hitbox2->hitbox.type == HITBOX_TYPE_CIRCLE) {
-        wrenSetSlotBool(vm, 0, satCircle(x2, y2, x1, y1, &hitbox2->hitbox, hitbox1->hitbox.circle.r));
+        wrenSetSlotBool(vm, 0, satCircle(x1, y1, x2, y2, &hitbox1->hitbox, hitbox2->hitbox.circle.r));
     } else {
         wrenSetSlotBool(vm, 0, false);
     }
