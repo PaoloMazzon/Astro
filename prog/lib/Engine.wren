@@ -48,6 +48,28 @@ class Engine {
     // Returns whether or not the engine is running out of a game pak
     foreign static using_pak
 
+    // Returns an error estimate for profiling in microseconds
+    static profile_error_estimate(trials) {
+        var start_time = Engine.time
+        for (i in 0..(trials - 1)) {}
+        var estimate = ((Engine.time - start_time) * 1000000) / trials
+        return estimate
+    }
+
+    // Profiles a given Wren function, returns [total time in seconds, average time in microseconds, trial count]
+    static profile_fn(function, trials) {
+        var start_time = 0
+        start_time = Engine.time
+
+        for (i in 0..(trials - 1)) {
+            function.call()
+        }
+
+        var total_time = Engine.time - start_time
+        var average = (total_time * 1000000) / trials
+        return [total_time, average, trials]
+    }
+
     // For internal use
     foreign static report_debug(entity_count)
 

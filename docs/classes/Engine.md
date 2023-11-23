@@ -21,6 +21,8 @@ aspects of game development.
  + [process_frame](#process_frame)
  + [argv](#argv)
  + [using_pak](#using_pak)
+ + [profile_error_estimate](#profile_error_estimate)
+ + [profile_fn](#profile_fn)
  
 ### switch_level
 `static switch_level(level)`
@@ -138,3 +140,33 @@ Read Only: `static using_pak`
 
 Variable Type: `Bool` - True if Astro is using a `game.pak` file.
 
+### profile_error_estimate
+`static profile_error_estimate(trials)`
+
+Parameters
+ + `trials -> Num` Number of trials to perform.
+
+This method attempts to find the overhead associated with a for loop on the host
+machine. It will run an empty for loop a given amount of times and return the average
+time per iteration in microseconds.
+
+### profile_fn
+`static profile_fn(function, trials)`
+
+Parameters
+ + `function -> Fn` Function to profile, should require no parameters.
+ + `trials -> Num` Number of trials to perform.
+
+Profiles a given function by running it trials amount of times - more trials will produce
+more reliable numbers. This method will return a list in the format
+
+    [total time in seconds, average time in microseconds, trial count]
+
+Because `function` is called in a for loop, you may use
+[profile_error_estimate](#profile_error_estimate) to estimate how much of the average time
+is just the overhead associated with the for loop. Because how fast you are able to run
+something is dependent on the host machine, the results are only useful in comparison to 
+other results and because this is being executed in a VM there is a little bit of error
+associated with all of the results. Do not take these numbers as law, they are a decent
+estimate that is useful to compare algorithms but it is not a completely reliable software
+testing tool.

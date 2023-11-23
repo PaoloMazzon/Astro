@@ -61,26 +61,6 @@ class Game is Level {
     }
     rng { _rng }
 
-    profile_begin(title, trials) {
-        _title_length = title.count
-        _trials = trials
-        System.print("--------------------%(title)--------------------")
-        _start_time = Engine.time
-    }
-
-    profile_end() {
-        var total_time = Engine.time - _start_time
-        var average = (total_time * 1000000) / _trials
-        System.print("Trial Count: %(_trials)")
-        System.print("Total Time: %(total_time)")
-        System.print("Average Time/Trial: %(average)µs")
-        var s = "----------------------------------------"
-        for (i in 0..(_title_length - 1)) {
-            s = s + "-"
-        }
-        System.print(s)
-    }
-
     create() {
         super.create()
         _rng = Random.new()
@@ -95,7 +75,7 @@ class Game is Level {
     }
 
     update() {
-        super.update()
+        //super.update()
         
         Renderer.draw_font(null, Engine.fps.toString, 0, 0)
 
