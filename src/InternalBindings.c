@@ -1043,6 +1043,20 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 			font->bitmapFont->unicodeEnd = uniEnd;
 			float spaceSize = font->bitmapFont->newLineHeight / 2;
 
+			// Calculate space size
+			float average = 0;
+			int count = 0;
+            for (int i = 0; i <= (uniEnd - uniStart); i++) {
+                int codePoint = i + uniStart;
+                int x0, y0, x1, y1;
+                stbtt_GetCodepointBox(&info, codePoint, &x0, &y0, &x1, &y1);
+                if (stbtt_IsGlyphEmpty(&info, stbtt_FindGlyphIndex(&info, codePoint)) == 0) {
+                    average += (x1 * scale) - (x0 * scale);
+                    count++;
+                }
+            }
+            spaceSize = (average / count) * 0.5;
+
 			// Calculate the width and height of the image we'll need
 			font->bitmapFont->characters = calloc(uniEnd - uniStart + 1, sizeof(struct JUCharacter));
 			float w = 0;
@@ -1052,9 +1066,9 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 				int x0, y0, x1, y1;
 				JUCharacter *c = &font->bitmapFont->characters[i];
 				stbtt_GetCodepointBox(&info, codePoint, &x0, &y0, &x1, &y1);
-				if (x1 != 0) {
+				if (stbtt_IsGlyphEmpty(&info, stbtt_FindGlyphIndex(&info, codePoint)) == 0) {
 					c->w = (x1 * scale) - (x0 * scale);
-					c->h = (y1 * scale) - (y0 * scale);
+					c->h = (y1 * scale) - (y0 * scale) + 2;
 					c->x = w;
 					c->drawn = true;
 				} else {
@@ -1090,7 +1104,8 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
 					VALIDATE_SDL(temp)
 					c->ykern = ((-(float) ascent * scale) + yoff) + ((ascent * scale) * 2);
 					SDL_Rect dst = {c->x, c->y, width, height};
-					SDL_BlitSurface(temp, NULL, bitmap, &dst);
+					if (SDL_BlitSurface(temp, NULL, bitmap, &dst) < 0)
+					    vksk_Log("Failed to copy character u%i", codePoint);
 					SDL_FreeSurface(temp);
 					free(pixels);
 				}

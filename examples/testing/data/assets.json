@@ -1,11 +1,47 @@
 {
   "sprites": [
-	
+
   ],
   "fonts": [
-	
+      {
+          "file": "merriweather.ttf",
+          "name": "merriweather48",
+          "ustart": 32,
+          "uend": 128,
+          "size": 48
+      },
+      {
+          "file": "merriweather.ttf",
+          "name": "merriweather32",
+          "ustart": 32,
+          "uend": 128,
+          "size": 32
+      },
+      {
+          "file": "merriweather.ttf",
+          "name": "merriweather24",
+          "ustart": 32,
+          "uend": 128,
+          "size": 24
+      },
+      {
+          "file": "merriweather.ttf",
+          "name": "merriweather16",
+          "ustart": 32,
+          "uend": 128,
+          "size": 16
+      }
+  ],
+  "bitmap_fonts": [
+      
+  ],
+  "buffers": [
+
+  ],
+  "strings": [
+
   ],
   "exclude": [
-	
+      
   ]
 }

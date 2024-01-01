@@ -99,6 +99,6 @@ In no particular order,
  + Quadtree-based collisions
  + Load hitboxes from json
  + External asset managing program to make jsons automatically
- + Better TTF support
+ + Per-character kerning for ttf support
  + Spatial audio
  + Move `Util.wren` to C side for optimization purposes
