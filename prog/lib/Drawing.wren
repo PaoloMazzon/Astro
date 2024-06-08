@@ -38,6 +38,36 @@ foreign class Texture {
     foreign free()
 }
 
+// For internal use with lighting
+foreign class Shadow {
+    foreign position=(pos)
+    foreign update(x, y, scale_x, scale_y, rotation, origin_x, origin_y)
+    foreign enabled=(enabled)
+    foreign enabled
+}
+
+// Internal use for shadows
+foreign class Light {
+    foreign position=(pos)
+    foreign position
+    foreign rotation=(rotation)
+    foreign rotation
+    foreign origin_x=(origin_x)
+    foreign origin_x
+    foreign origin_y=(origin_y)
+    foreign origin_y
+    foreign texture=(texture)
+}
+
+// Shadows
+foreign class Lighting {
+    construct new() {}
+    foreign add_shadow(edges) // returns a shadow object
+    foreign add_light(x, y, rotation, origin_x, origin_y, texture) // returns a new light source
+    foreign reset() // destroys all shadow objects
+    foreign flush_vbo() // call once done adding shadow objects
+}
+
 // Textures you can draw to
 foreign class Surface {
     // Creates a new surface you can draw on and draw to the screen

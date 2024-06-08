@@ -66,3 +66,23 @@ void vksk_RuntimeVK2DModelAllocate(WrenVM *vm);
 void vksk_RuntimeVK2DModelLoad(WrenVM *vm);
 void vksk_RuntimeVK2DModelFinalize(void *data);
 void vksk_RuntimeVK2DModelFree(WrenVM *vm);
+
+void vksk_RuntimeLightingAddShadow(WrenVM *vm);
+void vksk_RuntimeLightingAddLight(WrenVM *vm);
+void vksk_RuntimeLightingReset(WrenVM *vm);
+void vksk_RuntimeLightingFlushVBO(WrenVM *vm);
+
+void vksk_RuntimeLightSourcePositionSet(WrenVM *vm);
+void vksk_RuntimeLightSourcePositionGet(WrenVM *vm);
+void vksk_RuntimeLightSourceRotationSet(WrenVM *vm);
+void vksk_RuntimeLightSourceRotationGet(WrenVM *vm);
+void vksk_RuntimeLightSourceOriginXSet(WrenVM *vm);
+void vksk_RuntimeLightSourceOriginXGet(WrenVM *vm);
+void vksk_RuntimeLightSourceOriginYSet(WrenVM *vm);
+void vksk_RuntimeLightSourceOriginYGet(WrenVM *vm);
+void vksk_RuntimeLightSourceTextureSet(WrenVM *vm);
+
+void vksk_RuntimeShadowPositionSet(WrenVM *vm);
+void vksk_RuntimeShadowUpdate(WrenVM *vm);
+void vksk_RuntimeShadowEnabledSet(WrenVM *vm);
+void vksk_RuntimeShadowEnabledGet(WrenVM *vm);
