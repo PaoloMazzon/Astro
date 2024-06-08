@@ -9,6 +9,8 @@
 #include "src/Util.h"
 #include "src/Runtime.h"
 
+extern VK2DShadowEnvironment gShadowEnvironment; // From RendererBindings.c
+
 /*************** Texture ***************/
 void vksk_RuntimeVK2DTextureAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
@@ -512,12 +514,13 @@ void vksk_RuntimeVK2DModelFree(WrenVM *vm) {
 }
 
 void vksk_RuntimeLightingAddShadow(WrenVM *vm) {
-    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST, FOREIGN_END)
     // TODO: This
 }
 
 void vksk_RuntimeLightingAddLight(WrenVM *vm) {
-    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_TEXTURE, FOREIGN_END)
+    // x, y, rotation, origin_x, origin_y, texture
     // TODO: This
 }
 

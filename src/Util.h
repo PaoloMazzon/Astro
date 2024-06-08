@@ -9,4 +9,4 @@
 void *vksk_GetFileBuffer(const char *filename, int *size);
 
 // Puts a newly allocated foreign class into slot 0 and returns it
-VKSK_RuntimeForeign *vksk_NewForeignClass(WrenVM *vm, const char *module, const char *name);
+VKSK_RuntimeForeign *vksk_NewForeignClass(WrenVM *vm, const char *module, const char *name, uint64_t type);

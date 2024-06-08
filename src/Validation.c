@@ -9,29 +9,31 @@
 #include "src/Runtime.h"
 #include "src/IntermediateTypes.h"
 
-const uint64_t FOREIGN_END = 0; // internal use
-const uint64_t FOREIGN_STRING = 1<<0;
-const uint64_t FOREIGN_BOOL = 1<<1;
-const uint64_t FOREIGN_NUM = 1<<2;
-const uint64_t FOREIGN_LIST = 1<<3;
-const uint64_t FOREIGN_MAP = 1<<4;
-const uint64_t FOREIGN_NULL = 1<<5;
-const uint64_t FOREIGN_FOREIGN = 1<<6;
-const uint64_t FOREIGN_INI = 1<<7;
-const uint64_t FOREIGN_BITMAP_FONT = 1<<8;
-const uint64_t FOREIGN_TEXTURE = 1<<9;
-const uint64_t FOREIGN_SPRITE = 1<<10;
-const uint64_t FOREIGN_SURFACE = 1<<11;
-const uint64_t FOREIGN_CAMERA = 1<<12;
-const uint64_t FOREIGN_AUDIO_DATA = 1<<13;
-const uint64_t FOREIGN_AUDIO = 1<<14;
-const uint64_t FOREIGN_TILED_MAP = 1<<15;
-const uint64_t FOREIGN_BUFFER = 1<<16;
-const uint64_t FOREIGN_SHADER = 1<<17;
-const uint64_t FOREIGN_MODEL = 1<<18;
-const uint64_t FOREIGN_POLYGON = 1<<19;
-const uint64_t FOREIGN_POLY_HITBOX = 1<<20;
-const uint64_t FOREIGN_HITBOX = 1<<21;
+const uint64_t FOREIGN_END          = 0; // internal use
+const uint64_t FOREIGN_STRING       = 1<<0;
+const uint64_t FOREIGN_BOOL         = 1<<1;
+const uint64_t FOREIGN_NUM          = 1<<2;
+const uint64_t FOREIGN_LIST         = 1<<3;
+const uint64_t FOREIGN_MAP          = 1<<4;
+const uint64_t FOREIGN_NULL         = 1<<5;
+const uint64_t FOREIGN_FOREIGN      = 1<<6;
+const uint64_t FOREIGN_INI          = 1<<7;
+const uint64_t FOREIGN_BITMAP_FONT  = 1<<8;
+const uint64_t FOREIGN_TEXTURE      = 1<<9;
+const uint64_t FOREIGN_SPRITE       = 1<<10;
+const uint64_t FOREIGN_SURFACE      = 1<<11;
+const uint64_t FOREIGN_CAMERA       = 1<<12;
+const uint64_t FOREIGN_AUDIO_DATA   = 1<<13;
+const uint64_t FOREIGN_AUDIO        = 1<<14;
+const uint64_t FOREIGN_TILED_MAP    = 1<<15;
+const uint64_t FOREIGN_BUFFER       = 1<<16;
+const uint64_t FOREIGN_SHADER       = 1<<17;
+const uint64_t FOREIGN_MODEL        = 1<<18;
+const uint64_t FOREIGN_POLYGON      = 1<<19;
+const uint64_t FOREIGN_POLY_HITBOX  = 1<<20;
+const uint64_t FOREIGN_HITBOX       = 1<<21;
+const uint64_t FOREIGN_SHADOW       = 1<<22;
+const uint64_t FOREIGN_LIGHT_SOURCE = 1<<23;
 
 extern VKSK_EngineConfig gEngineConfig;
 

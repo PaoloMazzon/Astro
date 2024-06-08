@@ -16,6 +16,9 @@ static int gShaderSize = 0;
 static WrenHandle *gShaderBuffer;
 static JUFont gDefaultFont;
 static VK2DTexture gDefaultFontTexture;
+static VK2DTexture gShadowMapTexture = NULL; // Lighting buffer
+static VK2DCameraIndex gShadowCamera = -1; // For drawing shadows
+VK2DShadowEnvironment gShadowEnvironment; // For lighting
 
 // Updates shader data
 void _vksk_RendererUpdateShaderBinding(VK2DShader shader, WrenHandle *buffer) {
@@ -148,10 +151,16 @@ static void _vksk_DrawTexture(WrenVM *vm, VK2DTexture tex, float x, float y, flo
 void _vksk_RendererBindingsInit(void *textureData, int size) {
     gDefaultFontTexture = vk2dTextureFrom(textureData, size);
     gDefaultFont = juFontLoadFromTexture(gDefaultFontTexture, 32, 128, 7 * 3, 8 * 3);
+    VK2DCameraSpec spec = {};
+    gShadowCamera = vk2dCameraCreate(spec);
+    vk2dCameraSetState(gShadowCamera, VK2D_CAMERA_STATE_DISABLED);
+    gShadowEnvironment = vk2DShadowEnvironmentCreate();
 }
 
 void _vksk_RendererBindingsQuit() {
     juFontFree(gDefaultFont);
+    vk2dTextureFree(gShadowMapTexture);
+    vk2DShadowEnvironmentFree(gShadowEnvironment);
 }
 
 void vksk_RuntimeRendererGetWindowWidth(WrenVM *vm) {
@@ -642,7 +651,24 @@ void vksk_RuntimeRendererDrawPolygonExt(WrenVM *vm) {
 
 void vksk_RuntimeRendererSetupLighting(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
-    // TODO: This
+    float internalWidth = wrenGetSlotDouble(vm, 1);
+    float internalHeight = wrenGetSlotDouble(vm, 2);
+    float visibleWidth = wrenGetSlotDouble(vm, 3);
+    float visibleHeight = wrenGetSlotDouble(vm, 4);
+    vk2dTextureFree(gShadowMapTexture);
+    gShadowMapTexture = vk2dTextureCreate(internalWidth, internalHeight);
+    if (gShadowMapTexture == NULL) {
+        vksk_Error(true, "Failed to create shadow map internal texture of size (%f/%f)", internalWidth, internalHeight);
+    }
+    VK2DCameraSpec spec = {
+            .type = VK2D_CAMERA_TYPE_DEFAULT,
+            .zoom = 1,
+            .w = visibleWidth,
+            .h = visibleHeight,
+            .wOnScreen = internalWidth,
+            .hOnScreen = internalHeight
+    };
+    vk2dCameraUpdate(gShadowCamera, spec);
 }
 
 void vksk_RuntimeRendererDrawLighting(WrenVM *vm) {

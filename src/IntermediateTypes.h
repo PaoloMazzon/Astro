@@ -33,6 +33,8 @@ extern const uint64_t FOREIGN_POLYGON;
 extern const uint64_t FOREIGN_MODEL;
 extern const uint64_t FOREIGN_POLY_HITBOX;
 extern const uint64_t FOREIGN_HITBOX;
+extern const uint64_t FOREIGN_SHADOW;
+extern const uint64_t FOREIGN_LIGHT_SOURCE;
 
 // To protect Textures from garbage collection kinda
 typedef struct _vksk_RuntimeTexture {
@@ -101,6 +103,20 @@ typedef struct _vksk_RuntimeHitbox {
     };
 } _vksk_RuntimeHitbox;
 
+typedef struct _vksk_RuntimeLightSource {
+    float x;
+    float y;
+    float rotation;
+    float originX;
+    float originY;
+    VK2DTexture tex;
+} _vksk_RuntimeLightSource;
+
+typedef struct _vksk_RuntimeShadow {
+    VK2DShadowObject shadowObject;
+} _vksk_RuntimeShadow;
+
+
 // All foreign types come from this for type checking purposes
 typedef struct VKSK_RuntimeForeign {
 	uint64_t type;
@@ -120,5 +136,7 @@ typedef struct VKSK_RuntimeForeign {
 		VK2DModel model;
 		_vksk_RuntimePolygonHitbox polygonHitbox;
 		_vksk_RuntimeHitbox hitbox;
+        _vksk_RuntimeShadow shadow;
+        _vksk_RuntimeLightSource lightSource;
 	};
 } VKSK_RuntimeForeign;
