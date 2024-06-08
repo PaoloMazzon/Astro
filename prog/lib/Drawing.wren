@@ -47,7 +47,7 @@ foreign class Shadow {
 }
 
 // Internal use for shadows
-foreign class Light {
+foreign class LightSource {
     foreign position=(pos)
     foreign position
     foreign rotation=(rotation)
@@ -57,15 +57,15 @@ foreign class Light {
     foreign origin_y=(origin_y)
     foreign origin_y
     foreign texture=(texture)
+    foreign delete()
 }
 
 // Shadows
 foreign class Lighting {
-    construct new() {}
-    foreign add_shadow(edges) // returns a shadow object
-    foreign add_light(x, y, rotation, origin_x, origin_y, texture) // returns a new light source
-    foreign reset() // destroys all shadow objects
-    foreign flush_vbo() // call once done adding shadow objects
+    foreign static add_shadow(edges) // returns a shadow object
+    foreign static add_light(x, y, rotation, origin_x, origin_y, texture) // returns a new light source
+    foreign static reset() // destroys all shadow objects
+    foreign static flush_vbo() // call once done adding shadow objects
 }
 
 // Textures you can draw to

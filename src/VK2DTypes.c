@@ -510,3 +510,95 @@ void vksk_RuntimeVK2DModelFree(WrenVM *vm) {
 	vk2dModelFree(f->model);
 	f->model = NULL;
 }
+
+void vksk_RuntimeLightingAddShadow(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeLightingAddLight(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeLightingReset(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeLightingFlushVBO(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+
+void vksk_RuntimeLightSourcePositionSet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeLightSourcePositionGet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeLightSourceRotationSet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeLightSourceRotationGet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeLightSourceOriginXSet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeLightSourceOriginXGet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeLightSourceOriginYSet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeLightSourceOriginYGet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeLightSourceTextureSet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeLightSourceDelete(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+
+void vksk_RuntimeShadowPositionSet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeShadowUpdate(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeShadowEnabledSet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeShadowEnabledGet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    // TODO: This
+}

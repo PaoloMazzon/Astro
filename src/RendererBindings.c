@@ -639,3 +639,18 @@ void vksk_RuntimeRendererDrawPolygonExt(WrenVM *vm) {
 	float lineWidth = wrenGetSlotDouble(vm, 10);
 	vk2dRendererDrawPolygon(polygon->polygon, x, y, !outline, lineWidth, xScale, yScale, rot, xOrigin, yOrigin);
 }
+
+void vksk_RuntimeRendererSetupLighting(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeRendererDrawLighting(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_SURFACE | FOREIGN_NULL, FOREIGN_END)
+    // TODO: This
+}
+
+void vksk_RuntimeRendererDrawFOV(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+    // TODO: This
+}

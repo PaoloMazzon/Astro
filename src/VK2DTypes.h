@@ -81,6 +81,7 @@ void vksk_RuntimeLightSourceOriginXGet(WrenVM *vm);
 void vksk_RuntimeLightSourceOriginYSet(WrenVM *vm);
 void vksk_RuntimeLightSourceOriginYGet(WrenVM *vm);
 void vksk_RuntimeLightSourceTextureSet(WrenVM *vm);
+void vksk_RuntimeLightSourceDelete(WrenVM *vm);
 
 void vksk_RuntimeShadowPositionSet(WrenVM *vm);
 void vksk_RuntimeShadowUpdate(WrenVM *vm);
