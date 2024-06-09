@@ -10,15 +10,30 @@
 
 // Globals
 extern SDL_Window *gWindow; // -- from src/Runtime.c
-extern bool gOutsideFrame; // -- from src/Runtime.c
+extern bool gOutsideFrame;  // -- from src/Runtime.c
 static VK2DShader gShader = NULL;
 static int gShaderSize = 0;
 static WrenHandle *gShaderBuffer;
 static JUFont gDefaultFont;
 static VK2DTexture gDefaultFontTexture;
 static VK2DTexture gShadowMapTexture = NULL; // Lighting buffer
-static VK2DCameraIndex gShadowCamera = -1; // For drawing shadows
-VK2DShadowEnvironment gShadowEnvironment; // For lighting
+static VK2DCameraIndex gShadowCamera = -1;   // For drawing shadows
+VK2DShadowEnvironment gShadowEnvironment;    // For lighting
+
+// For adding lights to the lighting setup
+int _vksk_RendererAddLightSource(float x, float y, float roatation, float originX, float originY, VK2DTexture tex) {
+    // TODO: This
+    return -1;
+}
+
+_vksk_LightSource *_vkskRendererGetLightSource(int index) {
+    // TODO: This
+    return NULL;
+}
+
+void _vksk_RendererRemoveLightSource(int index) {
+    // TODO: This
+}
 
 // Updates shader data
 void _vksk_RendererUpdateShaderBinding(VK2DShader shader, WrenHandle *buffer) {
@@ -673,10 +688,13 @@ void vksk_RuntimeRendererSetupLighting(WrenVM *vm) {
 
 void vksk_RuntimeRendererDrawLighting(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_SURFACE | FOREIGN_NULL, FOREIGN_END)
+    const VKSK_RuntimeForeign *surface = wrenGetSlotType(vm, 1) == WREN_TYPE_NULL ? NULL : wrenGetSlotForeign(vm, 1);
     // TODO: This
 }
 
 void vksk_RuntimeRendererDrawFOV(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+    const float x = wrenGetSlotDouble(vm, 1);
+    const float y = wrenGetSlotDouble(vm, 2);
     // TODO: This
 }

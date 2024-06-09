@@ -41,6 +41,16 @@ typedef struct _vksk_RuntimeTexture {
 	VK2DTexture tex;
 }_vksk_RuntimeTexture;
 
+// For the renderer lighting system internally
+typedef struct _vksk_LightSource {
+    float x;
+    float y;
+    float rotation;
+    float originX;
+    float originY;
+    VK2DTexture tex;
+} _vksk_LightSource;
+
 // VK2D cameras in Wren are both index and spec because there is no access to the default camera
 typedef struct _vksk_RuntimeCamera {
 	VK2DCameraIndex index;
@@ -103,15 +113,6 @@ typedef struct _vksk_RuntimeHitbox {
     };
 } _vksk_RuntimeHitbox;
 
-typedef struct _vksk_RuntimeLightSource {
-    float x;
-    float y;
-    float rotation;
-    float originX;
-    float originY;
-    VK2DTexture tex;
-} _vksk_RuntimeLightSource;
-
 typedef struct _vksk_RuntimeShadow {
     VK2DShadowObject shadowObject;
 } _vksk_RuntimeShadow;
@@ -137,6 +138,6 @@ typedef struct VKSK_RuntimeForeign {
 		_vksk_RuntimePolygonHitbox polygonHitbox;
 		_vksk_RuntimeHitbox hitbox;
         _vksk_RuntimeShadow shadow;
-        _vksk_RuntimeLightSource lightSource;
+        int lightSourceIndex;
 	};
 } VKSK_RuntimeForeign;

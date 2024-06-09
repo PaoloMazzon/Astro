@@ -9,7 +9,11 @@
 #include "src/Util.h"
 #include "src/Runtime.h"
 
-extern VK2DShadowEnvironment gShadowEnvironment; // From RendererBindings.c
+// From RendererBindings.c
+extern VK2DShadowEnvironment gShadowEnvironment;
+int _vksk_RendererAddLightSource(float x, float y, float roatation, float originX, float originY, VK2DTexture tex);
+_vksk_LightSource *_vkskRendererGetLightSource(int index);
+void _vksk_RendererRemoveLightSource(int index);
 
 /*************** Texture ***************/
 void vksk_RuntimeVK2DTextureAllocate(WrenVM *vm) {
@@ -515,93 +519,274 @@ void vksk_RuntimeVK2DModelFree(WrenVM *vm) {
 
 void vksk_RuntimeLightingAddShadow(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST, FOREIGN_END)
-    // TODO: This
+    // List should be in the form [[x1, y1, x2, y2], [x1, y1, x2, y2], ...]
+    const int edgeCount = wrenGetListCount(vm, 1);
+    const int edgeListSlot = 1;
+    const int coordinateListSlot = 2;
+    const int coordinateSlot = 3;
+    bool error = false;
+    wrenEnsureSlots(vm, 4);
+
+    vec4 *coordinates = malloc(edgeCount * sizeof(coordinates));
+
+    if (coordinates != NULL) {
+        // Iterate over the edges
+        for (int i = 0; i < edgeCount && !error; i++) {
+            // Get the edge coordinates list
+            wrenGetListElement(vm, edgeListSlot, i, coordinateListSlot);
+
+            if (wrenGetSlotType(vm, coordinateListSlot) == WREN_TYPE_LIST && wrenGetListCount(vm, coordinateListSlot) != 4) {
+                vksk_Error(false, "Incorrect number of elements for edge index %i (expected 4, got %i)", i, wrenGetListCount(vm, coordinateListSlot));
+                error = true;
+                break;
+            } else if (wrenGetSlotType(vm, coordinateListSlot) != WREN_TYPE_LIST) {
+                vksk_Error(false, "Edge list element %i is not a list", i);
+                error = true;
+                break;
+            }
+
+            for (int j = 0; j < 4; j++) {
+                wrenGetListElement(vm, coordinateListSlot, j, coordinateSlot);
+                if (wrenGetSlotType(vm, coordinateSlot) == WREN_TYPE_NUM) {
+                    coordinates[i][j] = wrenGetSlotDouble(vm, coordinateSlot);
+                } else {
+                    vksk_Error(false, "Edge list element %i, coordinate list element %i is not a Num.", i, j);
+                    error = true;
+                    break;
+                }
+            }
+        }
+    } else {
+        vksk_Error(true, "Failed to allocate edge list (count %i) for shadow object", edgeCount);
+    }
+
+    if (!error) {
+        VKSK_RuntimeForeign *shadow = vksk_NewForeignClass(vm, "lib/Drawing", "Shadow", FOREIGN_SHADOW);
+        shadow->shadow.shadowObject = vk2dShadowEnvironmentAddObject(gShadowEnvironment);
+
+        for (int i = 0; i < edgeCount; i++) {
+            vk2DShadowEnvironmentAddEdge(
+                    gShadowEnvironment,
+                    coordinates[i][0],
+                    coordinates[i][1],
+                    coordinates[i][2],
+                    coordinates[i][3]
+            );
+        }
+    } else {
+        wrenSetSlotNull(vm, 0);
+    }
+
+    free(coordinates);
 }
 
 void vksk_RuntimeLightingAddLight(WrenVM *vm) {
-    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_TEXTURE, FOREIGN_END)
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_TEXTURE | FOREIGN_SURFACE, FOREIGN_END)
     // x, y, rotation, origin_x, origin_y, texture
-    // TODO: This
+    const x = wrenGetSlotDouble(vm, 1);
+    const y = wrenGetSlotDouble(vm, 2);
+    const rotation = wrenGetSlotDouble(vm, 3);
+    const originX = wrenGetSlotDouble(vm, 4);
+    const originY = wrenGetSlotDouble(vm, 5);
+    const VKSK_RuntimeForeign *texture = wrenGetSlotForeign(vm, 6);
+    VKSK_RuntimeForeign *light = vksk_NewForeignClass(vm, "lib/Drawing", "LightSource", FOREIGN_LIGHT_SOURCE);
+    light->lightSourceIndex = _vksk_RendererAddLightSource(
+        x,
+        y,
+        rotation,
+        originX,
+        originY,
+        texture->surface
+    );
 }
 
 void vksk_RuntimeLightingReset(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
+    vk2dRendererWait();
+    vk2dShadowEnvironmentResetEdges(gShadowEnvironment);
 }
 
 void vksk_RuntimeLightingFlushVBO(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
+    vk2DShadowEnvironmentFlushVBO(gShadowEnvironment);
 }
 
-
 void vksk_RuntimeLightSourcePositionSet(WrenVM *vm) {
-    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST, FOREIGN_END)
+    const int listSlot = 1;
+    const int xSlot = 2;
+    const int ySlot = 3;
+    VKSK_RuntimeForeign *lightSource = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightSource->lightSourceIndex);
+    wrenEnsureSlots(vm, 4);
+
+    if (wrenGetListCount(vm, listSlot) == 2) {
+        wrenGetListElement(vm, listSlot, 0, xSlot);
+        wrenGetListElement(vm, listSlot, 1, ySlot);
+        if (wrenGetSlotType(vm, xSlot) == WREN_TYPE_NUM && wrenGetSlotType(vm, ySlot) == WREN_TYPE_NUM) {
+            light->x = wrenGetSlotDouble(vm, xSlot);
+            light->y = wrenGetSlotDouble(vm, ySlot);
+        } else {
+            vksk_Error(false, "Element in coordinate list of wrong type, expected num");
+        }
+    } else {
+        vksk_Error(false, "Incorrect number of elements in coordinate list");
+    }
 }
 
 void vksk_RuntimeLightSourcePositionGet(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
+    wrenEnsureSlots(vm, 2);
+    const int listSlot = 0;
+    const int elementSlot = 1;
+    const VKSK_RuntimeForeign *lightIndex = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightIndex->lightSourceIndex);
+    wrenSetSlotNewList(vm, listSlot);
+    wrenSetSlotDouble(vm, elementSlot, light->x);
+    wrenInsertInList(vm, listSlot, -1, elementSlot);
+    wrenSetSlotDouble(vm, elementSlot, light->y);
+    wrenInsertInList(vm, listSlot, -1, elementSlot);
 }
 
-void vksk_RuntimeLightSourceRotationSet(WrenVM *vm) {
+void vksk_RuntimeLightSourceXGet(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
+    VKSK_RuntimeForeign *lightIndex = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightIndex->lightSourceIndex);
+    wrenSetSlotDouble(vm, 0, light->x);
+}
+
+void vksk_RuntimeLightSourceXSet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+    VKSK_RuntimeForeign *lightIndex = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightIndex->lightSourceIndex);
+    light->x = wrenGetSlotDouble(vm, 1);
+}
+
+void vksk_RuntimeLightSourceYGet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    VKSK_RuntimeForeign *lightIndex = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightIndex->lightSourceIndex);
+    wrenSetSlotDouble(vm, 0, light->y);
+}
+
+void vksk_RuntimeLightSourceYSet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+    VKSK_RuntimeForeign *lightIndex = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightIndex->lightSourceIndex);
+    light->y = wrenGetSlotDouble(vm, 1);
+}
+
+
+void vksk_RuntimeLightSourceRotationSet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+    VKSK_RuntimeForeign *lightIndex = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightIndex->lightSourceIndex);
+    light->rotation = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeLightSourceRotationGet(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
+    VKSK_RuntimeForeign *lightIndex = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightIndex->lightSourceIndex);
+    wrenSetSlotDouble(vm, 0, light->rotation);
 }
 
 void vksk_RuntimeLightSourceOriginXSet(WrenVM *vm) {
-    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+    VKSK_RuntimeForeign *lightIndex = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightIndex->lightSourceIndex);
+    light->originX = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeLightSourceOriginXGet(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
+    VKSK_RuntimeForeign *lightIndex = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightIndex->lightSourceIndex);
+    wrenSetSlotDouble(vm, 0, light->originX);
 }
 
 void vksk_RuntimeLightSourceOriginYSet(WrenVM *vm) {
-    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+    VKSK_RuntimeForeign *lightIndex = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightIndex->lightSourceIndex);
+    light->originY = wrenGetSlotDouble(vm, 1);
 }
 
 void vksk_RuntimeLightSourceOriginYGet(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
+    VKSK_RuntimeForeign *lightIndex = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightIndex->lightSourceIndex);
+    wrenSetSlotDouble(vm, 0, light->originY);
 }
 
 void vksk_RuntimeLightSourceTextureSet(WrenVM *vm) {
-    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_TEXTURE | FOREIGN_SURFACE, FOREIGN_END)
+    VKSK_RuntimeForeign *lightIndex = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightIndex->lightSourceIndex);
+    VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 1);
+    light->tex = tex->texture.tex;
 }
 
 void vksk_RuntimeLightSourceDelete(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
-}
+    VKSK_RuntimeForeign *lightIndex = wrenGetSlotForeign(vm, 0);
+    _vksk_RendererRemoveLightSource(lightIndex->lightSourceIndex);
 
+}
 
 void vksk_RuntimeShadowPositionSet(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
+    const int listSlot = 1;
+    const int xSlot = 2;
+    const int ySlot = 3;
+    VKSK_RuntimeForeign *shadow = wrenGetSlotForeign(vm, 0);
+    wrenEnsureSlots(vm, 4);
+
+    if (wrenGetListCount(vm, listSlot) == 2) {
+        wrenGetListElement(vm, listSlot, 0, xSlot);
+        wrenGetListElement(vm, listSlot, 1, ySlot);
+        if (wrenGetSlotType(vm, xSlot) == WREN_TYPE_NUM && wrenGetSlotType(vm, ySlot) == WREN_TYPE_NUM) {
+            vk2dShadowEnvironmentObjectSetPos(gShadowEnvironment, shadow->shadow.shadowObject, wrenGetSlotDouble(vm, xSlot), wrenGetSlotDouble(vm, ySlot));
+        } else {
+            vksk_Error(false, "Element in coordinate list of wrong type, expected num");
+        }
+    } else {
+        vksk_Error(false, "Incorrect number of elements in coordinate list");
+    }
 }
 
 void vksk_RuntimeShadowUpdate(WrenVM *vm) {
-    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+    // x, y, scale_x, scale_y, rotation, origin_x, origin_y
+    const VKSK_RuntimeForeign *shadow = wrenGetSlotForeign(vm, 0);
+    const float x = wrenGetSlotDouble(vm, 1);
+    const float y = wrenGetSlotDouble(vm, 2);
+    const float scaleX = wrenGetSlotDouble(vm, 3);
+    const float scaleY = wrenGetSlotDouble(vm, 4);
+    const float rotation = wrenGetSlotDouble(vm, 5);
+    const float originX = wrenGetSlotDouble(vm, 6);
+    const float originY = wrenGetSlotDouble(vm, 7);
+    vk2dShadowEnvironmentObjectUpdate(
+        gShadowEnvironment,
+        shadow->shadow.shadowObject,
+        x,
+        y,
+        scaleX,
+        scaleY,
+        rotation,
+        originX,
+        originY
+    );
 }
 
 void vksk_RuntimeShadowEnabledSet(WrenVM *vm) {
-    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BOOL, FOREIGN_END)
+    const VKSK_RuntimeForeign *shadow = wrenGetSlotForeign(vm, 0);
+    vk2dShadowEnvironmentObjectSetStatus(gShadowEnvironment, shadow->shadow.shadowObject, wrenGetSlotBool(vm, 1));
 }
 
 void vksk_RuntimeShadowEnabledGet(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
-    // TODO: This
+    const VKSK_RuntimeForeign *shadow = wrenGetSlotForeign(vm, 0);
+    wrenSetSlotBool(vm, 0, vk2dShadowEnvironmentObjectGetStatus(gShadowEnvironment, shadow->shadow.shadowObject));
 }

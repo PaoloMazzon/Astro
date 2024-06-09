@@ -74,6 +74,10 @@ void vksk_RuntimeLightingFlushVBO(WrenVM *vm);
 
 void vksk_RuntimeLightSourcePositionSet(WrenVM *vm);
 void vksk_RuntimeLightSourcePositionGet(WrenVM *vm);
+void vksk_RuntimeLightSourceXGet(WrenVM *vm);
+void vksk_RuntimeLightSourceXSet(WrenVM *vm);
+void vksk_RuntimeLightSourceYGet(WrenVM *vm);
+void vksk_RuntimeLightSourceYSet(WrenVM *vm);
 void vksk_RuntimeLightSourceRotationSet(WrenVM *vm);
 void vksk_RuntimeLightSourceRotationGet(WrenVM *vm);
 void vksk_RuntimeLightSourceOriginXSet(WrenVM *vm);
