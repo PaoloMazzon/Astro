@@ -46,6 +46,12 @@ class Game is Level {
         // Center the game camera on the player initially
         camera.x = player.x - (game_width / 2)
         camera.y = player.y - (game_height / 2)
+
+        // Setup shadows
+        Renderer.setup_lighting(game_width, game_height, game_width, game_height)
+        var light = Lighting.add_light(100, 100, 0, 0, 0, Assets.tex_light)
+        var shadow = Lighting.add_shadow([[20 * 8, 13 * 8, 20 * 8, 15 * 8], [20 * 8, 15 * 8, 30 * 8, 15 * 8], [20 * 8, 13 * 8, 30 * 8, 13 * 8]])
+        Lighting.flush_vbo()
     }
 
     pre_frame() {
@@ -65,6 +71,11 @@ class Game is Level {
 
         // Update all entities
         super.update()
+
+        // Draw shadows
+        Renderer.colour_mod = [0, 0, 0, 1]
+        Renderer.draw_fov(_player_entity.x, _player_entity.y)
+        Renderer.colour_mod = [1, 1, 1, 1]
 
         // Draw UI
         Renderer.lock_cameras(ui_camera)

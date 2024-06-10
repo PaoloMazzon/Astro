@@ -18,21 +18,71 @@ static JUFont gDefaultFont;
 static VK2DTexture gDefaultFontTexture;
 static VK2DTexture gShadowMapTexture = NULL; // Lighting buffer
 static VK2DCameraIndex gShadowCamera = -1;   // For drawing shadows
+
+// For shadows
 VK2DShadowEnvironment gShadowEnvironment;    // For lighting
+static _vksk_LightSource *gLightSources;
+static int gLightSourcesCount = 0;
 
 // For adding lights to the lighting setup
-int _vksk_RendererAddLightSource(float x, float y, float roatation, float originX, float originY, VK2DTexture tex) {
-    // TODO: This
-    return -1;
+int _vksk_RendererAddLightSource(float x, float y, float rotation, float originX, float originY, VK2DTexture tex) {
+    int index = -1;
+    const int extension = 10;
+
+    // Search for available index
+    for (int i = 0; i < gLightSourcesCount && index == -1; i++) {
+        if (gLightSources[i].enabled == false)
+            index = i;
+    }
+
+    // Extend list if no available slot
+    if (index == -1) {
+        void *newMem = realloc(gLightSources, sizeof(_vksk_LightSource) * (gLightSourcesCount + extension));
+
+        if (newMem != NULL) {
+            gLightSources = newMem;
+            for (int i = gLightSourcesCount; i < gLightSourcesCount + extension; i++)
+                gLightSources[i].enabled = false;
+
+            index = gLightSourcesCount;
+            gLightSourcesCount += 10;
+        } else {
+            vksk_Error(true, "Out of memory");
+        }
+    }
+
+    gLightSources[index].enabled = true;
+    gLightSources[index].x = x;
+    gLightSources[index].y = y;
+    gLightSources[index].rotation = rotation;
+    gLightSources[index].originX = originX;
+    gLightSources[index].originY = originY;
+    gLightSources[index].tex = tex;
+
+    return index;
 }
 
 _vksk_LightSource *_vkskRendererGetLightSource(int index) {
-    // TODO: This
-    return NULL;
+    if (index < gLightSourcesCount) {
+        return &gLightSources[index];
+    } else {
+        vksk_Error(true, "Invalid light source");
+        return NULL;
+    }
 }
 
 void _vksk_RendererRemoveLightSource(int index) {
-    // TODO: This
+    if (index < gLightSourcesCount) {
+        gLightSources[index].enabled = false;
+    } else {
+        vksk_Error(true, "Invalid light source");
+    }
+}
+
+void _vksk_RendererResetLights() {
+    gLightSourcesCount = 0;
+    free(gLightSources);
+    gLightSources = NULL;
 }
 
 // Updates shader data
@@ -696,5 +746,8 @@ void vksk_RuntimeRendererDrawFOV(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
     const float x = wrenGetSlotDouble(vm, 1);
     const float y = wrenGetSlotDouble(vm, 2);
-    // TODO: This
+    vec4 c;
+    vec2 l = {x, y};
+    vk2dRendererGetColourMod(c);
+    vk2dRendererDrawShadows(gShadowEnvironment, c, l);
 }

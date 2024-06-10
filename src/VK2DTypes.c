@@ -11,8 +11,9 @@
 
 // From RendererBindings.c
 extern VK2DShadowEnvironment gShadowEnvironment;
-int _vksk_RendererAddLightSource(float x, float y, float roatation, float originX, float originY, VK2DTexture tex);
+int _vksk_RendererAddLightSource(float x, float y, float rotation, float originX, float originY, VK2DTexture tex);
 _vksk_LightSource *_vkskRendererGetLightSource(int index);
+void _vksk_RendererResetLights();
 void _vksk_RendererRemoveLightSource(int index);
 
 /*************** Texture ***************/
@@ -527,7 +528,7 @@ void vksk_RuntimeLightingAddShadow(WrenVM *vm) {
     bool error = false;
     wrenEnsureSlots(vm, 4);
 
-    vec4 *coordinates = malloc(edgeCount * sizeof(coordinates));
+    vec4 *coordinates = malloc(edgeCount * sizeof(vec4));
 
     if (coordinates != NULL) {
         // Iterate over the edges
@@ -604,6 +605,7 @@ void vksk_RuntimeLightingReset(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
     vk2dRendererWait();
     vk2dShadowEnvironmentResetEdges(gShadowEnvironment);
+    _vksk_RendererResetLights();
 }
 
 void vksk_RuntimeLightingFlushVBO(WrenVM *vm) {

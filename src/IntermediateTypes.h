@@ -49,6 +49,7 @@ typedef struct _vksk_LightSource {
     float originX;
     float originY;
     VK2DTexture tex;
+    bool enabled;
 } _vksk_LightSource;
 
 // VK2D cameras in Wren are both index and spec because there is no access to the default camera
