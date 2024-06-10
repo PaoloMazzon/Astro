@@ -7,14 +7,12 @@ parent: API Documentation
 ## Renderer
 The `Renderer` class contains methods that are used in drawing and managing the display.
 
- + [draw_circle()](#draw_circle)
- + [draw_texture()](#draw_texture)
- + [draw_texture_part()](#draw_texture_part)
  + [config](#config)
  + [target](#target)
  + [blend_mode](#blend_mode)
  + [colour_mod](#colour_mod)
  + [shader](#shader)
+ + [setup_lighting()](#setup_lighting)
  + [set_window_size()](#set_window_size)
  + [window_width](#window_width)
  + [window_height](#window_height)
@@ -25,6 +23,9 @@ The `Renderer` class contains methods that are used in drawing and managing the 
  + [unlock_cameras()](#unlock_cameras)
  + [clear()](#clear)
  + [clear_blank()](#clear_blank)
+ + [draw_circle()](#draw_circle)
+ + [draw_texture()](#draw_texture)
+ + [draw_texture_part()](#draw_texture_part)
  + [draw_rectangle()](#draw_rectangle)
  + [draw_rectangle_outline()](#draw_rectangle_outline)
  + [draw_circle_outline()](#draw_circle_outline)
@@ -38,6 +39,8 @@ The `Renderer` class contains methods that are used in drawing and managing the 
  + [draw_sprite()](#draw_sprite)
  + [draw_polygon()](#draw_polygon)
  + [draw_model()](#draw_model)
+ + [draw_fov()](#draw_fov)
+ + [draw_lighting()](#draw_lighting)
  
 As well as the above methods, the renderer also contains a number of values that some of its
 methods expect as parameters:
@@ -204,6 +207,22 @@ Parameters
  + `h -> Num` Height of the window.
 
 Sets the size of the window in pixels.
+
+## setup_lighting
+`static setup_lighting(internal_width, internal_height, drawn_width, drawn_height)`
+
+Parameters
+ + `internal_width -> Num` Internal width the shadows will be drawn at.
+ + `internal_height -> Num` Internal height the shadows will be drawn at.
+ + `drawn_width -> Num` Width the shadows must be drawn at when put to the screen.
+ + `drawn_height -> Num` Height the shadows must be drawn at when put to the screen.
+
+Setups the lighting subsystem. Most of the time you would want the internal/drawn to be
+identical but you may specify smaller ones for performance reasons. The internal width/height
+are the resolution of the internal lighting surface that will be made and the drawn width/height
+are their size when they are drawn to the screen. For example, if your game is 800x600, you
+may want an internal resolution of 400x300 for performance reasons but you will still want it
+drawn at 800x600.
 
 ## window_width
 Read only: `static window_width`
@@ -425,3 +444,33 @@ Parameters
 
 Draws a model. See [Model](Model).
 
+## draw_fov
+`static draw_fov(x, y)`
+
+Parameters
+ + `x -> Num` X position of the light source.
+ + `y -> Num` Y position of the light source.
+
+This method draws shadows using the currently enabled shadows from [Lighting](#Lighting). This
+is a common technique for draw a player's field of view for effects like
+
+![fov](https://github.com/PaoloMazzon/Vulkan2D/raw/master/examples/shadows/example.gif)
+
+ 
+## draw_lighting
+`static draw_lighting(surface, game_camera, ui_camera)`
+ 
+Parameters
+ + `surface -> Surface or null` Surface to draw the resultant light graphics to or null for the screen.
+ + `camera -> Camera` Camera to use for shadow drawing, this would be your in-game camera.
+ + `ui_camera -> Camera` Camera used to draw the shadow surface to the screen, this would be the UI camera.
+
+This method draws all currently enabled lights and shadow objects blended together. This method internally
+changes the render target to the internal shadow blending surface, so you may provide your own surface to
+draw the results to or simply `null` for the screen. See the demo in [Github](https://github.com/PaoloMazzon/Astro/tree/master/examples/simple-game)
+for a complete example of this method. 
+
+{: .note }
+This method is currently only tested and supported for single-camera/non-splitscreen game. It may be possible
+to make it work in those scenarios but you are better off using [draw_fov](#draw_fov) and blending your own
+effect in those scenarios for now.
