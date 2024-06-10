@@ -5,7 +5,7 @@
 #include "wren.h"
 
 void _vksk_RendererBindingsInit(void *textureData, int size);
-void _vksk_RendererBindingsQuit();
+void _vksk_RendererBindingsQuit(WrenVM *vm);
 void vksk_RuntimeRendererGetWindowWidth(WrenVM *vm);
 void vksk_RuntimeRendererGetWindowHeight(WrenVM *vm);
 void vksk_RuntimeRendererSetWindowSize(WrenVM *vm);
@@ -47,5 +47,5 @@ void vksk_RuntimeRendererDrawModelExt(WrenVM *vm);
 void vksk_RuntimeRendererDrawPolygon(WrenVM *vm);
 void vksk_RuntimeRendererDrawPolygonExt(WrenVM *vm);
 void vksk_RuntimeRendererSetupLighting(WrenVM *vm);
-void vksk_RuntimeRendererDrawLighting(WrenVM *vm);
+void vksk_RuntimeRendererBakeLighting(WrenVM *vm);
 void vksk_RuntimeRendererDrawFOV(WrenVM *vm);

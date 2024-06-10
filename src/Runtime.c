@@ -424,7 +424,7 @@ void vksk_Start() {
     double finalTime = juTime();
 	vksk_Log("Cleanup...");
 	vk2dRendererWait();
-    _vksk_RendererBindingsQuit();
+    _vksk_RendererBindingsQuit(vm);
 	_vksk_FinalizeDebug();
 	wrenReleaseHandle(vm, assetsHandle);
 	wrenCollectGarbage(vm);

@@ -7,6 +7,7 @@
 #include "src/RendererBindings.h"
 #include "src/Validation.h"
 #include "src/IntermediateTypes.h"
+#include "src/Util.h"
 
 // Globals
 extern SDL_Window *gWindow; // -- from src/Runtime.c
@@ -16,13 +17,12 @@ static int gShaderSize = 0;
 static WrenHandle *gShaderBuffer;
 static JUFont gDefaultFont;
 static VK2DTexture gDefaultFontTexture;
-static VK2DTexture gShadowMapTexture = NULL; // Lighting buffer
-static VK2DCameraIndex gShadowCamera = -1;   // For drawing shadows
 
 // For shadows
 VK2DShadowEnvironment gShadowEnvironment;    // For lighting
 static _vksk_LightSource *gLightSources;
 static int gLightSourcesCount = 0;
+static WrenHandle *gShadowMapTextureHandle;
 
 // For adding lights to the lighting setup
 int _vksk_RendererAddLightSource(float x, float y, float rotation, float originX, float originY, VK2DTexture tex) {
@@ -57,6 +57,10 @@ int _vksk_RendererAddLightSource(float x, float y, float rotation, float originX
     gLightSources[index].rotation = rotation;
     gLightSources[index].originX = originX;
     gLightSources[index].originY = originY;
+    gLightSources[index].colour[0] = 1;
+    gLightSources[index].colour[1] = 1;
+    gLightSources[index].colour[2] = 1;
+    gLightSources[index].colour[3] = 1;
     gLightSources[index].tex = tex;
 
     return index;
@@ -216,15 +220,16 @@ static void _vksk_DrawTexture(WrenVM *vm, VK2DTexture tex, float x, float y, flo
 void _vksk_RendererBindingsInit(void *textureData, int size) {
     gDefaultFontTexture = vk2dTextureFrom(textureData, size);
     gDefaultFont = juFontLoadFromTexture(gDefaultFontTexture, 32, 128, 7 * 3, 8 * 3);
-    VK2DCameraSpec spec = {};
-    gShadowCamera = vk2dCameraCreate(spec);
-    vk2dCameraSetState(gShadowCamera, VK2D_CAMERA_STATE_DISABLED);
     gShadowEnvironment = vk2DShadowEnvironmentCreate();
 }
 
-void _vksk_RendererBindingsQuit() {
+void _vksk_RendererBindingsQuit(WrenVM *vm) {
     juFontFree(gDefaultFont);
-    vk2dTextureFree(gShadowMapTexture);
+
+    if (gShadowMapTextureHandle != NULL) {
+        wrenReleaseHandle(vm, gShadowMapTextureHandle);
+    }
+
     vk2DShadowEnvironmentFree(gShadowEnvironment);
 }
 
@@ -715,31 +720,64 @@ void vksk_RuntimeRendererDrawPolygonExt(WrenVM *vm) {
 }
 
 void vksk_RuntimeRendererSetupLighting(WrenVM *vm) {
-    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
     float internalWidth = wrenGetSlotDouble(vm, 1);
     float internalHeight = wrenGetSlotDouble(vm, 2);
-    float visibleWidth = wrenGetSlotDouble(vm, 3);
-    float visibleHeight = wrenGetSlotDouble(vm, 4);
-    vk2dTextureFree(gShadowMapTexture);
-    gShadowMapTexture = vk2dTextureCreate(internalWidth, internalHeight);
-    if (gShadowMapTexture == NULL) {
+
+    // Swap handles
+    if (gShadowMapTextureHandle != NULL) {
+        wrenReleaseHandle(vm, gShadowMapTextureHandle);
+    }
+
+    VKSK_RuntimeForeign *tex = vksk_NewForeignClass(vm, "lib/Drawing", "Texture", FOREIGN_TEXTURE);
+    gShadowMapTextureHandle = wrenGetSlotHandle(vm, 0);
+
+    tex->texture.tex = vk2dTextureCreate(internalWidth, internalHeight);
+    if (tex->texture.tex == NULL) {
         vksk_Error(true, "Failed to create shadow map internal texture of size (%f/%f)", internalWidth, internalHeight);
     }
-    VK2DCameraSpec spec = {
-            .type = VK2D_CAMERA_TYPE_DEFAULT,
-            .zoom = 1,
-            .w = visibleWidth,
-            .h = visibleHeight,
-            .wOnScreen = internalWidth,
-            .hOnScreen = internalHeight
-    };
-    vk2dCameraUpdate(gShadowCamera, spec);
 }
 
-void vksk_RuntimeRendererDrawLighting(WrenVM *vm) {
-    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_SURFACE | FOREIGN_NULL, FOREIGN_END)
+void vksk_RuntimeRendererBakeLighting(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
     const VKSK_RuntimeForeign *surface = wrenGetSlotType(vm, 1) == WREN_TYPE_NULL ? NULL : wrenGetSlotForeign(vm, 1);
-    // TODO: This
+    for (int i = 0; i < gLightSourcesCount; i++) {
+        if (!gLightSources[i].enabled)
+            continue;
+
+        // Prepare light texture
+        wrenSetSlotHandle(vm, 0, gShadowMapTextureHandle);
+        VKSK_RuntimeForeign *tex = wrenGetSlotForeign(vm, 0);
+        vk2dRendererSetTarget(tex->texture.tex);
+        vk2dRendererEmpty();
+
+        // Draw light orb
+        vk2dRendererSetColourMod(gLightSources[i].colour);
+        vk2dRendererDrawTexture(
+            gLightSources[i].tex,
+            gLightSources[i].x - gLightSources[i].originX,
+            gLightSources[i].y - gLightSources[i].originY,
+            gLightSources[i].scaleX,
+            gLightSources[i].scaleY,
+            gLightSources[i].rotation,
+            gLightSources[i].originX,
+            gLightSources[i].originY,
+            0,
+            0,
+            vk2dTextureWidth(gLightSources[i].tex),
+            vk2dTextureHeight(gLightSources[i].tex)
+        );
+        vk2dRendererSetColourMod(VK2D_DEFAULT_COLOUR_MOD);
+
+        // Subtract shadows from it
+        vk2dRendererSetBlendMode(VK2D_BLEND_MODE_SUBTRACT);
+        vec2 pos = {gLightSources[i].x, gLightSources[i].y};
+        vk2dRendererDrawShadows(gShadowEnvironment, VK2D_BLACK, pos);
+        vk2dRendererSetBlendMode(VK2D_BLEND_MODE_BLEND);
+    }
+
+    vk2dRendererSetTarget(VK2D_TARGET_SCREEN);
+    vk2dRendererUnlockCameras();
 }
 
 void vksk_RuntimeRendererDrawFOV(WrenVM *vm) {

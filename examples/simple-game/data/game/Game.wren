@@ -48,7 +48,7 @@ class Game is Level {
         camera.y = player.y - (game_height / 2)
 
         // Setup shadows
-        Renderer.setup_lighting(game_width, game_height, game_width, game_height)
+        Renderer.setup_lighting(game_width, game_height)
         var light = Lighting.add_light(100, 100, 0, 0, 0, Assets.tex_light)
         var shadow = Lighting.add_shadow([[20 * 8, 13 * 8, 20 * 8, 15 * 8], [20 * 8, 15 * 8, 30 * 8, 15 * 8], [20 * 8, 13 * 8, 30 * 8, 13 * 8]])
         Lighting.flush_vbo()

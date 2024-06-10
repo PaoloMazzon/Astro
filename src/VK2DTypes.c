@@ -729,11 +729,86 @@ void vksk_RuntimeLightSourceTextureSet(WrenVM *vm) {
     light->tex = tex->texture.tex;
 }
 
+void vksk_RuntimeLightSourceColourSet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_LIST, FOREIGN_END)
+    const int listSlot = 1;
+    const int rSlot = 2;
+    const int gSlot = 3;
+    const int bSlot = 4;
+    const int aSlot = 5;
+    VKSK_RuntimeForeign *lightSource = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightSource->lightSourceIndex);
+    wrenEnsureSlots(vm, 6);
+
+    if (wrenGetListCount(vm, listSlot) == 4) {
+        wrenGetListElement(vm, listSlot, 0, rSlot);
+        wrenGetListElement(vm, listSlot, 1, gSlot);
+        wrenGetListElement(vm, listSlot, 2, bSlot);
+        wrenGetListElement(vm, listSlot, 3, aSlot);
+        if (wrenGetSlotType(vm, rSlot) == WREN_TYPE_NUM && wrenGetSlotType(vm, gSlot) == WREN_TYPE_NUM
+         && wrenGetSlotType(vm, bSlot) == WREN_TYPE_NUM && wrenGetSlotType(vm, aSlot) == WREN_TYPE_NUM) {
+            light->colour[0] = wrenGetSlotDouble(vm, rSlot);
+            light->colour[1] = wrenGetSlotDouble(vm, gSlot);
+            light->colour[2] = wrenGetSlotDouble(vm, bSlot);
+            light->colour[3] = wrenGetSlotDouble(vm, aSlot);
+        } else {
+            vksk_Error(false, "Element in colour list of wrong type, expected num");
+        }
+    } else {
+        vksk_Error(false, "Incorrect number of elements in colour list");
+    }
+}
+
+void vksk_RuntimeLightSourceScaleXGet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    VKSK_RuntimeForeign *lightSource = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightSource->lightSourceIndex);
+    wrenSetSlotDouble(vm, 0, light->scaleX);
+}
+
+void vksk_RuntimeLightSourceScaleXSet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+    VKSK_RuntimeForeign *lightSource = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightSource->lightSourceIndex);
+    light->scaleX = wrenGetSlotDouble(vm, 1);
+}
+
+void vksk_RuntimeLightSourceScaleYGet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    VKSK_RuntimeForeign *lightSource = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightSource->lightSourceIndex);
+    wrenSetSlotDouble(vm, 0, light->scaleY);
+}
+
+void vksk_RuntimeLightSourceScaleYSet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+    VKSK_RuntimeForeign *lightSource = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightSource->lightSourceIndex);
+    light->scaleY = wrenGetSlotDouble(vm, 1);
+}
+
+void vksk_RuntimeLightSourceColourGet(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
+    wrenEnsureSlots(vm, 2);
+    const int listSlot = 0;
+    const int elementSlot = 1;
+    const VKSK_RuntimeForeign *lightIndex = wrenGetSlotForeign(vm, 0);
+    _vksk_LightSource *light = _vkskRendererGetLightSource(lightIndex->lightSourceIndex);
+    wrenSetSlotNewList(vm, listSlot);
+    wrenSetSlotDouble(vm, elementSlot, light->colour[0]);
+    wrenInsertInList(vm, listSlot, -1, elementSlot);
+    wrenSetSlotDouble(vm, elementSlot, light->colour[1]);
+    wrenInsertInList(vm, listSlot, -1, elementSlot);
+    wrenSetSlotDouble(vm, elementSlot, light->colour[2]);
+    wrenInsertInList(vm, listSlot, -1, elementSlot);
+    wrenSetSlotDouble(vm, elementSlot, light->colour[3]);
+    wrenInsertInList(vm, listSlot, -1, elementSlot);
+}
+
 void vksk_RuntimeLightSourceDelete(WrenVM *vm) {
     VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
     VKSK_RuntimeForeign *lightIndex = wrenGetSlotForeign(vm, 0);
     _vksk_RendererRemoveLightSource(lightIndex->lightSourceIndex);
-
 }
 
 void vksk_RuntimeShadowPositionSet(WrenVM *vm) {

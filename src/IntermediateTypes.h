@@ -48,7 +48,10 @@ typedef struct _vksk_LightSource {
     float rotation;
     float originX;
     float originY;
+    float scaleX;
+    float scaleY;
     VK2DTexture tex;
+    vec4 colour;
     bool enabled;
 } _vksk_LightSource;
 

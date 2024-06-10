@@ -113,7 +113,7 @@ class Renderer {
     foreign static clear_blank()
 
     // Sets the internal lighting resolution
-    foreign static setup_lighting(internal_width, internal_height, visible_width, visible_height)
+    foreign static setup_lighting(internal_width, internal_height)
 
     // Draws a rectangle with the current render colour
     foreign static draw_rectangle(x, y, w, h, rotation, x_origin, y_origin)
@@ -157,8 +157,8 @@ class Renderer {
     // Draws a polygon in detail
     foreign static draw_polygon(polygon, x, y, x_scale, y_scale, rotation, origin_x, origin_y, outline, line_width)
 
-    // Draws lighting
-    foreign static draw_lighting(target)
+    // Returns a texture with the lighting in question
+    foreign static bake_lighting()
 
     // Draws FOV (almost lighting)
     foreign static draw_fov(x, y)

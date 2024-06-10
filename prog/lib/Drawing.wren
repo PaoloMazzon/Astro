@@ -56,7 +56,13 @@ foreign class LightSource {
     foreign origin_x
     foreign origin_y=(origin_y)
     foreign origin_y
+    foreign scale_x=(scale_x)
+    foreign scale_x
+    foreign scale_y=(scale_y)
+    foreign scale_y
     foreign texture=(texture)
+    foreign colour
+    foreign colour=(colour)
     foreign delete()
 }
 
