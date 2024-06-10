@@ -1,4 +1,5 @@
 import "Player" for Player
+import "random" for Random
 
 class Game is Level {
     // Random getters
@@ -15,6 +16,7 @@ class Game is Level {
 
     create() {
         super.create()
+        _rng = Random.new()
         
         // Load the level from tiled
         var tilesets = load("data/level0.tmj")
@@ -48,10 +50,27 @@ class Game is Level {
         camera.y = player.y - (game_height / 2)
 
         // Setup shadows
-        Renderer.setup_lighting(game_width, game_height)
-        var light = Lighting.add_light(100, 100, 0, 0, 0, Assets.tex_light)
-        var shadow = Lighting.add_shadow([[20 * 8, 13 * 8, 20 * 8, 15 * 8], [20 * 8, 15 * 8, 30 * 8, 15 * 8], [20 * 8, 13 * 8, 30 * 8, 13 * 8]])
+        Renderer.setup_lighting(game_width, game_height, game_width, game_height)
+        _lights = []
+        _lights.add(Lighting.add_light(17 * 8 + 4, 18 * 8 + 4, 0, Assets.tex_light.width / 2, Assets.tex_light.height / 2, Assets.tex_light))
+        _lights.add(Lighting.add_light(3 * 8 + 4, 19 * 8 + 4, 0, Assets.tex_light.width / 2, Assets.tex_light.height / 2, Assets.tex_light))
+        _lights.add(Lighting.add_light(15 * 8 + 4, 5 * 8 + 4, 0, Assets.tex_light.width / 2, Assets.tex_light.height / 2, Assets.tex_light))
+        for (light in _lights) {
+            light.colour = [1, 1, 1, 0.7]
+        }
+        Lighting.add_shadow([
+            [20 * 8, 13 * 8, 20 * 8, 15 * 8], 
+            [20 * 8, 15 * 8, 30 * 8, 15 * 8], 
+            [20 * 8, 13 * 8, 30 * 8, 13 * 8],
+            [16 * 8, 21 * 8, 25 * 8, 21 * 8],
+            [0 * 8, 22 * 8, 6 * 8, 22 * 8],
+            [3 * 8, 8 * 8, 17 * 8, 8 * 8]
+        ])
+        
+        // Player shadow
+        _player_shadow = Lighting.add_shadow([[1, 1, 8, 1], [8, 1, 8, 8], [8, 8, 1, 8], [1, 8, 1, 1]])
         Lighting.flush_vbo()
+        _flicker_timer = 0
     }
 
     pre_frame() {
@@ -73,9 +92,19 @@ class Game is Level {
         super.update()
 
         // Draw shadows
-        Renderer.colour_mod = [0, 0, 0, 1]
-        Renderer.draw_fov(_player_entity.x, _player_entity.y)
-        Renderer.colour_mod = [1, 1, 1, 1]
+        _flicker_timer = _flicker_timer + 1
+        if (_flicker_timer >= 8) {
+            for (light in _lights) {
+                var scale = _rng.float(0.8, 1.2)
+                light.scale_x = scale
+                light.scale_y = scale
+                light.origin_x = (Assets.tex_light.width * scale) / 2
+                light.origin_y = (Assets.tex_light.height * scale) / 2
+            }
+            _flicker_timer = 0
+        }
+        _player_shadow.position = [_player_entity.sprite.scale_x == 1 ? _player_entity.x : _player_entity.x - 1, _player_entity.y]
+        Renderer.draw_lighting(game_surface, camera, ui_camera)
 
         // Draw UI
         Renderer.lock_cameras(ui_camera)

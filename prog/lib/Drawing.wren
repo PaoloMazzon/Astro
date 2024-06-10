@@ -50,6 +50,10 @@ foreign class Shadow {
 foreign class LightSource {
     foreign position=(pos)
     foreign position
+    foreign x=(x)
+    foreign x
+    foreign y=(y)
+    foreign y
     foreign rotation=(rotation)
     foreign rotation
     foreign origin_x=(origin_x)
