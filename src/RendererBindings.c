@@ -100,7 +100,7 @@ void _vksk_RendererUpdateShaderBinding(VK2DShader shader, WrenHandle *buffer) {
 }
 
 // Macro for not letting user draw outside of frame
-#define CHECK_VALID_DRAW() if (gOutsideFrame) {vksk_Error(true, "Drawing may not be performed in Level.pre_frame()");return;}
+#define CHECK_VALID_DRAW() if (gOutsideFrame) {vksk_Error(true, "Drawing may not be performed in Level.pre_frame() or Level.destroy()");return;}
 
 VK2DMSAA convertToMSAAEnum(double wrenVal) {
 	if (wrenVal == 2)
@@ -726,7 +726,8 @@ void vksk_RuntimeRendererSetupLighting(WrenVM *vm) {
     gDrawnWidth = wrenGetSlotDouble(vm, 3);
     gDrawnHeight = wrenGetSlotDouble(vm, 4);
 
-    free(gShadowMapTexture);
+    vk2dRendererWait();
+    vk2dTextureFree(gShadowMapTexture);
     gShadowMapTexture = vk2dTextureCreate(internalWidth, internalHeight);
     if (gShadowMapTexture == NULL) {
         vksk_Error(true, "Failed to create shadow map internal texture of size (%f/%f)", internalWidth, internalHeight);

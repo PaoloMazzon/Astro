@@ -19,6 +19,7 @@ class Game is Level {
         _rng = Random.new()
         
         // Load the level from tiled
+        Renderer.use_cameras_on_surfaces = false
         var tilesets = load("data/level0.tmj")
         _collision_tileset = tilesets["collisions"] // for player collisions
         _ladder_tileset = tilesets["ladder"] // so the player can climb ladders
@@ -68,7 +69,7 @@ class Game is Level {
         ])
         
         // Player shadow
-        _player_shadow = Lighting.add_shadow([[1, 1, 8, 1], [8, 1, 8, 8], [8, 8, 1, 8], [1, 8, 1, 1]])
+        _player_shadow = Lighting.add_shadow([[2, 2, 7, 2], [7, 2, 7, 7], [7, 7, 2, 7], [2, 7, 2, 2]])
         Lighting.flush_vbo()
         _flicker_timer = 0
     }
@@ -88,9 +89,6 @@ class Game is Level {
             Renderer.draw_texture(tileset, 0, 0)
         }
 
-        // Update all entities
-        super.update()
-
         // Draw shadows
         _flicker_timer = _flicker_timer + 1
         if (_flicker_timer >= 8) {
@@ -105,6 +103,10 @@ class Game is Level {
         }
         _player_shadow.position = [_player_entity.sprite.scale_x == 1 ? _player_entity.x : _player_entity.x - 1, _player_entity.y]
         Renderer.draw_lighting(game_surface, camera, ui_camera)
+
+        // Update all entities
+        Renderer.lock_cameras(camera)
+        super.update()
 
         // Draw UI
         Renderer.lock_cameras(ui_camera)
@@ -136,5 +138,6 @@ class Game is Level {
 
     destroy() {
         super.destroy()
+        Lighting.reset()
     }
 }

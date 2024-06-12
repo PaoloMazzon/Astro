@@ -348,6 +348,7 @@ void vksk_Start() {
 		}
 
 		// Run the pre-frame method
+		wrenEnsureSlots(vm, 1);
 		wrenSetSlotHandle(vm, 0, gCurrentLevel);
 		gOutsideFrame = true;
 		wrenCall(vm, preFrameHandle);
@@ -367,7 +368,10 @@ void vksk_Start() {
 
 		// Run the level creation/destruction functions if need be
 		if (gQuit || gNextLevel != NULL) {
+            wrenEnsureSlots(vm, 1);
 			wrenSetSlotHandle(vm, 0, gCurrentLevel);
+            vk2dRendererEndFrame();
+            gOutsideFrame = true;
 			wrenCall(vm, destroyHandle);
 			if (gEngineConfig.gcBetweenLevels)
 				wrenCollectGarbage(vm);
@@ -375,6 +379,9 @@ void vksk_Start() {
 			if (gNextLevel != NULL) {
 				gCurrentLevel = gNextLevel;
 				gNextLevel = NULL;
+                vk2dRendererStartFrame(VK2D_BLACK);
+                gOutsideFrame = false;
+                wrenEnsureSlots(vm, 1);
 				wrenSetSlotHandle(vm, 0, gCurrentLevel);
 				wrenCall(vm, createHandle);
 			}
