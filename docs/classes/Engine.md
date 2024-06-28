@@ -23,6 +23,7 @@ aspects of game development.
  + [using_pak](#using_pak)
  + [profile_error_estimate](#profile_error_estimate)
  + [profile_fn](#profile_fn)
+ + [delta_max](#delta_max)
  
 ### switch_level
 `static switch_level(level)`
@@ -170,3 +171,11 @@ other results and because this is being executed in a VM there is a little bit o
 associated with all of the results. Do not take these numbers as law, they are a decent
 estimate that is useful to compare algorithms but it is not a completely reliable software
 testing tool.
+
+### delta_max
+Write Only: `static delta_max`
+
+Variable Type: `Num`
+
+By default this is zero, meaning there is no cap on the delta time. If set to something other than
+0 [delta](#delta) will not return anything higher than this value.

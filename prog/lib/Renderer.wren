@@ -162,6 +162,8 @@ class Renderer {
 
     // Sets the internal lighting resolution
     foreign static setup_lighting(internal_width, internal_height, drawn_width, drawn_height)
+
+    foreign static hide_cursor=(s)
 }
 
 // Cameras that allow you to control what is displayed on screen

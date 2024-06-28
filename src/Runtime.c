@@ -52,6 +52,7 @@ static double gAverageTimeStep = 0;
 static double gTotalTimeSteps = 0;
 static double gTimeStepDistributions = 0;
 static double gAverageTimeStepDistribution = 0;
+static double gDeltaCap = 0;
 
 static void _vksk_SetWindowIcon(WrenVM *vm) {
 	if (wrenHasVariable(vm, "init", "window_icon")) {
@@ -472,7 +473,12 @@ void vksk_RuntimeCapFPS(WrenVM *vm) {
 }
 
 void vksk_RuntimeDelta(WrenVM *vm) {
-	wrenSetSlotDouble(vm, 0, juDelta());
+    double delta = juDelta();
+    if (gDeltaCap != 0) {
+        wrenSetSlotDouble(vm, 0, delta > gDeltaCap ? gDeltaCap : delta);
+    } else {
+        wrenSetSlotDouble(vm, 0, delta);
+    }
 }
 
 void vksk_RuntimeTime(WrenVM *vm) {
@@ -574,4 +580,9 @@ void vksk_RuntimeImportExists(WrenVM *vm) {
 	strncat(fname, name, 200 - 1 - 5 - 5);
 	strcat(fname, ext);
 	wrenSetSlotBool(vm, 0, _vk2dFileExists(fname));
+}
+
+void vksk_RuntimeSetDeltaMax(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_NUM, FOREIGN_END)
+    gDeltaCap = wrenGetSlotDouble(vm, 1);
 }

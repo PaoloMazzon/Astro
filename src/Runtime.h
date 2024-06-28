@@ -76,3 +76,6 @@ void vksk_RuntimeUsingPak(WrenVM *vm);
 
 // Returns true if the module would be found if an import was attempted
 void vksk_RuntimeImportExists(WrenVM *vm);
+
+// Sets the cap on delta time
+void vksk_RuntimeSetDeltaMax(WrenVM *vm);

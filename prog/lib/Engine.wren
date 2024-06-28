@@ -75,6 +75,9 @@ class Engine {
 
     // For internal use
     foreign static import_exists(string)
+
+    // Sets the max delta returned by Engine.delta
+    foreign static delta_max=(s)
 }
 
 // Entity in the game world, child classes must make their own constructor

@@ -1445,8 +1445,8 @@ JUSound juSoundLoad(const char *filename) {
 JUPlayingSound juSoundPlay(JUSound sound, bool loop, float volumeLeft, float volumeRight) {
 	sound->soundInfo = cs_make_def(&sound->sound);
 	sound->soundInfo.looped = loop;
-	sound->soundInfo.volume_left = 0.5;
-	sound->soundInfo.volume_right = 0.5;
+	sound->soundInfo.volume_left = 0.5 * volumeLeft;
+	sound->soundInfo.volume_right = 0.5 * volumeRight;
 	JUPlayingSound new = {cs_play_sound(gSoundContext, sound->soundInfo)};
 	return new;
 }

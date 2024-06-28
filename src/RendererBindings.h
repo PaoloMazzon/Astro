@@ -49,3 +49,4 @@ void vksk_RuntimeRendererDrawPolygonExt(WrenVM *vm);
 void vksk_RuntimeRendererSetupLighting(WrenVM *vm);
 void vksk_RuntimeRendererDrawLighting(WrenVM *vm);
 void vksk_RuntimeRendererDrawFOV(WrenVM *vm);
+void vksk_RuntimeRendererHideCursor(WrenVM *vm);

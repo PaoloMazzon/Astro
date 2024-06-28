@@ -800,3 +800,8 @@ void vksk_RuntimeRendererDrawFOV(WrenVM *vm) {
     vk2dRendererGetColourMod(c);
     vk2dRendererDrawShadows(gShadowEnvironment, c, l);
 }
+
+void vksk_RuntimeRendererHideCursor(WrenVM *vm) {
+    VALIDATE_FOREIGN_ARGS(vm, FOREIGN_BOOL, FOREIGN_END)
+    SDL_ShowCursor(wrenGetSlotBool(vm, 1) ? SDL_ENABLE : SDL_DISABLE);
+}

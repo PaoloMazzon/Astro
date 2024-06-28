@@ -177,6 +177,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
         BIND_METHOD("Renderer", true, "draw_lighting(_,_,_)", vksk_RuntimeRendererDrawLighting)
         BIND_METHOD("Renderer", true, "draw_fov(_,_)", vksk_RuntimeRendererDrawFOV)
         BIND_METHOD("Renderer", true, "setup_lighting(_,_,_,_)", vksk_RuntimeRendererSetupLighting)
+        BIND_METHOD("Renderer", true, "hide_cursor=(_)", vksk_RuntimeRendererHideCursor)
         BIND_METHOD("Camera", false, "type", vksk_RuntimeVK2DCameraGetType)
 		BIND_METHOD("Camera", false, "type=(_)", vksk_RuntimeVK2DCameraSetType)
 		BIND_METHOD("Camera", false, "x", vksk_RuntimeVK2DCameraGetX)
@@ -225,6 +226,7 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Engine", true, "argv", vksk_RuntimeArgv)
 		BIND_METHOD("Engine", true, "using_pak", vksk_RuntimeUsingPak)
 		BIND_METHOD("Engine", true, "import_exists(_)", vksk_RuntimeImportExists)
+		BIND_METHOD("Engine", true, "delta_max=(_)", vksk_RuntimeSetDeltaMax)
 	} else if (strcmp(module, "lib/Drawing") == 0) {
 		BIND_METHOD("Texture", false, "width", vksk_RuntimeVK2DTextureWidth)
 		BIND_METHOD("Texture", false, "height", vksk_RuntimeVK2DTextureHeight)
