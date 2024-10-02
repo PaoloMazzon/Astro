@@ -204,7 +204,7 @@ void vksk_Start() {
 	config.loadModuleFn = &vksk_WrenLoadModule;
 	config.bindForeignMethodFn = &vksk_WrenBindForeignMethod;
 	config.bindForeignClassFn = &vksk_WrenBindForeignClass;
-	config.initialHeapSize = 1024 * 1024 * 100; // 100mb
+	config.initialHeapSize = 1024 * 1024 * 10; // 10mb
 	config.heapGrowthPercent = 25;
 	vm = wrenNewVM(&config);
 
@@ -259,10 +259,10 @@ void vksk_Start() {
 	);
 	VK2DStartupOptions options = {0};
 	options.enableDebug = false;
-	options.loadCustomShaders = false;
 	options.stdoutLogging = true;
 	options.quitOnError = true;
 	options.errorFile = "astroerror.txt";
+	options.vramPageSize = 1000000; // 1mb page size
 	vk2dRendererInit(gWindow, rendererConfig, &options);
 	juInit(gWindow, 0, 0);
 

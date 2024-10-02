@@ -91,8 +91,6 @@ static JUJobSystem gJobSystem;                           // Information for the 
 static JUECS gECS;                                       // Entity component system
 static uint32_t gStringBuffer[1000];                     // For UTF-8 decoding
 static int gStringBufferSize = 1000;                     // For UTF-8 decoding
-static VK2DDrawInstance gStringInstances[1000] = {0};    // For instancing
-static int gStringInstanceCount = 1000;                  // For instancing
 static  vec4 gColours[7];
 
 /********************** Static Functions **********************/
@@ -348,7 +346,7 @@ void juInit(SDL_Window *window, int jobChannels, int minimumThreads) {
 	SDL_VERSION(&wmInfo.version)
 	//SDL_GetWindowWMInfo(window, &wmInfo);
 	//HWND hwnd = wmInfo.info.win.window;
-	gSoundContext = cs_make_context(NULL, 41000, 1024 * 1024 * 10, 20, NULL);
+	gSoundContext = cs_make_context(NULL, 44100, 1024 * 1024 * 10, 100, NULL);
 	if (gSoundContext != NULL) {
 		cs_spawn_mix_thread(gSoundContext);
 	} else {
@@ -382,11 +380,6 @@ void juInit(SDL_Window *window, int jobChannels, int minimumThreads) {
 		pthread_mutex_init(&gJobSystem.queueAccess, &attr);
 		pthread_mutexattr_init(&attr);
 		pthread_mutex_init(&gECS.createEntityAccess, &attr);
-	}
-
-	// Give every instance an identity matrix
-	for (int i = 0; i < gStringInstanceCount; i++) {
-		vk2dInstanceSetFast(&gStringInstances[i], 0, 0, 0, 0, 0, 0, VK2D_DEFAULT_COLOUR_MOD);
 	}
 
 	// Delta and other timing
@@ -1016,11 +1009,6 @@ static void _juFontDrawInternal(JUFont font, float x, float y, float w, const ch
 	float startX = x;
 	bool justMadeNewline = false;
 	int len = utf8Decode((void*)string, gStringBuffer, gStringBufferSize);
-	if (len > gStringInstanceCount)
-		len = gStringInstanceCount;
-	int instance = 0;
-	vec4 colour;
-	vk2dRendererGetColourMod(colour);
 
 	// Loop through each character and render individually
 	for (int i = 0; i < len; i++) {
@@ -1038,25 +1026,11 @@ static void _juFontDrawInternal(JUFont font, float x, float y, float w, const ch
 
 			// Draw character (or not) and move the cursor forward
 			if (!(gStringBuffer[i] == ' ' && justMadeNewline)) {
-				if (c->drawn) {
-					gStringInstances[instance].pos[0] = x;
-					gStringInstances[instance].pos[1] = y + c->ykern;
-					gStringInstances[instance].texturePos[0] = c->x;
-					gStringInstances[instance].texturePos[1] = c->y;
-					gStringInstances[instance].texturePos[2] = c->w;
-					gStringInstances[instance].texturePos[3] = c->h;
-					gStringInstances[instance].colour[0] = colour[0];
-					gStringInstances[instance].colour[1] = colour[1];
-					gStringInstances[instance].colour[2] = colour[2];
-					gStringInstances[instance].colour[3] = colour[3];
-					instance++;
-				}
+				if (c->drawn)
+					vk2dRendererDrawTexture(font->bitmap, x, y + c->ykern, 1, 1, 0, 0, 0, c->x, c->y, c->w, c->h);
 				if (gStringBuffer[i] != '\n') x += c->w;
 			}
 		}
-	}
-	if (instance > 0) {
-		vk2dRendererDrawInstanced(font->bitmap, gStringInstances, instance);
 	}
 }
 
@@ -1065,15 +1039,13 @@ static void _juFontDrawInternalExt(JUFont font, float x, float y, float w, const
 	float startX = x;
 	bool justMadeNewline = false;
 	int len = utf8Decode((void*)string, gStringBuffer, gStringBufferSize);
-	if (len > gStringInstanceCount)
-		len = gStringInstanceCount;
 	int instance = 0;
 	float displacementX = 0;
 	float displacementY = 0;
 	float wave = 0;
 	float shake = 0;
-	vec4 colour;
-	vk2dRendererGetColourMod(colour);
+	vec4 colour, originalColour;
+	vk2dRendererGetColourMod(originalColour);
 	bool rainbow = false;
 
 	// Loop through each character and render individually
@@ -1110,34 +1082,20 @@ static void _juFontDrawInternalExt(JUFont font, float x, float y, float w, const
 						xoff += vk2dRandom(-1, 1) * shake;
 						yoff += vk2dRandom(-1, 1) * shake;
 					}
-
-					gStringInstances[instance].pos[0] = x + xoff;
-					gStringInstances[instance].pos[1] = y + c->ykern + yoff;
-					gStringInstances[instance].texturePos[0] = c->x;
-					gStringInstances[instance].texturePos[1] = c->y;
-					gStringInstances[instance].texturePos[2] = c->w;
-					gStringInstances[instance].texturePos[3] = c->h;
-
 					if (rainbow) {
-						gStringInstances[instance].colour[0] = gColours[instance % 7][0];
-						gStringInstances[instance].colour[1] = gColours[instance % 7][1];
-						gStringInstances[instance].colour[2] = gColours[instance % 7][2];
-						gStringInstances[instance].colour[3] = gColours[instance % 7][3];
+						vec4 tempColour = {gColours[instance % 7][0], gColours[instance % 7][1], gColours[instance % 7][2], gColours[instance % 7][3]};
+                        vk2dRendererSetColourMod(tempColour);
 					} else {
-						gStringInstances[instance].colour[0] = colour[0];
-						gStringInstances[instance].colour[1] = colour[1];
-						gStringInstances[instance].colour[2] = colour[2];
-						gStringInstances[instance].colour[3] = colour[3];
+						vk2dRendererSetColourMod(colour);
 					}
+                    vk2dRendererDrawTexture(font->bitmap, x + xoff, y + yoff + c->ykern, 1, 1, 0, 0, 0, c->x, c->y, c->w, c->h);
 					instance++;
 				}
 				if (gStringBuffer[i] != '\n') x += c->w;
 			}
 		}
 	}
-	if (instance > 0) {
-		vk2dRendererDrawInstanced(font->bitmap, gStringInstances, instance);
-	}
+	vk2dRendererSetColourMod(originalColour);
 }
 
 void juFontDraw(JUFont font, float x, float y, const char *fmt, ...) {
