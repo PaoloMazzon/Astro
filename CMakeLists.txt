@@ -3,7 +3,7 @@ project(Astro)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -ffast-math -funroll-loops")
 
-find_package(Vulkan)
+find_package(Vulkan REQUIRED)
 find_package(SDL2 REQUIRED)
 
 add_subdirectory("Packer")
@@ -22,7 +22,7 @@ endif()
 
 # Accounts for msys2/mingw64 compilers
 if (${CMAKE_C_COMPILER_ID} STREQUAL "GNU" AND WIN32)
-	set(SDL2_LIBRARIES mingw32 SDL2main SDL2)
+	set(SDL2_LIBRARIES mingw32 SDL2main SDL2 m)
 endif()
 
-target_link_libraries(${PROJECT_NAME} m ${SDL2_LIBRARIES} ${Vulkan_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} Vulkan::Vulkan)

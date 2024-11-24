@@ -19,3 +19,4 @@ vk2derror.log
 out/
 *.exe
 *.pak
+.vs/

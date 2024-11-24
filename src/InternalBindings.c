@@ -1,7 +1,11 @@
 /// \file InternalBindings.c
 /// \author Paolo Mazzon
 #include <stdio.h>
+#ifdef _MSC_VER 
+#include "src/windowsdirent.h"
+#else
 #include <dirent.h>
+#endif
 #include <sys/stat.h>
 #include <sys/types.h>
 

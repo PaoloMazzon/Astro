@@ -1,7 +1,11 @@
 /// \file Packer.c
 /// \author Paolo Mazzon
 #include <SDL2/SDL.h>
+#ifdef _MSC_VER 
+#include "src/windowsdirent.h"
+#else
 #include <dirent.h>
+#endif
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>

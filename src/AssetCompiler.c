@@ -1,6 +1,10 @@
 /// \file AssetCompiler.c
 /// \author Paolo Mazzon
+#ifdef _MSC_VER 
+#include "src/windowsdirent.h"
+#else
 #include <dirent.h>
+#endif
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>

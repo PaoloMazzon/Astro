@@ -257,6 +257,11 @@ void vksk_Start() {
 			windowHeight,
 			SDL_WINDOW_VULKAN | (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0)
 	);
+
+	if (gWindow == NULL) {
+		vksk_Error(true, "Failed to create Vulkan window, SDL error: %s", SDL_GetError()); 
+	}
+
 	VK2DStartupOptions options = {0};
 	options.enableDebug = false;
 	options.stdoutLogging = true;
