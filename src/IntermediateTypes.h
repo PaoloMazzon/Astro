@@ -9,6 +9,10 @@
 #include "src/ConfigFile.h"
 #include "src/cute_tiled.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Various Wren-types Astro cares about, can be bit-wised together - defined in Validation.c
 extern const uint64_t FOREIGN_END;
 extern const uint64_t FOREIGN_STRING;
@@ -145,3 +149,7 @@ typedef struct VKSK_RuntimeForeign {
         int lightSourceIndex;
 	};
 } VKSK_RuntimeForeign;
+
+#ifdef __cplusplus
+}
+#endif
