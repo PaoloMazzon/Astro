@@ -3,8 +3,11 @@
 /// \brief Tools for debugging
 #pragma once
 #include <wren.h>
-
 #include "src/BuildOptions.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // Makes sure that the arguments provided to a foreign function are what they should be
 // if debug is enabled
@@ -21,3 +24,7 @@ void vksk_Log(const char *fmt, ...);
 
 // Throw an error
 void vksk_Error(bool fatal, const char *fmt, ...);
+
+#ifdef __cplusplus
+}
+#endif

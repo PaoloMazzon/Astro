@@ -11,6 +11,7 @@
 #include "src/Validation.h"
 #include "src/IntermediateTypes.h"
 #include "src/Blobs.h"
+#include "src/SteamBindings.h"
 
 extern Uint32 rmask, gmask, bmask, amask;
 
@@ -271,6 +272,9 @@ void vksk_Start() {
 	vk2dRendererInit(gWindow, rendererConfig, &options);
 	juInit(gWindow, 0, 0);
 
+	// Init Steam API
+	vksk_SteamInit();
+
 	// Internal stuff
     _vksk_RendererBindingsInit((void*)FONT_PNG, sizeof(FONT_PNG)); // basically just to create the default font
 	_vksk_SetWindowIcon(vm);
@@ -446,6 +450,7 @@ void vksk_Start() {
 	vk2dRendererQuit();
 	SDL_DestroyWindow(gWindow);
     SDL_Quit();
+	vksk_SteamQuit();
 	vksk_PakFree(gGamePak);
 	vksk_Log("Cleanup complete.\n---------------FPS---------------\n   Average | Minimum | Maximum\n   %7.2f | %7.2f | %7.2f\n---------------------------------", totalFrameCount / finalTime, minFPS, maxFPS);
 }
