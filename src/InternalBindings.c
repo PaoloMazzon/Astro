@@ -1025,7 +1025,7 @@ static inline uint32_t *alphaToRGBA(uint8_t *pixels, int w, int h, bool aa) {
 void vksk_RuntimeFontAllocate(WrenVM *vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_BOOL, FOREIGN_NUM, FOREIGN_NUM, FOREIGN_END)
 	VKSK_RuntimeForeign *font = wrenSetSlotNewForeign(vm, 0, 0, sizeof(VKSK_RuntimeForeign));
-	font->bitmapFont = malloc(sizeof(struct JUFont));
+	font->bitmapFont = malloc(sizeof(struct JUFont_t));
 	font->type = FOREIGN_BITMAP_FONT;
 	const char *filename = wrenGetSlotString(vm, 1);
 	float size = wrenGetSlotDouble(vm, 2);
@@ -1062,7 +1062,7 @@ void vksk_RuntimeFontAllocate(WrenVM *vm) {
             spaceSize = (average / count) * 0.5;
 
 			// Calculate the width and height of the image we'll need
-			font->bitmapFont->characters = calloc(uniEnd - uniStart + 1, sizeof(struct JUCharacter));
+			font->bitmapFont->characters = calloc(uniEnd - uniStart + 1, sizeof(struct JUCharacter_t));
 			float w = 0;
 			float h = 0;
 			for (int i = 0; i <= (uniEnd - uniStart); i++) {

@@ -11,7 +11,7 @@
 
 const char WREN_SOURCE_HEADER[] = "import \"lib/Audio\" for AudioData, Audio\n"
 								  "import \"lib/Drawing\" for Surface, Font, BitmapFont, Sprite, Texture, Model, Polygon, LightSource, Shadow, Lighting\n"
-								  "import \"lib/Engine\" for Engine, Level, Entity\n"
+								  "import \"lib/Engine\" for Engine, Level, Entity, Steam\n"
 								  "import \"lib/Util\" for Hitbox, Math, Tileset, Buffer\n"
 								  "import \"lib/File\" for File, INI\n"
 								  "import \"lib/Input\" for Mouse, Keyboard, Gamepad\n"

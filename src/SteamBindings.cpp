@@ -4,6 +4,7 @@
 #include "src/Validation.h"
 #include "src/IntermediateTypes.h"
 
+#include <ctime>
 #include "steam/steam_api.h"
 #include "steam/isteamfriends.h"
 #include "steam/isteamuserstats.h"
@@ -25,7 +26,10 @@ void vksk_SteamInit() {
 }
 
 void vksk_SteamQuit() {
-	SteamAPI_Shutdown();
+	if (gSteamAPIInit) {
+		SteamUserStats()->StoreStats();
+		SteamAPI_Shutdown();
+	}
 	gSteamAPIInit = false;
 }
 

@@ -318,11 +318,11 @@ void vksk_RuntimeJUAudioDataAllocate(WrenVM *vm) {
 	void *buffer = vksk_GetFileBuffer(fname, &size);
 	if (buffer != NULL) {
 		if (strcmp(ext, ".wav") == 0) {
-			snd->audioData = malloc(sizeof(struct JUSound));
+			snd->audioData = malloc(sizeof(struct JUSound_t));
 			cs_read_mem_wav(buffer, size, &snd->audioData->sound);
 			memset(&snd->audioData->soundInfo, 0, sizeof(snd->audioData->soundInfo));
 		} else if (strcmp(ext, ".ogg") == 0) {
-			snd->audioData = malloc(sizeof(struct JUSound));
+			snd->audioData = malloc(sizeof(struct JUSound_t));
 			cs_read_mem_ogg(buffer, size, &snd->audioData->sound);
 			memset(&snd->audioData->soundInfo, 0, sizeof(snd->audioData->soundInfo));
 		} else {

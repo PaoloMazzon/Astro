@@ -358,3 +358,16 @@ class Level {
         }
     }
 }
+
+class Steam {
+    foreign static isInitialized
+    foreign static getAchievement(name)
+    foreign static getAchievementAchievedPercent(name)
+    foreign static getAchievementAndUnlockTime(name)
+    foreign static getAchievementDisplayAttributes(name)
+    foreign static setAchievement(name)
+    foreign static activateGameOverlay(dialogue)
+    foreign static activateGameOverlayToWebpage(website)
+    foreign static getPersonaName()
+    foreign static attemptStoreStats()
+}

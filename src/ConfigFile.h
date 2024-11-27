@@ -3,6 +3,10 @@
 /// \brief Saves and loads .ini files
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct _VKSK_ConfigKey {
 	const char *key;
 	const char *val;
@@ -14,7 +18,7 @@ typedef struct _VKSK_ConfigHeader {
 	int size;
 } _VKSK_ConfigHeader;
 
-typedef struct VKSK_Config {
+typedef struct VKSK_Config_t {
 	_VKSK_ConfigHeader *headers; // List of headers
 	int size; // How many headers in memory
 } *VKSK_Config;
@@ -62,3 +66,7 @@ bool vksk_ConfigKeyExists(VKSK_Config config, const char *header, const char *ke
 
 // Frees a config from memory - does not save
 void vksk_ConfigFree(VKSK_Config config);
+
+#ifdef __cplusplus
+}
+#endif

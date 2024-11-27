@@ -16,12 +16,9 @@ const uint32_t JU_STRING_BUFFER = 1024;         // Maximum amount of text that c
 const uint32_t JU_SAVE_MAX_SIZE = 2000;         // Maximum pieces of data that can be loaded from a save, anything more than this is probably a corrupt file
 const uint32_t JU_SAVE_MAX_KEY_SIZE = 20;       // Maximum size a save key can be
 const int JU_LIST_EXTENSION = 5;                // How many elements to extend lists by
-const JUEntityID JU_INVALID_ENTITY = -1;
-const JUComponentID JU_NO_COMPONENT = -1;
 const int JU_JOB_CHANNEL_SYSTEMS = 0;
 const int JU_JOB_CHANNEL_COPY = 1;
 const int32_t JU_DISABLED_LOCK = -1;
-const JUEntityType JU_INVALID_TYPE = 0;
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 uint32_t RMASK = 0xff000000;
@@ -51,35 +48,6 @@ typedef struct JUBinaryFont {
 	void *png;                              ///< Raw bytes for the png image
 } JUBinaryFont;
 
-/// \brief Information for jobs
-typedef struct JUJobSystem {
-	int threadCount;             ///< Number of worker threads being used
-	//pthread_t *threads;          ///< Thread vector
-	int queueListSize;           ///< Actual size of the queue vector
-	int queueSize;               ///< Number of elements waiting in the queue
-	JUJob *queue;                ///< Queue (vector)
-	//pthread_mutex_t queueAccess; ///< Mutex that protects access to the queue
-	//_Atomic int *channels;       ///< Variable number of channels
-	int channelCount;            ///< Number of available channels
-	//_Atomic bool kill;           ///< For shutting down all jobs
-} JUJobSystem;
-
-/// \brief Information for ECS
-typedef struct JUECS {
-	JUEntity *entities;                    ///< Vector of all entities
-	int entityCount;                       ///< Number of entities
-	JUSystem *systems;               ///< List of all systems
-	int systemCount;                       ///< Amount of systems
-	//_Atomic bool *systemFinished;          ///< Whether or not each system is done executing this frame
-	JUComponentVector* previousComponents; ///< Previous frame's components
-	JUComponentVector *components;         ///< This frame's components
-	const int componentCount;              ///< Amount of components
-	const size_t *componentSizes;          ///< Size of each component in bytes
-	int *componentListSizes;               ///< Actual size of component list
-	//pthread_mutex_t createEntityAccess;    ///< Lock so only 1 entity may be created at a time
-	int entityIterator;                    ///< Basically the i value for the entity iterating functions
-} JUECS;
-
 /********************** Globals **********************/
 static cs_context_t *gSoundContext = NULL;               // For the audio player
 int gKeyboardSize = 0;                                   // For keeping track of keys through SDL
@@ -87,8 +55,6 @@ static uint8_t *gKeyboardState, *gKeyboardPreviousState; // Arrays for key state
 static double gDelta = 0;                                // Delta time
 static uint64_t gLastTime = 0;                           // For keeping track of delta
 static uint64_t gProgramStartTime = 0;                   // Time when the program started
-static JUJobSystem gJobSystem;                           // Information for the job system
-static JUECS gECS;                                       // Entity component system
 static uint32_t gStringBuffer[1000];                     // For UTF-8 decoding
 static int gStringBufferSize = 1000;                     // For UTF-8 decoding
 static  vec4 gColours[7];
@@ -409,35 +375,6 @@ void juUpdate() {
 }
 
 void juQuit() {
-	// Kill the jobs
-	if (gJobSystem.channelCount > 0) {
-		// Destroy ECS
-		for (int i = 0; i < gECS.componentCount; i++) {
-			juFree(gECS.components[i]);
-			juFree(gECS.previousComponents[i]);
-		}
-		for (int i = 0; i < gECS.entityCount; i++) {
-			juFree(gECS.entities[i].components);
-		}
-		juFree(gECS.entities);
-		juFree(gECS.previousComponents);
-		juFree(gECS.components);
-		//juFree(gECS.systemFinished);
-
-		// Destroy job system
-		//gJobSystem.kill = true;
-
-		// Wait for all threads to die
-		//for (int i = 0; i < gJobSystem.threadCount; i++)
-			//pthread_join(gJobSystem.threads[i], NULL);
-
-		// Free the lists
-		//juFree(gJobSystem.threads);
-		//juFree(gJobSystem.channels);
-		juFree(gJobSystem.queue);
-		//pthread_mutex_destroy(&gJobSystem.queueAccess);
-	}
-
 	free(gKeyboardPreviousState);
 	gKeyboardPreviousState = NULL;
 	gKeyboardState = NULL;
@@ -650,7 +587,7 @@ void juFontUTF8SizeExt(JUFont font, float *w, float *h, float width, const char 
 }
 
 JUFont juFontLoad(const char *filename) {
-	JUFont font = juMalloc(sizeof(struct JUFont));
+	JUFont font = juMalloc(sizeof(struct JUFont_t));
 
 	// nah im not using this
 
@@ -659,8 +596,8 @@ JUFont juFontLoad(const char *filename) {
 
 JUFont juFontLoadFromTexture(VK2DTexture texture, uint32_t unicodeStart, uint32_t unicodeEnd, float w, float h) {
 	// Setup font struct
-	JUFont font = juMalloc(sizeof(struct JUFont));
-	font->characters = juMalloc(sizeof(struct JUCharacter) * (unicodeEnd - unicodeStart));
+	JUFont font = juMalloc(sizeof(struct JUFont_t));
+	font->characters = juMalloc(sizeof(struct JUCharacter_t) * (unicodeEnd - unicodeStart));
 	font->bitmap = texture;
 	font->newLineHeight = h;
 	font->unicodeStart = unicodeStart;
@@ -831,7 +768,7 @@ void juFontDrawWrappedExt(JUFont font, float x, float y, float w, const char *st
 /********************** Buffer **********************/
 
 JUBuffer juBufferLoad(const char *filename) {
-	JUBuffer buffer = juMalloc(sizeof(struct JUBuffer));
+	JUBuffer buffer = juMalloc(sizeof(struct JUBuffer_t));
 	buffer->data = juGetFile(filename, &buffer->size);
 
 	if (buffer->data == NULL) {
@@ -843,7 +780,7 @@ JUBuffer juBufferLoad(const char *filename) {
 }
 
 JUBuffer juBufferCreate(void *data, uint32_t size) {
-	JUBuffer buffer = juMalloc(sizeof(struct JUBuffer));
+	JUBuffer buffer = juMalloc(sizeof(struct JUBuffer_t));
 	buffer->data = juMalloc(size);
 	buffer->size = size;
 	memcpy(buffer->data, data, size);
@@ -879,197 +816,10 @@ void juBufferSaveRaw(void *data, uint32_t size, const char *filename) {
 	}
 }
 
-/********************** Asset Loader **********************/
-
-// Puts an asset into the loader (properly)
-static void juLoaderAdd(JULoader loader, JUAsset asset) {
-	uint32_t hash = juHash(asset->name);
-
-	// Either we drop the asset right into its slot or send it down a linked
-	// list chain if there is a hash collision
-	if (loader->assets[hash] == NULL) {
-		loader->assets[hash] = asset;
-	} else {
-		JUAsset current = loader->assets[hash];
-		bool placed = false;
-		while (!placed) {
-			if (current->next == NULL) {
-				placed = true;
-				current->next = asset;
-			} else {
-				current = current->next;
-			}
-		}
-	}
-}
-
-// Just gets the raw asset from the loader
-static JUAsset juLoaderGet(JULoader loader, const char *key, JUAssetType type) {
-	JUAsset current = loader->assets[juHash(key)];
-	bool found = false;
-
-	while (!found) {
-		if (current != NULL && strcmp(current->name, key) == 0 && current->type == type) // this is the right asset
-			found = true;
-		else if (current != NULL) // wrong one, next one down the chain
-			current = current->next;
-		else // it doesn't exist, current should be null at this point
-			found = true;
-	}
-
-	return current;
-}
-
-// Frees a specific asset (not its next one in its chain though)
-static void juLoaderAssetFree(JUAsset asset) {
-	if (asset->type == JU_ASSET_TYPE_FONT) {
-		juFontFree(asset->Asset.font);
-	} else if (asset->type == JU_ASSET_TYPE_TEXTURE) {
-		vk2dTextureFree(asset->Asset.tex);
-	} else if (asset->type == JU_ASSET_TYPE_SOUND) {
-		juSoundFree(asset->Asset.sound);
-	} else if (asset->type == JU_ASSET_TYPE_BUFFER) {
-		juBufferFree(asset->Asset.buffer);
-	} else if (asset->type == JU_ASSET_TYPE_SPRITE) {
-		juSpriteFree(asset->Asset.sprite);
-	}
-	free((void*)asset->name);
-	free(asset);
-}
-
-JULoader juLoaderCreate(JULoadedAsset *files, uint32_t fileCount) {
-	JULoader loader = juMalloc(sizeof(struct JULoader));
-	JUAsset *assets = juMallocZero(JU_BUCKET_SIZE * sizeof(struct JUAsset));
-	loader->assets = assets;
-
-	// Load all assets
-	for (int i = 0; i < fileCount; i++) {
-		const char *extension = files[i].path + juLastDot(files[i].path) + 1;
-		JUAsset asset = juMalloc(sizeof(struct JUAsset));
-		asset->name = juCopyString(files[i].path);
-		asset->next = NULL;
-
-		// Load file based on asset
-		if (strcmp(extension, "jufnt") == 0) {
-			asset->type = JU_ASSET_TYPE_FONT;
-			asset->Asset.font = juFontLoad(files[i].path);
-		} else if (strcmp(extension, "png") == 0 || strcmp(extension, "jpg") == 0 || strcmp(extension, "jpeg") == 0 || strcmp(extension, "bmp") == 0) {
-			if (files[i].h + files[i].w + files[i].delay != 0) {
-				// Sprite
-				asset->type = JU_ASSET_TYPE_SPRITE; // TODO: Check for existing textures with the same name first
-
-				// Check if we already loaded the texture
-				JUAsset tex = juLoaderGet(loader, asset->name, JU_ASSET_TYPE_TEXTURE);
-				if (tex != NULL)
-					asset->Asset.sprite = juSpriteFrom(tex->Asset.tex, files[i].x, files[i].y, files[i].w, files[i].h, files[i].delay, files[i].frames);
-				else
-					asset->Asset.sprite = juSpriteCreate(files[i].path, files[i].x, files[i].y, files[i].w, files[i].h, files[i].delay, files[i].frames);
-				if (asset->Asset.sprite != NULL) {
-					asset->Asset.sprite->originX = files[i].originX;
-					asset->Asset.sprite->originY = files[i].originY;
-				}
-			} else {
-				// Just a textures
-				asset->type = JU_ASSET_TYPE_TEXTURE;
-				asset->Asset.tex = vk2dTextureLoad(files[i].path);
-			}
-		} else if (strcmp(extension, "wav") == 0) {
-			asset->type = JU_ASSET_TYPE_SOUND;
-			asset->Asset.sound = juSoundLoad(files[i].path);
-		} else {
-			asset->type = JU_ASSET_TYPE_BUFFER;
-			asset->Asset.buffer = juBufferLoad(files[i].path);
-		}
-
-		juLoaderAdd(loader, asset);
-	}
-
-	return loader;
-}
-
-VK2DTexture juLoaderGetTexture(JULoader loader, const char *filename) {
-	JUAsset asset = juLoaderGet(loader, filename, JU_ASSET_TYPE_TEXTURE);
-	VK2DTexture out = NULL;
-
-	if (asset != NULL) {
-		out = asset->Asset.tex;
-	} else {
-		juLog("Asset \"%s\" was never loaded", filename);
-	}
-
-	return out;
-}
-
-JUFont juLoaderGetFont(JULoader loader, const char *filename) {
-	JUAsset asset = juLoaderGet(loader, filename, JU_ASSET_TYPE_FONT);
-	JUFont out = NULL;
-
-	if (asset != NULL) {
-		out = asset->Asset.font;
-	} else {
-		juLog("Asset \"%s\" doesn't exist", filename);
-	}
-
-	return out;
-}
-
-JUSound juLoaderGetSound(JULoader loader, const char *filename) {
-	JUAsset asset = juLoaderGet(loader, filename, JU_ASSET_TYPE_SOUND);
-	JUSound out = NULL;
-
-	if (asset != NULL) {
-		out = asset->Asset.sound;
-	} else {
-		juLog("Asset \"%s\" doesn't exist", filename);
-	}
-
-	return out;
-}
-
-JUBuffer juLoaderGetBuffer(JULoader loader, const char *filename) {
-	JUAsset asset = juLoaderGet(loader, filename, JU_ASSET_TYPE_BUFFER);
-	JUBuffer out = NULL;
-
-	if (asset != NULL) {
-		out = asset->Asset.buffer;
-	} else {
-		juLog("Asset \"%s\" doesn't exist", filename);
-	}
-
-	return out;
-}
-
-JUSprite juLoaderGetSprite(JULoader loader, const char *filename) {
-	JUAsset asset = juLoaderGet(loader, filename, JU_ASSET_TYPE_SPRITE);
-	JUSprite out = NULL;
-
-	if (asset != NULL) {
-		out = asset->Asset.sprite;
-	} else {
-		juLog("Asset \"%s\" doesn't exist", filename);
-	}
-
-	return out;
-}
-
-void juLoaderFree(JULoader loader) {
-	if (loader != NULL) {
-		for (int i = 0; i < JU_BUCKET_SIZE; i++) {
-			JUAsset current = loader->assets[i];
-			while (current != NULL) {
-				JUAsset next = current->next;
-				juLoaderAssetFree(current);
-				current = next;
-			}
-		}
-		free(loader->assets);
-	}
-}
-
 /********************** Sound **********************/
 
 JUSound juSoundLoad(const char *filename) {
-	JUSound sound = juMallocZero(sizeof(struct JUSound));
+	JUSound sound = juMallocZero(sizeof(struct JUSound_t));
 	sound->sound = cs_load_wav(filename);
 	return sound;
 }
@@ -1202,7 +952,7 @@ JUSave juSaveLoad(const char *filename) {
 
 		// If we don't check for max size its possible for a corrupt file to cause a crash
 		if (save->size < JU_SAVE_MAX_SIZE && strcmp("JUSAV", header) == 0) {
-			save->data = juMallocZero(sizeof(struct JUData) * save->size);
+			save->data = juMallocZero(sizeof(struct JUData_t) * save->size);
 
 			// Grab all data
 			for (int i = 0; i < save->size && !feof(buffer); i++) {
@@ -1323,11 +1073,11 @@ static void juSaveSetRawData(JUSave save, const char *key, JUData *data) {
 	JUData *exists = juSaveGetRawData(save, key);
 
 	if (exists == NULL) {
-		save->data = juRealloc(save->data, sizeof(struct JUData) * (save->size + 1));
-		memcpy(&save->data[save->size], data, sizeof(struct JUData));
+		save->data = juRealloc(save->data, sizeof(struct JUData_t) * (save->size + 1));
+		memcpy(&save->data[save->size], data, sizeof(struct JUData_t));
 		save->size++;
 	} else {
-		memcpy(exists, data, sizeof(struct JUData));
+		memcpy(exists, data, sizeof(struct JUData_t));
 	}
 }
 
@@ -1474,7 +1224,7 @@ bool juKeyboardGetKeyReleased(SDL_Scancode key) {
 
 /********************** Animations **********************/
 JUSprite juSpriteCreate(const char *filename, float x, float y, float w, float h, float delay, int frames) {
-	JUSprite spr = juMalloc(sizeof(struct JUSprite));
+	JUSprite spr = juMalloc(sizeof(struct JUSprite_t));
 	spr->Internal.tex = vk2dTextureLoad(filename);
 
 	// Set default values
@@ -1503,7 +1253,7 @@ JUSprite juSpriteCreate(const char *filename, float x, float y, float w, float h
 }
 
 JUSprite juSpriteFrom(VK2DTexture tex, float x, float y, float w, float h, float delay, int frames) {
-	JUSprite spr = juMalloc(sizeof(struct JUSprite));
+	JUSprite spr = juMalloc(sizeof(struct JUSprite_t));
 	spr->Internal.tex = tex;
 
 	// Set default values
@@ -1526,8 +1276,8 @@ JUSprite juSpriteFrom(VK2DTexture tex, float x, float y, float w, float h, float
 }
 
 JUSprite juSpriteCopy(JUSprite original) {
-	JUSprite spr = juMalloc(sizeof(struct JUSprite));
-	memcpy(spr, original, sizeof(struct JUSprite));
+	JUSprite spr = juMalloc(sizeof(struct JUSprite_t));
+	memcpy(spr, original, sizeof(struct JUSprite_t));
 	spr->Internal.copy = true;
 	return spr;
 }

@@ -66,7 +66,7 @@ static const char *cleanINIString(const char *ini) {
 }
 
 VKSK_Config vksk_ConfigLoadFromString(const char *string) {
-	VKSK_Config conf = malloc(sizeof(struct VKSK_Config));
+	VKSK_Config conf = malloc(sizeof(struct VKSK_Config_t));
 	conf->size = 0;
 	conf->headers = NULL;
 
@@ -126,7 +126,7 @@ VKSK_Config vksk_ConfigLoad(const char *filename) {
 		conf = vksk_ConfigLoadFromString(file);
 		free(file);
 	} else {
-		conf = malloc(sizeof(struct VKSK_Config));
+		conf = malloc(sizeof(struct VKSK_Config_t));
 		conf->size = 0;
 		conf->headers = NULL;
 	}

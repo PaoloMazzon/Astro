@@ -12,6 +12,7 @@
 #include "src/InternalBindings.h"
 #include "src/UtilBindings.h"
 #include "src/WrenPreprocessor.h"
+#include "src/SteamBindings.h"
 
 // Globals
 extern const char *gAssetsFile;
@@ -227,6 +228,16 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Engine", true, "using_pak", vksk_RuntimeUsingPak)
 		BIND_METHOD("Engine", true, "import_exists(_)", vksk_RuntimeImportExists)
 		BIND_METHOD("Engine", true, "delta_max=(_)", vksk_RuntimeSetDeltaMax)
+		BIND_METHOD("Steam", true, "isInitialized", vksk_RuntimeSteamIsInitialized)
+		BIND_METHOD("Steam", true, "getAchievement(_)", vksk_RuntimeSteamGetAchievement)
+		BIND_METHOD("Steam", true, "getAchievementAchievedPercent(_)", vksk_RuntimeSteamGetAchievementAchievedPercent)
+		BIND_METHOD("Steam", true, "getAchievementAndUnlockTime(_)", vksk_RuntimeSteamGetAchievementAndUnlockTime)
+		BIND_METHOD("Steam", true, "getAchievementDisplayAttributes(_)", vksk_RuntimeSteamGetAchievementDisplayAttributes)
+		BIND_METHOD("Steam", true, "setAchievement(_)", vksk_RuntimeSteamSetAchievement)
+		BIND_METHOD("Steam", true, "activateGameOverlay(_)", vksk_RuntimeSteamActivateGameOverlay)
+		BIND_METHOD("Steam", true, "activateGameOverlayToWebpage(_)", vksk_RuntimeSteamActivateGameOverlayToWebPage)
+		BIND_METHOD("Steam", true, "getPersonaName()", vksk_RuntimeSteamGetPersonaName)
+		BIND_METHOD("Steam", true, "attemptStoreStats()", vksk_RuntimeSteamAttemptStoreStats)
 	} else if (strcmp(module, "lib/Drawing") == 0) {
 		BIND_METHOD("Texture", false, "width", vksk_RuntimeVK2DTextureWidth)
 		BIND_METHOD("Texture", false, "height", vksk_RuntimeVK2DTextureHeight)
