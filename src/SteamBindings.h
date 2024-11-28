@@ -22,6 +22,10 @@ void vksk_RuntimeSteamActivateGameOverlay(WrenVM *vm);
 void vksk_RuntimeSteamActivateGameOverlayToWebPage(WrenVM *vm);
 void vksk_RuntimeSteamGetPersonaName(WrenVM *vm);
 void vksk_RuntimeSteamAttemptStoreStats(WrenVM *vm);
+void vksk_RuntimeSteamGetStatFloat(WrenVM* vm);
+void vksk_RuntimeSteamGetStatInt(WrenVM* vm);
+void vksk_RuntimeSteamSetStatFloat(WrenVM* vm);
+void vksk_RuntimeSteamSetStatInt(WrenVM* vm);
 
 #ifdef __cplusplus
 }

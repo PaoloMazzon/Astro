@@ -238,6 +238,10 @@ WrenForeignMethodFn vksk_WrenBindForeignMethod(WrenVM* vm, const char* module, c
 		BIND_METHOD("Steam", true, "activateGameOverlayToWebpage(_)", vksk_RuntimeSteamActivateGameOverlayToWebPage)
 		BIND_METHOD("Steam", true, "getPersonaName()", vksk_RuntimeSteamGetPersonaName)
 		BIND_METHOD("Steam", true, "attemptStoreStats()", vksk_RuntimeSteamAttemptStoreStats)
+		BIND_METHOD("Steam", true, "getStatFloat(_)", vksk_RuntimeSteamGetStatFloat)
+		BIND_METHOD("Steam", true, "getStatInt(_)", vksk_RuntimeSteamGetStatInt)
+		BIND_METHOD("Steam", true, "setStatFloat(_,_)", vksk_RuntimeSteamSetStatFloat)
+		BIND_METHOD("Steam", true, "setStatInt(_,_)", vksk_RuntimeSteamSetStatInt)
 	} else if (strcmp(module, "lib/Drawing") == 0) {
 		BIND_METHOD("Texture", false, "width", vksk_RuntimeVK2DTextureWidth)
 		BIND_METHOD("Texture", false, "height", vksk_RuntimeVK2DTextureHeight)

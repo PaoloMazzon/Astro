@@ -18,8 +18,8 @@ void vksk_SteamInit() {
 	ESteamAPIInitResult ret = SteamAPI_InitEx(&error);
 	if (ret != k_ESteamAPIInitResult_OK) {
 		vksk_Log("Failed to initialize Steam API: %s.", error);
-	}
-	else {
+	} else {
+		vksk_Log("SteamAPI initialized successfully.");
 		gSteamAPIInit = true;
 		gSteamUserID = SteamUser()->GetSteamID();
 	}
@@ -162,5 +162,45 @@ void vksk_RuntimeSteamAttemptStoreStats(WrenVM* vm) {
 	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_END)
 	if (gSteamAPIInit) {
 		wrenSetSlotBool(vm, 0, SteamUserStats()->StoreStats());
+	}
+}
+
+void vksk_RuntimeSteamGetStatFloat(WrenVM* vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+		const char* pchName = wrenGetSlotString(vm, 1);
+	float num = 0;
+	if (gSteamAPIInit) {
+		SteamUserStats()->GetStat(pchName, &num);
+	}
+	wrenSetSlotDouble(vm, 0, num);
+}
+
+void vksk_RuntimeSteamGetStatInt(WrenVM* vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_END)
+	const char* pchName = wrenGetSlotString(vm, 1);
+	int num = 0;
+	if (gSteamAPIInit) {
+		SteamUserStats()->GetStat(pchName, &num);
+	}
+	wrenSetSlotDouble(vm, 0, num);
+}
+
+void vksk_RuntimeSteamSetStatFloat(WrenVM* vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_END)
+	const char *pchName = wrenGetSlotString(vm, 1);
+	float num = (float)wrenGetSlotDouble(vm, 2);
+
+	if (gSteamAPIInit) {
+		SteamUserStats()->SetStat(pchName, num);
+	}
+}
+
+void vksk_RuntimeSteamSetStatInt(WrenVM* vm) {
+	VALIDATE_FOREIGN_ARGS(vm, FOREIGN_STRING, FOREIGN_NUM, FOREIGN_END)
+	const char* pchName = wrenGetSlotString(vm, 1);
+	int num = (int)wrenGetSlotDouble(vm, 2);
+
+	if (gSteamAPIInit) {
+		SteamUserStats()->SetStat(pchName, num);
 	}
 }

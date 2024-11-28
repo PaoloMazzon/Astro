@@ -441,6 +441,7 @@ void vksk_Start() {
     double finalTime = juTime();
 	vksk_Log("Cleanup...");
 	vk2dRendererWait();
+	vksk_SteamQuit();
     _vksk_RendererBindingsQuit(vm);
 	_vksk_FinalizeDebug();
 	wrenReleaseHandle(vm, assetsHandle);
@@ -450,7 +451,6 @@ void vksk_Start() {
 	vk2dRendererQuit();
 	SDL_DestroyWindow(gWindow);
     SDL_Quit();
-	vksk_SteamQuit();
 	vksk_PakFree(gGamePak);
 	vksk_Log("Cleanup complete.\n---------------FPS---------------\n   Average | Minimum | Maximum\n   %7.2f | %7.2f | %7.2f\n---------------------------------", totalFrameCount / finalTime, minFPS, maxFPS);
 }

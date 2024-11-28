@@ -370,4 +370,8 @@ class Steam {
     foreign static activateGameOverlayToWebpage(website)
     foreign static getPersonaName()
     foreign static attemptStoreStats()
+    foreign static getStatFloat(name)
+    foreign static getStatInt(name)
+    foreign static setStatFloat(name, val)
+    foreign static setStatInt(name, val)
 }
