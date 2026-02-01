@@ -1,3 +1,7 @@
+> [!WARNING]
+> This project is no longer actively maintained. If you'd like to take it over, you are welcome to
+> do so, but as it stands Astro is purely for educational purposes.
+
 ![Astro Engine](https://astroengine.ca/banner.png)
 
 Astro Engine is a game development framework that provides all the things you need to
